@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EQUIJOB</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Add custom font families if needed, or configure in tailwind.config.js */
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        html {
+             scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+    </style>
+    <script>
+        // Basic JS for Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- Navbar Section -->
+    <x-landing-page-navbar/>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden px-6 pb-4">
+            <a href="#hero" class="block text-gray-600 hover:text-blue-600 py-2">Home</a>
+            <a href="#why-us" class="block text-gray-600 hover:text-blue-600 py-2">Why Us</a>
+            <a href="#partners" class="block text-gray-600 hover:text-blue-600 py-2">Partners</a>
+            <a href="#resources" class="block text-gray-600 hover:text-blue-600 py-2">Resources</a>
+            <a href="#reviews" class="block text-gray-600 hover:text-blue-600 py-2">Reviews</a>
+            <a href="#faq" class="block text-gray-600 hover:text-blue-600 py-2">FAQ</a>
+            <a href="#footer" class="block text-gray-600 hover:text-blue-600 py-2">Contact</a>
+            <a href="#" class="block bg-blue-600 text-white text-center mt-2 px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Register Now</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="bg-blue-400 text-white py-20 px-6 lg:px-16">
+        <div class="container mx-auto flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 text-center lg:text-left">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-poppins leading-tight mb-4">Connecting Persons with Disabilities with Employers</h1>
+                <p class="text-sm md:text-base leading-relaxed mb-8">Fostering disability-inclusive employment promotes equity, accessibility, and empowerment in the workforce, ensuring job seekers with disabilities have equal opportunities through inclusive hiring and strength-based pathways.</p>
+                <a href="#" class="bg-green-600 hover:bg-green-700 text-white text-lg font-medium px-10 py-3 rounded-xl shadow-md transition duration-300 inline-block">Register Now</a>
+            </div>
+            <div class="lg:w-1/2">
+                <img src="https://placehold.co/507x338/FFFFFF/000000?text=Hero+Image" alt="Inclusive workplace" class="w-full h-auto rounded-lg shadow-lg" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section id="why-us" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
+        <div class="container mx-auto flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-20">
+            <div class="lg:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-semibold font-poppins text-center lg:text-left mb-8 text-gray-800">Why Our Clients Trust Us</h2>
+                <div class="space-y-5">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-teal-700 mt-1 flex-shrink-0" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M14.4276 25.5273C20.9065 25.5273 26.2074 20.4396 26.2074 14.2214C26.2074 8.00324 20.9065 2.91562 14.4276 2.91562C7.94873 2.91562 2.64783 8.00324 2.64783 14.2214C2.64783 20.4396 7.94873 25.5273 14.4276 25.5273Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                           <path d="M9.42114 14.2214L12.7548 17.421L19.434 11.0219" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p class="text-lg text-gray-600 font-semibold leading-relaxed">Tailored for job seekers with disabilities, ensuring accessibility at every step.</p>
+                    </div>
+                     <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-teal-700 mt-1 flex-shrink-0" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M14.4276 25.2243C20.9065 25.2243 26.2074 20.1367 26.2074 13.9185C26.2074 7.70031 20.9065 2.61269 14.4276 2.61269C7.94873 2.61269 2.64783 7.70031 2.64783 13.9185C2.64783 20.1367 7.94873 25.2243 14.4276 25.2243Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                           <path d="M9.42114 13.9185L12.7548 17.1181L19.434 10.719" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p class="text-lg text-gray-600 font-semibold leading-relaxed">Offers resources and tools for equitable, inclusive hiring practices.</p>
+                    </div>
+                     <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-teal-700 mt-1 flex-shrink-0" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M14.3666 24.8963C20.8175 24.8963 26.0956 19.8086 26.0956 13.5904C26.0956 7.37224 20.8175 2.28462 14.3666 2.28462C7.91572 2.28462 2.6377 7.37224 2.6377 13.5904C2.6377 19.8086 7.91572 24.8963 14.3666 24.8963Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                           <path d="M9.38184 13.5904L12.7011 16.79L19.3514 10.3909" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p class="text-lg text-gray-600 font-semibold leading-relaxed">Committed to bringing about lasting and significant change in the job market.</p>
+                    </div>
+                     <div class="flex items-start gap-3">
+                        <svg class="w-6 h-6 text-teal-700 mt-1 flex-shrink-0" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M14.4276 25.5463C20.9065 25.5463 26.2074 20.4587 26.2074 14.2405C26.2074 8.0223 20.9065 2.93468 14.4276 2.93468C7.94873 2.93468 2.64783 8.0223 2.64783 14.2405C2.64783 20.4587 7.94873 25.5463 14.4276 25.5463Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                           <path d="M9.42114 14.2405L12.7548 17.4401L19.434 11.041" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p class="text-lg text-gray-600 font-semibold leading-relaxed">Meets more than one need using low-tech and high-tech methods.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2">
+                <img src="https://placehold.co/599x376/E0E0E0/AAAAAA?text=Trust+Image" alt="People collaborating" class="w-full h-auto rounded-lg shadow-lg" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="py-16 lg:py-20 px-6 lg:px-16 bg-gray-50">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-semibold font-poppins mb-12 text-gray-800">Our Partners</h2>
+            <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16 lg:gap-20">
+                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+1" alt="Partner 1 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+2" alt="Partner 2 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+3" alt="Partner 3 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+4" alt="Partner 4 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <!-- Add more logos as needed -->
+            </div>
+        </div>
+    </section>
+
+     <!-- Resources Section -->
+    <section id="resources" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
+        <div class="container mx-auto">
+             <h2 class="text-3xl md:text-4xl font-semibold font-poppins text-center mb-12 text-gray-800">Resources</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://placehold.co/365x234/E0E0E0/AAAAAA?text=Resource+1" alt="Inclusive Team Collaboration" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Inclusive Team Collaboration</h3>
+                        <p class="text-gray-600 leading-relaxed">Illustrates a wheelchair user participating in a group forum, emphasizing cooperation, integration, and equal access to working environments.</p>
+                    </div>
+                </div>
+                 <!-- Card 2 -->
+                <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://placehold.co/367x231/E0E0E0/AAAAAA?text=Resource+2" alt="Equal Opportunity & Professionalism" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Equal Opportunity & Professionalism</h3>
+                        <p class="text-gray-600 leading-relaxed">People with disabilities can occupy professional roles. A person in a wheelchair attends a business conference, proving capability and leadership.</p>
+                    </div>
+                </div>
+                 <!-- Card 3 -->
+                 <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://placehold.co/367x235/E0E0E0/AAAAAA?text=Resource+3" alt="Accessibility in Tech & Learning" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Accessibility in Tech & Learning</h3>
+                        <p class="text-gray-600 leading-relaxed">People with disabilities exhibit mastery of learning and technology, accessing online resources and showcasing diverse skills.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Reviews Section -->
+    <section id="reviews" class="py-16 lg:py-24 px-6 lg:px-16 bg-gray-50">
+        <div class="container mx-auto">
+             <h2 class="text-3xl md:text-4xl font-semibold font-poppins text-center mb-12 text-gray-800">What People Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <!-- Review 1 -->
+                 <div class="bg-white rounded-lg shadow-md p-6">
+                     <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“As a job seeker with a disability, I finally found a platform that understands my needs. The assistive features and virtual interview options gave me confidence and a real chance.”</p>
+                     <div class="flex items-center gap-4">
+                        <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50/E0E0E0/AAAAAA?text=JD" alt="John Doe">
+                        <div>
+                            <p class="font-semibold font-poppins text-gray-800">John Doe</p>
+                            <p class="text-sm text-gray-500">Customer</p>
+                        </div>
+                    </div>
+                 </div>
+                 <!-- Review 2 -->
+                 <div class="bg-white rounded-lg shadow-md p-6">
+                    <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“We love how EQUIJOB provides resources on inclusive hiring. It's helped us build a more diverse and supportive workplace.”</p>
+                     <div class="flex items-center gap-4">
+                        <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50/E0E0E0/AAAAAA?text=ML" alt="Maria L.">
+                        <div>
+                            <p class="font-semibold font-poppins text-gray-800">Maria L.</p>
+                            <p class="text-sm text-gray-500">Platform User</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
+        <div class="container mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+             <div class="lg:w-2/5">
+                 <img src="https://placehold.co/451x509/E0E0E0/AAAAAA?text=FAQ+Image" alt="Person asking a question" class="w-full h-auto rounded-lg shadow-lg"/>
+             </div>
+             <div class="lg:w-3/5">
+                <h2 class="text-3xl md:text-4xl font-semibold font-poppins mb-8 text-gray-800">Frequently Asked Questions</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2 font-poppins">Can employers use EQUIJOB to improve their hiring practices?</h3>
+                        <p class="text-gray-600 leading-relaxed">Yes, EQUIJOB provides employers with resources on disability inclusion and best practices for equitable hiring, helping to create a more inclusive workforce.</p>
+                    </div>
+                    <!-- Add more Q&A pairs here -->
+                     <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2 font-poppins">Is EQUIJOB accessible for users with various disabilities?</h3>
+                        <p class="text-gray-600 leading-relaxed">Absolutely. Accessibility is a core principle. The platform is designed with features and considerations to support users with a wide range of disabilities.</p>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2 font-poppins">How does EQUIJOB connect job seekers with employers?</h3>
+                        <p class="text-gray-600 leading-relaxed">EQUIJOB uses a tailored matching system considering skills, experience, and accessibility needs, alongside facilitating inclusive interview processes.</p>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+
+     <!-- Footer Section -->
+    <footer id="footer" class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Logo/Brand Column -->
+                <div class="lg:col-span-2 mb-6 lg:mb-0">
+                     <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
+                     <!-- Placeholder for Logo Image if available -->
+                     <!-- <img src="https://placehold.co/233x194/CCCCCC/AAAAAA?text=Logo" alt="Equijob Logo" class="w-32 h-auto mb-4"> -->
+                     <p class="text-sm text-gray-600 leading-relaxed">Fostering disability-inclusive employment for a more equitable and empowered workforce.</p>
+                </div>
+
+                <!-- Link Columns -->
+                <div>
+                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Candidate</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-blue-600">User Dashboard</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Resume Builder</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Find Jobs</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Accessibility</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Employers</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-blue-600">Post Jobs</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Jobs Listing</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Partnerships</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Resources</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Job Details</a></li>
+                    </ul>
+                </div>
+                 <div>
+                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-blue-600">Help Center</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Privacy & Terms</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Safety Info</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Sitemap</a></li>
+                        <li><a href="#" class="text-sm hover:text-blue-600">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                 <p class="text-gray-500 mb-4 md:mb-0">© equijob2025. All rights reserved.</p>
+                 <div class="flex items-center space-x-6">
+                    <div class="flex space-x-4">
+                         <!-- Replace with actual social icons -->
+                         <a href="#" class="text-gray-500 hover:text-blue-600">FB</a>
+                         <a href="#" class="text-gray-500 hover:text-blue-600">TW</a>
+                         <a href="#" class="text-gray-500 hover:text-blue-600">IG</a>
+                    </div>
+                     <div class="flex items-center text-gray-600">
+                        <span>English (US)</span>
+                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
