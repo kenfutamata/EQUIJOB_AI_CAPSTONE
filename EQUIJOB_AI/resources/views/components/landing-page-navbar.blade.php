@@ -4,7 +4,7 @@
   <div class="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-8 py-3">
     <!-- Logo and Brand Name Link -->
     <a href="{{ route('landing-page') }}" class="flex items-center gap-2 no-underline">
-      <img src="https://placehold.co/40x40/0B3C5D/FFFFFF?text=EJ" alt="EquiJob Logo" class="w-10 h-10 object-contain" />
+      <img src="{{ asset('assets/photos/landing_page/equijob_logo.png') }}" alt="EquiJob Logo" class="w-15 h-15 object-contain" />
       <span class="text-sm font-bold text-[#0b3c5d]">EquiJob</span>
     </a>
 

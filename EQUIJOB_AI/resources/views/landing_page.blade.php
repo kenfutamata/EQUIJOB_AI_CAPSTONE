@@ -4,36 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB</title>
-    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Include Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Add custom font families if needed, or configure in tailwind.config.js */
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-        }
-        html {
-             scroll-behavior: smooth; /* Smooth scrolling for anchor links */
-        }
-    </style>
-    <script>
-        // Basic JS for Mobile Menu Toggle
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-    </script>
+    <link href="{{ asset('assets/landing_page/css/landing_page.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/landing_page/js/landing_page.js') }}"></script>
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}">
 </head>
 <body class="bg-white text-gray-800">
     <!-- Navbar Section -->
     <x-landing-page-navbar/>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden px-6 pb-4">
             <a href="#hero" class="block text-gray-600 hover:text-blue-600 py-2">Home</a>
             <a href="#why-us" class="block text-gray-600 hover:text-blue-600 py-2">Why Us</a>
@@ -55,7 +36,7 @@
                 <a href="#" class="bg-green-600 hover:bg-green-700 text-white text-lg font-medium px-10 py-3 rounded-xl shadow-md transition duration-300 inline-block">Register Now</a>
             </div>
             <div class="lg:w-1/2">
-                <img src="https://placehold.co/507x338/FFFFFF/000000?text=Hero+Image" alt="Inclusive workplace" class="w-full h-auto rounded-lg shadow-lg" />
+                <img src="{{ asset('assets/photos/landing_page/landingpage_1.png') }}" alt="Inclusive workplace" class="w-full h-auto rounded-lg shadow-lg" />
             </div>
         </div>
     </section>
@@ -97,7 +78,7 @@
                 </div>
             </div>
             <div class="lg:w-1/2">
-                <img src="https://placehold.co/599x376/E0E0E0/AAAAAA?text=Trust+Image" alt="People collaborating" class="w-full h-auto rounded-lg shadow-lg" />
+                <img src="{{ asset('assets/photos/landing_page/landingpage_2.jpg') }}" alt="People collaborating" class="w-full h-auto rounded-lg shadow-lg" />
             </div>
         </div>
     </section>
@@ -111,7 +92,6 @@
                 <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+2" alt="Partner 2 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
                 <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+3" alt="Partner 3 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
                 <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+4" alt="Partner 4 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <!-- Add more logos as needed -->
             </div>
         </div>
     </section>
@@ -215,57 +195,9 @@
                 <div class="lg:col-span-2 mb-6 lg:mb-0">
                      <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
                      <!-- Placeholder for Logo Image if available -->
-                     <!-- <img src="https://placehold.co/233x194/CCCCCC/AAAAAA?text=Logo" alt="Equijob Logo" class="w-32 h-auto mb-4"> -->
+                     <img src="{{ asset('assets/photos/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
                      <p class="text-sm text-gray-600 leading-relaxed">Fostering disability-inclusive employment for a more equitable and empowered workforce.</p>
                 </div>
-
-                <!-- Link Columns -->
-                <div>
-                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Candidate</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm hover:text-blue-600">User Dashboard</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Resume Builder</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Find Jobs</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Accessibility</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Employers</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm hover:text-blue-600">Post Jobs</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Jobs Listing</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Partnerships</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Resources</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Job Details</a></li>
-                    </ul>
-                </div>
-                 <div>
-                    <h4 class="font-semibold mb-4 text-gray-800 font-poppins">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm hover:text-blue-600">Help Center</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Privacy & Terms</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Safety Info</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Sitemap</a></li>
-                        <li><a href="#" class="text-sm hover:text-blue-600">Contact Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-                 <p class="text-gray-500 mb-4 md:mb-0">© equijob2025. All rights reserved.</p>
-                 <div class="flex items-center space-x-6">
-                    <div class="flex space-x-4">
-                         <!-- Replace with actual social icons -->
-                         <a href="#" class="text-gray-500 hover:text-blue-600">FB</a>
-                         <a href="#" class="text-gray-500 hover:text-blue-600">TW</a>
-                         <a href="#" class="text-gray-500 hover:text-blue-600">IG</a>
-                    </div>
-                     <div class="flex items-center text-gray-600">
-                        <span>English (US)</span>
-                        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    </div>
-                 </div>
-            </div>
         </div>
     </footer>
 
