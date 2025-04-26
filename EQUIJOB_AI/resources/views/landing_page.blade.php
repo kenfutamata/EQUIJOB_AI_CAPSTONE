@@ -88,10 +88,10 @@
         <div class="container mx-auto text-center">
             <h2 class="text-3xl md:text-4xl font-semibold font-poppins mb-12 text-gray-800">Our Partners</h2>
             <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16 lg:gap-20">
-                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+1" alt="Partner 1 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+2" alt="Partner 2 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+3" alt="Partner 3 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="https://placehold.co/150x75/E0E0E0/AAAAAA?text=Partner+4" alt="Partner 4 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="{{ asset('assets/photos/landing_page/finance.png') }}" alt="Partner 1 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="{{ asset('assets/photos/landing_page/tmobile.png') }}" alt="Partner 2 Logo" class="h-16 md:h-5 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="{{ asset('assets/photos/landing_page/dell.png') }}" alt="Partner 3 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
+                <img src="{{ asset('assets/photos/landing_page/accenture.png') }}" alt="Partner 4 Logo" class="h-16 md:h-5 w-auto opacity-70 hover:opacity-100 transition duration-300" />
             </div>
         </div>
     </section>
@@ -103,7 +103,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Card 1 -->
                 <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/365x234/E0E0E0/AAAAAA?text=Resource+1" alt="Inclusive Team Collaboration" class="w-full h-48 object-cover">
+                    <img src="{{ asset('assets/photos/landing_page/landing_page5.jpg') }}" alt="Inclusive Team Collaboration" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Inclusive Team Collaboration</h3>
                         <p class="text-gray-600 leading-relaxed">Illustrates a wheelchair user participating in a group forum, emphasizing cooperation, integration, and equal access to working environments.</p>
@@ -111,7 +111,7 @@
                 </div>
                  <!-- Card 2 -->
                 <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/367x231/E0E0E0/AAAAAA?text=Resource+2" alt="Equal Opportunity & Professionalism" class="w-full h-48 object-cover">
+                    <img src="{{ asset('assets/photos/landing_page/landing_page4.jpg') }}" alt="Equal Opportunity & Professionalism" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Equal Opportunity & Professionalism</h3>
                         <p class="text-gray-600 leading-relaxed">People with disabilities can occupy professional roles. A person in a wheelchair attends a business conference, proving capability and leadership.</p>
@@ -119,7 +119,7 @@
                 </div>
                  <!-- Card 3 -->
                  <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden">
-                    <img src="https://placehold.co/367x235/E0E0E0/AAAAAA?text=Resource+3" alt="Accessibility in Tech & Learning" class="w-full h-48 object-cover">
+                    <img src="{{ asset('assets/photos/landing_page/landing_page6.jpg') }}" alt="Accessibility in Tech & Learning" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold font-poppins mb-2 text-gray-800">Accessibility in Tech & Learning</h3>
                         <p class="text-gray-600 leading-relaxed">People with disabilities exhibit mastery of learning and technology, accessing online resources and showcasing diverse skills.</p>
@@ -138,10 +138,10 @@
                  <div class="bg-white rounded-lg shadow-md p-6">
                      <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“As a job seeker with a disability, I finally found a platform that understands my needs. The assistive features and virtual interview options gave me confidence and a real chance.”</p>
                      <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50/E0E0E0/AAAAAA?text=JD" alt="John Doe">
+                        <img class="w-12 h-12 rounded-full" src="{{ asset('assets/photos/landing_page/pp1.jpg') }}" alt="John Doe">
                         <div>
-                            <p class="font-semibold font-poppins text-gray-800">John Doe</p>
-                            <p class="text-sm text-gray-500">Customer</p>
+                            <p class="font-semibold font-poppins text-gray-800">Maria Doe</p>
+                            <p class="text-sm text-gray-500">Job Applicant</p>
                         </div>
                     </div>
                  </div>
@@ -149,10 +149,10 @@
                  <div class="bg-white rounded-lg shadow-md p-6">
                     <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“We love how EQUIJOB provides resources on inclusive hiring. It's helped us build a more diverse and supportive workplace.”</p>
                      <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50/E0E0E0/AAAAAA?text=ML" alt="Maria L.">
+                        <img class="w-12 h-12 rounded-full" src="{{ asset('assets/photos/landing_page/pp2.jpg') }}" alt="Maria L.">
                         <div>
-                            <p class="font-semibold font-poppins text-gray-800">Maria L.</p>
-                            <p class="text-sm text-gray-500">Platform User</p>
+                            <p class="font-semibold font-poppins text-gray-800">John Doe</p>
+                            <p class="text-sm text-gray-500">Job Provider</p>
                         </div>
                     </div>
                  </div>
@@ -164,7 +164,7 @@
     <section id="faq" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
         <div class="container mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
              <div class="lg:w-2/5">
-                 <img src="https://placehold.co/451x509/E0E0E0/AAAAAA?text=FAQ+Image" alt="Person asking a question" class="w-full h-auto rounded-lg shadow-lg"/>
+                 <img src="{{ asset('assets/photos/landing_page/landing_page7.jpg') }}" alt="Person asking a question" class="w-full h-auto rounded-lg shadow-lg"/>
              </div>
              <div class="lg:w-3/5">
                 <h2 class="text-3xl md:text-4xl font-semibold font-poppins mb-8 text-gray-800">Frequently Asked Questions</h2>
@@ -195,7 +195,7 @@
                 <div class="lg:col-span-2 mb-6 lg:mb-0">
                      <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
                      <!-- Placeholder for Logo Image if available -->
-                     <img src="{{ asset('assets/photos/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
+                     <img src="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
                      <p class="text-sm text-gray-600 leading-relaxed">Fostering disability-inclusive employment for a more equitable and empowered workforce.</p>
                 </div>
         </div>
