@@ -57,15 +57,16 @@
       <h3 class="text-xl font-semibold text-gray-800">Select Your Role</h3>
       <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
     </div>
-
     <div class="space-y-4">
-      <button class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium" id="jobSeeker" name="jobSeeker" >
-      <!-- onclick="location.href='{{ route('jobseeker.register') }}'" -->
+    <div class="space-y-4">
+      <a href="{{ route('sign-up-applicant') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
         I am a Job Seeker
-      </button>
-      <button class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
+      </a>
+      
+      <a href="{{ route('sign-up-job-provider') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
         I am a Job Provider
-      </button>
+      </a>
+    </div>
     </div>
   </div>
 </div>

@@ -13,11 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('phone_number');
+            $table->date('date_of_birth');
+            $table->string('type_of_disability')->nullable(); 
+            $table->string('pwd_card')->nullable();
+            $table->string('upload_pwd_card')->nullable();
+            $table->enum('role', ['applicant', 'job_provider', 'admin']);
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
+            $table->string('company_name')->nullable();
+            $table->string('company_logo')->nullable();
             $table->timestamps();
         });
 
@@ -43,7 +51,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };
