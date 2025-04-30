@@ -12,7 +12,7 @@
   <x-landing-page-navbar/>
 
   <!-- Registration Form Section -->
-
+ <!-- Error Message -->
     @if ($message = Session::get('error'))
     <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
     {{ $message }}
@@ -69,7 +69,14 @@
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror
             </div>
-
+            <!--Address-->
+            <div class="flex flex-col relative">
+              <label class="text-stone-500 text-base mb-1">Address</label>
+              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Address" id="address" name="address" required>
+              @error('address')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
+            </div>
             <!-- Type of Disability -->
             <div class="flex flex-col relative">
               <label class="text-stone-500 text-base mb-1">Type of Disability</label>
@@ -120,7 +127,9 @@
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror
             </div>
-                      <!-- Buttons -->
+            <br>
+            <br>
+          <!-- Buttons -->
           <div class="flex flex-col md:flex-row gap-4 mt-10">
             <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md text-base font-semibold hover:bg-blue-700 transition">
               Sign Up

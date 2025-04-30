@@ -25,8 +25,9 @@ class SignUpController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|max:11',
             'date_of_birth' => 'required|date',
+            'address' => 'required|string|max:255',
             'type_of_disability' => 'required|string|max:255',
-            'pwd_card' => 'nullable|string|max:255',
+            'pwd_card' => 'nullable|string|max:12',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
@@ -47,7 +48,7 @@ class SignUpController extends Controller
         }
     }
     public function SignUpJobProvider(Request $request){
-        $request->validate([
+        $validateInformation = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -55,11 +56,26 @@ class SignUpController extends Controller
             'phone_number' => 'required|string|max:15',
             'company_name' => 'required|string|max:255',
             'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'role' => 'required|in:job_provider',
+            'role' => 'nullable|string',
+            'status' => 'nullable|string',
         ]);
-
-        return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');    }
-
+        try{
+            if($request->hasFile('company_logo')){
+                $file = $request->file('company_logo'); 
+                $filepath = $file->store('company_logo', 'public'); 
+                $validateInformation['company_logo'] = $filepath;
+            }
+            
+            $validateInformation['role']=$validateInformation['role']??'job_provider';
+            $validateInformation['status']=$validateInformation['status']??'inactive'; 
+            $validateInformation['password'] = Hash::make($request->password); 
+            users::create($validateInformation);
+            return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', 'An error occurred while creating the user: ' . $e->getMessage());
+        }
+            return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');    
+        }    
     public function ViewEmailConfirmationPage(){
         return view ('sign-in-page.sign_up.sign_up_confirmation.registrationMessage'); 
     }

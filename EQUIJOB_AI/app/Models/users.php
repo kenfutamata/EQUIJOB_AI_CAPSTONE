@@ -18,6 +18,7 @@ class users extends Model
         'password',
         'phone_number',
         'date_of_birth',
+        'address',
         'type_of_disability',
         'pwd_card',
         'upload_pwd_card',

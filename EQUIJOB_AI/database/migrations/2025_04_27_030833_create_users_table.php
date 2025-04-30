@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('address')->nullable();
             $table->string('phone_number');
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable();
             $table->string('type_of_disability')->nullable(); 
             $table->string('pwd_card')->nullable();
             $table->string('upload_pwd_card')->nullable();

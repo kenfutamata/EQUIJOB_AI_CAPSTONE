@@ -2,23 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\users;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
-class DatabaseSeeder extends Seeder
+class UserSeeder extends Seeder
 {
-    protected static ?string $password = null;
-    protected $model = users::class;
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         users::factory()->create([
             'first_name' => 'admin',
             'last_name' => 'admin',
@@ -31,6 +25,8 @@ class DatabaseSeeder extends Seeder
             'type_of_disability' => 'none',
             'pwd_card' => 'none',
             'upload_pwd_card' => 'none',
+            'company_name' => 'Admin Company',
+            'company_logo' => 'admin_logo.png',
         ]);
     }
 }
