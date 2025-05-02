@@ -10,44 +10,57 @@
 <body class="bg-gray-50 min-h-screen flex flex-col">
   <!-- Navbar component -->
   <x-landing-page-navbar />
+    <!-- Error Message -->
+    @if ($message = Session::get('error'))
+    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
+    {{ $message }}
+    @endif
+    </div>
+  <div class="flex-grow flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6">
+    <h2 class="text-2xl font-bold text-center">Sign in</h2>
 
-  <main class="flex-grow flex items-center justify-center px-4 py-12">
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-md p-8 space-y-8">
-      <h2 class="text-3xl font-semibold text-zinc-800 text-center">Sign in</h2>
-
+    <form id="signInForm" method="POST" action="{{route('login')}}" class="space-y-6" enctype="multipart/form-data">
+      @csrf
+      @method('POST')
       <!-- Email Input -->
-      <div class="space-y-1">
-        <label class="block text-stone-500 text-base">Email</label>
-        <input type="text" class="w-full h-14 px-4 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-green-500"  placeholder="enter email: text@gmail.com"/>
+      <div>
+        <label class="block text-gray-600 text-sm mb-1">Email</label>
+        <input name="email" type="text" class="w-full h-12 px-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Email" id="email" name="email" required/>
+        @error('email')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
       </div>
 
       <!-- Password Input -->
-      <div class="space-y-1 relative">
-        <label class="block text-stone-500 text-base">Password</label>
-        <input type="password" class="w-full h-14 px-4 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="enter password"/>
-        <!-- Hide Icon -->
-        <div class="absolute right-4 top-[42px] flex items-center space-x-1 text-stone-500 text-lg cursor-pointer">
-          <svg width="20" height="20" fill="#666666" fill-opacity="0.8" viewBox="0 0 24 24">
-            <path d="M3 3l18 18M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" />
+      <div class="relative">
+        <label class="block text-gray-600 text-sm mb-1">Password</label>
+        <input id="password" name="password" type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="email" name="email" required/>
+        <!-- Toggle visibility -->
+        <button type="button" onclick="togglePassword()" class="absolute right-3 top-9 text-gray-500 text-sm flex items-center space-x-1">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a18.98 18.98 0 013.75-5.25M21 12s-3 7-10 7c-.62 0-1.23-.057-1.82-.167M9.53 9.53A3.001 3.001 0 0114.47 14.47" />
           </svg>
-          <span class="text-sm">Hide</span>
-        </div>
+          <span>Hide</span>
+        </button>
+        @error('password')
+          <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+        @enderror
       </div>
 
-      <!-- Remember me and Help -->
-      <div class="flex justify-between items-center text-base">
-        <a href="#" class="text-red-500 hover:underline">Forgot Password?</a>
+      <div class="text-right">
+        <a href="#" class="text-sm text-red-500 hover:underline">Forgot Password?</a>
       </div>
 
-      <!-- Sign In Button -->
-      <button class="w-full py-3.5 bg-blue-600 text-white text-lg rounded-full hover:bg-red-700 transition">Sign in</button>
+      <button type="submit" class="w-full h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition text-lg font-semibold">Sign in</button>
+    </form>
 
-      <!-- Sign up link -->
-      <div class="text-center text-base">
-        <span class="text-stone-500">Don’t have an account? </span>
-        <a href="#roleModal" class="text-neutral-900 font-medium underline">Sign up</a>      
-      </div>
+    <div class="text-center text-sm text-gray-600">
+      Don’t have an account?
+      <a href="#" onclick="document.getElementById('roleModal').classList.remove('hidden')" class="text-indigo-600 font-medium hover:underline">Sign up</a>
     </div>
+  </div>
+</div>
 
  <!-- Modal Background -->
 <div id="roleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
@@ -83,11 +96,17 @@
     document.getElementById('roleModal').classList.add('hidden');
   }
 
-  // Optional: Close modal on outside click
   window.addEventListener('click', function(e) {
     const modal = document.getElementById('roleModal');
     if (e.target === modal) closeModal();
   });
+
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const icon = document.getElementById('eyeIcon');
+    const isHidden = passwordInput.type === 'password';
+    passwordInput.type = isHidden ? 'text' : 'password';
+  }
 </script>
 </main>
 </body>

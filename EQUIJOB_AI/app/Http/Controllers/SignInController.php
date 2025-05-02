@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\User;
 use App\Models\users;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class SignUpController extends Controller
+class SignInController extends Controller
 {
     public function ViewSignUpApplicantPage(){
         return view ('sign-in-page.sign_up.sign_up_applicant'); 
@@ -76,7 +75,48 @@ class SignUpController extends Controller
         }
             return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');    
         }    
-    public function ViewEmailConfirmationPage(){
+    
+        public function LoginUser(Request $request){
+            $validateInformation = $request->validate([
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:8',
+            ]);
+            try{
+                $credentiasls = $request->only('email', 'password');
+                if (Auth::guard('admin')->attempt($credentiasls)) {   
+                    $user = Auth::guard('admin')->user();
+                    if($user->role===('admin')&& $user->status===('active')){
+                        dd('Admin'); 
+                    return redirect()->intended('dashboard')->with('success', 'Login Successful!');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+                }
+
+                if (Auth::guard('applicant')->attempt($credentiasls)) {   
+                    $user = Auth::guard('applicant')->user();
+                    if($user->role===('applicant')&& $user->status===('active')){
+                        dd('applicant'); 
+                        // return redirect()->intended('dashboard')->with('success', 'Login Successful!');
+                    // return redirect()->intended('dashboard')->with('success', 'Login Successful!');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+                }
+
+                if (Auth::guard('job_provider')->attempt($credentiasls)) {   
+                    $user = Auth::guard('job_provider')->user();
+                    if($user->role===('job_provider')&& $user->status===('active')){ 
+                        return redirect()->route('job-provider-dashboard');                    }
+                } else {
+                    return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+                }
+            }catch(\Exception $e){
+                return redirect()->back()->with('catch_error', 'An error occurred while logging in: ' . $e->getMessage());
+            }
+        }
+        public function ViewEmailConfirmationPage(){
         return view ('sign-in-page.sign_up.sign_up_confirmation.registrationMessage'); 
     }
+    
 }
