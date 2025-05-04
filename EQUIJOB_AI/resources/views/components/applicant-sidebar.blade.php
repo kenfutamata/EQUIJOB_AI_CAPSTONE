@@ -12,7 +12,7 @@
       </a>
       <a class="nav-item" href="#">
         <img src="{{ asset('assets/photos/dashboard/job-provider-dashboard/job_applicant.png') }}" alt="Job Application Icon" />
-        <span>Job Application</span>
+        <span>Job Matching</span>
       </a>
       <a class="nav-item" href="#">
         <img src="{{ asset('assets/photos/dashboard/job-provider-dashboard/job_posting.png') }}" alt="Job Posting Icon" />
@@ -29,7 +29,7 @@
     </nav>
   </div>
 
-  <a class="nav-item" href="{{ route('job-provider-logout') }}">
+  <a class="nav-item" href="#">
       <img src="{{ asset('assets/photos/dashboard/logout.png') }}" alt="Logout" />
       <span>Log-out</span>
   </a>

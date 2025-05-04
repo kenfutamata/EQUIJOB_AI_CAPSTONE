@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->string('company_name')->nullable();
             $table->string('company_logo')->nullable();
+            $table->string('profile_picture')->nullable();
             $table->timestamps();
         });
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\JobProviderController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\SignInController;
@@ -26,4 +27,12 @@ Route::get('/EQUIJOB/Email-Confirmation',[SignInController::class, 'ViewEmailCon
 //Job Provider
 Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider-Dashboard',[JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
+    Route::get('/EQUIJOB/Job-Provider-Dashboard/Logout',[JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
+});
+
+//Applicant 
+
+Route::middleware('auth:applicant')->group(function () {
+    Route::get('/EQUIJOB/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
+    // Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogoutApplicant'])->name('applicant-logout');
 });
