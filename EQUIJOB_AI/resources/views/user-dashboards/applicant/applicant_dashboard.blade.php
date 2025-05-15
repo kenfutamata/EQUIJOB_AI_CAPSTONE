@@ -34,19 +34,41 @@
     </div>
 
     <!-- Status Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-10">
-      @foreach (['Apply', 'Interview', 'On Offer'] as $status)
-        <div class="flex border border-black w-full max-w-[230px] h-[83px]">
-          <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
-            <img src="https://placehold.co/60x60" alt="{{ $status }} icon" class="w-[60px] h-[60px]" />
-          </div>
-          <div class="flex flex-col justify-center px-4">
-            <div class="text-lg font-semibold">{{ $status }}</div>
-            <div class="text-2xl">0</div>
-          </div>
-        </div>
-      @endforeach
+<div class="flex flex-col md:flex-row gap-6 px-6 py-10">
+  
+  <!-- Apply Card -->
+  <div class="flex border border-black w-full max-w-[230px] h-[83px]">
+    <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
+      <img src="{{ asset('assets/applicant/dashboard/image_137.png') }}" alt="Apply icon" class="w-[60px] h-[60px]" />
+    </div>
+    <div class="flex flex-col justify-center px-4">
+      <div class="text-lg font-semibold">Apply</div>
+      <div class="text-2xl">0</div>
     </div>
   </div>
+
+  <!-- Interview Card -->
+  <div class="flex border border-black w-full max-w-[230px] h-[83px]">
+    <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
+      <img src="{{ asset('assets/applicant/dashboard/image_136.png') }}" alt="Interview icon" class="w-[60px] h-[60px]" />
+    </div>
+    <div class="flex flex-col justify-center px-4">
+      <div class="text-lg font-semibold">Interview</div>
+      <div class="text-2xl">0</div>
+    </div>
+  </div>
+
+  <!-- On Offer Card -->
+  <div class="flex border border-black w-full max-w-[230px] h-[83px]">
+    <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
+      <img src="{{ asset('assets/applicant/dashboard/email_1.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
+    </div>
+    <div class="flex flex-col justify-center px-4">
+      <div class="text-lg font-semibold">On Offer</div>
+      <div class="text-2xl">0</div>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>
