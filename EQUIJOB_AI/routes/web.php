@@ -32,7 +32,12 @@ Route::middleware('auth:job_provider')->group(function () {
 
 //Applicant 
 
-Route::middleware('auth:applicant')->group(function () {
+Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
-    // Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogoutApplicant'])->name('applicant-logout');
+    Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
+    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
+});
+
+Route::middleware('auth::admin')->group(function () {
+    // Route::get('/EQUIJOB/Admin-Dashboard',[ApplicantController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
 });

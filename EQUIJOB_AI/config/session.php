@@ -214,4 +214,12 @@ return [
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
 
+
+    'web' => [
+        'driver' => env('SESSION_DRIVER', 'file'),
+        'lifetime' => 120, // or more
+        'expire_on_close' => false,
+        'encrypt' => false,
+    ],
+
 ];

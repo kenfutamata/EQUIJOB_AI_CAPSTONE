@@ -87,7 +87,7 @@ class SignInController extends Controller
                 $user = Auth::guard('admin')->user();
                 if($user->role===('admin')&& $user->status===('active')){
                     dd('Admin'); 
-                return redirect()->intended('dashboard')->with('success', 'Login Successful!');
+                    return redirect()->intended('dashboard')->with('success', 'Login Successful!');
                 }
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
@@ -96,6 +96,7 @@ class SignInController extends Controller
             if (Auth::guard('applicant')->attempt($credentiasls)) {   
                 $user = Auth::guard('applicant')->user();
                 if($user->role===('applicant')&& $user->status===('active')){
+                    $request->session()->regenerate();
                     return redirect()->route('applicant-dashboard'); 
                 }
             } else {
@@ -105,12 +106,14 @@ class SignInController extends Controller
             if (Auth::guard('job_provider')->attempt($credentiasls)) {   
                 $user = Auth::guard('job_provider')->user();
                 if($user->role===('job_provider')&& $user->status===('active')){ 
-                    return redirect()->route('job-provider-dashboard');                    }
+                    $request->session()->regenerate();
+                    return redirect()->route('job-provider-dashboard');                    
+                }
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
             }
         }catch(\Exception $e){
-            return redirect()->back()->with('catch_error', 'An error occurred while logging in: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
         }
     }
     public function ViewEmailConfirmationPage(){

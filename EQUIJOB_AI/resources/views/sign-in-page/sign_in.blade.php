@@ -11,7 +11,7 @@
   <!-- Navbar component -->
   <x-landing-page-navbar />
     <!-- Error Message -->
-    @if ($message = Session::get('error'))
+    @if ($message = Session::get('error')??$message=Session::get('catch_error'))
     <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
     {{ $message }}
     @endif
@@ -22,7 +22,6 @@
 
     <form id="signInForm" method="POST" action="{{route('login')}}" class="space-y-6" enctype="multipart/form-data">
       @csrf
-      @method('POST')
       <!-- Email Input -->
       <div>
         <label class="block text-gray-600 text-sm mb-1">Email</label>
