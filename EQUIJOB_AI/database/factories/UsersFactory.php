@@ -36,7 +36,7 @@ class UsersFactory extends Factory
             'phone_number' => $this->faker->phoneNumber(),
             'date_of_birth' => $this->faker->date(),
             'type_of_disability' => $this->faker->word(),
-            'pwd_card' => $this->faker->word(),
+            'pwd_id' => $this->faker->word(),
             'upload_pwd_card' => $this->faker->word(),
         ];
     }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->date('date_of_birth')->nullable();
             $table->string('type_of_disability')->nullable(); 
-            $table->string('pwd_card')->nullable();
+            $table->string('pwd_id')->nullable();
             $table->string('upload_pwd_card')->nullable();
             $table->enum('role', ['applicant', 'job_provider', 'admin']);
             $table->enum('status', ['active', 'inactive'])->default('inactive');

@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'phone_number' => '1234567890',
             'date_of_birth' => '1990-01-01',
             'type_of_disability' => 'none',
-            'pwd_card' => 'none',
+            'pwd_id' => 'none',
             'upload_pwd_card' => 'none',
             'company_name' => 'Admin Company',
             'company_logo' => 'admin_logo.png',

@@ -20,7 +20,7 @@ class users extends Model
         'date_of_birth',
         'address',
         'type_of_disability',
-        'pwd_card',
+        'pwd_id',
         'upload_pwd_card',
         'role',
         'status',

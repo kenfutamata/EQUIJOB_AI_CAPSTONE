@@ -10,7 +10,7 @@
       </a>
       <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
         <img src="{{ asset('assets/photos/dashboard/job-provider-dashboard/job_applicant.png') }}" alt="Job Matching Icon" />
-        <span>Job Matching</span>
+        <span>Job Application</span>
       </a>
       <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
         <img src="{{ asset('assets/photos/dashboard/job-provider-dashboard/job_posting.png') }}" alt="Job Posting Icon" />
@@ -27,7 +27,7 @@
     </nav>
   </div>
 
-  <form method="POST" action="{{ route('applicant-logout') }}">
+  <form method="GET" action="{{ route('job-provider-logout') }}">
     @csrf
     <button class="flex items-center gap-3 px-4 py-2 text-[#F13E3E] font-medium hover:bg-red-100 w-full rounded">
       <img src="{{ asset('assets/photos/dashboard/logout.png') }}" alt="Logout Icon" />

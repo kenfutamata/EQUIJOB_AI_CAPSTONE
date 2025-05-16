@@ -28,7 +28,7 @@
             <!-- First Name -->
             <div class="flex flex-col">
               <label class="text-stone-500 text-base mb-1">First Name</label>
-              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="First Name" id="first_name" name="first_name" required>
+              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="First Name" id="first_name" name="first_name" pattern="[A-Za-z\s]+" required>
               @error('first_name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror
@@ -37,7 +37,7 @@
             <!-- Last Name -->
             <div class="flex flex-col">
               <label class="text-stone-500 text-base mb-1">Last Name</label>
-              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Last Name" id="last_name" name="last_name" required>
+              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Last Name" id="last_name" name="last_name" pattern="[A-Za-z\s]+" required>
               @error('last_name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror
@@ -64,7 +64,7 @@
             <!-- Date of Birth -->
             <div class="flex flex-col relative">
               <label class="text-stone-500 text-base mb-1">Date of Birth</label>
-              <input type="date" class="h-14 px-4 rounded-xl border border-stone-300" id="date_of_birth" name="date_of_birth" required>
+              <input type="date" class="h-14 px-4 rounded-xl border border-stone-300" id="date_of_birth" name="date_of_birth" required max="{{date('Y-m-d')}}" required>
               @error('date_of_birth')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror
@@ -113,7 +113,7 @@
             <!-- PWD ID -->
             <div class="flex flex-col">
               <label class="text-stone-500 text-base mb-1">PWD ID</label>
-              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID" id="pwd_id" name="pwd_id" required>
+              <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID" id="pwd_id" name="pwd_id" pattern="\d{3}-\d{3}-\d{3}" required>
               @error('pwd_id')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
               @enderror

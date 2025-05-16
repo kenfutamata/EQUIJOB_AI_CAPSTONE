@@ -18,15 +18,15 @@ class SignInController extends Controller
 
     public function SignUpJobApplicant(Request $request){
        $validateInformation =  $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|max:11',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'required|date|before_or_equal:today',
             'address' => 'required|string|max:255',
             'type_of_disability' => 'required|string|max:255',
-            'pwd_card' => 'nullable|string|max:12',
+            'pwd_id' => 'nullable|string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
@@ -48,12 +48,12 @@ class SignInController extends Controller
     }
     public function SignUpJobProvider(Request $request){
         $validateInformation = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'last_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|max:15',
-            'company_name' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',

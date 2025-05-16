@@ -28,14 +28,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">First Name</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="First Name" id="first_name" name="first_name" required>
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="First Name" id="first_name" name="first_name" pattern="[A-Za-z\s]+" required>
           </div>
           @error('first_name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Last Name</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Last Name" id="last_name" name="last_name" required>
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Last Name" id="last_name" name="last_name" pattern="[A-Za-z\s]+" required>
           </div>
           @error('last_name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -70,7 +70,7 @@
               @enderror
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Company</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="company_name" name="company_name" required>
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="company_name" name="company_name" pattern="[A-Za-z\s]+" required>
           </div>
           @error('company_name')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
