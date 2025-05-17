@@ -25,7 +25,7 @@
 
       <!-- Profile box -->
       <a href="/applicant/profile" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]">
-        <img src="{{ asset('assets/applicant/dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
+        <img src="{{ asset('assets/job-provider/job-provider-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
         <div class="text-xs font-medium">
           <div class ="text-[8px]">{{$user->email ?? 'No Email Found'}}</div>
         </div>
@@ -38,7 +38,7 @@
   <!-- Apply Card -->
   <div class="flex border border-black w-full max-w-[230px] h-[83px]">
     <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
-      <img src="{{ asset('assets/applicant/dashboard/image_137.png') }}" alt="Apply icon" class="w-[60px] h-[60px]" />
+      <img src="{{ asset('assets/job-provider/job-provider-dashboard/image_137.png') }}" alt="Apply icon" class="w-[60px] h-[60px]" />
     </div>
     <div class="flex flex-col justify-center px-4">
       <div class="text-lg font-semibold">Application</div>
@@ -49,7 +49,7 @@
   <!-- Interview Card -->
   <div class="flex border border-black w-full max-w-[230px] h-[83px]">
     <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
-      <img src="{{ asset('assets/applicant/dashboard/image_136.png') }}" alt="Interview icon" class="w-[60px] h-[60px]" />
+      <img src="{{ asset('assets/job-provider/job-provider-dashboard/image_136.png') }}" alt="Interview icon" class="w-[60px] h-[60px]" />
     </div>
     <div class="flex flex-col justify-center px-4">
       <div class="text-lg font-semibold">Interview</div>
@@ -60,7 +60,7 @@
   <!-- On Offer Card -->
   <div class="flex border border-black w-full max-w-[230px] h-[83px]">
     <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
-      <img src="{{ asset('assets/applicant/dashboard/email_1.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
+      <img src="{{ asset('assets/job-provider/job-provider-dashboard/email_1.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
     </div>
     <div class="flex flex-col justify-center px-4">
       <div class="text-lg font-semibold">On Offer</div>
