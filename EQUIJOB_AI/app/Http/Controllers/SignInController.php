@@ -86,8 +86,7 @@ class SignInController extends Controller
             if (Auth::guard('admin')->attempt($credentiasls)) {   
                 $user = Auth::guard('admin')->user();
                 if($user->role===('admin')&& $user->status===('active')){
-                    dd('Admin'); 
-                    return redirect()->intended('dashboard')->with('success', 'Login Successful!');
+                    return redirect()->route('admin-dashboard')->with('success', 'Login Successful!');
                 }
             } else {
                 return redirect()->back()->with('error', 'Invalid credentials. Please try again.');

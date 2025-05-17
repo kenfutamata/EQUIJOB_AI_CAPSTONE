@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\JobProviderController;
 use App\Http\Controllers\LandingPageController;
@@ -38,6 +39,9 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
 });
 
-Route::middleware('auth::admin')->group(function () {
-    // Route::get('/EQUIJOB/Admin-Dashboard',[ApplicantController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
+//admin
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/EQUIJOB/Admin-Dashboard',[AdminController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
+    Route::get('/EQUIJOB/Admin/Logout',[AdminController::class, 'LogoutAdmin'])->name('admin-logout');
+
 });
