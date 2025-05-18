@@ -36,7 +36,7 @@
         <!-- Password Input -->
         <div class="relative">
           <label class="block text-gray-600 text-sm mb-1">Password</label>
-          <input id="password" name="password" type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="email" name="email" required />
+          <input id="password" name="password" type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="password" name="password" required />
           <!-- Toggle visibility -->
           <button type="button" onclick="togglePassword()" class="absolute right-3 top-9 text-gray-500 text-sm flex items-center space-x-1">
             <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
