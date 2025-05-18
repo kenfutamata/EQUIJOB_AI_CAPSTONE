@@ -33,7 +33,7 @@
             <div class="lg:w-1/2 text-center lg:text-left">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-poppins leading-tight mb-4">Connecting Persons with Disabilities with Employers</h1>
                 <p class="text-sm md:text-base leading-relaxed mb-8">Fostering disability-inclusive employment promotes equity, accessibility, and empowerment in the workforce, ensuring job seekers with disabilities have equal opportunities through inclusive hiring and strength-based pathways.</p>
-                <a href="#" class="bg-green-600 hover:bg-green-700 text-white text-lg font-medium px-10 py-3 rounded-xl shadow-md transition duration-300 inline-block">Sign In Now</a>
+                <a href="{{route('sign-in')}}" class="bg-green-600 hover:bg-green-700 text-white text-lg font-medium px-10 py-3 rounded-xl shadow-md transition duration-300 inline-block">Sign In Now</a>
             </div>
             <div class="lg:w-1/2">
                 <img src="{{ asset('assets/photos/landing_page/landingpage_1.png') }}" alt="Inclusive workplace" class="w-full h-auto rounded-lg shadow-lg" />

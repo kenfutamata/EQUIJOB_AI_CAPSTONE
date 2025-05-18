@@ -4,9 +4,13 @@
       <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/equijob_logo_dashboard.png') }}" alt="Logo" class="mx-auto" />
     </div>
     <nav class="flex flex-col gap-2 px-2">
-      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{ route('applicant-dashboard') }}">
         <img src="{{ asset('assets/photos/dashboard/job-provider-dashboard/Dashboard.png') }}" alt="Dashboard Icon" />
         <span>Dashboard</span>
+      </a>
+      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+        <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/resume.png') }}" alt="Resume Icon" />
+        <span>Resume Builder</span>
       </a>
       <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_applicant.png') }}" alt="Job Matching Icon" />
@@ -15,10 +19,6 @@
       <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_posting.png') }}" alt="Job Posting Icon" />
         <span>Job Posting</span>
-      </a>
-      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
-        <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/generate_monthly_report.png') }}" alt="Report Icon" />
-        <span>Monthly Report</span>
       </a>
       <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/applicant_feedback.png') }}" alt="Feedback Icon" />

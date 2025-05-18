@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\ApplicantProfileController;
 use App\Http\Controllers\JobProviderController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\SignInController;
@@ -37,6 +38,10 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
     Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
     Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
+    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
+    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantProfileController::class, 'index'])->name('applicant-profile');
+    Route::put('/EQUIJOB/Applicant-Dashboard/Applicant-Profile/{id}',[ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
+
 });
 
 //admin

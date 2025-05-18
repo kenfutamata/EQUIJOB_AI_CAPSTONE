@@ -36,7 +36,7 @@ class SignInController extends Controller
             $filepath = $file->store('upload_pwd_card', 'public'); 
             $validateInformation['upload_pwd_card'] = $filepath;
         }
-        $validateInformation['role']=$validateInformation['role']??'applicant';
+        $validateInformation['role']=$validateInformation['role']??'Applicant';
         $validateInformation['status']=$validateInformation['status']??'inactive'; 
         $validateInformation['password'] = Hash::make($request->password); 
         try{
@@ -65,7 +65,7 @@ class SignInController extends Controller
                 $validateInformation['company_logo'] = $filepath;
             }
             
-            $validateInformation['role']=$validateInformation['role']??'job_provider';
+            $validateInformation['role']=$validateInformation['role']??'Job Provider';
             $validateInformation['status']=$validateInformation['status']??'inactive'; 
             $validateInformation['password'] = Hash::make($request->password); 
             users::create($validateInformation);
@@ -85,7 +85,7 @@ class SignInController extends Controller
             $credentiasls = $request->only('email', 'password');
             if (Auth::guard('admin')->attempt($credentiasls)) {   
                 $user = Auth::guard('admin')->user();
-                if($user->role===('admin')&& $user->status===('active')){
+                if($user->role===('Admin')&& $user->status===('active')){
                     return redirect()->route('admin-dashboard')->with('success', 'Login Successful!');
                 }
             } else {
@@ -94,7 +94,7 @@ class SignInController extends Controller
 
             if (Auth::guard('applicant')->attempt($credentiasls)) {   
                 $user = Auth::guard('applicant')->user();
-                if($user->role===('applicant')&& $user->status===('active')){
+                if($user->role===('Applicant')&& $user->status===('active')){
                     $request->session()->regenerate();
                     return redirect()->route('applicant-dashboard'); 
                 }
@@ -104,7 +104,7 @@ class SignInController extends Controller
 
             if (Auth::guard('job_provider')->attempt($credentiasls)) {   
                 $user = Auth::guard('job_provider')->user();
-                if($user->role===('job_provider')&& $user->status===('active')){ 
+                if($user->role===('Job Provider')&& $user->status===('active')){ 
                     $request->session()->regenerate();
                     return redirect()->route('job-provider-dashboard');                    
                 }

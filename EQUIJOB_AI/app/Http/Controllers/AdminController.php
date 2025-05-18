@@ -20,7 +20,6 @@ class AdminController extends Controller
     public function LogoutAdmin(Request $request)
     {
         Auth::guard('admin')->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('landing-page')->with('success', 'You have been logged out.');
