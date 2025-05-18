@@ -24,7 +24,7 @@
             <br>
             <a 
                 href = "{{route('landing-page')}}" class="px-10 py-2.5 mt-10 w-full rounded-md text-white text-sm font-semibold tracking-wide border-none outline-none bg-blue-500 hover:bg-blue-600">
-                Got it
+                OK
             </a>
         </div>
     </div>

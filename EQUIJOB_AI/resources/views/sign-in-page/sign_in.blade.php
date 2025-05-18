@@ -29,7 +29,7 @@
           <label class="block text-gray-600 text-sm mb-1">Email</label>
           <input name="email" type="text" class="w-full h-12 px-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Email" id="email" name="email" required />
           @error('email')
-          <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+          <div class="text-red text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
 
@@ -68,13 +68,13 @@
     <!-- Modal Box -->
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
       <div class="flex justify-between items-center">
-        <h3 class="text-xl font-semibold text-gray-800">Select Your Role</h3>
+        <h3 class="text-xl font-semibold text-gray-800">Job Applicant or Job Provider?</h3>
         <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
       </div>
       <div class="space-y-4">
         <div class="space-y-4">
           <a href="{{ route('sign-up-applicant') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
-            I am a Job Seeker
+            I am a Job Applicant
           </a>
 
           <a href="{{ route('sign-up-job-provider') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">

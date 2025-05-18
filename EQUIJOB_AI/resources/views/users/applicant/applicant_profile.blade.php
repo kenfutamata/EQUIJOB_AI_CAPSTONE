@@ -92,7 +92,7 @@
                         <button type="button"
                             onclick="document.getElementById('updateProfileModal').classList.remove('hidden')"
                             class="bg-white border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 font-semibold shadow-sm text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            Update Information
+                            Update
                         </button>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                             class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
                     <div>
-                        <label class="block text-sm text-gray-600 mb-1">Full Address</label>
+                        <label class="block text-sm text-gray-600 mb-1">Address</label>
                         <input type="text" name="address" value="{{ $user->address }}"
                             class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
@@ -163,7 +163,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm text-gray-600 mb-1">Upload Profile Picture</label>
+                        <label class="block text-sm text-gray-600 mb-1">Upload Profile</label>
                         <input type="file" name="profile_picture"
                             class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>

@@ -45,7 +45,7 @@
       <img src="{{ asset('assets/job-provider/job-provider-dashboard/email_1.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
     </div>
     <div class="flex flex-col justify-center px-4">
-      <div class="text-lg font-semibold">On Offer</div>
+      <div class="text-lg font-semibold">Hired</div>
       <div class="text-2xl">0</div>
     </div>
   </div>
