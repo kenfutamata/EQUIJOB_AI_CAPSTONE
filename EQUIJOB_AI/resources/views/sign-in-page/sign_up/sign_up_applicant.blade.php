@@ -72,6 +72,18 @@
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
+        <!-- Gender -->
+        <div class="flex flex-col relative">
+          <label class="text-stone-500 text-base mb-1">Gender</label>
+          <select class="h-14 px-4 rounded-xl border border-stone-300" id="gender" name="gender" required>
+            <option selected disabled>Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+          @error('gender')
+          <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+          @enderror
+        </div>
         <!--Address-->
         <div class="flex flex-col relative">
           <label class="text-stone-500 text-base mb-1">Address</label>
