@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminManageUserJobProviderController;
 use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ApplicantProfileController;
@@ -39,7 +40,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
     Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
     Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
-    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
+    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'EditProfil-e'])->name('applicant-profile-edit');
     Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantProfileController::class, 'index'])->name('applicant-profile');
     Route::put('/EQUIJOB/Applicant-Dashboard/Applicant-Profile/{id}',[ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
 
@@ -49,6 +50,8 @@ Route::middleware(['auth:applicant'])->group(function () {
 Route::middleware('auth:admin')->group(function () {
     Route::get('/EQUIJOB/Admin-Dashboard',[AdminController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
     Route::get('/EQUIJOB/Admin/Logout',[AdminController::class, 'LogoutAdmin'])->name('admin-logout');
-    Route::get('EQUIJOB/Admin/Manage-Users',[AdminManageUsersController::class, 'index'])->name('admin-manage-users');
+    Route::get('EQUIJOB/Admin/Manage-User-Applicants',[AdminManageUsersController::class, 'index'])->name('admin-manage-user-applicants');
+    Route::put('EQUIJOB/Admin/Manage-User-Applicants/Accept/{id}',[AdminManageUsersController::class, 'update'])->name('admin-manage-user-applicants-accept'); 
+    Route::get('EQUIJOB/Admin/Manage-User-JobProviders',[AdminManageUserJobProviderController::class, 'index'])->name('admin-manage-user-job-providers');
 
 });
