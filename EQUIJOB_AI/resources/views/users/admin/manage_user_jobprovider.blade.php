@@ -19,6 +19,11 @@
             </header>
 
             <main class="p-6">
+                @if(session('Success'))
+                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-500">
+                    {{ session('Success') }}
+                </div>
+                @endif
                 <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
                     <div>
                         <span class="text-gray-800">Manage </span>
@@ -28,6 +33,15 @@
                         <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
                         <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
                     </div>
+                    <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="mb-4 flex justify-end">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="Search applicants"
+                            class="border rounded-l px-2 py-1 w-32 text-sm focus:outline-none" />
+                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
+                    </form>
                 </div>
 
                 <div class="overflow-x-auto bg-white shadow rounded-lg">
@@ -66,14 +80,25 @@
                                 <td class="px-4 py-3">{{ $user->role }}</td>
                                 <td class="px-4 py-3">{{ $user->status }}</td>
                                 <td class="px-4 py-3">
+                                    @if($user->status =='active')
                                     <button type="button"
                                         onclick="openProfileModal(this)"
                                         data-user='@json($user)'
-                                        class="bg-blue-500 text-white px-2 py-1 rounded">View
-                                    </button>
+                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                    <button onclick="openDeleteModal()" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                    @elseif($user->status =='inactive')
+                                    <button type="button"
+                                        onclick="openProfileModal(this)"
+                                        data-user='@json($user)'
+                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                    <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
+                                        <button onclick="openDeleteModal()" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
 
-                                    <button class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
-                                    <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                    </form>
+                                    @endif
                                 </td>
                             </tr>
                             @endif
@@ -113,10 +138,6 @@
                     <input id="modal_company_name" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
-                    <input id="modal_pwd_id" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
                     <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
                     <img id="modal_company_logo" src="" alt="Company Logo" class="w-[100px] h-[100px] object-cover" />
                 </div>
@@ -132,6 +153,26 @@
         </div>
     </div>
 
+    <!-- Delete Modal-->
+    <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <!-- Modal Box -->
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-gray-800">Job Applicant or Job Provider?</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div class="space-y-4">
+                    <a href="{{ route('sign-up-applicant') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
+                        I am a Job Applicant
+                    </a>
+                    <a href="{{ route('sign-up-job-provider') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
+                        I am a Job Provider
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Script -->
     <script>
         function openProfileModal(button) {
@@ -165,6 +206,15 @@
             const modal = document.getElementById('viewProfileModal');
             if (e.target === modal) closeModal();
         });
+
+        //Open Delete Modal
+        function openDeleteModal() {
+            document.getElementById('DeleteRoleModal').classList.remove('hidden');
+        }
+        // Close Delete Modal
+        function closeDeleteModal() {
+            document.getElementById('DeleteRoleModal').classList.add('hidden');
+        }
     </script>
 
 </body>

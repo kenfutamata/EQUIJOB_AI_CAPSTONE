@@ -17,14 +17,16 @@ class AdminManageUsersController extends Controller
     public function index(Request $request)
     {
         $admin = Auth::guard('admin')->user();
-        $users = User::all();
+        $users = users::all();
 
         $search = $request->input('search');
 
         $users = \App\Models\users::query()
         ->when($search, function($query, $search){
             $query->where(function ($q) use ($search){
-                $q->where('first_name', 'like', "%{$search}%")
+            $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
+                ->orWhere('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%")
                 ->orWhere('last_name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->orWhere('address', 'like', "%{$search}%")

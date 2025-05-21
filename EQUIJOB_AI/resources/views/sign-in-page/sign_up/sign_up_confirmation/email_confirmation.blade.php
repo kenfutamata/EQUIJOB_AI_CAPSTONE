@@ -11,7 +11,7 @@
     <div class="bg-white border-4 border-blue-400 rounded-lg p-8">
       <div class="space-y-6">
         <div>
-          <p class="text-gray-800 text-base">Hello Fellow Customer!</p>
+          <p class="text-gray-800 text-base">Hello. Good day!</p>
         </div>
         <div>
           <p class="text-gray-700">

@@ -52,6 +52,8 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/EQUIJOB/Admin/Logout',[AdminController::class, 'LogoutAdmin'])->name('admin-logout');
     Route::get('EQUIJOB/Admin/Manage-User-Applicants',[AdminManageUsersController::class, 'index'])->name('admin-manage-user-applicants');
     Route::put('EQUIJOB/Admin/Manage-User-Applicants/Accept/{id}',[AdminManageUsersController::class, 'update'])->name('admin-manage-user-applicants-accept'); 
+    Route::put('EQUIJOB/Admin/Manage-User-Job-pROVIDERS/Accept/{id}',[AdminManageUserJobProviderController::class, 'update'])->name('admin-manage-user-Job-Providers-accept'); 
     Route::get('EQUIJOB/Admin/Manage-User-JobProviders',[AdminManageUserJobProviderController::class, 'index'])->name('admin-manage-user-job-providers');
+    Route::delete('EQUIJOB/Admin/Manage-User-JobProviders/Delete/{id}',[AdminManageUserJobProviderController::class, 'destroy'])->name('admin-manage-user-job-providers-delete');
 
 });

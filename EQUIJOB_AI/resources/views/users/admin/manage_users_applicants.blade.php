@@ -19,93 +19,106 @@
             </header>
 
             <main class="p-6">
-                <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
-                    <div>
-                        <span class="text-gray-800">Manage </span>
-                        <span class="text-blue-500">User Applicants</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
-                        <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
-                    </div>
-                    <form method="GET" action="{{ route('admin-manage-user-applicants') }}" class="mb-4 flex justify-end">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Search applicants"
-                            class="border rounded-l px-2 py-1 w-32 text-sm focus:outline-none" />
-                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
-                    </form>
+                @if(session('Success'))
+                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-500">
+                    {{ session('Success') }}
                 </div>
+                @elseif(session('Delete_Success'))
+                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-500">
+                    {{ session('Delete_Success') }}
+                    @endif
+                    <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
 
-                <div class="overflow-x-auto bg-white shadow rounded-lg">
-                    <table class="min-w-full text-sm text-center">
-                        <thead class="bg-gray-100 font-semibold">
-                            <tr>
-                                <th class="px-4 py-3">Id</th>
-                                <th class="px-4 py-3">First Name</th>
-                                <th class="px-4 py-3">Last Name</th>
-                                <th class="px-4 py-3">Email Address</th>
-                                <th class="px-4 py-3">Full Address</th>
-                                <th class="px-4 py-3">Phone Number</th>
-                                <th class="px-4 py-3">Date of Birth</th>
-                                <th class="px-4 py-3">Type of Disability</th>
-                                <th class="px-4 py-3">PWD ID</th>
-                                <th class="px-4 py-3">PWD Card</th>
-                                <th class="px-4 py-3">Role</th>
-                                <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @foreach ($users as $user)
-                            @if($user->role == 'applicant')
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3">{{ $user->id }}</td>
-                                <td class="px-4 py-3">{{ $user->first_name }}</td>
-                                <td class="px-4 py-3">{{ $user->last_name }}</td>
-                                <td class="px-4 py-3">{{ $user->email }}</td>
-                                <td class="px-4 py-3">{{ $user->address }}</td>
-                                <td class="px-4 py-3">{{ $user->phone_number }}</td>
-                                <td class="px-4 py-3">{{ $user->date_of_birth }}</td>
-                                <td class="px-4 py-3">{{ $user->type_of_disability }}</td>
-                                <td class="px-4 py-3">{{ $user->pwd_id }}</td>
-                                <td class="px-4 py-3">
-                                    @if ($user->upload_pwd_card)
-                                    <img src="{{ asset('storage/' . $user->upload_pwd_card) }}" alt="PWD Card" class="w-[100px] h-[100px] object-cover">
-                                    @else
-                                    No Card
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3">{{ $user->role }}</td>
-                                <td class="px-4 py-3">{{ $user->status }}</td>
-                                <td class="px-4 py-3">
-                                    @if($user->status =='active')
-                                    <button type="button"
-                                        onclick="openProfileModal(this)"
-                                        data-user='@json($user)'
-                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                    <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                    @elseif($user->status =='inactive')
-                                    <button type="button"
-                                        onclick="openProfileModal(this)"
-                                        data-user='@json($user)'
-                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                    <form action="{{ route('admin-manage-user-applicants-accept', $user->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
-                                    </form>
-                                    <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        <div>
+                            <span class="text-gray-800">Manage </span>
+                            <span class="text-blue-500">User Applicants</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
+                            <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
+                        </div>
+                        <form method="GET" action="{{ route('admin-manage-user-applicants') }}" class="mb-4 flex justify-end">
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                placeholder="Search applicants"
+                                class="border rounded-l px-2 py-1 w-32 text-sm focus:outline-none" />
+                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="overflow-x-auto bg-white shadow rounded-lg">
+                        <table class="min-w-full text-sm text-center">
+                            <thead class="bg-gray-100 font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3">Id</th>
+                                    <th class="px-4 py-3">First Name</th>
+                                    <th class="px-4 py-3">Last Name</th>
+                                    <th class="px-4 py-3">Email Address</th>
+                                    <th class="px-4 py-3">Full Address</th>
+                                    <th class="px-4 py-3">Phone Number</th>
+                                    <th class="px-4 py-3">Date of Birth</th>
+                                    <th class="px-4 py-3">Type of Disability</th>
+                                    <th class="px-4 py-3">PWD ID</th>
+                                    <th class="px-4 py-3">PWD Card</th>
+                                    <th class="px-4 py-3">Role</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @foreach ($users as $user)
+                                @if($user->role == 'applicant')
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3">{{ $user->id }}</td>
+                                    <td class="px-4 py-3">{{ $user->first_name }}</td>
+                                    <td class="px-4 py-3">{{ $user->last_name }}</td>
+                                    <td class="px-4 py-3">{{ $user->email }}</td>
+                                    <td class="px-4 py-3">{{ $user->address }}</td>
+                                    <td class="px-4 py-3">{{ $user->phone_number }}</td>
+                                    <td class="px-4 py-3">{{ $user->date_of_birth }}</td>
+                                    <td class="px-4 py-3">{{ $user->type_of_disability }}</td>
+                                    <td class="px-4 py-3">{{ $user->pwd_id }}</td>
+                                    <td class="px-4 py-3">
+                                        @if ($user->upload_pwd_card)
+                                        <img src="{{ asset('storage/' . $user->upload_pwd_card) }}" alt="PWD Card" class="w-[100px] h-[100px] object-cover">
+                                        @else
+                                        No Card
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3">{{ $user->role }}</td>
+                                    <td class="px-4 py-3">{{ $user->status }}</td>
+                                    <td class="px-4 py-3">
+                                        @if($user->status =='active')
+                                        <button type="button"
+                                            onclick="openProfileModal(this)"
+                                            data-user='@json($user)'
+                                            class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                        <form action="{{ route('admin-manage-user-applicants-accept', $user->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                        </form>
+                                        @elseif($user->status =='inactive')
+                                        <button type="button"
+                                            onclick="openProfileModal(this)"
+                                            data-user='@json($user)'
+                                            class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                        <form action="{{ route('admin-manage-user-applicants-accept', $user->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
+                                        </form>
+                                        <button class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
             </main>
         </div>
     </div>
@@ -165,6 +178,8 @@
             </div>
         </div>
     </div>
+
+    
     <script>
         function openProfileModal(button) {
             const user = JSON.parse(button.getAttribute('data-user'));
@@ -199,6 +214,14 @@
             const modal = document.getElementById('viewProfileModal');
             if (e.target === modal) closeModal();
         });
+        setTimeout(function() {
+            var notif = document.getElementById('notification-bar');
+            if (notif) notif.style.opacity = '0';
+        }, 2500);
+        setTimeout(function() {
+            var notif = document.getElementById('notification-bar');
+            if (notif) notif.style.display = 'none';
+        }, 3000);
     </script>
 </body>
 
