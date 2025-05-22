@@ -11,26 +11,23 @@
     <link rel="stylesheet" href="{{ asset('css/applicant_profile.css') }}">
 </head>
 
-<body class="h-screen bg-gray-100 text-gray-800 font-sans antialiased">
+<body class="min-h-screen bg-gray-100 text-gray-800 font-sans antialiased">
 
-    <div class="fixed top-0 left-0 w-[234px] h-full z-40">
+    <div class="fixed top-0 left-0 w-[234px] h-full z-40 bg-white">
         <x-applicant-sidebar />
     </div>
 
-    <div class="ml-[234px] flex flex-col h-screen">
+    <div class="flex flex-col ml-0 lg:ml-[234px] ">
 
-        <!-- Topbar sticky - Assuming a fixed height of 64px (h-16) -->
         <div class="sticky top-0 z-30 bg-white shadow-sm flex-shrink-0 h-16">
             <x-topbar :user="$user" />
         </div>
 
-        <!-- Title Bar sticky below topbar - Assuming a fixed height of approx 56px (h-14) for this bar -->
         <div class="sticky top-16 z-20 bg-white shadow-sm flex items-center justify-between px-6 py-4 flex-shrink-0 h-14">
             <h1 class="text-xl font-semibold">Applicant Profile</h1>
         </div>
 
-        <!-- Scrollable main content -->
-        <main class="flex-1 overflow-y-auto p-6 md:p-10 min-h-0">
+        <main class="p-6 md:p-10">
             <div class="max-w-5xl mx-auto">
 
                 <div class="flex flex-col items-center mb-8">
@@ -90,7 +87,7 @@
 
                     <div class="mt-8 md:mt-10 flex justify-center">
                         <button type="button"
-                            onclick="document.getElementById('updateProfileModal').classList.remove('hidden')"
+                            onclick="openModal()"
                             class="bg-white border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 font-semibold shadow-sm text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             Update
                         </button>
@@ -100,10 +97,8 @@
         </main>
     </div>
 
-
-     <div id="updateProfileModal"
+    <div id="updateProfileModal"
         class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <!-- Changed back to overflow-y-auto to enable vertical scrolling if content exceeds max-h -->
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6">
             <form action="{{ route('applicant-profile-update', $user->id) }}" method="POST" enctype="multipart/form-data"
                 class="space-y-6">
@@ -179,11 +174,14 @@
     </div>
 
     <script>
-        function closeModal() {
-            document.getElementById('updateProfileModal').classList.add('hidden');
+        function openModal() {
+            document.getElementById('updateProfileModal').classList.remove('hidden');
         }
 
-        window.addEventListener('click', function(e) {
+        function closeModal() {
+            document.getElementById('updateProfileModal').classList.add('hidden');        }
+
+        window.addEventListener('click', function (e) {
             const modal = document.getElementById('updateProfileModal');
             if (e.target === modal) closeModal();
         });
