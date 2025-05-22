@@ -1,67 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Admin Manage Job Providers</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
 </head>
-
 <body class="bg-white text-black">
-    <div class="flex min-h-screen">
-        <x-admin-sidebar />
+<div class="flex min-h-screen">
+    <x-admin-sidebar />
 
-        <div class="flex-1 flex flex-col w-full">
-            <header class="w-full border-b border-gray-200">
-                <x-topbar :user="$admin" />
-            </header>
+    <div class="flex-1 flex flex-col">
+        <header class="w-full border-b border-gray-200">
+            <x-topbar :user="$admin" />
+        </header>
 
-            <main class="p-6">
-                @if(session('Success'))
-                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-500">
-                    {{ session('Success') }}
+        <main class="p-6">
+            @if(session('Success'))
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+                {{ session('Success') }}
+            </div>
+            @elseif(session('Delete_Success'))
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+                {{ session('Delete_Success') }}
+            </div>
+            @endif
+
+            <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
+                <div>
+                    <span class="text-gray-800">Manage </span>
+                    <span class="text-blue-500">Job Provider</span>
                 </div>
-                @endif
-                <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
-                    <div>
-                        <span class="text-gray-800">Manage </span>
-                        <span class="text-blue-500">Job Provider</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
-                        <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
-                    </div>
-                    <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="mb-4 flex justify-end">
-                        <input
-                            type="text"
-                            name="search"
-                            value="{{ request('search') }}"
-                            placeholder="Search applicants"
-                            class="border rounded-l px-2 py-1 w-32 text-sm focus:outline-none" />
-                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
-                    </form>
+                <div class="flex gap-2">
+                    <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
+                    <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
                 </div>
+                <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="flex items-center gap-1">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Providers"
+                        class="border rounded-l px-2 py-1 w-32 text-sm" />
+                    <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
+                </form>
+            </div>
 
-                <div class="overflow-x-auto bg-white shadow rounded-lg">
-                    <table class="min-w-full text-sm text-center">
-                        <thead class="bg-gray-100 font-semibold">
-                            <tr>
-                                <th class="px-4 py-3">Id</th>
-                                <th class="px-4 py-3">First Name</th>
-                                <th class="px-4 py-3">Last Name</th>
-                                <th class="px-4 py-3">Email</th>
-                                <th class="px-4 py-3">Phone Number</th>
-                                <th class="px-4 py-3">Company</th>
-                                <th class="px-4 py-3">Company Logo</th>
-                                <th class="px-4 py-3">Role</th>
-                                <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @foreach ($users as $user)
+            <div class="overflow-x-auto bg-white shadow rounded-lg">
+                <table class="min-w-full text-sm text-center">
+                    <thead class="bg-gray-100 font-semibold">
+                        <tr>
+                            <th class="px-4 py-3">Id</th>
+                            <th class="px-4 py-3">First Name</th>
+                            <th class="px-4 py-3">Last Name</th>
+                            <th class="px-4 py-3">Email</th>
+                            <th class="px-4 py-3">Phone Number</th>
+                            <th class="px-4 py-3">Company</th>
+                            <th class="px-4 py-3">Company Logo</th>
+                            <th class="px-4 py-3">Role</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach ($users as $user)
                             @if($user->role == 'job_provider')
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3">{{ $user->id }}</td>
@@ -72,151 +71,108 @@
                                 <td class="px-4 py-3">{{ $user->company_name }}</td>
                                 <td class="px-4 py-3">
                                     @if ($user->company_logo)
-                                    <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[60px] h-[60px] object-cover">
+                                        <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[60px] h-[60px] object-cover">
                                     @else
-                                    No Card
+                                        No Logo
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">{{ $user->role }}</td>
                                 <td class="px-4 py-3">{{ $user->status }}</td>
-                                <td class="px-4 py-3">
-                                    @if($user->status =='active')
+                                <td class="px-4 py-3 space-y-1">
                                     <button type="button"
                                         onclick="openProfileModal(this)"
                                         data-user='@json($user)'
                                         class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                    <button onclick="openDeleteModal()" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                    @elseif($user->status =='inactive')
-                                    <button type="button"
-                                        onclick="openProfileModal(this)"
-                                        data-user='@json($user)'
-                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                    <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
-                                        <button onclick="openDeleteModal()" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
 
-                                    </form>
+                                    @if($user->status === 'inactive')
+                                        <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
+                                        </form>
                                     @endif
+                                    <button onclick="openDeleteModal({{ $user->id }})"
+                                        class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 </td>
                             </tr>
                             @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </main>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div id="viewProfileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6">
+        <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold">Profile</h3>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+        </div>
+        <div class="space-y-4">
+            <input id="modal_first_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_last_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_email" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_phone_number" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_company_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <img id="modal_company_logo" class="w-[100px] h-[100px] object-cover" />
+            <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_status" class="w-full border rounded px-4 py-2 text-sm" disabled />
         </div>
     </div>
-    <div id="viewProfileModal"
-        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-gray-800">Profile</h3>
-                <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                    <input id="modal_first_name" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                    <input id="modal_last_name" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Email</label>
-                    <input id="modal_email" type="email" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Phone Number</label>
-                    <input id="modal_phone_number" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Company Name</label>
-                    <input id="modal_company_name" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
-                    <img id="modal_company_logo" src="" alt="Company Logo" class="w-[100px] h-[100px] object-cover" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Role</label>
-                    <input id="modal_role" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Status</label>
-                    <input id="modal_status" type="text" class="w-full border rounded-md px-4 py-2 text-sm" />
-                </div>
-            </div>
+</div>
+
+<div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+        <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold">Delete User?</h3>
+            <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         </div>
+        <form id="deleteuser" method="POST" action="">
+            @csrf
+            @method('DELETE')
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+        </form>
+        <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
     </div>
+</div>
 
-    <!-- Delete Modal-->
-    <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <!-- Modal Box -->
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold text-gray-800">Job Applicant or Job Provider?</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            </div>
-            <div class="space-y-4">
-                <div class="space-y-4">
-                    <a href="{{ route('sign-up-applicant') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
-                        I am a Job Applicant
-                    </a>
-                    <a href="{{ route('sign-up-job-provider') }}" class="w-full block text-center py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 text-base font-medium">
-                        I am a Job Provider
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Script -->
-    <script>
-        function openProfileModal(button) {
-            const user = JSON.parse(button.getAttribute('data-user'));
+<script>
+    function openProfileModal(button) {
+        const user = JSON.parse(button.getAttribute('data-user'));
+        document.getElementById('modal_first_name').value = user.first_name;
+        document.getElementById('modal_last_name').value = user.last_name;
+        document.getElementById('modal_email').value = user.email;
+        document.getElementById('modal_phone_number').value = user.phone_number;
+        document.getElementById('modal_company_name').value = user.company_name;
+        document.getElementById('modal_role').value = user.role;
+        document.getElementById('modal_status').value = user.status;
 
-            document.getElementById('modal_first_name').value = user.first_name;
-            document.getElementById('modal_last_name').value = user.last_name;
-            document.getElementById('modal_email').value = user.email;
-            document.getElementById('modal_phone_number').value = user.phone_number;
-            document.getElementById('modal_company_name').value = user.company_name;
-            const logoPath = user.company_logo ? `/storage/${user.company_logo}` : '';
-            const companyLogoImg = document.getElementById('modal_company_logo');
-            if (logoPath) {
-                companyLogoImg.src = logoPath;
-                companyLogoImg.style.display = 'block';
-            } else {
-                companyLogoImg.src = '';
-                companyLogoImg.style.display = 'none';
-            }
-            document.getElementById('modal_role').value = user.role;
-            document.getElementById('modal_status').value = user.status;
-
-            document.getElementById('viewProfileModal').classList.remove('hidden');
+        const logo = document.getElementById('modal_company_logo');
+        if (user.company_logo) {
+            logo.src = `/storage/${user.company_logo}`;
+            logo.style.display = 'block';
+        } else {
+            logo.style.display = 'none';
         }
 
-        function closeModal() {
-            document.getElementById('viewProfileModal').classList.add('hidden');
-        }
+        document.getElementById('viewProfileModal').classList.remove('hidden');
+    }
 
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('viewProfileModal');
-            if (e.target === modal) closeModal();
-        });
+    function closeModal() {
+        document.getElementById('viewProfileModal').classList.add('hidden');
+    }
 
-        //Open Delete Modal
-        function openDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.remove('hidden');
-        }
-        // Close Delete Modal
-        function closeDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.add('hidden');
-        }
-    </script>
+    function openDeleteModal(userId) {
+        const form = document.getElementById('deleteuser');
+        form.action = `/EQUIJOB/Admin/Manage-User-JobProviders/Delete/${userId}`;
+        document.getElementById('DeleteRoleModal').classList.remove('hidden');
+    }
 
+    function closeDeleteModal() {
+        document.getElementById('DeleteRoleModal').classList.add('hidden');
+    }
+</script>
 </body>
-
 </html>

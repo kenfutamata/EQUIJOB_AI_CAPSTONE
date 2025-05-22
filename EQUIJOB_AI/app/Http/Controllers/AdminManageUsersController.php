@@ -92,6 +92,8 @@ class AdminManageUsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = users::findOrFail($id);
+        $user->delete();
+        return redirect()->back()->with('Delete_Success', 'User deleted successfully');
     }
 }

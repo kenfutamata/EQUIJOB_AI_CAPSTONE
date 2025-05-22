@@ -128,7 +128,7 @@
         <!-- PWD ID -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">PWD ID</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID" id="pwd_id" name="pwd_id" pattern="\d{3}-\d{3}-\d{3}" required>
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID format: 123-456-789" id="pwd_id" name="pwd_id" pattern="\d{3}-\d{3}-\d{3}" required>
           @error('pwd_id')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror

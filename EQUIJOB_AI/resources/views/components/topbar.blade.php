@@ -25,7 +25,7 @@
         </div>
       </a>
     @elseif($user->role == 'admin')
-     <a href="" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]">
+     <a href="" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]" disabled>
         <img src="{{ asset('assets/job-provider/job-provider-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
         <div class="text-xs font-medium">
           <div class="text-[11px]">{{ $user->first_name }} {{ $user->last_name }}</div>
