@@ -63,6 +63,7 @@
                                 <th class="px-4 py-3">Type of Disability</th>
                                 <th class="px-4 py-3">PWD ID</th>
                                 <th class="px-4 py-3">PWD Card</th>
+                                <th class="px-4 py-3">Profile Picture</th>
                                 <th class="px-4 py-3">Role</th>
                                 <th class="px-4 py-3">Status</th>
                                 <th class="px-4 py-3">Actions</th>
@@ -84,6 +85,13 @@
                                 <td class="px-4 py-3">
                                     @if ($user->upload_pwd_card)
                                     <img src="{{ asset('storage/' . $user->upload_pwd_card) }}" alt="PWD Card" class="w-[100px] h-[100px] object-cover">
+                                    @else
+                                    No Card
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3">
+                                    @if ($user->profile_picture)
+                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" class="w-[100px] h-[100px] object-cover">
                                     @else
                                     No Card
                                     @endif
