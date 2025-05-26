@@ -38,7 +38,7 @@
         </div>
         <div class="flex flex-col justify-center px-4">
           <div class="text-lg font-semibold">Registered</div>
-          <div class="text-2xl">0</div>
+          <div class="text-2xl">{{$userCount}}</div>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
         </div>
         <div class="flex flex-col justify-center px-4">
           <div class="text-lg font-semibold">Job Providers</div>
-          <div class="text-2xl">0</div>
+          <div class="text-2xl">{{$jobProviderCount}}</div>
         </div>
       </div>
 
