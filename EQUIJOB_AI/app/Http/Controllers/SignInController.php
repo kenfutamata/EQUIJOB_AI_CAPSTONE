@@ -42,8 +42,8 @@ class SignInController extends Controller
             $filepath = $file->store('upload_pwd_card', 'public');
             $validateInformation['upload_pwd_card'] = $filepath;
         }
-        $validateInformation['role'] = $validateInformation['role'] ?? 'applicant';
-        $validateInformation['status'] = $validateInformation['status'] ?? 'inactive';
+        $validateInformation['role'] = $validateInformation['role'] ?? 'Applicant';
+        $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';
         $validateInformation['password'] = Hash::make($request->password);
         try {
             users::create($validateInformation);
@@ -72,8 +72,8 @@ class SignInController extends Controller
                 $validateInformation['company_logo'] = $filepath;
             }
 
-            $validateInformation['role'] = $validateInformation['role'] ?? 'job_provider';
-            $validateInformation['status'] = $validateInformation['status'] ?? 'inactive';
+            $validateInformation['role'] = $validateInformation['role'] ?? 'Job Provider';
+            $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';
             $validateInformation['password'] = Hash::make($request->password);
             users::create($validateInformation);
             return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');
@@ -92,11 +92,11 @@ class SignInController extends Controller
         try {
             // Admin
             $adminCredentials = $request->only('email', 'password');
-            $adminCredentials['role'] = 'admin';
-            $adminCredentials['status'] = 'active';
+            $adminCredentials['role'] = 'Admin';
+            $adminCredentials['status'] = 'Active';
             if (Auth::guard('admin')->attempt($adminCredentials)) {
                 $user = Auth::guard('admin')->user();
-                if ($user->role === 'admin' && $user->status === 'active') {
+                if ($user->role === 'Admin' && $user->status === 'Active') {
                     $request->session()->regenerate();
                     return redirect()->route('admin-dashboard')->with('success', 'Login Successful!');
                 } else {
@@ -109,11 +109,11 @@ class SignInController extends Controller
 
             // Applicant
             $applicantCredentials = $request->only('email', 'password');
-            $applicantCredentials['role'] = 'applicant';
-            $applicantCredentials['status'] = 'active'; 
+            $applicantCredentials['role'] = 'Applicant';
+            $applicantCredentials['status'] = 'Active'; 
             if (Auth::guard('applicant')->attempt($applicantCredentials)) {
                 $user = Auth::guard('applicant')->user();
-                if ($user->role === 'applicant' && $user->status === 'active') {
+                if ($user->role === 'Applicant' && $user->status === 'Active') {
                     $request->session()->regenerate();
                     return redirect()->route('applicant-dashboard');
                 } else {
@@ -125,11 +125,11 @@ class SignInController extends Controller
 
             // Job Provider
             $jobProviderCredentials = $request->only('email', 'password');
-            $jobProviderCredentials['role'] = 'job_provider';
+            $jobProviderCredentials['role'] = 'Job Provider';
             $jobProviderCredentials['status'] = 'active';
             if (Auth::guard('job_provider')->attempt($jobProviderCredentials)) {
                 $user = Auth::guard('job_provider')->user();
-                if ($user->role === 'job_provider' && $user->status === 'active') {
+                if ($user->role === 'Job Provider' && $user->status === 'active') {
                     $request->session()->regenerate();
                     return redirect()->route('job-provider-dashboard');
                 } else {

@@ -10,10 +10,12 @@
 </head>
 
 <body class="bg-[#FCFDFF] text-gray-800 font-sans antialiased min-h-screen">
-
   <div class="flex min-h-screen">
+
     <!-- Sidebar -->
-    <x-applicant-sidebar />
+    <div class="w-[234px] h-full bg-white hidden lg:block">
+      <x-applicant-sidebar />
+    </div>
 
     <!-- Main Content -->
     <div class="flex flex-col flex-1">
@@ -58,9 +60,10 @@
               <div class="text-2xl">0</div>
             </div>
           </div>
+
+        </div>
       </main>
     </div>
-  </div>
   </div>
 </body>
 

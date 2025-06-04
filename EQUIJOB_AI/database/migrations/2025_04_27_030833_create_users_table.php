@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('type_of_disability')->nullable(); 
             $table->string('pwd_id')->nullable();
             $table->string('upload_pwd_card')->nullable();
-            $table->enum('role', ['applicant', 'job_provider', 'admin']);
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
+            $table->enum('role', ['Applicant', 'Job Provider', 'Admin']);
+            $table->enum('status', ['Active', 'Inactive'])->default('inactive');
             $table->string('company_name')->nullable();
             $table->string('company_logo')->nullable();
             $table->string('profile_picture')->nullable();

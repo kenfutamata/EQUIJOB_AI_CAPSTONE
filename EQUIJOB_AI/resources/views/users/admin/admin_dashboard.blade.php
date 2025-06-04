@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,20 +8,26 @@
   <title>EQUIJOB - Admin</title>
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
 </head>
+
 <body class="bg-[#FCFDFF] min-h-screen flex flex-col md:flex-row">
 
-  <x-admin-sidebar />
+  <!-- Sidebar -->
+  <div class="w-[234px] bg-white hidden lg:block h-screen fixed">
+    <x-admin-sidebar />
+  </div>
 
-  <div class="flex-1 flex flex-col w-full">
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col w-full lg:ml-[234px]">
 
+    <!-- Topbar -->
     <header class="w-full border-b border-gray-200">
       <x-topbar :user="$user" />
     </header>
 
     <!-- Status Cards -->
     <main class="flex flex-col md:flex-row flex-wrap gap-6 px-6 py-10">
-      
-      <!-- Apply Card -->
+
+      <!-- Applicants Card -->
       <div class="flex border border-black w-full max-w-[230px] h-[83px]">
         <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
           <img src="{{ asset('assets/admin/admin-dashboard/image_137.png') }}" alt="Apply icon" class="w-[60px] h-[60px]" />
@@ -31,7 +38,7 @@
         </div>
       </div>
 
-      <!-- Interview Card -->
+      <!-- Registered Card -->
       <div class="flex border border-black w-full max-w-[230px] h-[83px]">
         <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
           <img src="{{ asset('assets/admin/admin-dashboard/image_136.png') }}" alt="Interview icon" class="w-[60px] h-[60px]" />
@@ -42,7 +49,7 @@
         </div>
       </div>
 
-      <!-- On Offer Card -->
+      <!-- Job Providers Card -->
       <div class="flex border border-black w-full max-w-[230px] h-[83px]">
         <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
           <img src="{{ asset('assets/admin/admin-dashboard/email_1.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
@@ -68,4 +75,5 @@
   </div>
 
 </body>
+
 </html>

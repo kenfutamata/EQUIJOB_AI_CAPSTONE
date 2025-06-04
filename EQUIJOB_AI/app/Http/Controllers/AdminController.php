@@ -12,7 +12,7 @@ class AdminController extends Controller
     {
         $user = Auth::guard('admin')->user(); 
         $userCount = users::count(); 
-        $jobProviderCount = users::where('role', 'job_provider', 'status', 'active')->count();
+        $jobProviderCount = users::where('role', 'job_provider')->where('status', 'active')->count();
         $response = response()->view('users.admin.admin_dashboard', compact('user', 'userCount', 'jobProviderCount'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'openai'=>[
+        'key'=>env('OPEN_API_KEY'),    
+    ],
+
+    'google_gemini'=>[
+        'key'=>env('GOOGLE_GEMINI_API_KEY'),
+        'url'=>env('GOOGLE_GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta/models/text-bison:generateContent'),
+        'model'=>env('GOOGLE_GEMINI_MODEL'),
+    ],
 ];

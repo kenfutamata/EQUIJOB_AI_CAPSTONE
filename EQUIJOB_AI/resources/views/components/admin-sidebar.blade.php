@@ -29,7 +29,7 @@
 
   <form method="GET" action="{{ route('admin-logout') }}">
     @csrf
-    <button class="flex items-center gap-3 px-4 py-2 text-[#F13E3E] font-medium hover:bg-red-100 w-full rounded">
+    <button class="flex items-center gap-3 px-4 py-2 text-[#F13E3E] font-medium hover:bg-white-100 w-full rounded">
       <img src="{{ asset('assets/photos/dashboard/logout.png') }}" alt="Logout Icon" />
       <span>Log-out</span>
     </button>

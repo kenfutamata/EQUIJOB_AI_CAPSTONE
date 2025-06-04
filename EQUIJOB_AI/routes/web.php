@@ -6,7 +6,10 @@ use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ApplicantProfileController;
 use App\Http\Controllers\JobProviderController;
+use App\Http\Controllers\JobProviderProfileController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\ResumeViewAndDownloadController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -30,25 +33,31 @@ Route::get('/EQUIJOB/Email-Confirmation',[SignInController::class, 'ViewEmailCon
 
 //Job Provider
 Route::middleware('auth:job_provider')->group(function () {
-    Route::get('/EQUIJOB/Job-Provider-Dashboard',[JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
-    Route::get('/EQUIJOB/Job-Provider-Dashboard/Logout',[JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
+    Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard',[JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
+    Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard/Logout',[JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
+    Route::get('/EQUIJOB/Job-Provider/Job-Provider-Profile',[JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+    
 });
 
 //Applicant 
 
 Route::middleware(['auth:applicant'])->group(function () {
-    Route::get('/EQUIJOB/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
-    Route::get('/EQUIJOB/Applicant-Dashboard/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
-    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
-    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
-    Route::get('/EQUIJOB/Applicant-Dashboard/Applicant-Profile',[ApplicantProfileController::class, 'index'])->name('applicant-profile');
-    Route::put('/EQUIJOB/Applicant-Dashboard/Applicant-Profile/{id}',[ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
+    Route::get('/EQUIJOB/Applicant/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
+    Route::get('/EQUIJOB/Applicant/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
+    Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
+    Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
+    Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantProfileController::class, 'index'])->name('applicant-profile');
+    Route::put('/EQUIJOB/Applicant/Applicant-Profile/{id}',[ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
+    Route::get('/EQUIJOB/Applicant/Resume-Builder',[ResumeController::class, 'index'])->name('applicant-resume-builder');
+    Route::post('/EQUIJOB/Applicant/Resume-Builder',[ResumeController::class, 'store'])->name('applicant-resume-builder-store');
+    Route::get('/EQUIJOB/Applicant/Resume-View-And-Download',[ResumeViewAndDownloadController::class, 'index'])->name('applicant-resume-view-and-download');
+    Route::get('/EQUIJOB/Applicant/Resume-View-And-Download/Download',[ResumeViewAndDownloadController::class, 'download'])->name('applicant-resume-download');
 
 });
 
 //admin
 Route::middleware('auth:admin')->group(function () {
-    Route::get('/EQUIJOB/Admin-Dashboard',[AdminController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
+    Route::get('/EQUIJOB/Admin/Admin-Dashboard',[AdminController::class, 'ViewAdminDashboard'])->name('admin-dashboard');
     Route::get('/EQUIJOB/Admin/Logout',[AdminController::class, 'LogoutAdmin'])->name('admin-logout');
     Route::get('EQUIJOB/Admin/Manage-User-Applicants',[AdminManageUsersController::class, 'index'])->name('admin-manage-user-applicants');
     Route::put('EQUIJOB/Admin/Manage-User-Applicants/Accept/{id}',[AdminManageUsersController::class, 'update'])->name('admin-manage-user-applicants-accept'); 

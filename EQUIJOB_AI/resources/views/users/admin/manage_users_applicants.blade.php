@@ -41,7 +41,7 @@
                         <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
                     </div>
                     <form method="GET" action="{{ route('admin-manage-user-applicants') }}" class="flex items-center gap-1">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Providers"
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Applicants"
                             class="border rounded-l px-2 py-1 w-32 text-sm" />
                         <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
                     </form>
@@ -68,7 +68,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($users as $user)
-                            @if($user->role == 'applicant')
+                            @if($user->role == 'Applicant')
                             <tr class="hover:bg-gray-50">
                                 <td class="px-2 py-2">{{ $user->id }}</td>
                                 <td class="px-2 py-2">{{ $user->first_name }}</td>
@@ -93,7 +93,7 @@
                                 <td class="px-2 py-2">{{ $user->status }}</td>
                                 <td class="px-2 py-2 space-y-1">
                                     <button onclick="openProfileModal(this)" data-user='@json($user)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                    @if($user->status == 'inactive')
+                                    @if($user->status == 'Inactive')
                                     <form action="{{ route('admin-manage-user-applicants-accept', $user->id) }}" method="POST">
                                         @csrf @method('PUT')
                                         <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>

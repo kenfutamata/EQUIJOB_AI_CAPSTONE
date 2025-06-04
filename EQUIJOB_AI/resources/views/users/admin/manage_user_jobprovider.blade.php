@@ -64,7 +64,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($users as $user)
-                            @if($user->role == 'job_provider')
+                            @if($user->role == 'Job Provider')
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3">{{ $user->id }}</td>
                                 <td class="px-4 py-3">{{ $user->first_name }}</td>
@@ -92,7 +92,7 @@
                                         data-user='@json($user)'
                                         class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
 
-                                    @if($user->status === 'inactive')
+                                    @if($user->status === 'Inactive')
                                     <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('PUT')

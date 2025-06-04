@@ -80,7 +80,7 @@ class AdminManageUserJobProviderController extends Controller
     public function update(string $id)
     {
         $user = users::findOrFail($id);
-        $user->status = 'active';
+        $user->status = 'Active';
         $user->save();
         Mail::to($user->email)->send(new EmailConfirmation());
 
