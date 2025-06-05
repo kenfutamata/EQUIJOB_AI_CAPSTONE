@@ -37,6 +37,10 @@ class ResumeController extends Controller
         if ($resume->phone) {
             $prompt .= "Phone: {$resume->phone}\n";
         }
+        // Add Disability Type if present
+        if (!empty($resume->disability_type) && strcasecmp(trim($resume->disability_type), "Select Disability Type") !== 0) {
+            $prompt .= "Disability Type: {$resume->disability_type}\n";
+        }
         if ($resume->summary) {
             $prompt .= "Summary/Objectives (User Provided): {$resume->summary}\n";
         }
@@ -109,6 +113,7 @@ class ResumeController extends Controller
             'resume.address' => 'nullable|string|max:255',
             'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
             'resume.phone' => 'nullable|string|max:15',
+            'resume.disability_type' => 'nullable|string|max:255',
             'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'resume.summary' => 'nullable|string',
             'resume.skills' => 'nullable|string|max:1000',

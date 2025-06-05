@@ -97,6 +97,16 @@
                                 <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phone_number) }}" />
                             </div>
                             <div>
+                                <label for="disability_type" class="block text-lg">Disability Type</label>
+                                <select id="disability_type" name="resume[disability_type]" class="w-full border border-black bg-gray-300 h-11 px-3">
+                                    <option value="" disabled selected>Select Disability Type</option>
+                                    <option value="Physical" {{ old('resume.disability_type') == 'Physical' ? 'selected' : '' }}>Physical</option>
+                                    <option value="Visual" {{ old('resume.disability_type') == 'Visual' ? 'selected' : '' }}>Visual</option>
+                                    <option value="Hearing" {{ old('resume.disability_type') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
+                                    <option value="Intellectual" {{ old('resume.disability_type') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
+                                </select>
+                            </div>
+                            <div>
                                 <label for="photo" class="block text-lg">Upload a 2x2 Photo</label>
                                 <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" />
                             </div>
@@ -355,7 +365,6 @@
                 if (event.target.classList.contains('remove-education-btn')) {
                     const entryDiv = event.target.closest('.education-entry');
                     if (entryDiv) {
-                        entryDiv.remove();
                     }
                 }
             });

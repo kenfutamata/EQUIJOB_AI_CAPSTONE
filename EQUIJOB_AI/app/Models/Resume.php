@@ -12,6 +12,7 @@ class Resume extends Model
         'last_name',
         'dob',
         'address',
+        'disability_type',
         'email',
         'phone',
         'experience',
