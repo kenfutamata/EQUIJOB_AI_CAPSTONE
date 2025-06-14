@@ -18,7 +18,8 @@ class Resume extends Model
         'experience',
         'photo',
         'summary',
-        'skills'
+        'skills',
+        'type_of_disability'
     ];
     protected $table = 'resume';
 

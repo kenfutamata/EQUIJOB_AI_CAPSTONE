@@ -1,5 +1,5 @@
 <?php
-
+//
 namespace App\Http\Controllers;
 
 use App\Models\Resume;
@@ -39,34 +39,39 @@ class ResumeViewAndDownloadController extends Controller
         return $response;
     }
 
-    public function download(){
-        $user = Auth::guard('applicant')->user(); 
-        $resume = Resume::with(['experiences', 'educations'])->where('user_id', $user->id)->first();
-        $generatedSummary = $resume->summary ?? "No AI summary generated yet.";
-        $skillsList = [];
-        if (!empty($resume->skills)) {
-            // Always treat as comma-separated string
-            $skillsList = array_filter(array_map('trim', explode(',', $resume->skills)));
-        $pdf = Pdf::loadView('users.applicant.resume-view', [
-            'user' => $user,
-            'resume' => $resume,
-            'generatedSummary' => $generatedSummary,
-            'skillsList' => $skillsList,
-        ]);
-        return $pdf->download('resume.pdf');
-        }
+    public function download()
+    {
+    $user = Auth::guard('applicant')->user(); 
+    $resume = Resume::with(['experiences', 'educations'])->where('user_id', $user->id)->first();
+    $generatedSummary = $resume->summary ?? "No AI summary generated yet.";
+    $skillsList = [];
+    if (!empty($resume->skills)) {
+        $skillsList = array_filter(array_map('trim', explode(',', $resume->skills)));
     }
-    
-    
-    public function create() { }
 
-    public function store(Request $request) { }
+    // Pass all the data AND our new flag to the view
+    $data = [
+        'user' => $user,
+        'resume' => $resume,
+        'generatedSummary' => $generatedSummary,
+        'skillsList' => $skillsList,
+        'is_pdf' => true, // <-- This flag controls the layout in the view
+    ];
 
-    public function show(string $id) { }
+    $pdf = Pdf::loadView('users.applicant.resume-view', $data);
+    return $pdf->download('resume.pdf');
+    }
 
-    public function edit(string $id) { }
 
-    public function update(Request $request, string $id) { }
+    public function create() {}
 
-    public function destroy(string $id) { }
+    public function store(Request $request) {}
+
+    public function show(string $id) {}
+
+    public function edit(string $id) {}
+
+    public function update(Request $request, string $id) {}
+
+    public function destroy(string $id) {}
 }

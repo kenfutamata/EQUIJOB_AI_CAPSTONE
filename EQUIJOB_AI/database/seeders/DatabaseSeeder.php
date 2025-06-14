@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'Active',
             'phone_number' => '1234567890',
             'date_of_birth' => '1990-01-01',
-            'type_of_disability' => 'none',
+            'type_of_disability' => 'Physical',
             'pwd_id' => 'none',
             'upload_pwd_card' => 'none',
         ]);

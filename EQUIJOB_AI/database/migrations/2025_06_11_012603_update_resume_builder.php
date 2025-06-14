@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('resume', function (Blueprint $table) {
+            Schema::table('resume', function (Blueprint $table) {
             if (!Schema::hasColumn('resume', 'disability_type')) {
-                $table->string('disability_type')->nullable()->after('phone');
+            $table->enum('type_of_disability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();        
             }
             if (!Schema::hasColumn('resume', 'ai_generated_summary')) {
                 $table->text('ai_generated_summary')->nullable()->after('skills');

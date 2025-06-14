@@ -12,7 +12,7 @@
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_applicant.png') }}" alt="Manage Users" />
         <span>Manage User</span>
       </a>
-      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{route('admin-manage-job-posting')}}">
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_posting.png') }}" alt="Job Posting Icon" />
         <span>Manage Job Posting</span>
       </a>

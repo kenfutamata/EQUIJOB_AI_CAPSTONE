@@ -49,6 +49,16 @@
       <div class="text-2xl">0</div>
     </div>
   </div>
+<!--Job Postings-->
+    <div class="flex border border-black w-full max-w-[230px] h-[83px]">
+    <div class="flex items-center justify-center w-[88px] h-full border-r border-black/20">
+      <img src="{{ asset('assets/job-provider/job-provider-dashboard/job_posting.png') }}" alt="On Offer icon" class="w-[60px] h-[60px]" />
+    </div>
+    <div class="flex flex-col justify-center px-4">
+      <div class="text-lg font-semibold">Job Posting</div>
+      <div class="text-2xl">0</div>
+    </div>
+  </div>
 
 </div>
 </body>

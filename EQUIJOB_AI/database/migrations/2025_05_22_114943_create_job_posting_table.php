@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('job_posting', function (Blueprint $table) {
             $table->id();
             $table->foreignId('job_provider_id')->constrained('users')->onDelete('cascade');
-            $table->string('title'); 
-            $table->string('description'); 
-            $table->string('skills'); 
-            $table->string('requirements'); 
-            $table->string('location'); 
-            $table->string('salary_range');
+            $table->string('postion'); 
+            $table->string('company_name');
+            $table->enum('sex', ['Male', 'Female']);
+            $table->integer('age'); 
+            $table->enum('disability_type', ['Physical', 'Visual', 'Hearing', 'Intellectual']);
+            $table->string('educational_attainment'); 
+            $table->string('salary_range'); 
+            $table->text('job_posting_objectives'); 
+            $table->text('requirements'); 
+            $table->string('status')->default('Pending'); // e.g., active, closed, pending
             $table->timestamps();
         });
     }

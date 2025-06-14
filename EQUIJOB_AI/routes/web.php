@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminManageJobPostingController;
 use App\Http\Controllers\AdminManageUserJobProviderController;
 use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ApplicantProfileController;
+use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
 use App\Http\Controllers\JobProviderProfileController;
 use App\Http\Controllers\LandingPageController;
@@ -36,6 +38,9 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard',[JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
     Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard/Logout',[JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
     Route::get('/EQUIJOB/Job-Provider/Job-Provider-Profile',[JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+    Route::get('/EQUIIJOB/Job-Provider/Job-Posting',[JobPostingController::class, 'index'])->name('job-provider-job-posting');
+    Route::post('/EQUIJOB/Job-Provider/Job-Posting',[JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
+    Route::delete('/EQUIJOB/Job-Provider/Job-Posting/Delete/{id}',[JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     
 });
 
@@ -44,7 +49,6 @@ Route::middleware('auth:job_provider')->group(function () {
 Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Applicant-Dashboard',[ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
     Route::get('/EQUIJOB/Applicant/Logout',[ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
-    Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantController::class, 'ShowProfile'])->name('applicant-profile');
     Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
     Route::get('/EQUIJOB/Applicant/Applicant-Profile',[ApplicantProfileController::class, 'index'])->name('applicant-profile');
     Route::put('/EQUIJOB/Applicant/Applicant-Profile/{id}',[ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
@@ -52,6 +56,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::post('/EQUIJOB/Applicant/Resume-Builder',[ResumeController::class, 'store'])->name('applicant-resume-builder-store');
     Route::get('/EQUIJOB/Applicant/Resume-View-And-Download',[ResumeViewAndDownloadController::class, 'index'])->name('applicant-resume-view-and-download');
     Route::get('/EQUIJOB/Applicant/Resume-View-And-Download/Download',[ResumeViewAndDownloadController::class, 'download'])->name('applicant-resume-download');
+
 
 });
 
@@ -65,4 +70,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('EQUIJOB/Admin/Manage-User-JobProviders',[AdminManageUserJobProviderController::class, 'index'])->name('admin-manage-user-job-providers');
     Route::delete('EQUIJOB/Admin/Manage-User-JobProviders/Delete/{id}',[AdminManageUserJobProviderController::class, 'destroy'])->name('admin-manage-user-job-providers-delete');
     Route::delete('EQUIJOB/Admin/Manage-User-Applicants/Delete/{id}',[AdminManageUsersController::class, 'destroy'])->name('admin-manage-user-applicants-delete');
+    Route::get('EQUIJOB/Admin/Manage-Job-Posting',[AdminManageJobPostingController::class, 'index'])->name('admin-manage-job-posting');
+    Route::put('EQUIJOB/Admin/Manage-Job-Posting/For-Posting/{id}',[AdminManageJobPostingController::class, 'updateForPosting'])->name('admin-manage-job-posting-for-posting');
+    Route::put('EQUIJOB/Admin/Manage-Job-Posting/Disapproved/{id}',[AdminManageJobPostingController::class, 'updateDisapproved'])->name('admin-manage-job-posting-disapproved');
 });

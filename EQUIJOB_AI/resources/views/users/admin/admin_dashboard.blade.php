@@ -34,7 +34,7 @@
         </div>
         <div class="flex flex-col justify-center px-4">
           <div class="text-lg font-semibold">Applicants</div>
-          <div class="text-2xl">0</div>
+          <div class="text-2xl">{{$applicantCount}}</div>
         </div>
       </div>
 

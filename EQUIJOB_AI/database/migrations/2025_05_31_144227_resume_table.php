@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->string('disability_type')->nullable();
+            $table->enum('type_of_disability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();
             $table->text('experience')->nullable();
             $table->string('photo')->nullable(); 
             $table->text('summary')->nullable();

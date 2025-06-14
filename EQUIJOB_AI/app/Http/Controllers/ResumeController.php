@@ -38,8 +38,8 @@ class ResumeController extends Controller
             $prompt .= "Phone: {$resume->phone}\n";
         }
         // Add Disability Type if present
-        if (!empty($resume->disability_type) && strcasecmp(trim($resume->disability_type), "Select Disability Type") !== 0) {
-            $prompt .= "Disability Type: {$resume->disability_type}\n";
+        if (!empty($resume->type_of_disability) && strcasecmp(trim($resume->type_of_disability), "Select Disability Type") !== 0) {
+            $prompt .= "Disability Type: {$resume->type_of_disability}\n";
         }
         if ($resume->summary) {
             $prompt .= "Summary/Objectives (User Provided): {$resume->summary}\n";
@@ -113,7 +113,7 @@ class ResumeController extends Controller
             'resume.address' => 'nullable|string|max:255',
             'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
             'resume.phone' => 'nullable|string|max:15',
-            'resume.disability_type' => 'nullable|string|max:255',
+            'resume.type_of_disability' => 'nullable|string|max:255',
             'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'resume.summary' => 'nullable|string',
             'resume.skills' => 'nullable|string|max:1000',
@@ -134,6 +134,11 @@ class ResumeController extends Controller
 
         try {
             $resumeInputData = $validatedData['resume'];
+
+            // Ensure type_of_disability is always set (even as empty string if not provided)
+            if (!isset($resumeInputData['type_of_disability'])) {
+                $resumeInputData['type_of_disability'] = '';
+            }
 
             // Handle skills from the 'skills' textarea (not 'resume.skills' due to form field name)
             $skillsRaw = $request->input('skills', '');

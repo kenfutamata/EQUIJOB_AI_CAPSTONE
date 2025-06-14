@@ -7,109 +7,144 @@
     <title>EQUIJOB - Admin Manage Job Providers</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <style>
+        .sidebar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 234px;
+            height: 100vh;
+            z-index: 40;
+            background-color: #c3d2f7;
+        }
+
+        .topbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 234px;
+            right: 0;
+            height: 64px;
+            z-index: 30;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .main-content-scroll {
+            margin-left: 234px;
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        /* Fade-out transition for notification bar */
+        #notification-bar {
+            transition: opacity 0.5s;
+        }
+    </style>
 </head>
 
 <body class="bg-white text-black">
-    <div class="flex min-h-screen">
-        <x-admin-sidebar />
-
-        <div class="flex-1 flex flex-col">
-            <header class="w-full border-b border-gray-200">
-                <x-topbar :user="$admin" />
-            </header>
-
-            <main class="p-6">
-                @if(session('Success'))
-                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
-                    {{ session('Success') }}
-                </div>
-                @elseif(session('Delete_Success'))
-                <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
-                    {{ session('Delete_Success') }}
-                </div>
-                @endif
-
-                <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
-                    <div>
-                        <span class="text-gray-800">Manage </span>
-                        <span class="text-blue-500">Job Providers</span>
-                    </div>
-                    <div class="flex gap-2">
-                        <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
-                        <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
-                    </div>
-                    <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="flex items-center gap-1">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Providers"
-                            class="border rounded-l px-2 py-1 w-32 text-sm" />
-                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
-                    </form>
-                </div>
-
-                <div class="overflow-x-auto bg-white shadow rounded-lg">
-                    <table class="min-w-full text-sm text-center">
-                        <thead class="bg-gray-100 font-semibold">
-                            <tr>
-                                <th class="px-4 py-3">Id</th>
-                                <th class="px-4 py-3">First Name</th>
-                                <th class="px-4 py-3">Last Name</th>
-                                <th class="px-4 py-3">Email</th>
-                                <th class="px-4 py-3">Phone Number</th>
-                                <th class="px-4 py-3">Company</th>
-                                <th class="px-4 py-3">Company Logo</th>
-                                <th class="px-4 py-3">Role</th>
-                                <th class="px-4 py-3">Profile Picture</th>
-                                <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @foreach ($users as $user)
-                            @if($user->role == 'Job Provider')
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3">{{ $user->id }}</td>
-                                <td class="px-4 py-3">{{ $user->first_name }}</td>
-                                <td class="px-4 py-3">{{ $user->last_name }}</td>
-                                <td class="px-4 py-3">{{ $user->email }}</td>
-                                <td class="px-4 py-3">{{ $user->phone_number }}</td>
-                                <td class="px-4 py-3">{{ $user->company_name }}</td>
-                                <td class="px-4 py-3">
-                                    @if ($user->company_logo)
-                                    <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[60px] h-[60px] object-cover">
-                                    @else
-                                    No Logo
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3">{{ $user->role }}</td>
-                                <td class="px-2 py-2">
-                                    @if ($user->profile_picture)
-                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
-                                    @else No Picture @endif
-                                </td>
-                                <td class="px-4 py-3">{{ $user->status }}</td>
-                                <td class="px-4 py-3 space-y-1">
-                                    <button type="button"
-                                        onclick="openProfileModal(this)"
-                                        data-user='@json($user)'
-                                        class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-
-                                    @if($user->status === 'Inactive')
-                                    <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
-                                    </form>
-                                    @endif
-                                    <button onclick="openDeleteModal({{ $user->id }})"
-                                        class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                </td>
-                            </tr>
-                            @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </main>
+    <div>
+        <div class="sidebar-fixed">
+            <x-admin-sidebar />
         </div>
+
+        <header class="topbar-fixed">
+            <x-topbar :user="$admin" />
+        </header>
+
+        <main class="main-content-scroll">
+            @if(session('Success'))
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+                {{ session('Success') }}
+            </div>
+            @elseif(session('Delete_Success'))
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+                {{ session('Delete_Success') }}
+            </div>
+            @endif
+
+            <div class="text-4xl font-audiowide mb-6 flex items-center justify-between">
+                <div>
+                    <span class="text-gray-800">Manage </span>
+                    <span class="text-blue-500">Job Providers</span>
+                </div>
+                <div class="flex gap-2">
+                    <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
+                    <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
+                </div>
+                <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="flex items-center gap-1">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Providers"
+                        class="border rounded-l px-2 py-1 w-32 text-sm" />
+                    <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
+                </form>
+            </div>
+
+            <div class="overflow-x-auto bg-white shadow rounded-lg">
+                <table class="min-w-full text-sm text-center">
+                    <thead class="bg-gray-100 font-semibold">
+                        <tr>
+                            <th class="px-4 py-3">Id</th>
+                            <th class="px-4 py-3">First Name</th>
+                            <th class="px-4 py-3">Last Name</th>
+                            <th class="px-4 py-3">Email</th>
+                            <th class="px-4 py-3">Phone Number</th>
+                            <th class="px-4 py-3">Company</th>
+                            <th class="px-4 py-3">Company Logo</th>
+                            <th class="px-4 py-3">Role</th>
+                            <th class="px-4 py-3">Profile Picture</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach ($users as $user)
+                        @if($user->role == 'Job Provider')
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3">{{ $user->id }}</td>
+                            <td class="px-4 py-3">{{ $user->first_name }}</td>
+                            <td class="px-4 py-3">{{ $user->last_name }}</td>
+                            <td class="px-4 py-3">{{ $user->email }}</td>
+                            <td class="px-4 py-3">{{ $user->phone_number }}</td>
+                            <td class="px-4 py-3">{{ $user->company_name }}</td>
+                            <td class="px-4 py-3">
+                                @if ($user->company_logo)
+                                <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[60px] h-[60px] object-cover">
+                                @else
+                                No Logo
+                                @endif
+                            </td>
+                            <td class="px-4 py-3">{{ $user->role }}</td>
+                            <td class="px-2 py-2">
+                                @if ($user->profile_picture)
+                                <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
+                                @else No Picture @endif
+                            </td>
+                            <td class="px-4 py-3">{{ $user->status }}</td>
+                            <td class="px-4 py-3 space-y-1">
+                                <button type="button"
+                                    onclick="openProfileModal(this)"
+                                    data-user='@json($user)'
+                                    class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+
+                                @if($user->status === 'Inactive')
+                                <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
+                                </form>
+                                @endif
+                                <button onclick="openDeleteModal({{ $user->id }})"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                            </td>
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 
     <div id="viewProfileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
@@ -192,6 +227,16 @@
         function closeDeleteModal() {
             document.getElementById('DeleteRoleModal').classList.add('hidden');
         }
+
+        // Fade out notification bar after 2.5s, then hide after 3s
+        setTimeout(() => {
+            const notif = document.getElementById('notification-bar');
+            if (notif) notif.style.opacity = '0';
+        }, 2500);
+        setTimeout(() => {
+            const notif = document.getElementById('notification-bar');
+            if (notif) notif.style.display = 'none';
+        }, 3000);
     </script>
 </body>
 

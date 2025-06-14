@@ -98,12 +98,12 @@
                             </div>
                             <div>
                                 <label for="disability_type" class="block text-lg">Disability Type</label>
-                                <select id="disability_type" name="resume[disability_type]" class="w-full border border-black bg-gray-300 h-11 px-3">
-                                    <option value="" disabled selected>Select Disability Type</option>
-                                    <option value="Physical" {{ old('resume.disability_type') == 'Physical' ? 'selected' : '' }}>Physical</option>
-                                    <option value="Visual" {{ old('resume.disability_type') == 'Visual' ? 'selected' : '' }}>Visual</option>
-                                    <option value="Hearing" {{ old('resume.disability_type') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
-                                    <option value="Intellectual" {{ old('resume.disability_type') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
+                                <select id="type_of_disability" name="resume[type_of_disability]" class="w-full border border-black bg-gray-300 h-11 px-3">
+                                    <option value="" disabled {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
+                                    <option value="Physical" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Physical' ? 'selected' : '' }}>Physical</option>
+                                    <option value="Visual" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Visual' ? 'selected' : '' }}>Visual</option>
+                                    <option value="Hearing" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
+                                    <option value="Intellectual" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
                                 </select>
                             </div>
                             <div>

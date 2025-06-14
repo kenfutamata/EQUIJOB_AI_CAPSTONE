@@ -11,9 +11,10 @@ class AdminController extends Controller
     public function ViewAdminDashboard()
     {
         $user = Auth::guard('admin')->user(); 
-        $userCount = users::count(); 
-        $jobProviderCount = users::where('role', 'job_provider')->where('status', 'active')->count();
-        $response = response()->view('users.admin.admin_dashboard', compact('user', 'userCount', 'jobProviderCount'));
+        $userCount = users::where('status', 'Active')->count();
+        $applicantCount  = users::where('role', 'Applicant')->where('status', 'Active')->count();
+        $jobProviderCount = users::where('role', 'Job Provider')->where('status', 'Active')->count();
+        $response = response()->view('users.admin.admin_dashboard', compact('user', 'userCount', 'jobProviderCount', 'applicantCount'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');

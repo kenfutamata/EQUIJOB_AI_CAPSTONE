@@ -126,10 +126,10 @@ class SignInController extends Controller
             // Job Provider
             $jobProviderCredentials = $request->only('email', 'password');
             $jobProviderCredentials['role'] = 'Job Provider';
-            $jobProviderCredentials['status'] = 'active';
+            $jobProviderCredentials['status'] = 'Active';
             if (Auth::guard('job_provider')->attempt($jobProviderCredentials)) {
                 $user = Auth::guard('job_provider')->user();
-                if ($user->role === 'Job Provider' && $user->status === 'active') {
+                if ($user->role === 'Job Provider' && $user->status === 'Active') {
                     $request->session()->regenerate();
                     return redirect()->route('job-provider-dashboard');
                 } else {
