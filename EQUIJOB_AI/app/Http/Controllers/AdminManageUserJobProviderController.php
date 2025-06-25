@@ -17,9 +17,10 @@ class AdminManageUserJobProviderController extends Controller
     public function index(Request $request)
     {
         $admin = Auth::guard('admin')->user();
+        $notifications = $admin->notifications ?? collect();
+        $unreadNotifications = $admin->unreadNotifications ?? collect();
         $users = users::all();
         $search = $request->input('search');
-
         $users = \App\Models\users::query()
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
@@ -35,7 +36,7 @@ class AdminManageUserJobProviderController extends Controller
                 });
             })
             ->get();
-        $response = response()->view('users.admin.manage_user_jobprovider', compact('admin', 'users'));
+        $response = response()->view('users.admin.manage_user_jobprovider', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');

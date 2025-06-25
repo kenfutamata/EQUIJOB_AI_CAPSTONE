@@ -51,12 +51,10 @@
         <div class="sidebar-fixed">
             <x-admin-sidebar />
         </div>
-
-        <header class="topbar-fixed">
-            <x-topbar :user="$admin" />
-        </header>
-
-        <main class="main-content-scroll p-4 overflow-x-auto">
+        <div class="topbar-fixed">
+            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications"/>
+        </div>
+        <main class="main-content-scroll">
             @if(session('Success'))
             <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('Success') }}
@@ -86,17 +84,14 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Id</th>
+                            <th class="px-4 py-3">User Id</th>
                             <th class="px-2 py-2">First Name</th>
                             <th class="px-2 py-2">Last Name</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Email</th>
-                            <th class="px-2 py-2 max-w-[150px] break-words">Address</th>
                             <th class="px-2 py-2">Phone</th>
                             <th class="px-2 py-2">DOB</th>
                             <th class="px-2 py-2">Disability</th>
-                            <th class="px-2 py-2">PWD ID</th>
-                            <th class="px-2 py-2">PWD Card</th>
-                            <th class="px-2 py-2">Profile Pic</th>
+                            <th class="px-2 py-2">Profile Picture</th>
                             <th class="px-2 py-2">Role</th>
                             <th class="px-2 py-2">Status</th>
                             <th class="px-2 py-2">Actions</th>
@@ -106,20 +101,13 @@
                         @foreach ($users as $user)
                         @if($user->role == 'Applicant')
                         <tr class="hover:bg-gray-50">
-                            <td class="px-2 py-2">{{ $user->id }}</td>
+                            <td class="px-4 py-3">{{ $user->userID}}</td>
                             <td class="px-2 py-2">{{ $user->first_name }}</td>
                             <td class="px-2 py-2">{{ $user->last_name }}</td>
                             <td class="px-2 py-2 break-all max-w-[150px]">{{ $user->email }}</td>
-                            <td class="px-2 py-2 break-words max-w-[150px]">{{ $user->address }}</td>
                             <td class="px-2 py-2">{{ $user->phone_number }}</td>
                             <td class="px-2 py-2">{{ $user->date_of_birth }}</td>
                             <td class="px-2 py-2">{{ $user->type_of_disability }}</td>
-                            <td class="px-2 py-2">{{ $user->pwd_id }}</td>
-                            <td class="px-2 py-2">
-                                @if ($user->upload_pwd_card)
-                                <img src="{{ asset('storage/' . $user->upload_pwd_card) }}" class="w-8 h-8 object-cover mx-auto">
-                                @else No Card @endif
-                            </td>
                             <td class="px-2 py-2">
                                 @if ($user->profile_picture)
                                 <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
@@ -145,7 +133,7 @@
             </div>
         </main>
     </div>
-    
+
     <div id="viewProfileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6">
             <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
@@ -215,7 +203,7 @@
             pwdCardImg.style.display = user.upload_pwd_card ? 'block' : 'none';
             const profilePictureImg = document.getElementById('modal_profile_picture');
             profilePictureImg.src = user.profile_picture ? `/storage/${user.profile_picture}` : '';
-            profilePictureImg .style.display = user.profile_picture ? 'block' : 'none';
+            profilePictureImg.style.display = user.profile_picture ? 'block' : 'none';
             document.getElementById('modal_role').value = user.role;
             document.getElementById('modal_status').value = user.status;
             document.getElementById('viewProfileModal').classList.remove('hidden');

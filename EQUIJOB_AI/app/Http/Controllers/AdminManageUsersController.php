@@ -18,7 +18,8 @@ class AdminManageUsersController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         $users = users::all();
-
+        $notifications = $admin->notifications ?? collect();
+        $unreadNotifications = $admin->unreadNotifications ?? collect();
         $search = $request->input('search');
 
         $users = \App\Models\users::query()
@@ -37,7 +38,7 @@ class AdminManageUsersController extends Controller
             });
         })
         ->get(); 
-        $response = response()->view('users.admin.manage_users_applicants', compact('admin', 'users'));
+        $response = response()->view('users.admin.manage_users_applicants', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');

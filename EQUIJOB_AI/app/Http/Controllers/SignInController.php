@@ -20,6 +20,24 @@ class SignInController extends Controller
         return view('sign-in-page.sign_up.sign_up_job_provider');
     }
 
+    public function generateAlphaNumericId(string $role): string
+    {
+        $prefix = match($role){
+            'Applicant' => 'JA25',
+            'Job Provider' => 'JP25',
+            default => 'XX25',
+        }; 
+
+        $last = users::whereNotNull('userID')
+            ->where('userID', 'like', $prefix . '%')
+            ->orderBy('id', 'desc')
+            ->first();
+        
+        $lastID = $last ?->userID??$prefix.'0000';
+        $number = (int) substr($lastID, strlen($prefix));
+        $next = $number+1; 
+        return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
+    }
     public function SignUpJobApplicant(Request $request)
     {
         $validateInformation =  $request->validate([
@@ -45,6 +63,7 @@ class SignInController extends Controller
         $validateInformation['role'] = $validateInformation['role'] ?? 'Applicant';
         $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';
         $validateInformation['password'] = Hash::make($request->password);
+        $validateInformation['userID'] = $this->generateAlphaNumericId('Applicant');
         try {
             users::create($validateInformation);
             return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');
@@ -75,6 +94,7 @@ class SignInController extends Controller
             $validateInformation['role'] = $validateInformation['role'] ?? 'Job Provider';
             $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';
             $validateInformation['password'] = Hash::make($request->password);
+            $validateInformation['userID'] = $this->generateAlphaNumericId('Job Provider');
             users::create($validateInformation);
             return redirect()->route('email-confirmation')->with('success', 'Request Successful! Please wait for admins to approve your account.');
         } catch (\Exception $e) {

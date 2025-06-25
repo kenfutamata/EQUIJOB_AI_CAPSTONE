@@ -1,12 +1,12 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User; // Add this import
+use Illuminate\Notifications\Notifiable;
 
 class JobPosting extends Model
 {
+    use Notifiable;
     protected $table = 'job_posting';
     protected $fillable = [
         'position',
@@ -25,8 +25,14 @@ class JobPosting extends Model
         'skills',
         'contact_phone',
         'contact_email',
-        'job_provider_id',
+        'remarks',
+        'job_provider_id'   
     ];
+
+    public function jobProvider()
+    {
+        return $this->belongsTo(users::class, 'job_provider_id');
+    }
 
     public function recruitment()
     {

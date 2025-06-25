@@ -5,35 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Js;
+use App\Notifications\JobPostingNotificationSent;
 
 class JobPostingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $user = Auth::guard('job_provider')->user();
+        $notifications = $user->notifications ?? collect();
+        $unreadNotifications = $user->unreadNotifications ?? collect();
         $postings = JobPosting::all(); 
-        $response = response()->view('users.job-provider.job_posting', compact('user', 'postings'));
+        $response = response()->view('users.job-provider.job_posting', compact('user', 'postings', 'notifications', 'unreadNotifications'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
         return $response;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -54,53 +47,52 @@ class JobPostingController extends Controller
             'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // Map job_description from form to description for saving
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }
 
-        if($request->hasFile('company_logo')) {
+        if ($request->hasFile('company_logo')) {
             $file = $request->file('company_logo');
             $filepath = $file->store('company_logos', 'public');
             $validatedData['company_logo'] = $filepath;
         }
+
         $validatedData['job_provider_id'] = Auth::guard('job_provider')->id();
         $validatedData['status'] = 'Pending'; 
-        try{
-            JobPosting::create($validatedData);
+
+        try {
+            $jobPosting = JobPosting::create($validatedData);
+
+            $admins = \App\Models\users::where('role', 'Admin')->get();
+            foreach ($admins as $admin) {
+                if (method_exists($admin, 'notify')) {
+                    $admin->notify(new JobPostingNotificationSent($jobPosting, 'Admin'));
+                }
+            }
+
             return redirect()->route('job-provider-job-posting')->with('Success', 'Job posting created successfully!');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while creating the job posting: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $jobPosting = JobPosting::findOrFail($id);
+        $user = Auth::guard('job_provider')->user();
+        return view('users.job-provider.job_posting_show', compact('jobPosting', 'user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $jobPosting = JobPosting::findOrFail($id);

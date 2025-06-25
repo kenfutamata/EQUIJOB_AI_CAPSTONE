@@ -18,9 +18,10 @@
         </div>
 
         <!-- Topbar -->
-        <header class="fixed top-0 left-[234px] right-0 h-[64px] z-30 bg-white border-b border-gray-200 shadow-none">
-            <x-topbar :user="$user" />
-        </header>
+        <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
+            <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        </div>
+
 
         <!-- Main Content -->
         <main class="ml-[234px] mt-[64px] h-[calc(100vh-64px)] overflow-y-auto p-6 bg-gray-50">
@@ -68,8 +69,6 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Id</th>
-                            <th class="px-2 py-2">Job Provider ID</th>
                             <th class="px-2 py-2">Position</th>
                             <th class="px-2 py-2">Company Name</th>
                             <th class="px-2 py-2">Sex</th>
@@ -93,8 +92,6 @@
                         @foreach ($postings as $posting)
                         @if($posting->job_provider_id==$user->id)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-2 py-2">{{ $posting->id }}</td>
-                            <td class="px-2 py-2">{{ $posting->job_provider_id }}</td>
                             <td class="px-2 py-2">{{ $posting->position }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->company_name }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
@@ -336,11 +333,14 @@
                 <label class="block text-xs text-gray-500">Salary Range</label>
                 <input id="modal.salary_range" class="w-full border rounded px-2 py-1" disabled>
             </div>
-            
+            <div>
+                <label class="block text-xs text-gray-500">Remarks</label>
+                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+            </div>
         </div>
     </div>
 
-        <div id="DeleteJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div id="DeleteJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-semibold">Delete Job Posting?</h3>
@@ -406,8 +406,9 @@
             document.getElementById('modal.contact_email').value = jobposting.contact_email;
             document.getElementById('modal.description').value = jobposting.description;
             document.getElementById('modal.salary_range').value = jobposting.salary_range;
+            document.getElementById('modal.remarks').value = jobposting.remarks || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
-            
+
         }
 
         function closeViewJobPostingModal() {

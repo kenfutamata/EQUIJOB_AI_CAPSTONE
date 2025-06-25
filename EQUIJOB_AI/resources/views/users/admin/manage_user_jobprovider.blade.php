@@ -49,11 +49,9 @@
         <div class="sidebar-fixed">
             <x-admin-sidebar />
         </div>
-
-        <header class="topbar-fixed">
-            <x-topbar :user="$admin" />
-        </header>
-
+        <div class="topbar-fixed">
+            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        </div>
         <main class="main-content-scroll">
             @if(session('Success'))
             <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
@@ -85,7 +83,7 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-4 py-3">Id</th>
+                            <th class="px-4 py-3">User Id</th>
                             <th class="px-4 py-3">First Name</th>
                             <th class="px-4 py-3">Last Name</th>
                             <th class="px-4 py-3">Email</th>
@@ -102,7 +100,7 @@
                         @foreach ($users as $user)
                         @if($user->role == 'Job Provider')
                         <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $user->id }}</td>
+                            <td class="px-4 py-3">{{ $user->userID }}</td>
                             <td class="px-4 py-3">{{ $user->first_name }}</td>
                             <td class="px-4 py-3">{{ $user->last_name }}</td>
                             <td class="px-4 py-3">{{ $user->email }}</td>

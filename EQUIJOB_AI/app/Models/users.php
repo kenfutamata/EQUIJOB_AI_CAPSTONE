@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class users extends Model
+class users extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $table = 'users';
@@ -26,7 +27,8 @@ class users extends Model
         'role',
         'status',
         'company_name',
-        'company_logo'
+        'company_logo',
+        'userID'
     ];
 
     protected $hidden = [

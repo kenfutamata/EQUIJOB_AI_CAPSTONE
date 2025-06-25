@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
-
 <body class="bg-white text-black">
-
     <div>
         <!-- Sidebar -->
         <div class="fixed top-0 left-0 w-[234px] h-full z-40" style="background-color: #c3d2f7;">
@@ -18,21 +15,18 @@
         </div>
 
         <!-- Topbar -->
-        <header class="fixed top-0 left-[234px] right-0 h-[64px] z-30 bg-white border-b border-gray-200 shadow-none">
-            <x-topbar :user="$user" />
-        </header>
+        <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
+            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        </div>
 
         <!-- Main Content -->
-        <main class="ml-[234px] mt-[64px] h-[calc(100vh-64px)] overflow-y-auto p-6 bg-gray-50">
-
+        <main class="main-content-scroll bg-gray-50">
             @if(session('Success'))
-            <div id="notification-bar"
-                class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('Success') }}
             </div>
             @elseif(session('error'))
-            <div id="notification-bar"
-                class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('error') }}
             </div>
             @endif
@@ -44,13 +38,9 @@
                     <span class="text-blue-500">Job Postings</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <form method="GET" action="{{ route('admin-manage-user-applicants') }}"
-                        class="flex items-center gap-1 ml-auto">
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Search Job Posting"
-                            class="border rounded-l px-2 py-1 w-32 text-sm" />
-                        <button type="submit"
-                            class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
+                    <form method="GET" action="{{ route('admin-manage-user-applicants') }}" class="flex items-center gap-1 ml-auto">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Posting" class="border rounded-l px-2 py-1 w-32 text-sm" />
+                        <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
                     </form>
                 </div>
             </div>
@@ -60,8 +50,6 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Id</th>
-                            <th class="px-2 py-2">Job Provider ID</th>
                             <th class="px-2 py-2">Position</th>
                             <th class="px-2 py-2">Company Name</th>
                             <th class="px-2 py-2">Sex</th>
@@ -84,15 +72,12 @@
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($postings as $posting)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-2 py-2">{{ $posting->id }}</td>
-                            <td class="px-2 py-2">{{ $posting->job_provider_id }}</td>
                             <td class="px-2 py-2">{{ $posting->position }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->company_name }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
                             <td class="px-2 py-2">
                                 @if ($posting->company_logo)
-                                <img src="{{ asset('storage/' . $posting->company_logo) }}"
-                                    class="w-8 h-8 object-cover mx-auto">
+                                <img src="{{ asset('storage/' . $posting->company_logo) }}" class="w-8 h-8 object-cover mx-auto">
                                 @else
                                 No Logo
                                 @endif
@@ -111,26 +96,16 @@
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if ($posting->status === 'Pending')
-                                <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 <form action="{{route('admin-manage-job-posting-for-posting', $posting->id)}}" method="post" class="inline">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">For Posting</button>
                                 </form>
-                                <form action="{{route('admin-manage-job-posting-disapproved', $posting->id)}}" method="post" class="inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
-                                </form>
-                                @elseif ($posting->status === 'For Posting')
-                                    <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                @elseif ($posting->status === 'Disapproved')
-                                    <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                <button onclick="openDisapproveJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
+                                @else
+                                <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @endif
-
                             </td>
                         </tr>
                         @endforeach
@@ -139,7 +114,6 @@
             </div>
         </main>
     </div>
-
     <div id="viewJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeViewJobPostingModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
@@ -204,11 +178,37 @@
                 <label class="block text-xs text-gray-500">Salary Range</label>
                 <input id="modal.salary_range" class="w-full border rounded px-2 py-1" disabled>
             </div>
+            <div>
+                <label class="block text-xs text-gray-500">Remarks</label>
+                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+            </div>
+        </div>
+    </div>
 
+    <div id="DisapproveJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Please Input your Remarks for Disapproval of Job Posting</h3>
+                <button onclick="closeDisapproveJobPostingModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form id="remarks" method="POST" action="{{route('admin-manage-job-posting-disapproved', $posting->id)}}">
+                @csrf
+                @method('PUT')
+                <div class="mb-4">
+                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                    <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
+            </form>
         </div>
     </div>
     <!-- Scripts -->
     <script>
+        function openDisapproveJobPostingModal(button) {
+            document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
+        }
+        function closeDisapproveJobPostingModal() {
+            document.getElementById('DisapproveJobPostingModal').classList.add('hidden');
+        }
         function openAddJobPostingModal() {
             document.getElementById('addJobPostingModal').classList.remove('hidden');
         }
@@ -264,6 +264,7 @@
             document.getElementById('modal.contact_email').value = jobposting.contact_email;
             document.getElementById('modal.description').value = jobposting.description;
             document.getElementById('modal.salary_range').value = jobposting.salary_range;
+            document.getElementById('modal.remarks').value = jobposting.remarks || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
 
         }
@@ -272,7 +273,18 @@
             document.getElementById('viewJobPostingModal').classList.add('hidden');
         }
     </script>
-
+    <!-- Style -->
+    <style>
+        .main-content-scroll {
+            margin-left: 234px;
+            padding-top: 4rem;
+            height: 100vh;
+            overflow-y: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+    </style>
 </body>
 
 </html>
