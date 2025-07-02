@@ -40,8 +40,12 @@ return [
     ],
 
     'google_gemini'=>[
-        'key'=>env('GOOGLE_GEMINI_API_KEY'),
-        'url'=>env('GOOGLE_GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta/models/text-bison:generateContent'),
-        'model'=>env('GOOGLE_GEMINI_MODEL'),
+        'key'=>env('GEMINI_API_KEY'),
+        'url'=>env('GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta/models/text-bison:generateContent'),
+        'model'=>env('GEMINI_MODEL'),
+    ],
+
+    'spatie' => [
+        'pdf_to_text_binary_path' => env('PDF_TO_TEXT_BINARY_PATH', 'C:\\Users\\kenfu\\scoop\\shims\\pdftotext.exe'),
     ],
 ];

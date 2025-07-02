@@ -12,7 +12,7 @@
                 <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/resume.png') }}" alt="Resume Icon" />
                 <span>Resume Builder</span>
             </a>
-            <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+            <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{ route('applicant-match-jobs') }}">
                 <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_applicant.png') }}" alt="Job Matching Icon" />
                 <span>AI Job Matching</span>
             </a>

@@ -1,6 +1,5 @@
 @php
-    // Set a default value so the page doesn't break on the normal web view.
-    // The controller will set this to true when downloading the PDF.
+
     $is_pdf = $is_pdf ?? false;
 @endphp
 <!DOCTYPE html>
@@ -11,14 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Generated Resume</title>
     
-    {{-- Only load web assets if we are NOT generating a PDF --}}
+
     @if(!$is_pdf)
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
     @endif
     
     <style>
-        /* Basic styles that apply to both web and PDF */
         body { font-family: sans-serif; }
         .resume-section { page-break-inside: avoid; margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 5px; }
         .resume-section h2 { margin-top: 0; border-bottom: 1px solid #ccc; padding-bottom: 5px; }

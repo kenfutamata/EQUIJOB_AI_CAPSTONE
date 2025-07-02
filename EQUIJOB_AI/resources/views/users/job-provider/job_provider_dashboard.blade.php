@@ -16,13 +16,13 @@
   <div class="flex flex-col flex-1 min-h-screen overflow-hidden">
     
     <!-- Topbar -->
-      <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
-          <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
-      </div>
+    <div class="w-full border-b border-gray-200 shadow-sm z-10">
+      <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
+    </div>
 
 
     <!-- Main content -->
-    <main class="flex-1 overflow-y-auto px-6 py-10 bg-[#FCFDFF] mt-16">
+    <main class="flex-1 overflow-y-auto px-6 py-0 bg-[#FCFDFF] mt-8">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Application Card -->
         <div class="flex border border-black w-full h-[83px] bg-white">

@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminManageJobPostingController;
 use App\Http\Controllers\AdminManageUserJobProviderController;
 use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\ApplicantMatchJobsController;
 use App\Http\Controllers\ApplicantProfileController;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
@@ -17,6 +18,8 @@ use App\Http\Controllers\SignInController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Event\Code\Test;
+use Illuminate\Support\Facades\File;
+use Gemini\Laravel\Facades\Gemini;
 
 //Landing Page
 Route::get('/', [LandingPageController::class, 'ViewLandingPage'])->name('landing-page');
@@ -33,7 +36,29 @@ Route::post('/EQUIJOB/Sign-up-Applicant/login', [SignInController::class, 'SignU
 Route::post('/EQUIJOB/Sign-up-JobProvider/login', [SignInController::class, 'SignUpJobProvider'])->name('sign-up-job-provider-register');
 Route::get('/EQUIJOB/Email-Confirmation', [SignInController::class, 'ViewEmailConfirmationPage'])->name('email-confirmation');
 
+// notification
+Route::delete('/EQUIJOB/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
 
+Route::get('/test-gemini-api', function () {
+    try {
+        // THE DIAGNOSTIC: Ask the API to list all available models
+        $response = Gemini::models()->list();
+
+        // Loop through the results and print them out
+        $availableModels = [];
+        foreach ($response->models as $model) {
+            // We only care about models that support 'generateContent'
+            if (in_array('generateContent', $model->supportedGenerationMethods)) {
+                $availableModels[] = $model->name;
+            }
+        }
+
+        dd("SUCCESS! These are the models YOU CAN USE for 'generateContent':", $availableModels);
+
+    } catch (\Exception $e) {
+        dd("API CONNECTION FAILED. See the error message below:", $e->getMessage());
+    }
+});
 //Job Provider
 Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard', [JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
@@ -43,8 +68,6 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::post('/EQUIJOB/Job-Provider/Job-Posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
     Route::delete('/EQUIJOB/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/EQUIJOB/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
-    Route::delete('/EQUIJOB/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
-
 });
 
 //Applicant 
@@ -59,8 +82,9 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::post('/EQUIJOB/Applicant/Resume-Builder', [ResumeController::class, 'store'])->name('applicant-resume-builder-store');
     Route::get('/EQUIJOB/Applicant/Resume-View-And-Download', [ResumeViewAndDownloadController::class, 'index'])->name('applicant-resume-view-and-download');
     Route::get('/EQUIJOB/Applicant/Resume-View-And-Download/Download', [ResumeViewAndDownloadController::class, 'download'])->name('applicant-resume-download');
-    Route::delete('/EQUIJOB/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
-
+    Route::get('/EQUIJOB/Applicant/Match-Jobs', [ApplicantMatchJobsController::class, 'showUploadForm'])->name('applicant-match-jobs');
+    Route::post('/EQUIJOB/Applicant/Match-Jobs/Upload-Resume', [ApplicantMatchJobsController::class, 'matchWithPdf'])->name('applicant-match-jobs-upload-resume');
+    Route::get('/EQUIJOB/Applicant/Match-Jobs/Recommended-Jobs', [ApplicantMatchJobsController::class, 'showRecommendations'])->name('applicant-match-jobs-recommended-jobs');
 });
 
 //admin
@@ -77,6 +101,4 @@ Route::middleware('auth:admin')->group(function () {
     Route::put('EQUIJOB/Admin/Manage-Job-Posting/For-Posting/{id}', [AdminManageJobPostingController::class, 'updateForPosting'])->name('admin-manage-job-posting-for-posting');
     Route::put('EQUIJOB/Admin/Manage-Job-Posting/Disapproved/{id}', [AdminManageJobPostingController::class, 'updateDisapproved'])->name('admin-manage-job-posting-disapproved');
     Route::get('/EQUIJOB/Admin/Manage-Job-Posting/{id}', [AdminManageJobPostingController::class, 'show'])->name('Admin-job-posting-show');
-    Route::delete('/EQUIJOB/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
-
 });

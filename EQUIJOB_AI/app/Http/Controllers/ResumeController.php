@@ -13,7 +13,9 @@ class ResumeController extends Controller
     public function index()
     {
         $user = Auth::guard('applicant')->user();
-        $response = response()->view('users.applicant.resume_builder', compact('user'));
+        $notifications = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
+        $response = response()->view('users.applicant.resume_builder', compact('user', 'notifications', 'unreadNotifications'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
@@ -188,14 +190,14 @@ class ResumeController extends Controller
 
             $promptForAI = $this->buildResumePrompt($resumeInstance, $skillsRaw);
 
-            $geminiApiKey = env('GOOGLE_GEMINI_API_KEY');
+            $geminiApiKey = env('GEMINI_API_KEY');
             if (!$geminiApiKey) {
                 Log::error('Google Gemini API Key is not set.');
                 return redirect()->back()->with('error', 'Google Gemini API Key is not configured.');
             }
 
             $client = Gemini::client($geminiApiKey);
-            $modelName = env('GOOGLE_GEMINI_MODEL');
+            $modelName = env('GEMINI_MODEL');
             if (!$modelName) {
                 Log::error("Gemini model name not set.");
                 return redirect()->back()->with('error', 'AI model name is not configured.');
