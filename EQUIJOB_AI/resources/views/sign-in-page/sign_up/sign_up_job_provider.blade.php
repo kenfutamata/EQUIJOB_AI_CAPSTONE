@@ -20,7 +20,7 @@
   <div class="flex-1 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl shadow-lg p-10 w-full max-w-5xl">
       
-      <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Sign Up</h2>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Sign Up Job Provider</h2>
 
       <form action="{{route('sign-up-job-provider-register')}}" method="POST" class="space-y-6" enctype="multipart/form-data">
         @csrf

@@ -39,26 +39,7 @@ Route::get('/EQUIJOB/Email-Confirmation', [SignInController::class, 'ViewEmailCo
 // notification
 Route::delete('/EQUIJOB/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
 
-Route::get('/test-gemini-api', function () {
-    try {
-        // THE DIAGNOSTIC: Ask the API to list all available models
-        $response = Gemini::models()->list();
 
-        // Loop through the results and print them out
-        $availableModels = [];
-        foreach ($response->models as $model) {
-            // We only care about models that support 'generateContent'
-            if (in_array('generateContent', $model->supportedGenerationMethods)) {
-                $availableModels[] = $model->name;
-            }
-        }
-
-        dd("SUCCESS! These are the models YOU CAN USE for 'generateContent':", $availableModels);
-
-    } catch (\Exception $e) {
-        dd("API CONNECTION FAILED. See the error message below:", $e->getMessage());
-    }
-});
 //Job Provider
 Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Job-Provider-Dashboard', [JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
@@ -68,6 +49,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::post('/EQUIJOB/Job-Provider/Job-Posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
     Route::delete('/EQUIJOB/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/EQUIJOB/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
+    Route::get('/EQUIJOB/Job-Provider/Applicant-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
 });
 
 //Applicant 
@@ -75,7 +57,6 @@ Route::middleware('auth:job_provider')->group(function () {
 Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Applicant-Dashboard', [ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
     Route::get('/EQUIJOB/Applicant/Logout', [ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
-    Route::get('/EQUIJOB/Applicant/Applicant-Profile', [ApplicantController::class, 'EditProfile'])->name('applicant-profile-edit');
     Route::get('/EQUIJOB/Applicant/Applicant-Profile', [ApplicantProfileController::class, 'index'])->name('applicant-profile');
     Route::put('/EQUIJOB/Applicant/Applicant-Profile/{id}', [ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
     Route::get('/EQUIJOB/Applicant/Resume-Builder', [ResumeController::class, 'index'])->name('applicant-resume-builder');

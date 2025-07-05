@@ -10,10 +10,12 @@ class ApplicantProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index()
+    public function index()
     {
-        $user = Auth::guard('applicant')->user(); 
-        $response = response()->view('users.applicant.applicant_profile', compact('user'));
+        $user = Auth::guard('applicant')->user();
+        $notification = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
+        $response = response()->view('users.applicant.applicant_profile', compact('user', 'notification', 'unreadNotifications'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
@@ -79,7 +81,7 @@ public function index()
             $filepath = $file->store('profile_picture', 'public');
             $validateInformation['profile_picture'] = $filepath;
         }
-        
+
         try {
             $user = Auth::guard('applicant')->user();
             if (!$user instanceof \App\Models\User) {

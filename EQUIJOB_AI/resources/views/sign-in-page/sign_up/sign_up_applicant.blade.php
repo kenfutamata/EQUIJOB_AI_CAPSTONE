@@ -22,7 +22,7 @@
   @endif
   <div class="w-full min-h-screen flex justify-center items-center px-4 py-10">
     <div class="bg-white max-w-4xl w-full rounded-3xl shadow-lg p-8 md:p-12">
-      <h2 class="text-3xl font-semibold text-zinc-800 text-center mb-8">Sign Up</h2>
+      <h2 class="text-3xl font-semibold text-zinc-800 text-center mb-8">Sign Up Job Applicant</h2>
 
       <form class="grid grid-cols-1 md:grid-cols-2 gap-6" action="{{route('sign-up-applicant-register')}}" method="post" enctype="multipart/form-data">
         @csrf

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full" x-data="{sidebarOpen:false}">
 
 <head>
     <meta charset="UTF-8" />
@@ -9,6 +9,8 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/applicant_profile.css') }}">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </head>
 
 <body class="min-h-screen bg-gray-100 text-gray-800 font-sans antialiased">
@@ -20,11 +22,14 @@
     <div class="flex flex-col ml-0 lg:ml-[234px] ">
 
         <div class="sticky top-0 z-30 bg-white shadow-sm flex-shrink-0 h-16">
-            <x-topbar :user="$user" />
+            <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
         </div>
 
         <div class="sticky top-16 z-20 bg-white shadow-sm flex items-center justify-between px-6 py-4 flex-shrink-0 h-14">
-            <h1 class="text-xl font-semibold">Applicant Profile</h1>
+            <h1 class="font-audiowide text-3xl md:text-4xl text-gray-800">
+                <span class="text-[#25324B]">Applicant </span>
+                <span class="text-[#26A4FF]">Profile</span>
+            </h1>
         </div>
 
         <main class="p-6 md:p-10">
@@ -179,9 +184,10 @@
         }
 
         function closeModal() {
-            document.getElementById('updateProfileModal').classList.add('hidden');        }
+            document.getElementById('updateProfileModal').classList.add('hidden');
+        }
 
-        window.addEventListener('click', function (e) {
+        window.addEventListener('click', function(e) {
             const modal = document.getElementById('updateProfileModal');
             if (e.target === modal) closeModal();
         });
