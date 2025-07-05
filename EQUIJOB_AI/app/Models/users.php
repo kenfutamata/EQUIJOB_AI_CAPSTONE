@@ -81,6 +81,7 @@ class users extends Authenticatable
         'status',
         'company_name',
         'company_logo',
+        'business_permit', 
         'userID'
     ];
 

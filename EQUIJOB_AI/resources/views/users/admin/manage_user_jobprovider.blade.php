@@ -164,14 +164,17 @@
                 <input id="modal_company_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Logo:</label>
                 <img id="modal_company_logo" class="w-[100px] h-[100px] object-cover" />
-                <label class="block text-xs text-gray-500">Profile Picture:</label>
-                <img id="modal_profile_picture" class="w-[100px] h-[100px] object-cover" />
-                <label class="block text-xs text-gray-500">Role:</label>
-                <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
-                <label class="block text-xs text-gray-500">Status:</label>
-                <input id="modal_status" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <label class="block text-xs text-gray-500">Business Permit:</label>
+                <div id="modal_business_permit_container" />
             </div>
+            <label class="block text-xs text-gray-500">Profile Picture:</label>
+            <img id="modal_profile_picture" class="w-[100px] h-[100px] object-cover" />
+            <label class="block text-xs text-gray-500">Role:</label>
+            <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <label class="block text-xs text-gray-500">Status:</label>
+            <input id="modal_status" class="w-full border rounded px-4 py-2 text-sm" disabled />
         </div>
+    </div>
     </div>
 
     <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
@@ -197,6 +200,21 @@
             document.getElementById('modal_email').value = user.email;
             document.getElementById('modal_phone_number').value = user.phone_number;
             document.getElementById('modal_company_name').value = user.company_name;
+            const permitContainer = document.getElementById('modal_business_permit_container');
+            permitContainer.innerHTML = '';
+
+            if (user.business_permit) {
+                const fileExtension = user.business_permit.split('.').pop().toLowerCase();
+                const filePath = `/storage/${user.business_permit}`;
+
+                if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
+                    permitContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
+                } else if (fileExtension === 'pdf') {
+                    permitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Business Permit (PDF)</a>`;
+                } else {
+                    permitContainer.innerText = 'Unsupported file format';
+                }
+            }
             document.getElementById('modal_profile_picture').value = user.profile_picture;
             document.getElementById('modal_role').value = user.role;
             document.getElementById('modal_status').value = user.status;

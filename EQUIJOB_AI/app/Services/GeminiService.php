@@ -26,18 +26,14 @@ class GeminiService
         // The official endpoint for the Gemini 1.5 Flash model
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={$apiKey}";
 
-        // The text prompt part of the request
         $textPrompt = "You are an expert HR data entry specialist. Analyze the attached resume file and extract the information. You MUST return the information ONLY as a valid JSON object. The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
 
-        // The file data part of the request
         $fileData = [
             'inline_data' => [
                 'mime_type' => $mimeType,
                 'data' => base64_encode(file_get_contents($filePath)),
             ],
         ];
-
-        // The final request body structure required by the Google API
         $requestBody = [
             'contents' => [
                 'parts' => [
@@ -48,7 +44,6 @@ class GeminiService
         ];
 
         try {
-            // Make the direct HTTP POST request
             $response = Http::withHeaders(['Content-Type' => 'application/json'])
                             ->post($url, $requestBody);
 
@@ -69,7 +64,6 @@ class GeminiService
         }
     }
 
-    // The getAiJobMatches method remains the same, as it was already working
     public function getAiJobMatches(array $resumeData, $potentialJobs): array
     {
         if ($potentialJobs->isEmpty()) { return []; }

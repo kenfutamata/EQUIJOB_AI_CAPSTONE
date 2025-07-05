@@ -81,6 +81,7 @@ class SignInController extends Controller
             'phone_number' => 'required|string|max:15',
             'company_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'business_permit'=>'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
         ]);
@@ -90,7 +91,11 @@ class SignInController extends Controller
                 $filepath = $file->store('company_logo', 'public');
                 $validateInformation['company_logo'] = $filepath;
             }
-
+            if ($request->hasFile('business_permit')) {
+                $file = $request->file('business_permit');
+                $filepath = $file->store('business_permit', 'public');
+                $validateInformation['business_permit'] = $filepath;
+            }
             $validateInformation['role'] = $validateInformation['role'] ?? 'Job Provider';
             $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';
             $validateInformation['password'] = Hash::make($request->password);

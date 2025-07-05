@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,20 @@
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col">
   <!-- Navbar -->
   <x-landing-page-navbar />
-    <!-- Error Message -->
+  <!-- Error Message -->
   @if ($message = Session::get('error'))
-    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
+  <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
     {{ $message }}
-    </div>
+  </div>
   @endif
   <!-- Main Content -->
   <div class="flex-1 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl shadow-lg p-10 w-full max-w-5xl">
-      
+
       <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Sign Up Job Provider</h2>
 
       <form action="{{route('sign-up-job-provider-register')}}" method="POST" class="space-y-6" enctype="multipart/form-data">
@@ -30,49 +32,49 @@
             <label class="block mb-2 text-gray-600 text-sm font-medium">First Name</label>
             <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="First Name" id="first_name" name="first_name" pattern="[A-Za-z\s]+" value="{{ old('first_name') }}" required>
             @error('first_name')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Last Name</label>
             <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Last Name" id="last_name" name="last_name" pattern="[A-Za-z\s]+" value="{{ old('last_name') }}" required>
             @error('last_name')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Email</label>
             <input type="email" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Email Address" id="email" name="email" value="{{ old('email') }}" required>
             @error('email')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Phone Number</label>
             <input type="tel" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Phone Number" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" required>
             @error('phone_number')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Password</label>
             <input type="password" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Password" id="password" name="password" required>
             @error('password')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Confirm Password</label>
             <input type="password" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Confirm Password" id="password_confirmation" name="password_confirmation" required>
             @error('password_confirmation')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Company</label>
             <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="company_name" name="company_name" pattern="[A-Za-z\s]+" value="{{ old('company_name') }}" required>
             @error('company_name')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
         </div>
@@ -81,7 +83,16 @@
           <div class="flex flex-col">
             <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="company_logo" name="company_logo" accept="image/*" required>
             @error('company_logo')
-              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-gray-600 text-sm font-medium">Business Permit</label>
+          <div class="flex flex-col">
+            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="business_permit" name="business_permit" accept="image/*, application/pdf " required>
+            @error('business_permit')
+            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
         </div>
@@ -99,4 +110,5 @@
   </div>
 
 </body>
+
 </html>
