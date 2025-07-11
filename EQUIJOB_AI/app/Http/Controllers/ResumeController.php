@@ -135,36 +135,24 @@ class ResumeController extends Controller
         ]);
 
         try {
+            // Your existing data saving logic is good, we keep it as is.
             $resumeInputData = $validatedData['resume'];
-
-            // Ensure type_of_disability is always set (even as empty string if not provided)
             if (!isset($resumeInputData['type_of_disability'])) {
                 $resumeInputData['type_of_disability'] = '';
             }
-
-            // Handle skills from the 'skills' textarea (not 'resume.skills' due to form field name)
             $skillsRaw = $request->input('skills', '');
             if (!empty($skillsRaw)) {
-                // Save as comma-separated string
                 $resumeInputData['skills'] = $skillsRaw;
             }
-
-            // Only this block should remain for photo upload:
             if ($request->hasFile('resume.photo')) {
                 $path = $request->file('resume.photo')->store('resume_photos', 'public');
-                $resumeInputData['photo'] = $path; // store in 'photo' column
+                $resumeInputData['photo'] = $path;
             }
-
-            // Remove any UploadedFile object from the array
-            unset($resumeInputData['photo']); // Remove the UploadedFile object if present
+            unset($resumeInputData['photo']);
             if (isset($path)) {
-                $resumeInputData['photo'] = $path; // Add back the string path if uploaded
+                $resumeInputData['photo'] = $path;
             }
-
-            $resumeInstance = Resume::updateOrCreate(
-                ['user_id' => $applicantUser->id],
-                $resumeInputData
-            );
+            $resumeInstance = Resume::updateOrCreate(['user_id' => $applicantUser->id], $resumeInputData);
             $resumeInstance->experiences()->delete();
             if (!empty($validatedData['experience'])) {
                 foreach ($validatedData['experience'] as $exp) {
@@ -189,24 +177,45 @@ class ResumeController extends Controller
             }
 
             $promptForAI = $this->buildResumePrompt($resumeInstance, $skillsRaw);
-
-            $geminiApiKey = env('GEMINI_API_KEY');
+            $geminiApiKey = config('services.gemini.api_key');
             if (!$geminiApiKey) {
                 Log::error('Google Gemini API Key is not set.');
                 return redirect()->back()->with('error', 'Google Gemini API Key is not configured.');
             }
-
             $client = Gemini::client($geminiApiKey);
-            $modelName = env('GEMINI_MODEL');
+            $modelName = config('services.gemini.model');
             if (!$modelName) {
                 Log::error("Gemini model name not set.");
                 return redirect()->back()->with('error', 'AI model name is not configured.');
             }
 
-            $response = $client->generativeModel($modelName)->generateContent($promptForAI);
-            $generatedContent = $response->text();
+            $generatedContent = null;
+            $maxRetries = 3;
+            $initialDelay = 1; // seconds
+
+            for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
+                try {
+                    $response = $client->generativeModel($modelName)->generateContent($promptForAI);
+                    $generatedContent = $response->text();
+                    // If successful, break out of the retry loop
+                    if (!empty($generatedContent)) {
+                        break;
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("Gemini API call failed on attempt " . ($attempt + 1) . ". Error: " . $e->getMessage());
+                    // If this was the last attempt, re-throw the exception to be caught by the outer catch block
+                    if ($attempt === $maxRetries - 1) {
+                        throw $e; 
+                    }
+                    // Wait before retrying (exponential backoff)
+                    $delay = $initialDelay * (2 ** $attempt);
+                    sleep($delay);
+                }
+            }
+            
 
             if (empty($generatedContent)) {
+                // This will be used if the AI returns an empty response even without an error
                 $generatedContent = 'AI could not generate additional content for the resume.';
             }
 
@@ -214,17 +223,21 @@ class ResumeController extends Controller
             $resumeInstance->save();
 
             $resumeData = $resumeInstance->load('experiences', 'educations')->toArray();
-            // Do NOT unset photo here
-            // unset($resumeData['photo']); // REMOVE THIS LINE
-
             session()->flash('generated_resume_content', $generatedContent);
             session()->flash('resume_data_for_download', $resumeData);
             session()->flash('skills_summary_for_download', $skillsRaw);
 
             return redirect()->route('applicant-resume-view-and-download')->with('success', 'Resume processed successfully with AI enhancements!');
+
         } catch (\Throwable $e) {
             Log::error('Error in ResumeController@store: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Unexpected error during resume processing: ' . $e->getMessage())->withInput();
+            // Provide a more user-friendly message for the specific "overloaded" error
+            if (str_contains(strtolower($e->getMessage()), 'overloaded')) {
+                $errorMessage = 'The AI assistant is currently experiencing high demand and could not process your request. Your resume has been saved. Please try again in a few moments.';
+            } else {
+                $errorMessage = 'An unexpected error occurred during AI processing: ' . $e->getMessage();
+            }
+            return redirect()->back()->with('error', $errorMessage)->withInput();
         }
     }
 
@@ -256,7 +269,8 @@ class ResumeController extends Controller
 
         return view('users.applicant.resume_view_download', compact('generatedContent', 'resumeInstance', 'skillsSummary'));
     }
-
+    
+    // Unchanged methods
     public function create() {}
     public function show(string $id) {}
     public function edit(string $id) {}

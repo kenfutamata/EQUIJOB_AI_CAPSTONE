@@ -77,15 +77,15 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\users::class,
+            'model' => App\Models\User::class,
         ],
         'applicants' => [
             'driver' => 'eloquent',
-            'model' => App\Models\users::class,
+            'model' => App\Models\User::class,
         ],
         'job_providers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\users::class,
+            'model' => App\Models\User::class,
         ],
         'admins' => [
             'driver' => 'eloquent',

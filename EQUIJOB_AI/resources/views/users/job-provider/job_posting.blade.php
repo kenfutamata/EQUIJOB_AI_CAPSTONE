@@ -30,7 +30,7 @@
             <div id="notification-bar"
                 class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('Success') }}
-            </div>
+        </div>
             @elseif(session('error'))
             <div id="notification-bar"
                 class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
@@ -53,7 +53,7 @@
                     <button type="button"
                         onclick="openAddJobPostingModal()"
                         class="bg-blue-500 text-white px-3 py-1 rounded text-sm">Add Job Posting</button>
-                    <form method="GET" action="{{ route('admin-manage-user-applicants') }}"
+                    <form method="GET" action="{{ route('job-provider-job-posting') }}"
                         class="flex items-center gap-1 ml-auto">
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Search Job Posting"
@@ -72,48 +72,29 @@
                             <th class="px-2 py-2">Position</th>
                             <th class="px-2 py-2">Company Name</th>
                             <th class="px-2 py-2">Sex</th>
-                            <th class="px-2 py-2">Company Logo</th>
                             <th class="px-2 py-2">Age</th>
                             <th class="px-2 py-2">Disability Type</th>
                             <th class="px-2 py-2">Educational Attainment</th>
-                            <th class="px-2 py-2">Job Posting Objectives</th>
                             <th class="px-2 py-2">Experience</th>
                             <th class="px-2 py-2">Skills</th>
                             <th class="px-2 py-2">Requirements</th>
-                            <th class="px-2 py-2">Contact Phone</th>
-                            <th class="px-2 py-2">Contact Email</th>
-                            <th class="px-2 py-2">Job Description</th>
-                            <th class="px-2 py-2">Salary Range</th>
                             <th class="px-2 py-2">Status</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($postings as $posting)
-                        @if($posting->job_provider_id==$user->id)
+                        @if($posting->jobProviderID==$user->id)
                         <tr class="hover:bg-gray-50">
                             <td class="px-2 py-2">{{ $posting->position }}</td>
-                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->company_name }}</td>
+                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->companyName }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
-                            <td class="px-2 py-2">
-                                @if ($posting->company_logo)
-                                <img src="{{ asset('storage/' . $posting->company_logo) }}"
-                                    class="w-8 h-8 object-cover mx-auto">
-                                @else
-                                No Logo
-                                @endif
-                            </td>
-                            <td class="px-2 py-2">{{ $posting->age }}</td>
-                            <td class="px-2 py-2">{{ $posting->disability_type }}</td>
-                            <td class="px-2 py-2">{{ $posting->educational_attainment }}</td>
-                            <td class="px-2 py-2">{{ $posting->job_posting_objectives }}</td>
+                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->age }}</td>
+                            <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
+                            <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
-                            <td class="px-2 py-2">{{ $posting->contact_phone }}</td>
-                            <td class="px-2 py-2">{{ $posting->contact_email }}</td>
-                            <td class="px-2 py-2">{{ $posting->description }}</td>
-                            <td class="px-2 py-2">{{ $posting->salary_range }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)'
@@ -157,8 +138,8 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Name</label>
-                    <input name="company_name" class="w-full border rounded px-2 py-1" required>
-                    @error('company_name')
+                    <input name="companyName" class="w-full border rounded px-2 py-1" required>
+                    @error('companyName')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -174,8 +155,8 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Logo</label>
-                    <input type="file" name="company_logo" class="w-full border rounded px-2 py-1">
-                    @error('company_logo')
+                    <input type="file" name="companyLogo" class="w-full border rounded px-2 py-1">
+                    @error('companyLogo')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -188,27 +169,27 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Disability Type</label>
-                    <select name="disability_type" class="w-full border rounded px-2 py-1">
+                    <select name="disabilityType" class="w-full border rounded px-2 py-1">
                         <option value="Physical">Physical</option>
                         <option value="Visual">Visual</option>
                         <option value="Hearing">Hearing</option>
                         <option value="Intellectual">Intellectual</option>
                     </select>
-                    @error('disability_type')
+                    @error('disabilityType')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Educational Attainment</label>
-                    <textarea name="educational_attainment" class="w-full border rounded px-2 py-1"></textarea>
-                    @error('educational_attainment')
+                    <textarea name="educationalAttainment" class="w-full border rounded px-2 py-1"></textarea>
+                    @error('educationalAttainment')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Job Posting Objectives</label>
-                    <input name="job_posting_objectives" class="w-full border rounded px-2 py-1">
-                    @error('job_posting_objectives')
+                    <input name="jobPostingObjectives" class="w-full border rounded px-2 py-1">
+                    @error('jobPostingObjectives')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -235,15 +216,15 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Phone</label>
-                    <input name="contact_phone" class="w-full border rounded px-2 py-1">
-                    @error('contact_phone')
+                    <input name="contactPhone" class="w-full border rounded px-2 py-1">
+                    @error('contactPhone')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Email</label>
-                    <input type="email" name="contact_email" class="w-full border rounded px-2 py-1">
-                    @error('contact_email')
+                    <input type="email" name="contactEmail" class="w-full border rounded px-2 py-1">
+                    @error('contactEmail')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -256,8 +237,8 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Salary Range</label>
-                    <input name="salary_range" class="w-full border rounded px-2 py-1">
-                    @error('salary_range')
+                    <input name="salaryRange" class="w-full border rounded px-2 py-1">
+                    @error('salaryRange')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -279,7 +260,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Company Name</label>
-                <input id="modal.company_name" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.companyName" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Sex</label>
@@ -287,7 +268,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Company Logo</label>
-                <img id="modal.company_logo" class="w-16 h-16 object-cover border rounded" style="display:none;">
+                <img id="modal.companyLogo" class="w-16 h-16 object-cover border rounded" style="display:none;">
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Age</label>
@@ -295,15 +276,15 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Disability Type</label>
-                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.disabilityType" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Educational Attainment</label>
-                <input id="modal.educational_attainment" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.educationalAttainment" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Job Posting Objectives</label>
-                <input id="modal.job_posting_objectives" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.jobPostingObjectives" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Experience</label>
@@ -319,11 +300,11 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Contact Phone</label>
-                <input id="modal.contact_phone" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.contactPhone" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Contact Email</label>
-                <input id="modal.contact_email" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.contactEmail" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Job Description</label>
@@ -331,7 +312,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Salary Range</label>
-                <input id="modal.salary_range" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.salaryRange" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Remarks</label>
@@ -346,7 +327,7 @@
                 <h3 class="text-xl font-semibold">Delete Job Posting?</h3>
                 <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <form id="deletejobpositng" method="POST" action="{{route('job-provider-job-posting-delete', $posting->id)}}">
+            <form id="deletejobpositng" method="POST" action="">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
@@ -386,27 +367,30 @@
         function openViewJobPostingModal(button) {
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
             document.getElementById('modal.position').value = jobposting.position;
-            document.getElementById('modal.company_name').value = jobposting.company_name;
+            document.getElementById('modal.companyName').value = jobposting.company_name;
             document.getElementById('modal.sex').value = jobposting.sex;
-            const companyLogo = document.getElementById('modal.company_logo');
-            if (jobposting.company_logo) {
-                companyLogo.src = `/storage/${jobposting.company_logo}`;
+            const companyLogo = document.getElementById('modal.companyLogo');
+            if (jobposting.companyLogo) {
+                companyLogo.src = `/storage/${jobposting.companyLogo}`;
                 companyLogo.style.display = 'block';
             } else {
                 companyLogo.style.display = 'none';
             }
             document.getElementById('modal.age').value = jobposting.age;
-            document.getElementById('modal.disability_type').value = jobposting.disability_type;
-            document.getElementById('modal.educational_attainment').value = jobposting.educational_attainment;
-            document.getElementById('modal.job_posting_objectives').value = jobposting.job_posting_objectives;
+            document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
+            document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
+            document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
             document.getElementById('modal.experience').value = jobposting.experience;
             document.getElementById('modal.skills').value = jobposting.skills;
             document.getElementById('modal.requirements').value = jobposting.requirements;
-            document.getElementById('modal.contact_phone').value = jobposting.contact_phone;
-            document.getElementById('modal.contact_email').value = jobposting.contact_email;
+            document.getElementById('modal.contactPhone').value = jobposting.contactPhone;
+            document.getElementById('modal.contactEmail').value = jobposting.contactEmail;
             document.getElementById('modal.description').value = jobposting.description;
-            document.getElementById('modal.salary_range').value = jobposting.salary_range;
+            document.getElementById('modal.salaryRange').value = jobposting.salaryRange;
             document.getElementById('modal.remarks').value = jobposting.remarks || '';
+            document.getElementById('modal.remarks').disabled = true;
+            document.getElementById('modal.companyLogo').style.display = jobposting.companyLogo ? 'block' : 'none';
+            document.getElementById('modal.companyName').value = jobposting.companyName || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
 
         }

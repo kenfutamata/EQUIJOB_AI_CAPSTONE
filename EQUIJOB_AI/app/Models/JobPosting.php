@@ -1,32 +1,32 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; // Add this import
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * 
  *
  * @property int $id
- * @property int $job_provider_id
+ * @property int $jobProviderID
  * @property string $position
- * @property string $company_name
+ * @property string $companyName
  * @property string $sex
  * @property int $age
- * @property string $disability_type
- * @property string $educational_attainment
- * @property string $salary_range
- * @property string $job_posting_objectives
+ * @property string $disabilityType
+ * @property string $educationalAttainment
+ * @property string $salaryRange
+ * @property string $jobPostingObjectives
  * @property string $requirements
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $company_logo
+ * @property string|null $companyLogo
  * @property string|null $description
  * @property string|null $experience
  * @property string|null $skills
- * @property string|null $contact_phone
- * @property string|null $contact_email
+ * @property string|null $contactPhone
+ * @property string|null $contactEmail
  * @property string|null $remarks
  * @property-read \App\Models\users $jobProvider
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
@@ -61,35 +61,35 @@ use Illuminate\Notifications\Notifiable;
 class JobPosting extends Model
 {
     use Notifiable;
-    protected $table = 'job_posting';
+    protected $table = 'jobPosting';
     protected $fillable = [
+        'jobProviderID',
         'position',
-        'company_name',
-        'sex',
+        'companyName',
+        'sex', 
+        'companyLogo',
         'age',
-        'disability_type',
-        'educational_attainment',
-        'salary_range',
-        'job_posting_objectives',
+        'disabilityType',
+        'educationalAttainment',
+        'salaryRange',
+        'jobPostingObjectives',
         'requirements',
-        'company_logo',
         'status',
         'description',
         'experience',
         'skills',
-        'contact_phone',
-        'contact_email',
-        'remarks',
-        'job_provider_id'   
+        'contactPhone',
+        'contactEmail',
+        'remarks'
     ];
 
     public function jobProvider()
     {
-        return $this->belongsTo(users::class, 'job_provider_id');
+        return $this->belongsTo(User::class, 'jobProviderID');
     }
 
     public function recruitment()
     {
-        return $this->belongsTo(User::class, 'job_provider_id');
+        return $this->belongsTo(User::class, 'jobProviderID');
     }
 }

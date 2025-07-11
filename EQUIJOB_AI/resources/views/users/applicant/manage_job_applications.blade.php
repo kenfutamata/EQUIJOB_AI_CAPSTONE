@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EQUIJOB - Admin-Job Posting</title>
+    <title>EQUIJOB - Job Applicant- Manage Job Applications</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
@@ -11,12 +11,12 @@
     <div>
         <!-- Sidebar -->
         <div class="fixed top-0 left-0 w-[234px] h-full z-40" style="background-color: #c3d2f7;">
-            <x-admin-sidebar />
+            <x-applicant-sidebar />
         </div>
 
         <!-- Topbar -->
         <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
-            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
         </div>
 
         <!-- Main Content -->
@@ -35,10 +35,10 @@
             <div class="text-3xl font-semibold mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
                 <div>
                     <span class="text-gray-800">Manage </span>
-                    <span class="text-blue-500">Job Postings</span>
+                    <span class="text-blue-500">Job Applications</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <form method="GET" action="{{ route('admin-manage-job-posting') }}" class="flex items-center gap-1 ml-auto">
+                    <form method="GET" action="" class="flex items-center gap-1 ml-auto">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Posting" class="border rounded-l px-2 py-1 w-32 text-sm" />
                         <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
                     </form>
@@ -50,31 +50,49 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-2 py-2">Applicant Number</th>
+                            <th class="px-2 py-2">Job Posting Name</th>
                             <th class="px-2 py-2">Position</th>
                             <th class="px-2 py-2">Company Name</th>
+                            <th class="px-2 py-2">Applicant Name</th>
+                            <th class="px-2 py-2">Applicant Phone Number</th>
+                            <th class="px-2 py-2">Applicant Address</th>
                             <th class="px-2 py-2">Sex</th>
                             <th class="px-2 py-2">Age</th>
-                            <th class="px-2 py-2">Disability Type</th>
-                            <th class="px-2 py-2">Educational Attainment</th>
+                            <th class="px-2 py-2">Applicant Disability Type</th>
                             <th class="px-2 py-2">Experience</th>
                             <th class="px-2 py-2">Skills</th>
                             <th class="px-2 py-2">Requirements</th>
+                            <th class="px-2 py-2">Contact Phone</th>
+                            <th class="px-2 py-2">Contact Email</th>
                             <th class="px-2 py-2">Status</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @foreach ($postings as $posting)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-2 py-2">{{ $posting->position }}</td>
-                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->companyName }}</td>
-                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
-                            <td class="px-2 py-2">{{ $posting->age }}</td>
-                            <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
-                            <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
+                        @foreach ($applications as $application)
+                            @php $posting = $application->jobPosting; 
+                            $applicant = $application->user;
+                            @endphp
+                        <tr>
+                            <td class="px-2 py-2">{{ $application->id }}</td>
+                            <td class="px-2 py-2">{{ $posting->position ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $posting->companyName ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $application->applicant->first_name ?? '' }} {{ $application->applicant->->last_name ?? ''}}</td>
+                            <td class="px-2 py-2">{{ $application->phone_number ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $application->address?? '' }}</td>
+                            <td class="px-2 py-2">{{ $application->sex ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $application->age ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $posting->disability_type ?? ''}}</td>
+                            <td class="px-2 py-2">{{ $posting->educational_attainment }}</td>
+                            <td class="px-2 py-2">{{ $posting->job_posting_objectives }}</td>
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
+                            <td class="px-2 py-2">{{ $posting->contact_phone }}</td>
+                            <td class="px-2 py-2">{{ $posting->contact_email }}</td>
+                            <td class="px-2 py-2">{{ $posting->description }}</td>
+                            <td class="px-2 py-2">{{ $posting->salary_range }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if ($posting->status === 'Pending')
@@ -106,7 +124,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Company Name</label>
-                <input id="modal.companyName" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.company_name" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Sex</label>
@@ -114,7 +132,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Company Logo</label>
-                <img id="modal.companyLogo" class="w-16 h-16 object-cover border rounded" style="display:none;">
+                <img id="modal.company_logo" class="w-16 h-16 object-cover border rounded" style="display:none;">
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Age</label>
@@ -122,15 +140,15 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Disability Type</label>
-                <input id="modal.disabilityType" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Educational Attainment</label>
-                <input id="modal.educationalAttainment" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.educational_attainment" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Job Posting Objectives</label>
-                <input id="modal.jobPostingObjectives" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.job_posting_objectives" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Experience</label>
@@ -146,11 +164,11 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Contact Phone</label>
-                <input id="modal.contactPhone" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.contact_phone" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Contact Email</label>
-                <input id="modal.contactEmail" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.contact_email" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Job Description</label>
@@ -158,7 +176,7 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Salary Range</label>
-                <input id="modal.salaryRange" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.salary_range" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Remarks</label>
@@ -167,22 +185,7 @@
         </div>
     </div>
 
-    <div id="DisapproveJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Please Input your Remarks for Disapproval of Job Posting</h3>
-                <button onclick="closeDisapproveJobPostingModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            </div>
-            <form id="remarks" method="POST" action="{{route('admin-manage-job-posting-disapproved', $posting->id)}}">
-                @csrf
-                @method('PUT')
-                <div class="mb-4">
-                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
-                    <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
-            </form>
-        </div>
-    </div>
+
     <!-- Scripts -->
     <script>
         function openDisapproveJobPostingModal(button) {
@@ -226,26 +229,26 @@
         function openViewJobPostingModal(button) {
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
             document.getElementById('modal.position').value = jobposting.position;
-            document.getElementById('modal.companyName').value = jobposting.companyName;
+            document.getElementById('modal.company_name').value = jobposting.company_name;
             document.getElementById('modal.sex').value = jobposting.sex;
-            const companyLogo = document.getElementById('modal.companyLogo');
-            if (jobposting.companyLogo) {
-                companyLogo.src = `/storage/${jobposting.companyLogo}`;
+            const companyLogo = document.getElementById('modal.company_logo');
+            if (jobposting.company_logo) {
+                companyLogo.src = `/storage/${jobposting.company_logo}`;
                 companyLogo.style.display = 'block';
             } else {
                 companyLogo.style.display = 'none';
             }
             document.getElementById('modal.age').value = jobposting.age;
-            document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
-            document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
-            document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
+            document.getElementById('modal.disability_type').value = jobposting.disability_type;
+            document.getElementById('modal.educational_attainment').value = jobposting.educational_attainment;
+            document.getElementById('modal.job_posting_objectives').value = jobposting.job_posting_objectives;
             document.getElementById('modal.experience').value = jobposting.experience;
             document.getElementById('modal.skills').value = jobposting.skills;
             document.getElementById('modal.requirements').value = jobposting.requirements;
-            document.getElementById('modal.contactPhone').value = jobposting.contactPhone;
-            document.getElementById('modal.contactEmail').value = jobposting.contactEmail;
+            document.getElementById('modal.contact_phone').value = jobposting.contact_phone;
+            document.getElementById('modal.contact_email').value = jobposting.contact_email;
             document.getElementById('modal.description').value = jobposting.description;
-            document.getElementById('modal.salaryRange').value = jobposting.salaryRange;
+            document.getElementById('modal.salary_range').value = jobposting.salary_range;
             document.getElementById('modal.remarks').value = jobposting.remarks || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
 

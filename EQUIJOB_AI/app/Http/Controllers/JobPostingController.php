@@ -12,9 +12,29 @@ class JobPostingController extends Controller
     public function index()
     {
         $user = Auth::guard('job_provider')->user();
-        $notifications = $user->notifications ?? collect();
-        $unreadNotifications = $user->unreadNotifications ?? collect();
-        $postings = JobPosting::all(); 
+        $search = request()->input('search');
+        $postingsQuery = JobPosting::query()->where('jobProviderID', $user->id);
+        $postingsQuery->when($search, function($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('companyName', 'like', "%{$search}%")
+                    ->orWhere('sex', 'like', "%{$search}%")
+                    ->orWhere('age', 'like', "%{$search}%")
+                    ->orWhere('disabilityType', 'like', "%{$search}%")
+                    ->orWhere('educationalAttainment', 'like', "%{$search}%")
+                    ->orWhere('jobPostingObjectives', 'like', "%{$search}%")
+                    ->orWhere('requirements', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('experience', 'like', "%{$search}%")
+                    ->orWhere('skills', 'like', "%{$search}%")
+                    ->orWhere('contactPhone', 'like', "%{$search}%")
+                    ->orWhere('contactEmail', 'like', "%{$search}%")
+                    ->orWhere('position', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%");
+            });
+        });
+        $postings = $postingsQuery->get();
+        $notifications = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
         $response = response()->view('users.job-provider.job_posting', compact('user', 'postings', 'notifications', 'unreadNotifications'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
@@ -31,33 +51,33 @@ class JobPostingController extends Controller
     {
         $validatedData = $request->validate([
             'position' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
+            'companyName' => 'required|string|max:255',
             'sex' => 'required|string|max:10',
             'age' => 'required|integer|min:18|max:65',
-            'disability_type' => 'nullable|string|max:255',
-            'educational_attainment' => 'nullable|string|max:255',
-            'salary_range' => 'nullable|string|max:255',
-            'job_posting_objectives' => 'nullable|string|max:1000',
-            'requirements' => 'nullable|string|max:1000',
-            'description' => 'nullable|string|max:1000',
-            'experience' => 'nullable|string|max:255',
-            'skills' => 'nullable|string|max:1000',
-            'contact_phone' => 'nullable|string|max:15',
-            'contact_email' => 'nullable|email|max:255',
-            'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'disabilityType' => 'required|string|max:255',
+            'educationalAttainment' => 'required|string|max:255',
+            'salaryRange' => 'required|string|max:255',
+            'jobPostingObjectives' => 'required|string|max:1000',
+            'requirements' => 'required|string|max:1000',
+            'description' => 'required|string|max:1000',
+            'experience' => 'required|string|max:255',
+            'skills' => 'required|string|max:1000',
+            'contactPhone' => 'required|string|max:15',
+            'contactEmail' => 'nullable|email|max:255',
+            'companyLogo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }
 
-        if ($request->hasFile('company_logo')) {
-            $file = $request->file('company_logo');
-            $filepath = $file->store('company_logos', 'public');
-            $validatedData['company_logo'] = $filepath;
+        if ($request->hasFile('companyLogo')) {
+            $file = $request->file('companyLogo');
+            $filepath = $file->store('companyLogo', 'public');
+            $validatedData['companyLogo'] = $filepath;
         }
 
-        $validatedData['job_provider_id'] = Auth::guard('job_provider')->id();
+        $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();
         $validatedData['status'] = 'Pending'; 
 
         try {

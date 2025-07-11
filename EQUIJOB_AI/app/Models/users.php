@@ -100,4 +100,9 @@ class users extends Authenticatable
          return $this->hasOne(\App\Models\Resume::class, 'user_id');
     }
 
+        public function jobPostings()
+    {
+        return $this->hasMany(JobPosting::class, 'jobProviderID');
+    }
+
 }

@@ -31,15 +31,17 @@ class ApprovedJobPostingNotification extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the database representation of the notification.
      */
     public function toDatabase($notifiable)
     {
+        $url = route('job-provider-job-posting-show', $this->jobPosting->id);
+
         return [
             'message'=> 'Your job posting for ' . $this->jobPosting->position . ' has been approved.',
             'job_posting_id' => $this->jobPosting->id,
-            'job_posting_position' => $this->jobPosting->position,
-            'url' => route('Admin-job-posting-show', $this->jobPosting->id),
+            'position' => $this->jobPosting->position,
+            'url' => $url, 
         ];
     }
 

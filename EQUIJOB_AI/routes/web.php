@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ApplicantMatchJobsController;
 use App\Http\Controllers\ApplicantProfileController;
+use App\Http\Controllers\JobApplicantManageJobApplications;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
 use App\Http\Controllers\JobProviderProfileController;
@@ -66,6 +67,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Match-Jobs', [ApplicantMatchJobsController::class, 'showUploadForm'])->name('applicant-match-jobs');
     Route::post('/EQUIJOB/Applicant/Match-Jobs/Upload-Resume', [ApplicantMatchJobsController::class, 'matchWithPdf'])->name('applicant-match-jobs-upload-resume');
     Route::get('/EQUIJOB/Applicant/Match-Jobs/Recommended-Jobs', [ApplicantMatchJobsController::class, 'showRecommendations'])->name('applicant-match-jobs-recommended-jobs');
+    Route::get('/EQUIJOB/Applicant/Manage-Job-Applications', [JobApplicantManageJobApplications::class, 'index'])->name('applicant-job-applications');
 });
 
 //admin

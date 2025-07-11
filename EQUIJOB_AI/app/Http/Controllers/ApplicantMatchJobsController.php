@@ -41,7 +41,6 @@ class ApplicantMatchJobsController extends Controller
         $filePath = $file->getRealPath();
         $mimeType = $file->getMimeType();
 
-        // 1. Call our new service method that sends the file directly to the AI.
         $parsedData = $this->geminiService->extractInformationFromResumeFile($filePath, $mimeType);
 
         if (!$parsedData) {
@@ -158,7 +157,7 @@ class ApplicantMatchJobsController extends Controller
                     ->orWhere('description', 'LIKE', "%{$keyword}%")
                     ->orWhere('requirements', 'LIKE', "%{$keyword}%")
                     ->orWhere('experience', 'LIKE', "%{$keyword}%") 
-                    ->orWhere('educational_attainment', 'LIKE', "%{$keyword}%"); 
+                    ->orWhere('educationalAttainment', 'LIKE', "%{$keyword}%"); 
             }
         });
 

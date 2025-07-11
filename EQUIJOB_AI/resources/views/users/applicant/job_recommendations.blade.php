@@ -51,14 +51,16 @@
                     @forelse($recommendedJobs as $job)
                     <article class="bg-white border border-gray-200 rounded-lg p-6 flex flex-col gap-4 hover:shadow-lg hover:border-blue-500 transition-all duration-300">
                         <header class="flex justify-between items-start gap-4">
-                            @if($job->company_logo)
-                            <img class="w-12 h-12 rounded-lg object-contain border border-gray-100" src="{{ asset('storage/' . $job->company_logo) }}" alt="{{ $job->company_name }} logo" />
+                            @if($job->companyLogo)
+                            <img class="w-12 h-12 rounded-lg object-contain border border-gray-100" src="{{ asset('storage/' . $job->companyLogo) }}" alt="{{ $job->companyName }} logo" />
                             @else
                             <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-blue-500 font-bold text-lg">
-                                {{ substr($job->company_name, 0, 1) }}
+                                {{ substr($job->companyName, 0, 1) }}
                             </div>
                             @endif
-
+                            <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($job)' class="text-center text-sm font-semibold text-blue-600 border border-blue-600 px-4 py-1.5 rounded-full whitespace-nowrap hover:bg-blue-600 hover:text-white transition-colors duration-200">
+                                View Job Posting
+                            </button>
                             <a href="#" class="text-center text-sm font-semibold text-blue-600 border border-blue-600 px-4 py-1.5 rounded-full whitespace-nowrap hover:bg-blue-600 hover:text-white transition-colors duration-200">
                                 Apply Now
                             </a>
@@ -68,7 +70,7 @@
 
                                 <h3 class="text-lg font-bold text-[#25324B]">{{ $job->position }}</h3>
                                 <div class="flex items-center gap-2 text-sm text-gray-500 mt-1 flex-wrap">
-                                    <span>{{ $job->company_name }}</span>
+                                    <span>{{ $job->companyName }}</span>
                                 </div>
                             </div>
 
@@ -77,9 +79,10 @@
                             {{ $job->description }}
                         </p>
                         <footer class="mt-auto pt-2">
-                            @if($job->disability_type && $job->disability_type !== 'Any' && $job->disability_type !== 'Not Specified')
+                            {{-- Corrected the property name from disability_type to disabilityType --}}
+                            @if($job->disabilityType && $job->disabilityType !== 'Any' && $job->disabilityType !== 'Not Specified')
                             <span class="text-sm font-semibold text-yellow-800 bg-yellow-100 px-3 py-1 rounded-full">
-                                {{ $job->disability_type }}
+                                {{ $job->disabilityType }}
                             </span>
                             @endif
                         </footer>
@@ -99,6 +102,99 @@
             </main>
 
         </div>
+
+        <div id="viewJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
+            <!-- Modal Container -->
+            <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6">
+
+                <!-- Close Button -->
+                <button onclick="closeViewJobPostingModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black text-xl">&times;</button>
+
+                <!-- Header Section -->
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-shrink-0">
+                        <img id="modal-companyLogo" src="https://placehold.co/180x151" alt="Company Logo" class="w-44 h-auto border" />
+                    </div>
+                    <div>
+                        <h2 id="modal-companyName" class="text-2xl font-semibold text-gray-800">Company Name</h2>
+                        <p id="modal-position" class="text-xl text-gray-700 mt-1">Position</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="border w-full md:max-w-xs p-4 flex flex-col gap-4">
+                        <h3 class="text-lg font-semibold border-b pb-1">Job Information</h3>
+                        <div class="flex items-start gap-3">
+                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <div>
+                                <p class="text-sm text-gray-700">Disability Type</p>
+                                <p id="modal-disabilityType" class="text-sm text-blue-600 font-medium"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <div>
+                                <p class="text-sm text-gray-700">Salary</p>
+                                <p id="modal-salaryRange" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col gap-6">
+                        <div class="border p-4">
+                            <h3 class="text-lg font-semibold border-b pb-1 mb-2">Job Description</h3>
+                            <p id="modal-description" class="text-sm text-gray-700 leading-relaxed"></p>
+                        </div>
+                        <div class="border p-4">
+                            <h3 class="text-lg font-semibold border-b pb-1 mb-2">Educational Attainment</h3>
+                            <p id="modal-educationalAttainment" class="text-sm text-gray-700 leading-relaxed"></p>
+                        </div>
+                        <div class="border p-4">
+                            <h3 class="text-lg font-semibold border-b pb-1 mb-2">Skills</h3>
+                            <p id="modal-skills" class="text-sm text-gray-700 leading-relaxed"></p>
+                        </div>
+                        <div class="border p-4">
+                            <h3 class="text-lg font-semibold border-b pb-1 mb-2">Requirements</h3>
+                            <p id="modal-requirements" class="text-sm text-gray-700 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button class="px-5 py-2 border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition">
+                        Apply Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openViewJobPostingModal(button) {
+                const job = JSON.parse(button.getAttribute('data-jobposting'));
+
+                document.getElementById('modal-position').textContent = job.position || 'N/A';
+                document.getElementById('modal-companyName').textContent = job.companyName || 'N/A';
+                document.getElementById('modal-disabilityType').textContent = job.disabilityType || 'Not Specified';
+                document.getElementById('modal-salaryRange').textContent = job.salaryRange || '₱ 0';
+                document.getElementById('modal-educationalAttainment').textContent = job.educationalAttainment || 'No educational attainment provided.';
+                document.getElementById('modal-skills').textContent = job.skills || 'No skills required.';
+                document.getElementById('modal-description').textContent = job.description || 'No description provided.';
+                document.getElementById('modal-requirements').textContent = job.requirements || 'No requirements provided.';
+
+                const logo = document.getElementById('modal-companyLogo');
+                if (job.companyLogo) {
+                    logo.src = `/storage/${job.companyLogo}`;
+                    logo.style.display = 'block';
+                } else {
+                    logo.src = 'https://placehold.co/180x151';
+                }
+
+                document.getElementById('viewJobPostingModal').classList.remove('hidden');
+            }
+            function closeViewJobPostingModal() {
+                document.getElementById('viewJobPostingModal').classList.add('hidden');
+            }
+        </script>
     </body>
 
     </html>

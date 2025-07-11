@@ -39,13 +39,13 @@ return [
         'key'=>env('OPEN_API_KEY'),    
     ],
 
-    'google_gemini'=>[
-        'key'=>env('GEMINI_API_KEY'),
-        'url'=>env('GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta/models/text-bison:generateContent'),
-        'model'=>env('GEMINI_MODEL'),
+    'gemini'=>[
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'models/gemini-1.5-flash-latest'),
     ],
 
     'spatie' => [
         'pdf_to_text_binary_path' => env('PDF_TO_TEXT_BINARY_PATH', 'C:\\Users\\kenfu\\scoop\\shims\\pdftotext.exe'),
     ],
+
 ];

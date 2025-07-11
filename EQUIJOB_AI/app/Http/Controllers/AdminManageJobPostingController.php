@@ -17,7 +17,27 @@ class AdminManageJobPostingController extends Controller
     public function index()
     {
         $admin = Auth::guard('admin')->user();
-        $postings = JobPosting::all();
+        $search = request()->input('search');
+        $postingsQuery = JobPosting::query();
+        $postingsQuery->when($search, function($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('company_name', 'like', "%{$search}%")
+                    ->orWhere('sex', 'like', "%{$search}%")
+                    ->orWhere('age', 'like', "%{$search}%")
+                    ->orWhere('disability_type', 'like', "%{$search}%")
+                    ->orWhere('educational_attainment', 'like', "%{$search}%")
+                    ->orWhere('job_posting_objectives', 'like', "%{$search}%")
+                    ->orWhere('requirements', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('experience', 'like', "%{$search}%")
+                    ->orWhere('skills', 'like', "%{$search}%")
+                    ->orWhere('contactPhone', 'like', "%{$search}%")
+                    ->orWhere('contactEmail', 'like', "%{$search}%")
+                    ->orWhere('position', 'like', "%{$search}%")
+                    ->orWhere('remarks', 'like', "%{$search}%");
+            });
+        });
+        $postings = $postingsQuery->get();
         $notifications = $admin->notifications ?? collect();
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $response = response()->view('users.admin.admin_manage_job_posting', compact('admin', 'postings', 'notifications', 'unreadNotifications'));
@@ -41,7 +61,7 @@ class AdminManageJobPostingController extends Controller
         $JobPosting->status = 'For Posting';
         $JobPosting->save();
         if ($JobPosting->jobProvider) {
-            $JobPosting->jobProvider->notify(new ApprovedJobPostingNotification($JobPosting, 'For Posting'));
+            $JobPosting->jobProvider->notify(new ApprovedJobPostingNotification($JobPosting));
         }
         return redirect()->back()->with('Success', 'Job posting status updated successfully');
     }

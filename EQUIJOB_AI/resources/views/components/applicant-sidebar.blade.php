@@ -16,7 +16,7 @@
                 <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/ai_job_matching.png') }}" alt="Job Matching Icon" />
                 <span>AI Job Matching</span>
             </a>
-            <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+            <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{ route('applicant-job-applications') }}">
                 <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_applications.png') }}" alt="Application Management" />
                 <span>Application Management</span>
             </a>
