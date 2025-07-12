@@ -27,7 +27,6 @@
 
     <body class="bg-[#FCFDFF] text-gray-800 font-sans antialiased min-h-screen flex">
 
-        <!-- Sidebar -->
         <aside class="w-[234px] bg-white hidden lg:block h-screen fixed top-0 left-0">
             <x-applicant-sidebar />
         </aside>
@@ -135,7 +134,21 @@
                             <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Salary</p>
-                                <p id="modal-salaryRange" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                                <p id="modal-salaryRange" class="text-sm text-blue-600 font-medium"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <div>
+                                <p class="text-sm text-gray-700">Contact Number</p>
+                                <p id="modal-contactPhone" class="text-sm text-blue-600 font-medium"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <div>
+                                <p class="text-sm text-gray-700">Email Address</p>
+                                <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium">₱ 0</p>
                             </div>
                         </div>
                     </div>
@@ -159,12 +172,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="flex justify-end pt-4">
-                    <button class="px-5 py-2 border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded transition">
-                        Apply Now
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -180,6 +187,8 @@
                 document.getElementById('modal-skills').textContent = job.skills || 'No skills required.';
                 document.getElementById('modal-description').textContent = job.description || 'No description provided.';
                 document.getElementById('modal-requirements').textContent = job.requirements || 'No requirements provided.';
+                document.getElementById('modal-contactPhone').textContent = job.contactPhone || 'No contact number provided.';
+                document.getElementById('modal-contactEmail').textContent = job.contactEmail || 'No email address provided.';
 
                 const logo = document.getElementById('modal-companyLogo');
                 if (job.companyLogo) {
@@ -191,6 +200,7 @@
 
                 document.getElementById('viewJobPostingModal').classList.remove('hidden');
             }
+
             function closeViewJobPostingModal() {
                 document.getElementById('viewJobPostingModal').classList.add('hidden');
             }

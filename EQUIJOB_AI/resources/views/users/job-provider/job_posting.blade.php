@@ -216,14 +216,14 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Phone</label>
-                    <input name="contactPhone" class="w-full border rounded px-2 py-1">
+                    <input name="contactPhone" class="w-full border rounded px-2 py-1" value="{{$user->phone_number}}" readonly>
                     @error('contactPhone')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Email</label>
-                    <input type="email" name="contactEmail" class="w-full border rounded px-2 py-1">
+                    <input type="email" name="contactEmail" class="w-full border rounded px-2 py-1" value="{{$user->email}}" readonly>
                     @error('contactEmail')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
