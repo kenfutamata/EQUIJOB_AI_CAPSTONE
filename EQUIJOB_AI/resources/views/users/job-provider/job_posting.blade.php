@@ -30,7 +30,7 @@
             <div id="notification-bar"
                 class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('Success') }}
-        </div>
+            </div>
             @elseif(session('error'))
             <div id="notification-bar"
                 class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
@@ -138,7 +138,7 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Name</label>
-                    <input name="companyName" class="w-full border rounded px-2 py-1" required>
+                    <input name="companyName" class="w-full border rounded px-2 py-1" value="{{$user->company_name}}" readonly>
                     @error('companyName')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -155,7 +155,10 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Logo</label>
-                    <input type="file" name="companyLogo" class="w-full border rounded px-2 py-1">
+                    @if($user->company_logo)
+                    <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-16 h-16 object-cover border rounded mb-2" id="companyLogo" name="companyLogo" style="display: block;">
+                    <span id="companyLogoFilename">{{ $user->company_logo ? basename($user->company_logo) : 'No file chosen' }}</span>
+                    @endif
                     @error('companyLogo')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -367,14 +370,17 @@
         function openViewJobPostingModal(button) {
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
             document.getElementById('modal.position').value = jobposting.position;
-            document.getElementById('modal.companyName').value = jobposting.company_name;
+            document.getElementById('modal.companyName').value = jobposting.companyName;
             document.getElementById('modal.sex').value = jobposting.sex;
             const companyLogo = document.getElementById('modal.companyLogo');
+            const companyLogoFilename = document.getElementById('modal.companyLogoFilename');
             if (jobposting.companyLogo) {
                 companyLogo.src = `/storage/${jobposting.companyLogo}`;
                 companyLogo.style.display = 'block';
+                companyLogoFilename.textContent = jobposting.companyLogo.split('/').pop(); // Show just the file name
             } else {
                 companyLogo.style.display = 'none';
+                companyLogoFilename.textContent = '';
             }
             document.getElementById('modal.age').value = jobposting.age;
             document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
@@ -398,6 +404,11 @@
         function closeViewJobPostingModal() {
             document.getElementById('viewJobPostingModal').classList.add('hidden');
         }
+
+        document.getElementById('companyLogoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            document.getElementById('companyLogoFilename').textContent = file ? file.name : '';
+        });
     </script>
 
 </body>

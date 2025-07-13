@@ -48,7 +48,9 @@ class JobPostingController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {        
+        $user = Auth::guard('job_provider')->user();
+
         $validatedData = $request->validate([
             'position' => 'required|string|max:255',
             'companyName' => 'required|string|max:255',
@@ -71,11 +73,7 @@ class JobPostingController extends Controller
             $validatedData['description'] = $request->input('job_description');
         }
 
-        if ($request->hasFile('companyLogo')) {
-            $file = $request->file('companyLogo');
-            $filepath = $file->store('companyLogo', 'public');
-            $validatedData['companyLogo'] = $filepath;
-        }
+        $validatedData['companyLogo'] = $user->company_logo;
 
         $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();
         $validatedData['status'] = 'Pending'; 

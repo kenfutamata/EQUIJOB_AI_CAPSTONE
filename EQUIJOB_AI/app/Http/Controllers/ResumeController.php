@@ -135,15 +135,13 @@ class ResumeController extends Controller
         ]);
 
         try {
-            // Your existing data saving logic is good, we keep it as is.
+
             $resumeInputData = $validatedData['resume'];
             if (!isset($resumeInputData['type_of_disability'])) {
                 $resumeInputData['type_of_disability'] = '';
             }
-            $skillsRaw = $request->input('skills', '');
-            if (!empty($skillsRaw)) {
-                $resumeInputData['skills'] = $skillsRaw;
-            }
+            $skillsRaw = $request->input('skills') ?? '';
+            $resumeInputData['skills'] = $skillsRaw;
             if ($request->hasFile('resume.photo')) {
                 $path = $request->file('resume.photo')->store('resume_photos', 'public');
                 $resumeInputData['photo'] = $path;
@@ -205,17 +203,16 @@ class ResumeController extends Controller
                     Log::warning("Gemini API call failed on attempt " . ($attempt + 1) . ". Error: " . $e->getMessage());
                     // If this was the last attempt, re-throw the exception to be caught by the outer catch block
                     if ($attempt === $maxRetries - 1) {
-                        throw $e; 
+                        throw $e;
                     }
                     // Wait before retrying (exponential backoff)
                     $delay = $initialDelay * (2 ** $attempt);
                     sleep($delay);
                 }
             }
-            
+
 
             if (empty($generatedContent)) {
-                // This will be used if the AI returns an empty response even without an error
                 $generatedContent = 'AI could not generate additional content for the resume.';
             }
 
@@ -228,7 +225,6 @@ class ResumeController extends Controller
             session()->flash('skills_summary_for_download', $skillsRaw);
 
             return redirect()->route('applicant-resume-view-and-download')->with('success', 'Resume processed successfully with AI enhancements!');
-
         } catch (\Throwable $e) {
             Log::error('Error in ResumeController@store: ' . $e->getMessage());
             // Provide a more user-friendly message for the specific "overloaded" error
@@ -269,7 +265,7 @@ class ResumeController extends Controller
 
         return view('users.applicant.resume_view_download', compact('generatedContent', 'resumeInstance', 'skillsSummary'));
     }
-    
+
     // Unchanged methods
     public function create() {}
     public function show(string $id) {}
@@ -277,3 +273,6 @@ class ResumeController extends Controller
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
 }
+
+
+

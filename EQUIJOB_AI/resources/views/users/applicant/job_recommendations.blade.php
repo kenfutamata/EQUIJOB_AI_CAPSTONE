@@ -112,7 +112,8 @@
                 <!-- Header Section -->
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex-shrink-0">
-                        <img id="modal-companyLogo" src="https://placehold.co/180x151" alt="Company Logo" class="w-44 h-auto border" />
+                        <img id="modal-companyLogo" src="https://placehold.co/180x151" alt="Company Logo" class="w-44 h-auto border" style="display:block;" />
+                        <div id="modal-companyInitial" class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-blue-500 font-bold text-lg" style="display:none;"></div>
                     </div>
                     <div>
                         <h2 id="modal-companyName" class="text-2xl font-semibold text-gray-800">Company Name</h2>
@@ -124,28 +125,28 @@
                     <div class="border w-full md:max-w-xs p-4 flex flex-col gap-4">
                         <h3 class="text-lg font-semibold border-b pb-1">Job Information</h3>
                         <div class="flex items-start gap-3">
-                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/disabled.png') }}" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Disability Type</p>
                                 <p id="modal-disabilityType" class="text-sm text-blue-600 font-medium"></p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
-                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/salary.png') }}" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Salary</p>
                                 <p id="modal-salaryRange" class="text-sm text-blue-600 font-medium"></p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
-                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/phone.png') }}" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Contact Number</p>
                                 <p id="modal-contactPhone" class="text-sm text-blue-600 font-medium"></p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
-                            <img src="https://placehold.co/30x30" alt="Icon" class="w-6 h-6" />
+                            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/email.png') }}" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Email Address</p>
                                 <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium">₱ 0</p>
@@ -191,11 +192,15 @@
                 document.getElementById('modal-contactEmail').textContent = job.contactEmail || 'No email address provided.';
 
                 const logo = document.getElementById('modal-companyLogo');
+                const initial = document.getElementById('modal-companyInitial');
                 if (job.companyLogo) {
                     logo.src = `/storage/${job.companyLogo}`;
                     logo.style.display = 'block';
+                    initial.style.display = 'none';
                 } else {
-                    logo.src = 'https://placehold.co/180x151';
+                    logo.style.display = 'none';
+                    initial.textContent = job.companyName ? job.companyName.charAt(0) : '';
+                    initial.style.display = 'flex';
                 }
 
                 document.getElementById('viewJobPostingModal').classList.remove('hidden');
