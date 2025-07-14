@@ -45,7 +45,18 @@
         }
     </style>
 </head>
-
+@php
+    function sortArrow($column) {
+        $currentSort = request('sort');
+        $direction = request('direction') === 'asc' ? 'desc' : 'asc';
+        $arrow = request('sort') === $column
+            ? (request('direction') === 'asc' ? '↑' : '↓')
+            : '↕';
+        $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+        $url = request()->url() . '?' . http_build_query($params);
+        return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+    }
+@endphp
 <body class="bg-white text-black">
     <div>
         <div class="sidebar-fixed">
@@ -84,16 +95,16 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-4 py-3">User Id</th>
-                            <th class="px-2 py-2">First Name</th>
-                            <th class="px-2 py-2">Last Name</th>
-                            <th class="px-2 py-2 max-w-[150px] break-words">Email</th>
-                            <th class="px-2 py-2">Phone</th>
-                            <th class="px-2 py-2">DOB</th>
-                            <th class="px-2 py-2">Disability</th>
+                            <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
+                            <th class="px-2 py-2">First Name {!! sortArrow('first_name')!!}</th>
+                            <th class="px-2 py-2">Last Name {!! sortArrow('last_name')!!}</th>
+                            <th class="px-2 py-2 max-w-[150px] break-words">Email {!! sortArrow('email')!!}</th>
+                            <th class="px-2 py-2">Phone {!! sortArrow('phone_number')!!}</th>
+                            <th class="px-2 py-2">DOB {!! sortArrow('date_of_birth')!!}</th>
+                            <th class="px-2 py-2">Disability {!! sortArrow('type_of_disability')!!}</th>
                             <th class="px-2 py-2">Profile Picture</th>
-                            <th class="px-2 py-2">Role</th>
-                            <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Role {!! sortArrow('role')!!}</th>
+                            <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>

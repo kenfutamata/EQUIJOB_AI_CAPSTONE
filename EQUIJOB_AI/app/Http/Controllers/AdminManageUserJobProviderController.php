@@ -21,7 +21,7 @@ class AdminManageUserJobProviderController extends Controller
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $users = users::all();
         $search = $request->input('search');
-        $users = \App\Models\users::query()
+        $query = \App\Models\users::query()
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
@@ -34,8 +34,14 @@ class AdminManageUserJobProviderController extends Controller
                         ->orWhere('pwd_id', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%");
                 });
-            })
-            ->get();
+            });
+        $sortable = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'company_name', 'role',];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+
+        $query->orderBy($sort, $direction);
+
+        $users = $query->get();
         $response = response()->view('users.admin.manage_user_jobprovider', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

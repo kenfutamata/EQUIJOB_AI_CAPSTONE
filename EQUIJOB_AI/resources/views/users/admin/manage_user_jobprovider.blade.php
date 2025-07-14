@@ -44,6 +44,18 @@
     </style>
 </head>
 
+@php
+    function sortArrow($column) {
+        $currentSort = request('sort');
+        $direction = request('direction') === 'asc' ? 'desc' : 'asc';
+        $arrow = request('sort') === $column
+            ? (request('direction') === 'asc' ? '↑' : '↓')
+            : '↕';
+        $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+        $url = request()->url() . '?' . http_build_query($params);
+        return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+    }
+@endphp
 <body class="bg-white text-black">
     <div>
         <div class="sidebar-fixed">
@@ -83,14 +95,14 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-4 py-3">User Id</th>
-                            <th class="px-4 py-3">First Name</th>
-                            <th class="px-4 py-3">Last Name</th>
-                            <th class="px-4 py-3">Email</th>
-                            <th class="px-4 py-3">Phone Number</th>
-                            <th class="px-4 py-3">Company</th>
+                            <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
+                            <th class="px-4 py-3">First Name {!! sortArrow('first_name')!!}</th>
+                            <th class="px-4 py-3">Last Name {!! sortArrow('last_name')!!}</th>
+                            <th class="px-4 py-3">Email {!! sortArrow('email')!!}</th>
+                            <th class="px-4 py-3">Phone Number {!! sortArrow('phone_number')!!}</th>
+                            <th class="px-4 py-3">Company {!! sortArrow('company_name')!!}</th>
                             <th class="px-4 py-3">Company Logo</th>
-                            <th class="px-4 py-3">Role</th>
+                            <th class="px-4 py-3">Role {!! sortArrow('role')!!}</th>
                             <th class="px-4 py-3">Profile Picture</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Actions</th>
@@ -108,7 +120,7 @@
                             <td class="px-4 py-3">{{ $user->company_name }}</td>
                             <td class="px-4 py-3">
                                 @if ($user->company_logo)
-                                <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[60px] h-[60px] object-cover">
+                                <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[30px] h-[30px] object-cover">
                                 @else
                                 No Logo
                                 @endif

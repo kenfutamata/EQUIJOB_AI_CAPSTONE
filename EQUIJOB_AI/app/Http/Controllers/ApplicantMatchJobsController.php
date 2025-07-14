@@ -163,4 +163,13 @@ class ApplicantMatchJobsController extends Controller
 
         return $query->limit(20)->get(); 
     }
+
+    public function show()
+    {
+        $user = Auth::guard('applicant')->user();
+        $notifications = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
+
+        return view('users.applicant.match_jobs', compact('user', 'notifications', 'unreadNotifications'));
+    }
 }

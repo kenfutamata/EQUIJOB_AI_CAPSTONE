@@ -377,7 +377,7 @@
             if (jobposting.companyLogo) {
                 companyLogo.src = `/storage/${jobposting.companyLogo}`;
                 companyLogo.style.display = 'block';
-                companyLogoFilename.textContent = jobposting.companyLogo.split('/').pop(); // Show just the file name
+                companyLogoFilename.textContent = jobposting.companyLogo.split('/').pop(); 
             } else {
                 companyLogo.style.display = 'none';
                 companyLogoFilename.textContent = '';

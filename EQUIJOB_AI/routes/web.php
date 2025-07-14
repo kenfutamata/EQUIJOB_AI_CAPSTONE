@@ -5,11 +5,13 @@ use App\Http\Controllers\AdminManageJobPostingController;
 use App\Http\Controllers\AdminManageUserJobProviderController;
 use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\ApplicantJobApplicationController;
 use App\Http\Controllers\ApplicantMatchJobsController;
 use App\Http\Controllers\ApplicantProfileController;
 use App\Http\Controllers\JobApplicantManageJobApplications;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
+use App\Http\Controllers\JobProviderManageJobApplications;
 use App\Http\Controllers\JobProviderProfileController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\NotificationController;
@@ -51,6 +53,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::delete('/EQUIJOB/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/EQUIJOB/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
     Route::get('/EQUIJOB/Job-Provider/Applicant-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+    Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
 });
 
 //Applicant 
@@ -68,6 +71,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::post('/EQUIJOB/Applicant/Match-Jobs/Upload-Resume', [ApplicantMatchJobsController::class, 'matchWithPdf'])->name('applicant-match-jobs-upload-resume');
     Route::get('/EQUIJOB/Applicant/Match-Jobs/Recommended-Jobs', [ApplicantMatchJobsController::class, 'showRecommendations'])->name('applicant-match-jobs-recommended-jobs');
     Route::get('/EQUIJOB/Applicant/Manage-Job-Applications', [JobApplicantManageJobApplications::class, 'index'])->name('applicant-job-applications');
+    Route::post('/EQUIJOB/Applicant/Job-Application', [ApplicantJobApplicationController::class, 'store'])->name('applicant-job-application-store');
 });
 
 //admin

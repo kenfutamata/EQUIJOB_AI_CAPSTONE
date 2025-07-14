@@ -22,28 +22,34 @@ class AdminManageUsersController extends Controller
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $search = $request->input('search');
 
-        $users = \App\Models\users::query()
-        ->when($search, function($query, $search){
-            $query->where(function ($q) use ($search){
-            $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
-                ->orWhere('first_name', 'like', "%{$search}%")
-                ->orWhere('first_name', 'like', "%{$search}%")
-                ->orWhere('last_name', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%")
-                ->orWhere('address', 'like', "%{$search}%")
-                ->orWhere('phone_number', 'like', "%{$search}%")
-                ->orWhere('type_of_disability', 'like', "%{$search}%")
-                ->orWhere('pwd_id', 'like', "%{$search}%")
-                ->orWhere('status', 'like', "%{$search}%");
+        $query = \App\Models\users::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
+                        ->orWhere('first_name', 'like', "%{$search}%")
+                        ->orWhere('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%")
+                        ->orWhere('phone_number', 'like', "%{$search}%")
+                        ->orWhere('type_of_disability', 'like', "%{$search}%")
+                        ->orWhere('pwd_id', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%");
+                });
             });
-        })
-        ->get(); 
+        $sortable = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'date_of_birth', 'type_of_disability', 'role', 'status'];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+
+        $query->orderBy($sort, $direction);
+        $users = $query->latest()->paginate();
         $response = response()->view('users.admin.manage_users_applicants', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
         return $response;
     }
+
 
 
     /**
