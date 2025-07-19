@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 
 class JobApplicationSent extends Notification
 {
-      use Queueable;
+    use Queueable;
 
     public $jobApplication;
     public $recipientType;
@@ -27,19 +27,17 @@ class JobApplicationSent extends Notification
 
     public function toDatabase($notifiable): array
     {
-        if ($this->recipientType === 'Admin') {
-            return [
-                'message' => 'A new job application for ' . $this->jobApplication->position . ' has been submitted.',
-                'job_posting_id' => $this->jobApplication->id,
-                'job_posting_position' => $this->jobApplication->position,
-                'url' => url('job-provider-job-posting-show' . $this->jobApplication->id),
-            ];
-        }
+        $this->jobApplication->load('jobPosting');
+
+        $message = 'A new application has been submitted for the position of ' . $this->jobApplication->jobPosting->position . '.';
+
+        // Admin check logic can be added here if needed.
+
         return [
-            'message' => 'A new job posting has been submitted.',
-            'job_posting_id' => $this->jobApplication->id,
-            'job_posting_position' => $this->jobApplication->position,
-            'url' => url('job-provider-job-posting-show' . $this->jobApplication->id),
+            'message' => $message,
+            'job_application_id' => $this->jobApplication->id,
+            'job_posting_position' => $this->jobApplication->jobPosting->position, 
+            'url' => route('job-provider-manage-job-applications'),
         ];
     }
 

@@ -75,6 +75,7 @@
                             <th class="px-2 py-2">Age</th>
                             <th class="px-2 py-2">Disability Type</th>
                             <th class="px-2 py-2">Educational Attainment</th>
+                            <th class="px-2 py-2">Work Environment</th>
                             <th class="px-2 py-2">Experience</th>
                             <th class="px-2 py-2">Skills</th>
                             <th class="px-2 py-2">Requirements</th>
@@ -84,7 +85,6 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($postings as $posting)
-                        @if($posting->jobProviderID==$user->id)
                         <tr class="hover:bg-gray-50">
                             <td class="px-2 py-2">{{ $posting->position }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->companyName }}</td>
@@ -92,6 +92,7 @@
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->age }}</td>
                             <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
                             <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
+                            <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
@@ -104,10 +105,12 @@
                                     class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>
-                        @endif
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $postings->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>
@@ -146,6 +149,7 @@
                 <div>
                     <label class="block text-xs text-gray-500">Sex</label>
                     <select name="sex" class="w-full border rounded px-2 py-1">
+                        <option value="Any">Any</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
@@ -186,6 +190,18 @@
                     <label class="block text-xs text-gray-500">Educational Attainment</label>
                     <textarea name="educationalAttainment" class="w-full border rounded px-2 py-1"></textarea>
                     @error('educationalAttainment')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500">Work Environment</label>
+                    <select name="workEnvironment" class="w-full border rounded px-2 py-1">
+                        <option value="On-Site">On-Site</option>
+                        <option value="Work From Home">Work From Home</option>
+                        <option value="Hybrid">Hybrid</option>
+
+                    </select>
+                    @error('workEnvironment')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -286,6 +302,10 @@
                 <input id="modal.educationalAttainment" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
+                <label class="block text-xs text-gray-500">Work Environment</label>
+                <input id="modal.workEnvironment" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
                 <label class="block text-xs text-gray-500">Job Posting Objectives</label>
                 <input id="modal.jobPostingObjectives" class="w-full border rounded px-2 py-1" disabled>
             </div>
@@ -360,7 +380,7 @@
 
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '0';
+            if (notif) notif.style.opacity = '10';
         }, 2500);
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
@@ -368,37 +388,34 @@
         }, 3000);
 
         function openViewJobPostingModal(button) {
+            // This part is correct
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-            document.getElementById('modal.position').value = jobposting.position;
-            document.getElementById('modal.companyName').value = jobposting.companyName;
-            document.getElementById('modal.sex').value = jobposting.sex;
+
+            // Populate all the input/textarea fields
+            document.getElementById('modal.position').value = jobposting.position || '';
+            document.getElementById('modal.companyName').value = jobposting.companyName || '';
+            document.getElementById('modal.sex').value = jobposting.sex || '';
+            document.getElementById('modal.age').value = jobposting.age || '';
+            document.getElementById('modal.disabilityType').value = jobposting.disabilityType || '';
+            document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment || '';
+            document.getElementById('modal.workEnvironment').value = jobposting.workEnvironment || '';
+            document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives || '';
+            document.getElementById('modal.experience').value = jobposting.experience || '';
+            document.getElementById('modal.skills').value = jobposting.skills || '';
+            document.getElementById('modal.requirements').value = jobposting.requirements || '';
+            document.getElementById('modal.contactPhone').value = jobposting.contactPhone || '';
+            document.getElementById('modal.contactEmail').value = jobposting.contactEmail || '';
+            document.getElementById('modal.description').value = jobposting.description || '';
+            document.getElementById('modal.salaryRange').value = jobposting.salaryRange || '';
+            document.getElementById('modal.remarks').value = jobposting.remarks || '';
             const companyLogo = document.getElementById('modal.companyLogo');
-            const companyLogoFilename = document.getElementById('modal.companyLogoFilename');
             if (jobposting.companyLogo) {
                 companyLogo.src = `/storage/${jobposting.companyLogo}`;
                 companyLogo.style.display = 'block';
-                companyLogoFilename.textContent = jobposting.companyLogo.split('/').pop(); 
             } else {
                 companyLogo.style.display = 'none';
-                companyLogoFilename.textContent = '';
             }
-            document.getElementById('modal.age').value = jobposting.age;
-            document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
-            document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
-            document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
-            document.getElementById('modal.experience').value = jobposting.experience;
-            document.getElementById('modal.skills').value = jobposting.skills;
-            document.getElementById('modal.requirements').value = jobposting.requirements;
-            document.getElementById('modal.contactPhone').value = jobposting.contactPhone;
-            document.getElementById('modal.contactEmail').value = jobposting.contactEmail;
-            document.getElementById('modal.description').value = jobposting.description;
-            document.getElementById('modal.salaryRange').value = jobposting.salaryRange;
-            document.getElementById('modal.remarks').value = jobposting.remarks || '';
-            document.getElementById('modal.remarks').disabled = true;
-            document.getElementById('modal.companyLogo').style.display = jobposting.companyLogo ? 'block' : 'none';
-            document.getElementById('modal.companyName').value = jobposting.companyName || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
-
         }
 
         function closeViewJobPostingModal() {

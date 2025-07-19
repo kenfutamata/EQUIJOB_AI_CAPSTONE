@@ -6,15 +6,18 @@ use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\JobPostingNotificationSent;
+use Illuminate\Support\Facades\Log;
 
 class JobPostingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::guard('job_provider')->user();
-        $search = request()->input('search');
-        $postingsQuery = JobPosting::query()->where('jobProviderID', $user->id);
-        $postingsQuery->when($search, function($query, $search) {
+        $search = $request->input('search');
+
+        $postingsQuery = JobPosting::where('jobProviderID', $user->id);
+
+        $postingsQuery->when($search, function ($query, $search) {
             $query->where(function ($q) use ($search) {
                 $q->where('companyName', 'like', "%{$search}%")
                     ->orWhere('sex', 'like', "%{$search}%")
@@ -32,14 +35,17 @@ class JobPostingController extends Controller
                     ->orWhere('remarks', 'like', "%{$search}%");
             });
         });
-        $postings = $postingsQuery->get();
-        $notifications = $user->notifications;
-        $unreadNotifications = $user->unreadNotifications;
-        $response = response()->view('users.job-provider.job_posting', compact('user', 'postings', 'notifications', 'unreadNotifications'));
-        $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
-        $response->header('Pragma', 'no-cache');
-        $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
-        return $response;
+
+        $postings = $postingsQuery->latest()->paginate(10)->withQueryString(); // Use pagination
+
+        $notifications = $user->notifications ?? collect();
+        $unreadNotifications = $user->unreadNotifications ?? collect();
+
+        return response()
+            ->view('users.job-provider.job_posting', compact('user', 'postings', 'notifications', 'unreadNotifications'))
+            ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     public function create()
@@ -48,17 +54,18 @@ class JobPostingController extends Controller
     }
 
     public function store(Request $request)
-    {        
+    {
         $user = Auth::guard('job_provider')->user();
 
         $validatedData = $request->validate([
-            'position' => 'required|string|max:255',
-            'companyName' => 'required|string|max:255',
+            'position' => 'required|string|max:100',
+            'companyName' => 'required|string|max:100',
             'sex' => 'required|string|max:10',
             'age' => 'required|integer|min:18|max:65',
-            'disabilityType' => 'required|string|max:255',
+            'disabilityType' => 'required|string|max:100',
             'educationalAttainment' => 'required|string|max:255',
-            'salaryRange' => 'required|string|max:255',
+            'workEnvironment' => 'required|string|max:255',
+            'salaryRange' => 'required|string|max:100',
             'jobPostingObjectives' => 'required|string|max:1000',
             'requirements' => 'required|string|max:1000',
             'description' => 'required|string|max:1000',
@@ -76,7 +83,7 @@ class JobPostingController extends Controller
         $validatedData['companyLogo'] = $user->company_logo;
 
         $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();
-        $validatedData['status'] = 'Pending'; 
+        $validatedData['status'] = 'Pending';
 
         try {
             $jobPosting = JobPosting::create($validatedData);
@@ -91,6 +98,7 @@ class JobPostingController extends Controller
             return redirect()->route('job-provider-job-posting')->with('Success', 'Job posting created successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while creating the job posting: ' . $e->getMessage());
+            Log::error('Failed to Store Job Posting : ' . $e->getMessage());
         }
     }
 

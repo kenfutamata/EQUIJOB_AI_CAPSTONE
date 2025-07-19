@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\jobApplicationEmailSent;
 use App\Models\JobApplication;
+use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\users;
+use App\Notifications\JobApplicationSent;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 
 class ApplicantJobApplicationController extends Controller
 {
@@ -29,51 +36,70 @@ class ApplicantJobApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        // Step 1: Validate the incoming request data.
+        // If this fails, Laravel will redirect back with errors. No need for a try-catch here.
+        $validatedRequest = $request->validate([
             'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'jobPostingID' => 'required|exists:jobPosting,id', // Using your confirmed table name
+            'jobProviderID' => 'required|exists:users,id',
         ]);
-        if ($request->hasFile('uploadResume')) {
-            $file = $request->file('uploadResume');
-            $filepath = $file->store('uploadResume', 'public');
-            $validatedData['uploadResume'] = $filepath;
-        }
-        if ($request->hasFile('uploadApplicationLetter')) {
-            $file = $request->file('uploadApplicationLetter');
-            $filepath = $file->store('uploadApplicationLetter', 'public');
-            $validatedData['uploadApplicationLetter'] = $filepath;
-        }
-        $validatedData['applicantID'] = auth('applicant')->id();
-        $validatedData['jobApplicationNumber'] = $this->generateAlphaNumericId($validatedData['applicantID']);
-        $validatedData['jobPostingID'] = $request->input('jobPostingID');
-        $validatedData['status'] = 'Pending';
 
         try {
-            JobApplication::create($validatedData);
-            $jobProvider = User::find($request->input('jobProviderID'));
-            if ($jobProvider) {
-                $jobProvider->notify(new \App\Notifications\JobApplicationSent($validatedData, 'job_provider'));
+            // Step 2: Get the necessary models.
+            $applicant = auth('applicant')->user();
+            $posting = JobPosting::find($validatedRequest['jobPostingID']);
+            $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
+                ->where('role', 'Job Provider')
+                ->first();
+
+            if (!$jobProvider) {
+                throw new \Exception('The specified job provider could not be found or does not have the correct role.');
             }
+            $applicationData = [
+                'applicantID' => $applicant->id,
+                'jobPostingID' => $posting->id,
+                'jobApplicationNumber' => $this->generateAlphaNumericId(),
+                'status' => 'Pending',
+                'uploadResume' => $request->file('uploadResume')->store('uploadResume', 'public'),
+                'uploadApplicationLetter' => $request->file('uploadApplicationLetter')->store('uploadApplicationLetter', 'public'),
+            ];
+
+            $newApplication = JobApplication::create($applicationData);
+
+            $maildata = [
+                'firstName' => $applicant->first_name,
+                'lastName' => $applicant->last_name,
+                'jobProvidersFirstName' => $jobProvider->first_name,
+                'jobProvidersLastName' => $jobProvider->last_name,
+                'position' => $posting->position,
+                'companyName' => $posting->companyName,
+                'applicationNumber' => $applicationData['jobApplicationNumber'],
+            ];
+
+            Mail::to($applicant->email)->send(new jobApplicationEmailSent($maildata));
+            $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider')); 
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred Please Try Again ');
+            Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
+            return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
-        // Logic to store the job application in the database
 
         return redirect()->back()->with('Success', 'Application Submitted Successfully');
     }
 
 
-    public function generateAlphaNumericId(string $applicantNumberID): string
+    public function generateAlphaNumericId(): string
     {
         $prefix = 'AN25';
-        $last = JobApplication::whereNotNull('jobApplicationNumber')
-            ->where('jobApplicationNumber', 'like', $prefix . '%')
-            ->orderBy('id', 'desc')
+        $last = JobApplication::where('jobApplicationNumber', 'like', $prefix . '%')
+            ->latest('id') // A slightly cleaner way to write orderBy('id', 'desc')
             ->first();
 
         $lastID = $last?->jobApplicationNumber ?? $prefix . '0000';
         $number = (int) substr($lastID, strlen($prefix));
         $next = $number + 1;
+
         return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
     }
     /**

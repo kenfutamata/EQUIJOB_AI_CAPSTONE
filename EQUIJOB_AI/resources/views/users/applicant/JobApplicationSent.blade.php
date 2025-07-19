@@ -11,11 +11,12 @@
     <div class="bg-white border-4 border-blue-400 rounded-lg p-8">
       <div class="space-y-6">
         <div>
-          <p class="text-gray-800 text-base">Hello. Good day!</p>
+          <p class="text-gray-800 text-base">Hello {{$maildata['firstName']}} {{$maildata['lastName']}}</p>
         </div>
         <div>
           <p class="text-gray-700">
-            Your Job Application is been sent to the assigned Job Provider who will review your Application. Please Wait for further updates with regards with your Job Application status.
+            Your Job Application for the position of {{$maildata['position']}} is been sent to the assigned Job Provider of {{$maildata['position']}} who will review your Application. Please Wait for further updates with regards with your Job Application status.
+            Your Application Number will be {{$maildata['applicationNumber']}}.
           </p>
         </div>
         <div>

@@ -17,12 +17,11 @@ class AdminManageUsersController extends Controller
     public function index(Request $request)
     {
         $admin = Auth::guard('admin')->user();
-        $users = users::all();
         $notifications = $admin->notifications ?? collect();
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $search = $request->input('search');
 
-        $query = \App\Models\users::query()
+        $query = \App\Models\users::query()->where('role', 'Applicant')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
@@ -42,7 +41,7 @@ class AdminManageUsersController extends Controller
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
         $query->orderBy($sort, $direction);
-        $users = $query->latest()->paginate();
+        $users = $query->orderBy($sort, $direction)->paginate(10);
         $response = response()->view('users.admin.manage_users_applicants', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

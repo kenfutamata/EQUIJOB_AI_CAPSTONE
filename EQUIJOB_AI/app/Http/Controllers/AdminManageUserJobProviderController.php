@@ -22,6 +22,7 @@ class AdminManageUserJobProviderController extends Controller
         $users = users::all();
         $search = $request->input('search');
         $query = \App\Models\users::query()
+            ->where('role', 'Job Provider')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
@@ -41,7 +42,7 @@ class AdminManageUserJobProviderController extends Controller
 
         $query->orderBy($sort, $direction);
 
-        $users = $query->get();
+        $users = $query->latest()->paginate(10);
         $response = response()->view('users.admin.manage_user_jobprovider', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

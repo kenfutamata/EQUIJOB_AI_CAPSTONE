@@ -75,7 +75,7 @@
           </div>
           <div class="flex flex-col justify-center px-4">
             <div class="text-lg font-semibold">Application</div>
-            <div class="text-2xl">0</div>
+            <div class="text-2xl">{{$jobApplicationCount}}</div>
           </div>
         </div>
 
@@ -86,7 +86,7 @@
           </div>
           <div class="flex flex-col justify-center px-4">
             <div class="text-lg font-semibold">Interview</div>
-            <div class="text-2xl">0</div>
+            <div class="text-2xl">{{$jobApplicantInterviewCount}}</div>
           </div>
         </div>
 

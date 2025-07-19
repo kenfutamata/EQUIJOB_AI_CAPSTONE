@@ -31,8 +31,17 @@ function closeViewJobPostingModal() {
     document.getElementById('viewJobPostingModal').classList.add('hidden');
 }
 
-function openApplyJobModal() {
-    document.getElementById('applyJobModal').classList.remove('hidden');
+function openApplyJobModal(button) {
+    const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
+    const modal = document.getElementById('applyJobModal');
+
+    document.getElementById('apply_jobPostingID').value = jobposting.id;
+    document.getElementById('apply_jobProviderID').value = jobposting.jobProviderID;
+
+    document.getElementById('apply_position').value = jobposting.position;
+    document.getElementById('apply_companyName').value = jobposting.companyName;
+
+    modal.classList.remove('hidden');
 }
 
 function closeApplyJobModal() {

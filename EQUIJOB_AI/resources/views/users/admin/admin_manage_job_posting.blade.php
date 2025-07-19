@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
+
 <body class="bg-white text-black">
     <div>
         <!-- Sidebar -->
@@ -56,6 +58,7 @@
                             <th class="px-2 py-2">Age</th>
                             <th class="px-2 py-2">Disability Type</th>
                             <th class="px-2 py-2">Educational Attainment</th>
+                            <th class="px-2 py-2">Work Environment</th>
                             <th class="px-2 py-2">Experience</th>
                             <th class="px-2 py-2">Skills</th>
                             <th class="px-2 py-2">Requirements</th>
@@ -72,6 +75,8 @@
                             <td class="px-2 py-2">{{ $posting->age }}</td>
                             <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
                             <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
+                            <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
+
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
@@ -93,6 +98,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $postings->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>
@@ -127,6 +135,10 @@
             <div>
                 <label class="block text-xs text-gray-500">Educational Attainment</label>
                 <input id="modal.educationalAttainment" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500">Work Environment</label>
+                <input id="modal.workEnvironment" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Job Posting Objectives</label>
@@ -179,7 +191,7 @@
                 <div class="mb-4">
                     <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
                     <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
+                    <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
             </form>
         </div>
     </div>
@@ -188,9 +200,11 @@
         function openDisapproveJobPostingModal(button) {
             document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
         }
+
         function closeDisapproveJobPostingModal() {
             document.getElementById('DisapproveJobPostingModal').classList.add('hidden');
         }
+
         function openAddJobPostingModal() {
             document.getElementById('addJobPostingModal').classList.remove('hidden');
         }
@@ -238,6 +252,8 @@
             document.getElementById('modal.age').value = jobposting.age;
             document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
             document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
+            document.getElementById('modal.workEnvironment').value = jobposting.workEnvironment;
+
             document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
             document.getElementById('modal.experience').value = jobposting.experience;
             document.getElementById('modal.skills').value = jobposting.skills;

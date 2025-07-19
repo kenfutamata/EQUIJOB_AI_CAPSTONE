@@ -45,17 +45,18 @@
 </head>
 
 @php
-    function sortArrow($column) {
-        $currentSort = request('sort');
-        $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-        $arrow = request('sort') === $column
-            ? (request('direction') === 'asc' ? '↑' : '↓')
-            : '↕';
-        $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-        $url = request()->url() . '?' . http_build_query($params);
-        return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
-    }
+function sortArrow($column) {
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
 @endphp
+
 <body class="bg-white text-black">
     <div>
         <div class="sidebar-fixed">
@@ -110,7 +111,6 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($users as $user)
-                        @if($user->role == 'Job Provider')
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3">{{ $user->userID }}</td>
                             <td class="px-4 py-3">{{ $user->first_name }}</td>
@@ -149,10 +149,12 @@
                                     class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>
-                        @endif
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $users->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>
@@ -177,16 +179,16 @@
                 <label class="block text-xs text-gray-500">Company Logo:</label>
                 <img id="modal_company_logo" class="w-[100px] h-[100px] object-cover" />
                 <label class="block text-xs text-gray-500">Business Permit:</label>
-                <div id="modal_business_permit_container" />
+                <div id="modal_business_permit_container">
+                </div>
+                <label class="block text-xs text-gray-500">Profile Picture:</label>
+                <img id="modal_profile_picture" class="w-[100px] h-[100px] object-cover" />
+                <label class="block text-xs text-gray-500">Role:</label>
+                <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <label class="block text-xs text-gray-500">Status:</label>
+                <input id="modal_status" class="w-full border rounded px-4 py-2 text-sm" disabled />
             </div>
-            <label class="block text-xs text-gray-500">Profile Picture:</label>
-            <img id="modal_profile_picture" class="w-[100px] h-[100px] object-cover" />
-            <label class="block text-xs text-gray-500">Role:</label>
-            <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
-            <label class="block text-xs text-gray-500">Status:</label>
-            <input id="modal_status" class="w-full border rounded px-4 py-2 text-sm" disabled />
         </div>
-    </div>
     </div>
 
     <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">

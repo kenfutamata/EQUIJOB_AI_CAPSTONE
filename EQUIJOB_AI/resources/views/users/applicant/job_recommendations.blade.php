@@ -1,5 +1,6 @@
     <!DOCTYPE html>
     <html lang="en">
+
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -66,10 +67,12 @@
                             </div>
                             @endif
                             <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($job)' class="text-center text-sm font-semibold text-blue-600 border border-blue-600 px-4 py-1.5 rounded-full whitespace-nowrap hover:bg-blue-600 hover:text-white transition-colors duration-200">
-                                View Job Posting
-                                <button onclick="openApplyJobModal(this)" data-jobposting='@json($job)' class="text-center text-sm font-semibold text-blue-600 border border-blue-600 px-4 py-1.5 rounded-full whitespace-nowrap hover:bg-blue-600 hover:text-white transition-colors duration-200">
-                                    Apply Now
-                                </button>
+                                View Posting
+                            </button>
+
+                            <button onclick="openApplyJobModal(this)" data-jobposting='@json($job)' class="text-center text-sm font-semibold text-green-600 border border-green-600 px-4 py-1.5 rounded-full whitespace-nowrap hover:bg-green-600 hover:text-white transition-colors duration-200">
+                                Apply Now
+                            </button>
                         </header>
                         <div class="flex flex-col gap-2">
                             <div>
@@ -207,14 +210,14 @@
                     </div>
                     <div>
                         <label class="block text-xs text-gray-500">Position</label>
-                        <input name="position" class="w-full border rounded px-2 py-1" readonly value="{{ $job->position }}">
+                        <input name="position" id="apply_position" class="w-full border rounded px-2 py-1" readonly>
                         @error('position')
                         <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <label class="block text-xs text-gray-500">Company Name</label>
-                        <input name="companyName" class="w-full border rounded px-2 py-1" value="{{$job->companyName}}" readonly>
+                        <input name="companyName" id="apply_companyName" class="w-full border rounded px-2 py-1" readonly>
                         @error('companyName')
                         <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
@@ -252,7 +255,9 @@
                             <button type="button" onclick="closeApplyJobModal()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
                             <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Add</button>
                         </div>
-                        <input type="hidden" name="jobPostingID" value="{{ $job->id }}">
+                        <input type="hidden" name="jobPostingID" id="apply_jobPostingID">
+                        <input type="hidden" name="jobProviderID" id="apply_jobProviderID">
+
                 </form>
             </div>
         </div>

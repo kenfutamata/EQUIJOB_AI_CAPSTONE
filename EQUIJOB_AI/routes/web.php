@@ -31,7 +31,6 @@ Route::post('/EQUIJOB/Log-in', [SignInController::class, 'LoginUser'])->name('lo
 Route::get('/EQUIJOB/Log-in', function () {
     return redirect()->route('sign-in');
 });
-
 //Sign Up
 Route::get('/EQUIJOB/Sign-up-Applicant', [SignInController::class, 'ViewSignUpApplicantPage'])->name('sign-up-applicant');
 Route::get('/EQUIJOB/Sign-up-JobProvider', [SignInController::class, 'ViewSignUpJobProviderPage'])->name('sign-up-job-provider');
@@ -54,6 +53,10 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
     Route::get('/EQUIJOB/Job-Provider/Applicant-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
+    Route::post('/EQUIJOB/Job-Provider/Manage-Job-Applications/create-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider-manage-job-applications.google.meet.create_link');
+    Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/redirect', [JobProviderManageJobApplications::class, 'redirectToGoogle'])->name('job-provider-manage-job-applications.provider.google.redirect');
+    Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/callback', [JobProviderManageJobApplications::class, 'handleGoogleCallback'])->name('job-provider-manage-job-applications.provider.google.callback');
+    Route::post('/EQUIJOB/Job-Provider/Manage-Job-Applications/{application}/schedule-interview', [JobProviderManageJobApplications::class, 'scheduleInterview'])->name('job-provider-manage-job-applications.scheduleinterview');
 });
 
 //Applicant 

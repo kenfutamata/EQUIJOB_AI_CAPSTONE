@@ -18,11 +18,9 @@ class JobApplication extends Model
         'remarks',
         'interviewDate',
         'interviewTime',
+        'interviewLink', 
         'uploadResume',
         'uploadApplicationLetter',
-        'googleAccessToken',
-        'googleRefreshToken',
-        'googleTokenExpiry'
     ];
 
     protected $casts = [

@@ -46,24 +46,25 @@
     </style>
 </head>
 @php
-    function sortArrow($column) {
-        $currentSort = request('sort');
-        $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-        $arrow = request('sort') === $column
-            ? (request('direction') === 'asc' ? '↑' : '↓')
-            : '↕';
-        $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-        $url = request()->url() . '?' . http_build_query($params);
-        return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
-    }
+function sortArrow($column) {
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
 @endphp
+
 <body class="bg-white text-black">
     <div>
         <div class="sidebar-fixed">
             <x-admin-sidebar />
         </div>
         <div class="topbar-fixed">
-            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications"/>
+            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
         </div>
         <main class="main-content-scroll">
             @if(session('Success'))
@@ -110,7 +111,6 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($users as $user)
-                        @if($user->role == 'Applicant')
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3">{{ $user->userID}}</td>
                             <td class="px-2 py-2">{{ $user->first_name }}</td>
@@ -137,10 +137,12 @@
                                 <button onclick="openDeleteModal({{ $user->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>
-                        @endif
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $users->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>

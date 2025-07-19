@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{csrf_token()}}">
     <title>EQUIJOB - Job Provider- Manage Job Applications</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
@@ -32,6 +33,7 @@
                 {{ session('error') }}
             </div>
             @endif
+
             <div class="text-3xl font-semibold mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
                 <div>
                     <span class="text-gray-800">Manage </span>
@@ -55,8 +57,10 @@
                             <th class="px-2 py-2">Company Name</th>
                             <th class="px-2 py-2">Applicant Name</th>
                             <th class="px-2 py-2">Applicant Phone Number</th>
-                            <th class="px-2 py-2">Applicant Address</th>
                             <th class="px-2 py-2">Sex</th>
+
+                            <th class="px-2 py-2">Applicant Address</th>
+                            <th class="px-2 py-2">Email Address</th>
                             <th class="px-2 py-2">Applicant Disability Type</th>
                             <th class="px-2 py-2">Status</th>
                             <th class="px-2 py-2">Actions</th>
@@ -64,37 +68,87 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($applications as $application)
-                        @php $posting = $application->jobPosting;
+                        @php
+                        $posting = $application->jobPosting;
                         $applicant = $application->applicant;
+                        $jobpostingData = array_merge($posting->toArray(), [
+                        'uploadResume' => $application->uploadResume,
+                        'uploadApplicationLetter' => $application->uploadApplicationLetter,
+                        'remarks' => $application->remarks,
+                        ]);
                         @endphp
                         <tr>
                             <td class="px-2 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-2 py-2">{{ $posting->position ?? '' }}</td>
                             <td class="px-2 py-2">{{ $posting->companyName ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->first_name ?? '' }} {{ $applicant->last_name ?? ''}}</td>
+                            <td class="px-2 py-2">{{ $applicant->first_name ?? '' }} {{ $applicant->last_name ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->phone_number ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->address?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->gender ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->type_of_disability ?? ''}}</td>
-                            <td class="px-2 py-2">{{ $application->status ?? ''}}</td>
+                            <td class="px-2 py-2">{{ $applicant->address ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->email ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->type_of_disability ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $application->status ?? '' }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if ($application->status === 'Pending')
-                                <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                <button onclick="openDisapproveJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                                @else
-                                <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+                                <button
+                                    onclick="openViewJobApplicationsModal(this)"
+                                    data-jobposting='@json($jobpostingData)'
+                                    class="bg-blue-500 text-white px-2 py-1 rounded">
+                                    View
+                                </button>
+                                <button
+                                    onclick="openCreateInterviewDetailsModal({{ $application->id }})"
+                                    class="bg-green-500 text-white px-2 py-1 rounded">
+                                    For Interview
+                                </button>
+                                <button
+                                    onclick="openDisapproveJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Disapprove
+                                </button>
+                                @elseif($application->status == 'For Interview')
+                                <button
+                                    onclick="openViewJobApplicationsModal(this)"
+                                    data-jobposting='@json($jobpostingData)'
+                                    class="bg-blue-500 text-white px-2 py-1 rounded">
+                                    View
+                                </button>
+                                <button
+                                    onclick="openCreateInterviewDetailsModal({{ $application->id }})"
+                                    class="bg-green-500 text-white px-2 py-1 rounded">
+                                    Hire
+                                </button>
+                                <button
+                                    onclick="openDisapproveJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Disapprove
+                                </button>
+                                @elseif($application->status == 'Rejected')
+                                <button
+                                    onclick="openViewJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-blue-500 text-white px-2 py-1 rounded">
+                                    View
+                                </button>
                                 @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $applications->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>
-    <!-- <div id="viewJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+
+    <!-- View Job Posting Modal -->
+    <div id="viewJobApplicationsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
-            <button onclick="closeViewJobPostingModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            <button onclick="closeViewJobApplicationsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             <h2 class="text-xl font-bold mb-4">View Job Posting</h2>
             <div>
                 <label class="block text-xs text-gray-500">Position</label>
@@ -109,10 +163,6 @@
                 <input id="modal.sex" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Company Logo</label>
-                <img id="modal.company_logo" class="w-16 h-16 object-cover border rounded" style="display:none;">
-            </div>
-            <div>
                 <label class="block text-xs text-gray-500">Age</label>
                 <input id="modal.age" class="w-full border rounded px-2 py-1" disabled>
             </div>
@@ -121,81 +171,160 @@
                 <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Educational Attainment</label>
-                <input id="modal.educational_attainment" class="w-full border rounded px-2 py-1" disabled>
+                <label class="block text-xs text-gray-500">Resume</label>
+                <div id="modal_view_resume"></div>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Job Posting Objectives</label>
-                <input id="modal.job_posting_objectives" class="w-full border rounded px-2 py-1" disabled>
+                <label class="block text-xs text-gray-500">Application Letter</label>
+                <div id="modal_view_application_letter"></div>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Experience</label>
-                <input id="modal.experience" class="w-full border rounded px-2 py-1" disabled>
+                <label class="block text-xs text-gray-500">Interview Date</label>
+                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Skills</label>
-                <input id="modal.skills" class="w-full border rounded px-2 py-1" disabled>
+                <label class="block text-xs text-gray-500">Time</label>
+                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Requirements</label>
-                <textarea id="modal.requirements" class="w-full border rounded px-2 py-1" disabled></textarea>
+                <label class="block text-xs text-gray-500">Google Meet Link</label>
+                <input type="text" id="modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm" readonly placeholder="Generating link...">
+                <input type="hidden" name="interview_link" id="interview_link_hidden">
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Contact Phone</label>
-                <input id="modal.contact_phone" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Contact Email</label>
-                <input id="modal.contact_email" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Job Description</label>
-                <textarea id="modal.description" class="w-full border rounded px-2 py-1" disabled></textarea>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Salary Range</label>
-                <input id="modal.salary_range" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Remarks</label>
+                <label class="block text-xs text-gray-500 mt-2">Remarks</label>
                 <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
             </div>
         </div>
-    </div> -->
+    </div>
 
+    <div id="createInterviewDetailsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
+            <button onclick="closeCreateInterviewDetailsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            <form id="interviewForm" action="" method="POST" class="space-y-4">
+                @csrf
+                @method('POST')
+                <h2 class="text-xl font-bold mb-4">Schedule Interview</h2>
+                <div>
+                    <label for="interviewDate" class="block text-sm font-medium text-gray-700">Interview Date</label>
+                    <input type="date" id="interviewDate" name="interviewDate" class="mt-1 block w-full border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                    <label for="interviewTime" class="block text-sm font-medium text-gray-700">Interview Time</label>
+                    <input type="time" id="interviewTime" name="interviewTime" class="mt-1 block w-full border border-gray-300 rounded-md" required>
+                </div>
+                <div>
+                    <label for="create_modal_meet_link" class="block text-sm font-medium text-gray-700">Google Meet Link</label>
+                    <input type="text" id="create_modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md" readonly placeholder="Generating link...">
+                    <input type="hidden" name="interviewLink" id="interviewLink">
+                </div>
+
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" onclick="closeCreateInterviewDetailsModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md">Cancel</button>
+                    <button type="submit" id="submitInterviewBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400" disabled>
+                        Schedule Interview
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script>
-        function openDisapproveJobPostingModal(button) {
+        async function openCreateInterviewDetailsModal(applicationId) {
+            const modal = document.getElementById('createInterviewDetailsModal');
+            const form = document.getElementById('interviewForm');
+            const meetLinkInput = document.getElementById('create_modal_meet_link');
+            const hiddenLinkInput = document.getElementById('interviewLink');
+            const submitBtn = document.getElementById('submitInterviewBtn');
+            form.action = '/EQUIJOB/Job-Provider/Manage-Job-Applications/${applicationId}/schedule-interview';
+            form.action = `/EQUIJOB/Job-Provider/Manage-Job-Applications/${applicationId}/schedule-interview`;
+            meetLinkInput.value = 'Generating link, please wait...';
+            hiddenLinkInput.value = '';
+            submitBtn.disabled = true;
+            modal.classList.remove('hidden');
+
+            try {
+                const response = await fetch("{{ route('job-provider-manage-job-applications.google.meet.create_link') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    meetLinkInput.value = data.meetLink;
+                    hiddenLinkInput.value = data.meetLink;
+                    submitBtn.disabled = false;
+                } else {
+                    meetLinkInput.value = `Error: ${data.error || 'Could not generate link.'}`;
+                }
+            } catch (error) {
+                meetLinkInput.value = 'A network error occurred. Please try again.';
+                console.error('Fetch error:', error);
+            }
+        }
+
+
+        function closeCreateInterviewDetailsModal(button) {
+            document.getElementById('createInterviewDetailsModal').classList.add('hidden');
+
+        }
+
+        function openDisapproveJobApplicationModal(button) {
             document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
         }
 
-        function closeDisapproveJobPostingModal() {
+        function closeDisapproveJobApplicationModal() {
             document.getElementById('DisapproveJobPostingModal').classList.add('hidden');
         }
 
-        function openAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.remove('hidden');
+        function openViewJobApplicationsModal(button) {
+            const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
+            document.getElementById('modal.position').value = jobposting.position ?? '';
+            document.getElementById('modal.company_name').value = jobposting.companyName ?? '';
+            document.getElementById('modal.sex').value = jobposting.sex ?? '';
+            document.getElementById('modal.age').value = jobposting.age ?? '';
+            document.getElementById('modal.disability_type').value = jobposting.disabilityType ?? '';
+            document.getElementById('modal.remarks').value = jobposting.remarks ?? '';
+
+            const resumeContainer = document.getElementById('modal_view_resume');
+            resumeContainer.innerHTML = '';
+            if (jobposting.uploadResume) {
+                const ext = jobposting.uploadResume.split('.').pop().toLowerCase();
+                const filePath = `/storage/${jobposting.uploadResume}`;
+                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+                    resumeContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
+                } else if (ext === 'pdf') {
+                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
+                } else {
+                    resumeContainer.innerText = 'Unsupported file format';
+                }
+            }
+
+            const applicationContainer = document.getElementById('modal_view_application_letter');
+            applicationContainer.innerHTML = '';
+            if (jobposting.uploadApplicationLetter) {
+                const ext = jobposting.uploadApplicationLetter.split('.').pop().toLowerCase();
+                const filePath = `/storage/${jobposting.uploadApplicationLetter}`;
+                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+                    applicationContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
+                } else if (ext === 'pdf') {
+                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
+                } else {
+                    applicationContainer.innerText = 'Unsupported file format';
+                }
+            }
+
+            document.getElementById('viewJobApplicationsModal').classList.remove('hidden');
         }
 
-        function closeAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.add('hidden');
+        function closeViewJobApplicationsModal() {
+            document.getElementById('viewJobApplicationsModal').classList.add('hidden');
         }
-
-        function openDeleteModal(userId) {
-            const form = document.getElementById('deleteuser');
-            form.action = `/EQUIJOB/Admin/Manage-User-Applicants/Delete/${userId}`;
-            document.getElementById('DeleteRoleModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.add('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('viewProfileModal');
-            if (e.target === modal) closeModal();
-        });
 
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
@@ -205,39 +334,8 @@
             const notif = document.getElementById('notification-bar');
             if (notif) notif.style.display = 'none';
         }, 3000);
-
-        function openViewJobPostingModal(button) {
-            const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-            document.getElementById('modal.position').value = jobposting.position;
-            document.getElementById('modal.company_name').value = jobposting.company_name;
-            document.getElementById('modal.sex').value = jobposting.sex;
-            const companyLogo = document.getElementById('modal.company_logo');
-            if (jobposting.company_logo) {
-                companyLogo.src = `/storage/${jobposting.company_logo}`;
-                companyLogo.style.display = 'block';
-            } else {
-                companyLogo.style.display = 'none';
-            }
-            document.getElementById('modal.age').value = jobposting.age;
-            document.getElementById('modal.disability_type').value = jobposting.disabilityType;
-            document.getElementById('modal.educational_attainment').value = jobposting.educational_attainment;
-            document.getElementById('modal.job_posting_objectives').value = jobposting.job_posting_objectives;
-            document.getElementById('modal.experience').value = jobposting.experience;
-            document.getElementById('modal.skills').value = jobposting.skills;
-            document.getElementById('modal.requirements').value = jobposting.requirements;
-            document.getElementById('modal.contact_phone').value = jobposting.contact_phone;
-            document.getElementById('modal.contact_email').value = jobposting.contact_email;
-            document.getElementById('modal.description').value = jobposting.description;
-            document.getElementById('modal.salary_range').value = jobposting.salary_range;
-            document.getElementById('modal.remarks').value = jobposting.remarks || '';
-            document.getElementById('viewJobPostingModal').classList.remove('hidden');
-
-        }
-
-        function closeViewJobPostingModal() {
-            document.getElementById('viewJobPostingModal').classList.add('hidden');
-        }
     </script>
+
     <!-- Style -->
     <style>
         .main-content-scroll {

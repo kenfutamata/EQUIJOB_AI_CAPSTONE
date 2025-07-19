@@ -75,6 +75,7 @@ class JobPosting extends Model
         'educationalAttainment',
         'salaryRange',
         'jobPostingObjectives',
+        'workEnvironment', 
         'requirements',
         'status',
         'description',
