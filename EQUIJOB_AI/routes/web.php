@@ -24,6 +24,14 @@ use PHPUnit\Event\Code\Test;
 use Illuminate\Support\Facades\File;
 use Gemini\Laravel\Facades\Gemini;
 
+//coming Soon 
+Route::get('/EQUIJOB/Coming-Soon', function () {
+    return view('placeholders.coming_soon');
+})->name('coming-soon');
+
+Route::get('EQUIJOB/Privacy-Policy', function () {
+    return view('placeholders.privacy_policy');
+})->name('privacy-policy');
 //Landing Page
 Route::get('/', [LandingPageController::class, 'ViewLandingPage'])->name('landing-page');
 Route::get('/EQUIJOB/Sign-in', [LandingPageController::class, 'ViewSignInPage'])->name('sign-in');
