@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interview Details</title>
+    <title>Hired Details</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -17,16 +17,19 @@
                 </div>
                 <div>
                     <p class="text-gray-700">
-                        Your Job Application for the position of {{$maildata['position']}} has been reviewed and we would like to request you to attend the scheduled interview on {{$maildata['interviewDate']}}
-                        at {{$maildata['interviewTime']}}.
+                        Welcome to {{$maildata['companyName']}} and congratulations on being hired for the position of "{{$maildata['position']}}".
                         <br>
-
-                        The setup for this interview will be a video conference and this is the link for you to access for the virtual interview: {{$maildata['interviewLink']}}
+                        We will update you with the next steps in the hiring process. 
                         <br>
-                        We are looking forward for your interview.
+                        Please contact the job provider for any questions or concerns regarding your employment.
                         <br>
-
-                        Thank you.
+                        Email Account: {{$maildata['jobProviderEmail']}}
+                        <br>
+                        Phone Number: {{$maildata['jobProviderPhone']}}
+                        <br>
+                        We are looking forward for your work with you in the future.
+                        <br>
+                        Thank you and welcome to {{$maildata['position']}}!
                     </p>
                 </div>
 

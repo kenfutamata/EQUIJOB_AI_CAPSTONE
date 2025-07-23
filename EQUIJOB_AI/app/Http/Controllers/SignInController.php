@@ -22,20 +22,20 @@ class SignInController extends Controller
 
     public function generateAlphaNumericId(string $role): string
     {
-        $prefix = match($role){
+        $prefix = match ($role) {
             'Applicant' => 'JA25',
             'Job Provider' => 'JP25',
             default => 'XX25',
-        }; 
+        };
 
         $last = users::whereNotNull('userID')
             ->where('userID', 'like', $prefix . '%')
             ->orderBy('id', 'desc')
             ->first();
-        
-        $lastID = $last ?->userID??$prefix.'0000';
+
+        $lastID = $last?->userID ?? $prefix . '0000';
         $number = (int) substr($lastID, strlen($prefix));
-        $next = $number+1; 
+        $next = $number + 1;
         return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
     }
     public function SignUpJobApplicant(Request $request)
@@ -48,7 +48,7 @@ class SignInController extends Controller
             'phone_number' => 'required|string|max:11',
             'date_of_birth' => 'required|date|before_or_equal:today',
             'address' => 'required|string|max:255',
-            'gender'=> 'required|string|max:255|', 
+            'gender' => 'required|string|max:255|',
             'type_of_disability' => 'required|string|max:255',
             'pwd_id' => 'nullable|string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
@@ -81,7 +81,7 @@ class SignInController extends Controller
             'phone_number' => 'required|string|max:15',
             'company_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'business_permit'=>'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'business_permit' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
         ]);
@@ -110,64 +110,33 @@ class SignInController extends Controller
 
     public function LoginUser(Request $request)
     {
-        $validateInformation = $request->validate([
+        $request->validate([
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-        try {
-            // Admin
-            $adminCredentials = $request->only('email', 'password');
-            $adminCredentials['role'] = 'Admin';
-            $adminCredentials['status'] = 'Active';
-            if (Auth::guard('admin')->attempt($adminCredentials)) {
-                $user = Auth::guard('admin')->user();
-                if ($user->role === 'Admin' && $user->status === 'Active') {
-                    $request->session()->regenerate();
-                    return redirect()->route('admin-dashboard')->with('success', 'Login Successful!');
-                } else {
-                    dd('Admin found, but role/status mismatch', $user);
-                }
-            } else {
-                // Debug failed attempt
-                Log::info('Admin guard failed', $adminCredentials);
-            }
 
-            // Applicant
-            $applicantCredentials = $request->only('email', 'password');
-            $applicantCredentials['role'] = 'Applicant';
-            $applicantCredentials['status'] = 'Active'; 
-            if (Auth::guard('applicant')->attempt($applicantCredentials)) {
-                $user = Auth::guard('applicant')->user();
-                if ($user->role === 'Applicant' && $user->status === 'Active') {
-                    $request->session()->regenerate();
-                    return redirect()->route('applicant-dashboard');
-                } else {
-                    dd('Applicant found, but role/status mismatch', $user);
-                }
-            } else {
-                Log::info('Applicant guard failed', $applicantCredentials);
-            }
+        $credentials = $request->only('email', 'password');
 
-            // Job Provider
-            $jobProviderCredentials = $request->only('email', 'password');
-            $jobProviderCredentials['role'] = 'Job Provider';
-            $jobProviderCredentials['status'] = 'Active';
-            if (Auth::guard('job_provider')->attempt($jobProviderCredentials)) {
-                $user = Auth::guard('job_provider')->user();
-                if ($user->role === 'Job Provider' && $user->status === 'Active') {
-                    $request->session()->regenerate();
-                    return redirect()->route('job-provider-dashboard');
-                } else {
-                    dd('Job Provider found, but role/status mismatch', $user);
-                }
-            } else {
-                Log::info('Job Provider guard failed', $jobProviderCredentials);
-            }
-
-            return redirect()->back()->with('error', 'Invalid credentials or inactive account. Please try again.');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Invalid credentials. Please try again.');
+        $adminCredentials = array_merge($credentials, ['role' => 'Admin', 'status' => 'Active']);
+        if (Auth::guard('admin')->attempt($adminCredentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('admin-dashboard')->with('success', 'Login Successful!');
         }
+
+        $applicantCredentials = array_merge($credentials, ['role' => 'Applicant', 'status' => 'Active']);
+        if (Auth::guard('applicant')->attempt($applicantCredentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('applicant-dashboard')->with('success', 'Login Successful!');
+        }
+
+        $jobProviderCredentials = array_merge($credentials, ['role' => 'Job Provider', 'status' => 'Active']);
+        if (Auth::guard('job_provider')->attempt($jobProviderCredentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('job-provider-dashboard')->with('success', 'Login Successful!');
+        }
+        return redirect()->back()
+            ->withInput($request->only('email')) // Keep email in the form
+            ->with('error', 'Invalid credentials or your account is not yet active.');
     }
     public function ViewEmailConfirmationPage()
     {

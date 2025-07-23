@@ -104,7 +104,7 @@
           </div>
           <div class="flex flex-col justify-center px-4">
             <div class="text-base sm:text-lg font-semibold">On Offer</div>
-            <div class="text-xl sm:text-2xl">0</div>
+            <div class="text-xl sm:text-2xl">{{$onOfferCount}}</div>
           </div>
         </div>
 

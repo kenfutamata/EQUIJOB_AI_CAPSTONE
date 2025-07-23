@@ -57,6 +57,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/redirect', [JobProviderManageJobApplications::class, 'redirectToGoogle'])->name('job-provider-manage-job-applications.provider.google.redirect');
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/callback', [JobProviderManageJobApplications::class, 'handleGoogleCallback'])->name('job-provider-manage-job-applications.provider.google.callback');
     Route::post('/EQUIJOB/Job-Provider/Manage-Job-Applications/{application}/schedule-interview', [JobProviderManageJobApplications::class, 'scheduleInterview'])->name('job-provider-manage-job-applications.scheduleinterview');
+    Route::put('/EQUIJOB/Job-Provider/Manage-Job-Applications/update-to-offer/{application}', [JobProviderManageJobApplications::class, 'updateApplicationToOffer'])->name('job-provider-manage-job-applications.update-to-offer');
 });
 
 //Applicant 
@@ -75,6 +76,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Match-Jobs/Recommended-Jobs', [ApplicantMatchJobsController::class, 'showRecommendations'])->name('applicant-match-jobs-recommended-jobs');
     Route::get('/EQUIJOB/Applicant/Manage-Job-Applications', [JobApplicantManageJobApplications::class, 'index'])->name('applicant-job-applications');
     Route::post('/EQUIJOB/Applicant/Job-Application', [ApplicantJobApplicationController::class, 'store'])->name('applicant-job-application-store');
+    Route::put('/EQUIJOB/Applicant/Job-Application/Hired/{id}', [ApplicantJobApplicationController::class, 'hiredStatus'])->name('applicant-job-application-hired');
 });
 
 //admin

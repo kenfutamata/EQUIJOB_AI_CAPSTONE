@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\users;
 use App\Notifications\JobApplicationSent;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -36,17 +38,15 @@ class ApplicantJobApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        // Step 1: Validate the incoming request data.
-        // If this fails, Laravel will redirect back with errors. No need for a try-catch here.
+
         $validatedRequest = $request->validate([
             'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'jobPostingID' => 'required|exists:jobPosting,id', // Using your confirmed table name
+            'jobPostingID' => 'required|exists:jobPosting,id', 
             'jobProviderID' => 'required|exists:users,id',
         ]);
 
         try {
-            // Step 2: Get the necessary models.
             $applicant = auth('applicant')->user();
             $posting = JobPosting::find($validatedRequest['jobPostingID']);
             $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
@@ -93,7 +93,7 @@ class ApplicantJobApplicationController extends Controller
     {
         $prefix = 'AN25';
         $last = JobApplication::where('jobApplicationNumber', 'like', $prefix . '%')
-            ->latest('id') // A slightly cleaner way to write orderBy('id', 'desc')
+            ->latest('id') 
             ->first();
 
         $lastID = $last?->jobApplicationNumber ?? $prefix . '0000';
@@ -101,6 +101,48 @@ class ApplicantJobApplicationController extends Controller
         $next = $number + 1;
 
         return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function hiredStatus(string $id)
+    {
+        try {
+            $application = JobApplication::findOrFail($id);
+            
+            DB::transaction(function () use ($application){
+            $application->status = 'Accepted';
+            $application->save();
+
+            JobApplication::where('applicantID', $application->applicantID)
+                ->where('id', '!=', $application->id)
+                ->whereIN('status', ['Pending', 'For Interview', 'On-Offer'])
+                ->update(['status' => 'Occupied']);
+            }); 
+
+
+            $applicant = $application->applicant;
+            $jobPosting = $application->jobPosting;
+
+            $jobPosting->status = 'Occupied';
+            $jobPosting->save();
+            $jobProvider = Auth::guard('job_provider')->user();
+
+            $maildata = [
+                'firstName' => $applicant->first_name,
+                'lastName' => $applicant->last_name,
+                'companyName' => $jobPosting->companyName,
+                'position' => $jobPosting->position,
+                'jobProviderFirstName'=> $jobProvider->first_name,
+                'jobProviderLastName'=> $jobProvider->last_name,
+                'jobProviderEmail'=> $jobProvider->email,
+                'jobProviderPhone'=> $jobProvider->phone,
+            ];
+
+            Mail::to($applicant->email)->send(new jobApplicationEmailSent($maildata));
+            return redirect()->back()->with('Success', 'Application Updated to Hired');
+        } catch (\Exception $e) {
+            Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to Update Application');
+        }
     }
     /**
      * Display the specified resource.

@@ -9,14 +9,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InterviewDetailsSent extends Mailable
+class SendOnOfferDetails extends Mailable
 {
     use Queueable, SerializesModels;
+    public $maildata;
 
     /**
      * Create a new message instance.
      */
-    public $maildata;
     public function __construct($maildata)
     {
         $this->maildata = $maildata; 
@@ -28,7 +28,7 @@ class InterviewDetailsSent extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Schedule Interview',
+            subject: 'Your Job Application was Approved and On Offer',
         );
     }
 
@@ -38,9 +38,9 @@ class InterviewDetailsSent extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'users.job-provider.Interview-Details',
+            view: 'users.job-provider.On-Offer-Details',
             with:[
-                'maildata'=>$this->maildata, 
+                'maildata' => $this->maildata, 
             ]
         );
     }

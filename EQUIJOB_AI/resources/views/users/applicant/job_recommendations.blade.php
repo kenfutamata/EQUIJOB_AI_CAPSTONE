@@ -156,6 +156,13 @@
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
+                            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/workplace.png') }}" alt="Icon" class="w-6 h-6" />
+                            <div>
+                                <p class="text-sm text-gray-700">Work Environment</p>
+                                <p id="modal-workEnvironment" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
                             <img src="{{ asset('assets/photos/job-applicant/job-recommendations/email.png') }}" alt="Icon" class="w-6 h-6" />
                             <div>
                                 <p class="text-sm text-gray-700">Email Address</p>

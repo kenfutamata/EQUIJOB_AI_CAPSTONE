@@ -46,8 +46,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Job Postings Table -->
             <div class="overflow-x-auto bg-white shadow rounded-lg">
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
@@ -58,7 +56,6 @@
                             <th class="px-2 py-2">Applicant Name</th>
                             <th class="px-2 py-2">Applicant Phone Number</th>
                             <th class="px-2 py-2">Sex</th>
-
                             <th class="px-2 py-2">Applicant Address</th>
                             <th class="px-2 py-2">Email Address</th>
                             <th class="px-2 py-2">Applicant Disability Type</th>
@@ -71,11 +68,19 @@
                         @php
                         $posting = $application->jobPosting;
                         $applicant = $application->applicant;
-                        $jobpostingData = array_merge($posting->toArray(), [
+                        $modalData = [
+                        'position' => $posting->position ?? 'N/A',
+                        'companyName' => $posting->companyName ?? 'N/A',
+                        'sex' => $applicant->gender ?? 'N/A',
+                        'age' => $applicant->age ?? 'N/A',
+                        'disabilityType' => $applicant->type_of_disability ?? 'N/A',
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
                         'remarks' => $application->remarks,
-                        ]);
+                        'interviewDate' => $application->interviewDate ? \Carbon\Carbon::parse($application->interviewDate)->format('F j, Y') : null,
+                        'interviewTime' => $application->interviewTime ? \Carbon\Carbon::parse($application->interviewTime)->format('g:i A') : null,
+                        'interviewLink' => $application->interviewLink
+                        ];
                         @endphp
                         <tr>
                             <td class="px-2 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
@@ -92,7 +97,7 @@
                                 @if ($application->status === 'Pending')
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
-                                    data-jobposting='@json($jobpostingData)'
+                                    data-application='@json($modalData)'
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
@@ -107,30 +112,65 @@
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Disapprove
                                 </button>
+                                <button
+                                    onclick="openDisapproveJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Delete
+                                </button>
                                 @elseif($application->status == 'For Interview')
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
-                                    data-jobposting='@json($jobpostingData)'
+                                    data-application='@json($modalData)'
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
-                                <button
-                                    onclick="openCreateInterviewDetailsModal({{ $application->id }})"
-                                    class="bg-green-500 text-white px-2 py-1 rounded">
-                                    Hire
-                                </button>
+                                <form action="{{route('job-provider-manage-job-applications.update-to-offer', $application->id)}}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button
+                                        href="{{ route('job-provider-manage-job-applications.update-to-offer', $application->id) }}"
+                                        class="bg-green-500 text-white px-2 py-1 rounded">
+                                        Offer
+                                    </button>
+                                </form>
                                 <button
                                     onclick="openDisapproveJobPostingModal(this)"
                                     data-jobposting='@json($posting)'
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Disapprove
                                 </button>
-                                @elseif($application->status == 'Rejected')
                                 <button
-                                    onclick="openViewJobPostingModal(this)"
+                                    onclick="openDisapproveJobPostingModal(this)"
                                     data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Delete
+                                </button>
+                                @elseif($application->status == 'On-Offer')
+                                <button
+                                    onclick="openViewJobApplicationsModal(this)"
+                                    data-application='@json($modalData)'
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
+                                </button>
+                                <button
+                                    onclick="openDisapproveJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Delete
+                                </button>
+                                @elseif($application->status == 'Rejected')
+                                <button
+                                    onclick="openViewJobApplicationsModal(this)"
+                                    data-application='@json($modalData)'
+                                    class="bg-blue-500 text-white px-2 py-1 rounded">
+                                    View
+                                </button>
+                                <button
+                                    onclick="openDisapproveJobPostingModal(this)"
+                                    data-jobposting='@json($posting)'
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Delete
                                 </button>
                                 @endif
                             </td>
@@ -148,8 +188,8 @@
     <!-- View Job Posting Modal -->
     <div id="viewJobApplicationsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
-            <button onclick="closeViewJobApplicationsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            <h2 class="text-xl font-bold mb-4">View Job Posting</h2>
+            <button onclick="closeViewJobApplicationsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            <h2 class="text-xl font-bold mb-4">View Job Application</h2>
             <div>
                 <label class="block text-xs text-gray-500">Position</label>
                 <input id="modal.position" class="w-full border rounded px-2 py-1" disabled>
@@ -180,16 +220,16 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Interview Date</label>
-                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.interviewDate" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Time</label>
-                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.interviewTime" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Google Meet Link</label>
-                <input type="text" id="modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm" readonly placeholder="Generating link...">
-                <input type="hidden" name="interview_link" id="interview_link_hidden">
+                <input type="text" id="modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm" readonly>
+                <input type="hidden" name="modal.interviewLink" id="modal.interviewLink">
             </div>
             <div>
                 <label class="block text-xs text-gray-500 mt-2">Remarks</label>
@@ -198,6 +238,7 @@
         </div>
     </div>
 
+    <!-- Create Interview Modal -->
     <div id="createInterviewDetailsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeCreateInterviewDetailsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
@@ -218,7 +259,6 @@
                     <input type="text" id="create_modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md" readonly placeholder="Generating link...">
                     <input type="hidden" name="interviewLink" id="interviewLink">
                 </div>
-
                 <div class="flex justify-end gap-4 pt-4">
                     <button type="button" onclick="closeCreateInterviewDetailsModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md">Cancel</button>
                     <button type="submit" id="submitInterviewBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400" disabled>
@@ -228,8 +268,6 @@
             </form>
         </div>
     </div>
-
-    <!-- Scripts -->
     <script>
         async function openCreateInterviewDetailsModal(applicationId) {
             const modal = document.getElementById('createInterviewDetailsModal');
@@ -237,7 +275,6 @@
             const meetLinkInput = document.getElementById('create_modal_meet_link');
             const hiddenLinkInput = document.getElementById('interviewLink');
             const submitBtn = document.getElementById('submitInterviewBtn');
-            form.action = '/EQUIJOB/Job-Provider/Manage-Job-Applications/${applicationId}/schedule-interview';
             form.action = `/EQUIJOB/Job-Provider/Manage-Job-Applications/${applicationId}/schedule-interview`;
             meetLinkInput.value = 'Generating link, please wait...';
             hiddenLinkInput.value = '';
@@ -252,9 +289,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     meetLinkInput.value = data.meetLink;
                     hiddenLinkInput.value = data.meetLink;
@@ -268,57 +303,68 @@
             }
         }
 
-
-        function closeCreateInterviewDetailsModal(button) {
+        function closeCreateInterviewDetailsModal() {
             document.getElementById('createInterviewDetailsModal').classList.add('hidden');
-
         }
 
-        function openDisapproveJobApplicationModal(button) {
-            document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
+        function openDisapproveJobPostingModal(button) {
+            const disapproveModal = document.getElementById('DisapproveJobPostingModal');
+            if (disapproveModal) {
+                disapproveModal.classList.remove('hidden');
+            } else {
+                alert('Disapprove modal not found! Please create it.');
+            }
         }
 
         function closeDisapproveJobApplicationModal() {
-            document.getElementById('DisapproveJobPostingModal').classList.add('hidden');
+            const disapproveModal = document.getElementById('DisapproveJobPostingModal');
+            if (disapproveModal) disapproveModal.classList.add('hidden');
         }
 
         function openViewJobApplicationsModal(button) {
-            const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-            document.getElementById('modal.position').value = jobposting.position ?? '';
-            document.getElementById('modal.company_name').value = jobposting.companyName ?? '';
-            document.getElementById('modal.sex').value = jobposting.sex ?? '';
-            document.getElementById('modal.age').value = jobposting.age ?? '';
-            document.getElementById('modal.disability_type').value = jobposting.disabilityType ?? '';
-            document.getElementById('modal.remarks').value = jobposting.remarks ?? '';
+            const applicationData = JSON.parse(button.getAttribute('data-application'));
+            document.getElementById('modal.position').value = applicationData.position ?? 'N/A';
+            document.getElementById('modal.company_name').value = applicationData.companyName ?? 'N/A';
+            document.getElementById('modal.sex').value = applicationData.sex ?? 'N/A';
+            document.getElementById('modal.age').value = applicationData.age ?? 'N/A';
+            document.getElementById('modal.disability_type').value = applicationData.disabilityType ?? 'N/A';
+            document.getElementById('modal.remarks').value = applicationData.remarks ?? 'N/A';
+            document.getElementById('modal.interviewDate').value = applicationData.interviewDate ?? 'N/A';
+            document.getElementById('modal.interviewTime').value = applicationData.interviewTime ?? 'N/A';
+            document.getElementById('modal_meet_link').value = applicationData.interviewLink ?? 'N/A';
+            document.getElementById('modal.interviewLink').value = applicationData.interviewLink ?? '';
 
             const resumeContainer = document.getElementById('modal_view_resume');
             resumeContainer.innerHTML = '';
-            if (jobposting.uploadResume) {
-                const ext = jobposting.uploadResume.split('.').pop().toLowerCase();
-                const filePath = `/storage/${jobposting.uploadResume}`;
+            if (applicationData.uploadResume) {
+                const ext = applicationData.uploadResume.split('.').pop().toLowerCase();
+                const filePath = `/storage/${applicationData.uploadResume}`;
                 if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    resumeContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
+                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Resume Preview"/></a>`;
                 } else if (ext === 'pdf') {
                     resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
                 } else {
                     resumeContainer.innerText = 'Unsupported file format';
                 }
+            } else {
+                resumeContainer.innerText = 'No resume uploaded.';
             }
 
             const applicationContainer = document.getElementById('modal_view_application_letter');
             applicationContainer.innerHTML = '';
-            if (jobposting.uploadApplicationLetter) {
-                const ext = jobposting.uploadApplicationLetter.split('.').pop().toLowerCase();
-                const filePath = `/storage/${jobposting.uploadApplicationLetter}`;
+            if (applicationData.uploadApplicationLetter) {
+                const ext = applicationData.uploadApplicationLetter.split('.').pop().toLowerCase();
+                const filePath = `/storage/${applicationData.uploadApplicationLetter}`;
                 if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    applicationContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
+                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Application Letter Preview"/></a>`;
                 } else if (ext === 'pdf') {
                     applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
                 } else {
                     applicationContainer.innerText = 'Unsupported file format';
                 }
+            } else {
+                applicationContainer.innerText = 'No letter uploaded.';
             }
-
             document.getElementById('viewJobApplicationsModal').classList.remove('hidden');
         }
 

@@ -6,6 +6,8 @@ function openViewJobPostingModal(button) {
     document.getElementById('modal-disabilityType').textContent = job.disabilityType || 'Not Specified';
     document.getElementById('modal-salaryRange').textContent = job.salaryRange || '₱ 0';
     document.getElementById('modal-educationalAttainment').textContent = job.educationalAttainment || 'No educational attainment provided.';
+    document.getElementById('modal-workEnvironment').textContent = job.workEnvironment || 'No Work Envionment provided.';
+
     document.getElementById('modal-skills').textContent = job.skills || 'No skills required.';
     document.getElementById('modal-description').textContent = job.description || 'No description provided.';
     document.getElementById('modal-requirements').textContent = job.requirements || 'No requirements provided.';

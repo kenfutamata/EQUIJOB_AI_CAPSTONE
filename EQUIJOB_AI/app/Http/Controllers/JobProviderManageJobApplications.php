@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InterviewDetailsSent;
+use App\Mail\SendOnOfferDetails;
 use App\Models\JobApplication;
+use App\Notifications\JobInterviewDetailsSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Google_Client;
@@ -38,7 +40,7 @@ class JobProviderManageJobApplications extends Controller
 
             $applicationsQuery->where(function ($q) use ($searchTerm) {
                 $q->where('jobApplicationNumber', 'like', $searchTerm)
-                    ->orWhere('status', 'like', $searchTerm)
+                    ->orWhere('status', 'like', 'searchTerm')
                     ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                         $q2->where('position', 'like', $searchTerm)
                             ->orWhere('companyName', 'like', $searchTerm)
@@ -74,6 +76,7 @@ class JobProviderManageJobApplications extends Controller
         $masterRefreshToken = env('GOOGLE_MASTER_REFRESH_TOKEN');
 
         if (!$masterRefreshToken) {
+            Log::error('Google Master Refresh Token is not set in the .env file.');
             return response()->json(['error' => 'Application is not configured for meeting creation.'], 500);
         }
 
@@ -85,8 +88,16 @@ class JobProviderManageJobApplications extends Controller
         try {
             $accessToken = $client->fetchAccessTokenWithRefreshToken($masterRefreshToken);
 
+            // Check for an error in the response from Google.
             if (isset($accessToken['error'])) {
-                return response()->json(['error' => 'Authentication service failed.'], 500);
+                // Log the detailed error from Google for debugging purposes.
+                Log::error('Google API Token Refresh Failed', [
+                    'error' => $accessToken['error'],
+                    'error_description' => $accessToken['error_description'] ?? 'No description provided by Google.'
+                ]);
+
+                // Return a more informative error to the front-end.
+                return response()->json(['error' => 'Authentication service failed. Please check application logs for details.'], 500);
             }
 
             // Set the newly fetched access token on the client.
@@ -100,9 +111,15 @@ class JobProviderManageJobApplications extends Controller
             // Success: Return the link.
             return response()->json(['meetLink' => $createdSpace->getMeetingUri()]);
         } catch (\Exception $e) {
+            // Catch any other exceptions during the process.
+            Log::error('Failed to create Google Meet link due to an exception.', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return response()->json(['error' => 'Failed to create meeting link: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function scheduleInterview(Request $request, JobApplication $application)
     {
@@ -115,9 +132,14 @@ class JobProviderManageJobApplications extends Controller
         try {
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
+            $jobProvider = Auth::guard('job_provider')->user();
+
+            $interviewDate = Carbon::parse($validated['interviewDate']);
+            $interviewTime = Carbon::parse($validated['interviewTime']);
+
             $application->status = 'For Interview';
-            $application->interviewDate = $validated['interviewDate'];
-            $application->interviewTime = $validated['interviewTime'];
+            $application->interviewDate = $interviewDate->toDateString();
+            $application->interviewTime = $interviewTime->toTimeString();
             $application->interviewLink = $validated['interviewLink'];
             $application->save();
             $maildata = [
@@ -125,13 +147,15 @@ class JobProviderManageJobApplications extends Controller
                 'lastName' => $applicant->last_name,
                 'position' => $jobPosting->position,
                 'companyName' => $jobPosting->companyName,
-                'interviewDate' => $application->interviewDate->foramt('F j, y'),
-                'interviewTime' => $application->interviewTime->foramt('g:i A'),
+                'interviewDate' => $interviewDate->format('F j, Y'),
+                'interviewTime' => $interviewTime->format('g:i A'),
                 'interviewLink' => $application->interviewLink,
+                'jobProviderFirstName' => $jobProvider->first_name,
+                'jobProviderLastName' => $jobProvider->last_name,
             ];
 
             Mail::to($applicant->email)->send(new InterviewDetailsSent($maildata, 'applicant'));
-
+            $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Successfully Scheduled Interview');
         } catch (\Exception $e) {
             Log::error('Failed to schedule interview for application ' . $application->id . ': ' . $e->getMessage());
@@ -174,9 +198,33 @@ class JobProviderManageJobApplications extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateApplicationToOffer(string $id)
     {
-        //
+        try {
+            $application = JobApplication::findOrFail($id);
+            $application->status = 'On-Offer';
+            $application->save();
+
+            $applicant = $application->applicant;
+            $jobPosting = $application->jobPosting;
+            $jobProvider = Auth::guard('job_provider')->user();
+
+            $maildata = [
+                'firstName' => $applicant->first_name,
+                'lastName' => $applicant->last_name,
+                'companyName' => $jobPosting->companyName,
+                'position' => $jobPosting->position,
+                'jobProviderFirstName' => $jobProvider->first_name,
+                'jobProviderLastName' => $jobProvider->last_name,
+
+            ];
+
+            Mail::to($applicant->email)->send(new SendOnOfferDetails($maildata));
+            return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application and Position is on-offer');
+        } catch (\Exception $e) {
+            Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
+            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Update Application');
+        }
     }
 
     /**

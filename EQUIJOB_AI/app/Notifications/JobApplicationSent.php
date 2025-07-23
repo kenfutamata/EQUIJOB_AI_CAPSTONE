@@ -31,8 +31,6 @@ class JobApplicationSent extends Notification
 
         $message = 'A new application has been submitted for the position of ' . $this->jobApplication->jobPosting->position . '.';
 
-        // Admin check logic can be added here if needed.
-
         return [
             'message' => $message,
             'job_application_id' => $this->jobApplication->id,
