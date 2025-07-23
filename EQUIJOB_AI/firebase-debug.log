@@ -1,0 +1,21 @@
+[debug] [2025-07-23T10:57:31.493Z] ----------------------------------------------------------------------
+[debug] [2025-07-23T10:57:31.495Z] Command:       C:\nvm4w\nodejs\node.exe C:\nvm4w\nodejs\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-07-23T10:57:31.495Z] CLI Version:   14.11.1
+[debug] [2025-07-23T10:57:31.496Z] Platform:      win32
+[debug] [2025-07-23T10:57:31.496Z] Node Version:  v20.19.0
+[debug] [2025-07-23T10:57:31.496Z] Time:          Wed Jul 23 2025 18:57:31 GMT+0800 (China Standard Time)
+[debug] [2025-07-23T10:57:31.496Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-23T10:57:31.501Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-23T10:57:31.501Z] > authorizing via signed-in user (kenfutamata123@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\kenfu\OneDrive\Documents\College\capstone\system1\EQUIJOB_AI_CAPSTONE\EQUIJOB_AI
+
