@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\HiredStatusSent;
 use App\Mail\jobApplicationEmailSent;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
@@ -109,13 +110,13 @@ class ApplicantJobApplicationController extends Controller
             $application = JobApplication::findOrFail($id);
             
             DB::transaction(function () use ($application){
-            $application->status = 'Accepted';
+            $application->status = 'Hired';
             $application->save();
 
-            JobApplication::where('applicantID', $application->applicantID)
+            JobApplication::where('jobPostingID', $application->jobPostingID)
                 ->where('id', '!=', $application->id)
                 ->whereIN('status', ['Pending', 'For Interview', 'On-Offer'])
-                ->update(['status' => 'Occupied']);
+                ->update(['status' => 'Not Available']);
             }); 
 
 
@@ -137,11 +138,29 @@ class ApplicantJobApplicationController extends Controller
                 'jobProviderPhone'=> $jobProvider->phone,
             ];
 
-            Mail::to($applicant->email)->send(new jobApplicationEmailSent($maildata));
+            Mail::to($applicant->email)->send(new HiredStatusSent($maildata));
             return redirect()->back()->with('Success', 'Application Updated to Hired');
         } catch (\Exception $e) {
             Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to Update Application');
+        }
+    }
+
+    public function withdrawApplication(Request $request, string $id)
+    {
+        $request->validate([
+            'remarks' => 'required|string|max:255',
+        ]);
+        try {
+            $application = JobApplication::findOrFail($id);
+            $application->status = 'Withdrawn';
+            $application ->remarks = $request->input('remarks');
+            $application->save();
+
+            return redirect()->back()->with('Success', 'Application Withdrawn Successfully');
+        } catch (\Exception $e) {
+            Log::error('Failed to withdraw application ' . $id . ': ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to Withdraw Application');
         }
     }
     /**

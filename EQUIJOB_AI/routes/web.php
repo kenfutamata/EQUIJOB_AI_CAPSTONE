@@ -32,6 +32,7 @@ Route::get('/EQUIJOB/Coming-Soon', function () {
 Route::get('EQUIJOB/Privacy-Policy', function () {
     return view('placeholders.privacy_policy');
 })->name('privacy-policy');
+
 //Landing Page
 Route::get('/', [LandingPageController::class, 'ViewLandingPage'])->name('landing-page');
 Route::get('/EQUIJOB/Sign-in', [LandingPageController::class, 'ViewSignInPage'])->name('sign-in');
@@ -85,6 +86,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Manage-Job-Applications', [JobApplicantManageJobApplications::class, 'index'])->name('applicant-job-applications');
     Route::post('/EQUIJOB/Applicant/Job-Application', [ApplicantJobApplicationController::class, 'store'])->name('applicant-job-application-store');
     Route::put('/EQUIJOB/Applicant/Job-Application/Hired/{id}', [ApplicantJobApplicationController::class, 'hiredStatus'])->name('applicant-job-application-hired');
+    Route::put('/EQUIJOB/Applicant/Manage-Job-Applications/withdraw/{id}', [ApplicantJobApplicationController::class, 'withdrawApplication'])->name('applicant-manage-job-applications.withdraw');
 });
 
 //admin

@@ -16,7 +16,7 @@ class HiredStatusSent extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(string $maildata)
+    public function __construct($maildata)
     {
         $this->maildata = $maildata; 
     }

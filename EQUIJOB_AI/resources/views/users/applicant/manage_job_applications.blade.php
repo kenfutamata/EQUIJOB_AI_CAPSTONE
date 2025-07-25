@@ -91,10 +91,10 @@
                             <td class="px-2 py-2 space-y-1">
                                 @if ($application->status === 'Pending')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                <button onclick="openDisapproveJobPostingModal(this)" data-application='@json($modalData)' class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
+                                <button onclick="openWithdrawModal(this)" data-url="{{route('applicant-manage-job-applications.withdraw', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
                                 @elseif($application->status === 'For Interview')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                <button onclick="openDisapproveJobPostingModal(this)" data-application='@json($modalData)' class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
+                                <button onclick="openWithdrawModal(this)" data-url="{{route('applicant-manage-job-applications.withdraw', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
                                 @elseif($application->status === 'On-Offer')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 </button>
@@ -103,15 +103,13 @@
                                     @method('PUT')
                                     <button href="" class="bg-green-500 text-white px-2 py-1 rounded"> Accept </button>
                                 </form>
-                                <button onclick="openDisapproveJobPostingModal(this)" data-application='@json($modalData)' class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
+                                <button onclick="openWithdrawModal(this)" data-url="{{route('applicant-manage-job-applications.withdraw', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
                                 @elseif($application->status === 'Rejected')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-
                                 @elseif($application->status==='Withdrawn')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @elseif($application->status === 'Accepted')
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-
                                 @else
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @endif
@@ -164,7 +162,23 @@
         </div>
     </div>
 
-
+    <div id="withdrawJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Withdrawal Application</h3>
+                <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+            <form id="withdrawForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="mb-4">
+                    <label for="remarks-input" class="block text-sm font-medium text-gray-700 mb-1">Please state your reason for withdrawing the application.</label>
+                    <textarea id="remarks-input" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
+                </div>
+                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">Submit Withdrawal</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         function openDisapproveJobPostingModal(button) {
@@ -256,6 +270,17 @@
 
         function closeviewJobApplicationModal() {
             document.getElementById('viewJobApplicationModal').classList.add('hidden');
+        }
+
+        function openWithdrawModal(button) {
+            const formActionUrl = button.getAttribute('data-url');
+            const form = document.getElementById('withdrawForm');
+            form.action = formActionUrl;
+            document.getElementById('withdrawJobApplicationModal').classList.remove('hidden');
+        }
+
+        function closeWithdrawModal() {
+            document.getElementById('withdrawJobApplicationModal').classList.add('hidden');
         }
     </script>
     <!-- Style -->

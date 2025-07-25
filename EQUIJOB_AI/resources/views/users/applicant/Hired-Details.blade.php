@@ -29,10 +29,9 @@
                         <br>
                         We are looking forward for your work with you in the future.
                         <br>
-                        Thank you and welcome to {{$maildata['position']}}!
+                        Thank you and welcome to {{$maildata['companyName']}}!
                     </p>
                 </div>
-
                 <div>
                     <p class="font-bold text-gray-800">Please Do not Reply on this Email.</p>
                     <br>
