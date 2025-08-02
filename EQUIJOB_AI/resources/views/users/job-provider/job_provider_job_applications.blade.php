@@ -32,6 +32,15 @@
             <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
                 {{ session('error') }}
             </div>
+            @elseif ($errors->any())
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 max-w-md w-full">
+                <h4 class="font-bold mb-1">Please correct the following errors:</h4>
+                <ul class="list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             <div class="text-3xl font-semibold mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
@@ -106,15 +115,9 @@
                                     class="bg-green-500 text-white px-2 py-1 rounded">
                                     For Interview
                                 </button>
+                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
-                                    class="bg-red-500 text-white px-2 py-1 rounded">
-                                    Disapprove
-                                </button>
-                                <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
+                                    onclick="openDeleteApplicationModal({{$application->id}})"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -125,24 +128,16 @@
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
-                                <form action="{{route('job-provider-manage-job-applications.update-to-offer', $application->id)}}" method="POST">
+                                <form action="{{route('job-provider-manage-job-applications.update-to-offer', $application->id)}}" method="POST" class="inline-block">
                                     @csrf
                                     @method('PUT')
-                                    <button
-                                        href="{{ route('job-provider-manage-job-applications.update-to-offer', $application->id) }}"
-                                        class="bg-green-500 text-white px-2 py-1 rounded">
+                                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">
                                         Offer
                                     </button>
                                 </form>
+                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
-                                    class="bg-red-500 text-white px-2 py-1 rounded">
-                                    Disapprove
-                                </button>
-                                <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
+                                    onclick="openDeleteApplicationModal({{$application->id}})"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -154,12 +149,11 @@
                                     View
                                 </button>
                                 <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
+                                    onclick="openDeleteApplicationModal({{$application->id}})"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
-                                @elseif($application->status == 'Rejected')
+                                @else
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
                                     data-application='@json($modalData)'
@@ -167,8 +161,7 @@
                                     View
                                 </button>
                                 <button
-                                    onclick="openDisapproveJobPostingModal(this)"
-                                    data-jobposting='@json($posting)'
+                                    onclick="openDeleteApplicationModal({{$application->id}})"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -185,7 +178,7 @@
         </main>
     </div>
 
-    <!-- View Job Posting Modal -->
+    {{-- Modals remain unchanged --}}
     <div id="viewJobApplicationsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeViewJobApplicationsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
@@ -238,13 +231,11 @@
         </div>
     </div>
 
-    <!-- Create Interview Modal -->
     <div id="createInterviewDetailsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeCreateInterviewDetailsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
             <form id="interviewForm" action="" method="POST" class="space-y-4">
                 @csrf
-                @method('POST')
                 <h2 class="text-xl font-bold mb-4">Schedule Interview</h2>
                 <div>
                     <label for="interviewDate" class="block text-sm font-medium text-gray-700">Interview Date</label>
@@ -268,6 +259,39 @@
             </form>
         </div>
     </div>
+    <div id="rejectJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Disapprove Application</h3>
+                <button onclick="closeRejectJobApplicationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+            <form id="rejectForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="mb-4">
+                    <label for="remarks-input" class="block text-sm font-medium text-gray-700 mb-1">Please state your reason for Disapproving the application.</label>
+                    <textarea id="remarks-input" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
+                </div>
+                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">Submit Disapproval</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="DeleteApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Delete Job Application?</h3>
+                <button onclick="closeDeleteApplicationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+            <form id="deleteApplication" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+            </form>
+            <button onclick="closeDeleteApplicationModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
+        </div>
+    </div>
+    
     <script>
         async function openCreateInterviewDetailsModal(applicationId) {
             const modal = document.getElementById('createInterviewDetailsModal');
@@ -305,20 +329,6 @@
 
         function closeCreateInterviewDetailsModal() {
             document.getElementById('createInterviewDetailsModal').classList.add('hidden');
-        }
-
-        function openDisapproveJobPostingModal(button) {
-            const disapproveModal = document.getElementById('DisapproveJobPostingModal');
-            if (disapproveModal) {
-                disapproveModal.classList.remove('hidden');
-            } else {
-                alert('Disapprove modal not found! Please create it.');
-            }
-        }
-
-        function closeDisapproveJobApplicationModal() {
-            const disapproveModal = document.getElementById('DisapproveJobPostingModal');
-            if (disapproveModal) disapproveModal.classList.add('hidden');
         }
 
         function openViewJobApplicationsModal(button) {
@@ -375,11 +385,33 @@
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
             if (notif) notif.style.opacity = '0';
-        }, 2500);
+        }, 3500); // Increased time slightly for readability of lists
+
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
             if (notif) notif.style.display = 'none';
-        }, 3000);
+        }, 4000);
+
+        function openRejectJobApplicationModal(button) {
+            const formActionUrl = button.getAttribute('data-url');
+            const form = document.getElementById('rejectForm');
+            form.action = formActionUrl;
+            document.getElementById('rejectJobApplicationModal').classList.remove('hidden');
+        }
+
+        function closeRejectJobApplicationModal() {
+            document.getElementById('rejectJobApplicationModal').classList.add('hidden');
+        }
+
+        function openDeleteApplicationModal(applicationId) {
+            const form = document.getElementById('deleteApplication');
+            form.action = `/EQUIJOB/Job-Provider/Manage-Job-Applications/Delete/${applicationId}`;
+            document.getElementById('DeleteApplicationModal').classList.remove('hidden');
+        }
+
+        function closeDeleteApplicationModal() {
+            document.getElementById('DeleteApplicationModal').classList.add('hidden');
+        }
     </script>
 
     <!-- Style -->
@@ -392,6 +424,10 @@
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             padding-bottom: 1.5rem;
+        }
+
+        #notification-bar {
+            transition: opacity 0.5s ease-in-out;
         }
     </style>
 </body>

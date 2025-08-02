@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\PdfToText\Pdf;
+use Illuminate\Database\QueryException;
 
 class ApplicantMatchJobsController extends Controller
 {
@@ -29,13 +30,12 @@ class ApplicantMatchJobsController extends Controller
     }
 
 
-  public function matchWithPdf(Request $request)
+ public function matchWithPdf(Request $request)
 {
     $request->validate([
         'resume' => 'required|file|mimes:pdf|max:5120',
     ]);
 
-    // This block is now much simpler.
     try {
         $file = $request->file('resume');
         $filePath = $file->getRealPath();
@@ -52,41 +52,59 @@ class ApplicantMatchJobsController extends Controller
         return back()->with('error', 'An unexpected error occurred while processing the resume.');
     }
 
-    // 2. *** SAVE PARSED DATA TO DATABASE *** (This part remains the same)
-    // I've also corrected the $users -> $user typo for you.
-    $user = Auth::guard('applicant')->user();
-    DB::transaction(function () use ($user, $parsedData) {
-        $resume = \App\Models\Resume::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'skills' => $parsedData['skills'] ?? '',
-                'experience' => $parsedData['experience_summary'] ?? null,
-                'type_of_disability' => $parsedData['disability_type'] ?? 'Not Specified',
-                'first_name' => $user->first_name ?? 'N/A',
-                'last_name' => $user->last_name ?? 'N/A',
-                'email' => $user->email,
-            ]
-        );
+    try {
+        $user = Auth::guard('applicant')->user();
+        DB::transaction(function () use ($user, $parsedData) {
+            $disabilityTypeFromAI = $parsedData['disability_type'] ?? null;
+            
+            if (empty(trim($disabilityTypeFromAI))) {
+                $disabilityTypeToSave = 'Not Specified';
+            } else {
+                $disabilityTypeToSave = $disabilityTypeFromAI;
+            }
 
-        $resume->experiences()->delete();
-        if (!empty($parsedData['experience_details'])) {
-            $resume->experiences()->createMany($parsedData['experience_details']);
+            $resume = \App\Models\Resume::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'skills' => $parsedData['skills'] ?? '',
+                    'experience' => $parsedData['experience_summary'] ?? null,
+                    'type_of_disability' => $disabilityTypeToSave, 
+                    'first_name' => $user->first_name ?? 'N/A',
+                    'last_name' => $user->last_name ?? 'N/A',
+                    'email' => $user->email,
+                ]
+            );
+
+            $resume->experiences()->delete();
+            if (!empty($parsedData['experience_details'])) {
+                $resume->experiences()->createMany($parsedData['experience_details']);
+            }
+
+            $resume->educations()->delete();
+            if (!empty($parsedData['education_details'])) {
+                $resume->educations()->createMany($parsedData['education_details']);
+            }
+        });
+    } catch (QueryException $e) {
+        // This 'catch' block specifically listens for database errors.
+        
+        // Check if the error is the specific 'check violation' we're looking for.
+        if ($e->getCode() === '23514') { // '23514' is the SQLSTATE code for check violation
+            \Illuminate\Support\Facades\Log::error("DATABASE_CHECK_VIOLATION: " . $e->getMessage());
+            
+            return back()->with('error', 'The resume could not be saved because a value (like Disability Type) provided by the AI is not allowed by the system. Please try again or use the Resume Builder.');
         }
 
-        $resume->educations()->delete();
-        if (!empty($parsedData['education_details'])) {
-            $resume->educations()->createMany($parsedData['education_details']);
-        }
-    });
+        throw $e;
+    }
 
-    // 3. GET AI-RANKED RECOMMENDATIONS (This part remains the same)
     $potentialJobs = $this->getPotentialJobsFromData($parsedData);
     $rankedJobIds = [];
     if ($potentialJobs->isNotEmpty()) {
         $rankedJobIds = $this->geminiService->getAiJobMatches($parsedData, $potentialJobs);
     }
 
-    // 4. STORE IDS IN SESSION AND REDIRECT (This part remains the same)
+    // STORE IDS AND REDIRECT
     session(['recommended_job_ids' => $rankedJobIds]);
     return redirect()->route('applicant-match-jobs-recommended-jobs');
 }
@@ -141,7 +159,7 @@ class ApplicantMatchJobsController extends Controller
             $keywords[] = $resumeData['education_details'][0]['degree'];
         }
 
-        $keywords = array_unique(array_filter($keywords)); 
+        $keywords = array_unique(array_filter($keywords));
 
         if (empty($keywords)) {
             return collect();
@@ -156,12 +174,12 @@ class ApplicantMatchJobsController extends Controller
                     ->orWhere('position', 'LIKE', "%{$keyword}%")
                     ->orWhere('description', 'LIKE', "%{$keyword}%")
                     ->orWhere('requirements', 'LIKE', "%{$keyword}%")
-                    ->orWhere('experience', 'LIKE', "%{$keyword}%") 
-                    ->orWhere('educationalAttainment', 'LIKE', "%{$keyword}%"); 
+                    ->orWhere('experience', 'LIKE', "%{$keyword}%")
+                    ->orWhere('educationalAttainment', 'LIKE', "%{$keyword}%");
             }
         });
 
-        return $query->limit(20)->get(); 
+        return $query->limit(20)->get();
     }
 
     public function show()

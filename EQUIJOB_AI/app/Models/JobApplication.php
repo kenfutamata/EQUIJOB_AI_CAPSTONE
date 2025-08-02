@@ -14,6 +14,8 @@ class JobApplication extends Model
         'jobApplicationNumber',
         'jobPostingID',
         'status',
+        'hiredAt',
+        'notifiedAt',
         'appliedAt',
         'remarks',
         'interviewDate',
@@ -27,6 +29,7 @@ class JobApplication extends Model
         'googleTokenExpiry' => 'datetime',
         'interviewDate' => 'date',
         'interviewTime' => 'datetime',
+        'hiredAt' => 'datetime',
     ];
 
     public function scopeSearch($query, $search)
@@ -39,7 +42,7 @@ class JobApplication extends Model
                 ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                     $q2->where('position', 'like', $searchTerm)
                         ->orWhereRaw('"companyName" LIKE ?', [$searchTerm])
-                        ->orWhereRaw('"disabilityType" LIKE ?', [$searchTerm]); // <-- THE FIX
+                        ->orWhereRaw('"disabilityType" LIKE ?', [$searchTerm]); 
                 })
                 ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
                     $q3->where('first_name', 'like', $searchTerm)
@@ -54,5 +57,9 @@ class JobApplication extends Model
     public function jobPosting()
     {
         return $this->belongsTo(JobPosting::class, 'jobPostingID');
+    }
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedbacks::class);
     }
 }

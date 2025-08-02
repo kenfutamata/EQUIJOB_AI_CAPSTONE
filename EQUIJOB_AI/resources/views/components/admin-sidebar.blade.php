@@ -20,7 +20,7 @@
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/generate_monthly_report.png') }}" alt="Report Icon" />
         <span>Monthly Report</span>
       </a>
-      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="#">
+      <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{route('admin-feedback-contact-us-system-review')}}">
         <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/applicant_feedback.png') }}" alt="Feedback Icon" />
         <span>Feedback</span>
       </a>

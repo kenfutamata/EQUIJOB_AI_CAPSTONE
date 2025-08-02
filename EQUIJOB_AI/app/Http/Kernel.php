@@ -2,6 +2,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Support\Facades\Schedule;
 
 class Kernel extends HttpKernel
 {
@@ -25,10 +26,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'nocache' => \App\Http\Middleware\NoCacheHeaders::class,  // <-- Ensure this is here
+        'nocache' => \App\Http\Middleware\NoCacheHeaders::class,  
         'auth' => \App\Http\Middleware\UnauthorizedMiddleware::class,
         // Other middlewares...
     ];
+
+
 }
 
 ?>

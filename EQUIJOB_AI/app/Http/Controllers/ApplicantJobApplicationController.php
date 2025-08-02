@@ -111,6 +111,7 @@ class ApplicantJobApplicationController extends Controller
             
             DB::transaction(function () use ($application){
             $application->status = 'Hired';
+            $application->hiredAt = now();
             $application->save();
 
             JobApplication::where('jobPostingID', $application->jobPostingID)

@@ -258,7 +258,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             document.getElementById('DeleteRoleModal').classList.add('hidden');
         }
 
-        // Fade out notification bar after 2.5s, then hide after 3s
         setTimeout(() => {
             const notif = document.getElementById('notification-bar');
             if (notif) notif.style.opacity = '0';

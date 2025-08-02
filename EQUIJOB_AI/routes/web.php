@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\AdminContactUsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminJobRatingController;
 use App\Http\Controllers\AdminManageJobPostingController;
 use App\Http\Controllers\AdminManageUserJobProviderController;
 use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\ApplicantFeedbackController;
 use App\Http\Controllers\ApplicantJobApplicationController;
 use App\Http\Controllers\ApplicantMatchJobsController;
 use App\Http\Controllers\ApplicantProfileController;
+use App\Http\Controllers\ApplicationTrackerController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\JobApplicantManageJobApplications;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
+use App\Http\Controllers\JobProviderJobRatingController;
 use App\Http\Controllers\JobProviderManageJobApplications;
 use App\Http\Controllers\JobProviderProfileController;
 use App\Http\Controllers\LandingPageController;
@@ -23,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 use PHPUnit\Event\Code\Test;
 use Illuminate\Support\Facades\File;
 use Gemini\Laravel\Facades\Gemini;
+use Illuminate\Support\Facades\DB;
 
 //coming Soon 
 Route::get('/EQUIJOB/Coming-Soon', function () {
@@ -40,6 +47,10 @@ Route::post('/EQUIJOB/Log-in', [SignInController::class, 'LoginUser'])->name('lo
 Route::get('/EQUIJOB/Log-in', function () {
     return redirect()->route('sign-in');
 });
+
+//Contact Us 
+Route::get('/EQUIJOB/Contact-Us', [LandingPageController::class, 'ViewContactUsPage'])->name('contact-us');
+Route::post('/EQUIJOB/Contact-Us/Submit', [ContactUsController::class, 'store'])->name('contact-us-submit');
 //Sign Up
 Route::get('/EQUIJOB/Sign-up-Applicant', [SignInController::class, 'ViewSignUpApplicantPage'])->name('sign-up-applicant');
 Route::get('/EQUIJOB/Sign-up-JobProvider', [SignInController::class, 'ViewSignUpJobProviderPage'])->name('sign-up-job-provider');
@@ -67,6 +78,9 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/callback', [JobProviderManageJobApplications::class, 'handleGoogleCallback'])->name('job-provider-manage-job-applications.provider.google.callback');
     Route::post('/EQUIJOB/Job-Provider/Manage-Job-Applications/{application}/schedule-interview', [JobProviderManageJobApplications::class, 'scheduleInterview'])->name('job-provider-manage-job-applications.scheduleinterview');
     Route::put('/EQUIJOB/Job-Provider/Manage-Job-Applications/update-to-offer/{application}', [JobProviderManageJobApplications::class, 'updateApplicationToOffer'])->name('job-provider-manage-job-applications.update-to-offer');
+    Route::put('/EQUIJOB/Job-Provider/Manage-Job-Applications/reject/{id}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
+    Route::delete('/EQUIJOB/Job-Provider/Manage-Job-Applications/Delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications.delete');
+    Route::get('/EQUIJOB/Job-Provider/Applicant-Feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
 });
 
 //Applicant 
@@ -87,6 +101,10 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::post('/EQUIJOB/Applicant/Job-Application', [ApplicantJobApplicationController::class, 'store'])->name('applicant-job-application-store');
     Route::put('/EQUIJOB/Applicant/Job-Application/Hired/{id}', [ApplicantJobApplicationController::class, 'hiredStatus'])->name('applicant-job-application-hired');
     Route::put('/EQUIJOB/Applicant/Manage-Job-Applications/withdraw/{id}', [ApplicantJobApplicationController::class, 'withdrawApplication'])->name('applicant-manage-job-applications.withdraw');
+    Route::get('/EQUIJOB/Applicant/Application-Tracker', [ApplicationTrackerController::class, 'index'])->name('applicant-application-tracker');
+    Route::get('/EQUIJOB/Applicant/Application-Tracker/status', [ApplicationTrackerController::class, 'show'])->name('applicant-application-tracker-show');
+    Route::get('/EQUIJOB/Applicant/Applicant-Feedback', [ApplicantFeedbackController::class, 'index'])->name('applicant-feedback');
+    Route::post('/EQUIJOB/Applicant/Applicant-Feedback/{id}', [ApplicantFeedbackController::class, 'store'])->name('applicant-feedback-store');
 });
 
 //admin
@@ -103,4 +121,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::put('EQUIJOB/Admin/Manage-Job-Posting/For-Posting/{id}', [AdminManageJobPostingController::class, 'updateForPosting'])->name('admin-manage-job-posting-for-posting');
     Route::put('EQUIJOB/Admin/Manage-Job-Posting/Disapproved/{id}', [AdminManageJobPostingController::class, 'updateDisapproved'])->name('admin-manage-job-posting-disapproved');
     Route::get('/EQUIJOB/Admin/Manage-Job-Posting/{id}', [AdminManageJobPostingController::class, 'show'])->name('Admin-job-posting-show');
+    Route::get('/EQUIJOB/Admin/Feedback-System-Review', [AdminContactUsController::class, 'index'])->name('admin-feedback-contact-us-system-review');
+    Route::get('/EQUIJOB/Admin/Feedback-Job', [AdminJobRatingController::class, 'index'])->name('admin-feedback-job');
+    Route::delete('/EQUIJOB/Admin/Feedback-System-Review/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-system-review-delete');
 });

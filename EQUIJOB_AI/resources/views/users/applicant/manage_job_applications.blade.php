@@ -104,12 +104,6 @@
                                     <button href="" class="bg-green-500 text-white px-2 py-1 rounded"> Accept </button>
                                 </form>
                                 <button onclick="openWithdrawModal(this)" data-url="{{route('applicant-manage-job-applications.withdraw', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Withdraw </button>
-                                @elseif($application->status === 'Rejected')
-                                <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                @elseif($application->status==='Withdrawn')
-                                <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                @elseif($application->status === 'Accepted')
-                                <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @else
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @endif

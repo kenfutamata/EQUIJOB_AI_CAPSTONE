@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\disapprovalDetailssent;
 use App\Mail\InterviewDetailsSent;
 use App\Mail\SendOnOfferDetails;
 use App\Models\JobApplication;
 use App\Notifications\JobInterviewDetailsSent;
+use App\Notifications\PositionOnOfferNotificationSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Google_Client;
@@ -88,9 +90,7 @@ class JobProviderManageJobApplications extends Controller
         try {
             $accessToken = $client->fetchAccessTokenWithRefreshToken($masterRefreshToken);
 
-            // Check for an error in the response from Google.
             if (isset($accessToken['error'])) {
-                // Log the detailed error from Google for debugging purposes.
                 Log::error('Google API Token Refresh Failed', [
                     'error' => $accessToken['error'],
                     'error_description' => $accessToken['error_description'] ?? 'No description provided by Google.'
@@ -220,10 +220,42 @@ class JobProviderManageJobApplications extends Controller
             ];
 
             Mail::to($applicant->email)->send(new SendOnOfferDetails($maildata));
+            $applicant->notify(new PositionOnOfferNotificationSent($application, 'applicant'));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application and Position is on-offer');
         } catch (\Exception $e) {
             Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
             return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Update Application');
+        }
+    }
+
+    public function rejectApplication(Request $request, string $id)
+    {
+        $request->validate([
+            'remarks' => 'required|string|max:255',
+        ]);
+
+        try {
+            $application = JobApplication::findOrFail($id);
+            $application->status = 'Rejected';
+            $application->remarks = $request->input('remarks');
+            $application->save();
+            $applicant = $application->applicant;
+            $jobPosting = $application->jobPosting;
+            $jobProvider = Auth::guard('job_provider')->user();
+            $maildata = [
+                'firstName' => $applicant->first_name,
+                'lastName'=>$applicant->last_name, 
+                'position'=>$applicant->position, 
+                'companyName'=>$jobPosting->companyName,
+                'jobProviderFirstName' => $jobProvider->first_name,
+                'jobProviderLastName' => $jobProvider->last_name,
+                'remarks' => $application->remarks,
+            ]; 
+            Mail::to($applicant->email)->send(new disapprovalDetailssent($maildata));
+            return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
+        } catch (\Exception $e) {
+            Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());
+            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Reject Application');
         }
     }
 
@@ -232,6 +264,13 @@ class JobProviderManageJobApplications extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            $application = JobApplication::findOrFail($id);
+            $application->delete();
+            return redirect()->back()->with('Success', 'Application Deleted Successfully');
+        }catch(\Exception $e){
+            Log::error('Failed to delete application ' . $id . ': ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to Delete Application');
+        }
     }
 }

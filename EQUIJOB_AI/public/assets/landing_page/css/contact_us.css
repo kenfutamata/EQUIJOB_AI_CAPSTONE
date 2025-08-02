@@ -1,0 +1,9 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+.font-poppins {
+    font-family: 'Poppins', sans-serif;
+}
+html {
+     scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}
