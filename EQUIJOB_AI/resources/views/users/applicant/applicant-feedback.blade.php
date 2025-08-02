@@ -92,6 +92,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <th class="px-2 py-2 max-w-[150px] break-words">Position {!! sortArrow('email')!!}</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Company Name {!! sortArrow('email')!!}</th>
                             <th class="px-2 py-2">Feedback Type {!! sortArrow('feedbackType')!!}</th>
+                            <th class="px-2 py-2">Status {!! sortArrow('feedbackType')!!}</th>
+
                             <th class="px-2 py-2">Action {!! sortArrow('action')!!}</th>
                         </tr>
                     </thead>
@@ -103,14 +105,13 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $feedback->jobPosting->position }}</td>
                             <td class="px-2 py-2">{{ $feedback->jobPosting->companyName }}</td>
                             <td class="px-2 py-2">{{ $feedback->feedbackType }}</td>
+                            <td class="px-2 py-2">{{ $feedback->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if($feedback->status === 'Sent')
                                 <button onclick="openviewDescriptionModal(this)" data-user='@json($feedback)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                <button onclick="openFeedbackSubmitModal(this)" data-user='@json($feedback)' class="bg-green-500 text-white px-2 py-1 rounded">Submit</button>
-
+                                <button onclick="openFeedbackSubmitModal({{$feedback}})" data-user='@json($feedback)' class="bg-green-500 text-white px-2 py-1 rounded">Submit</button>
                                 @else
                                 <button onclick="openviewDescriptionModal(this)" data-user='@json($feedback)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-
                                 @endif
                             </td>
                         </tr>
@@ -155,7 +156,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <h3 class="text-xl font-semibold">Your Job Feedback</h3>
                 <button onclick="closeFeedbackSubmitModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <form id="submitFeedback" method="POST" action="{{route('applicant-feedback-store', $feedback->id)}}">
+            <form id="submitFeedback" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="mb-4">
@@ -195,7 +196,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             document.getElementById('viewDescriptionModal').classList.add('hidden');
         }
 
-        function openFeedbackSubmitModal() {
+        function openFeedbackSubmitModal(feedback) {
+            const modal = document.getElementById('submitFeedbackDetails');
+            const form = document.getElementById('submitFeedback');
+
+            const url = `/EQUIJOB/Applicant/Applicant-Feedback/${feedback.id}`;
+            form.action = url;
             document.getElementById('submitFeedbackDetails').classList.remove('hidden');
         }
 

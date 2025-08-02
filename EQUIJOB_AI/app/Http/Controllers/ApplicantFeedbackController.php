@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedbacks;
+use Google\Service\Forms\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,19 +68,20 @@ class ApplicantFeedbackController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Feedbacks $feedback)
     {
         $request->validate([
             'feedbackText' => 'required|string|max:500',
-            'rating'=> 'required|integer|min:1|max:5',
+            'rating' => 'required|integer|min:1|max:5',
         ]);
+        try {
+            $feedback->status = 'Completed';
+            $feedback->save();
 
-        $feedback = Feedbacks::findOrFail($id);
-        $feedback->feedbackText = $request->input('feedbackText');
-        $feedback->status = 'Completed';
-        $feedback->save();
-
-        return redirect()->back()->with('success', 'Feedback submitted successfully.');
+            return redirect()->back()->with('Success', 'Feedback submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('Error', 'Failed to submit feedback: ' . $e->getMessage());
+        }
     }
 
     /**

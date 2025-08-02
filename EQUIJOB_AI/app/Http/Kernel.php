@@ -31,7 +31,16 @@ class Kernel extends HttpKernel
         // Other middlewares...
     ];
 
+   protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('feedback:send-requests')->daily();
+    }
 
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
 }
 
 ?>

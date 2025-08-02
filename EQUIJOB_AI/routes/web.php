@@ -104,7 +104,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/EQUIJOB/Applicant/Application-Tracker', [ApplicationTrackerController::class, 'index'])->name('applicant-application-tracker');
     Route::get('/EQUIJOB/Applicant/Application-Tracker/status', [ApplicationTrackerController::class, 'show'])->name('applicant-application-tracker-show');
     Route::get('/EQUIJOB/Applicant/Applicant-Feedback', [ApplicantFeedbackController::class, 'index'])->name('applicant-feedback');
-    Route::post('/EQUIJOB/Applicant/Applicant-Feedback/{id}', [ApplicantFeedbackController::class, 'store'])->name('applicant-feedback-store');
+    Route::put('/EQUIJOB/Applicant/Applicant-Feedback/{feedback}', [ApplicantFeedbackController::class, 'update'])->name('applicant-feedback-update');
 });
 
 //admin
