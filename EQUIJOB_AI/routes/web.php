@@ -16,6 +16,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\JobApplicantManageJobApplications;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
+use App\Http\Controllers\JobProviderGenerateReports;
 use App\Http\Controllers\JobProviderJobRatingController;
 use App\Http\Controllers\JobProviderManageJobApplications;
 use App\Http\Controllers\JobProviderProfileController;
@@ -35,6 +36,14 @@ use Illuminate\Support\Facades\DB;
 Route::get('/EQUIJOB/Coming-Soon', function () {
     return view('placeholders.coming_soon');
 })->name('coming-soon');
+
+
+//test
+Route::get('/get-db-ip', function() {
+    $host = config('database.connections.pgsql.host');
+    $ip = gethostbyname($host);
+    dd("The IP address PHP is using is:", $ip);
+});
 
 Route::get('EQUIJOB/Privacy-Policy', function () {
     return view('placeholders.privacy_policy');
@@ -81,6 +90,8 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::put('/EQUIJOB/Job-Provider/Manage-Job-Applications/reject/{id}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
     Route::delete('/EQUIJOB/Job-Provider/Manage-Job-Applications/Delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications.delete');
     Route::get('/EQUIJOB/Job-Provider/Applicant-Feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
+    Route::get('/EQUIJOB/Job-Provider/Generate-report', [JobProviderGenerateReports::class, 'index'])->name('job-provider-generate-report');
+    Route::get('/EQUIJOB/Job-Provider/Generate-report/download', [JobProviderGenerateReports::class, 'generateReport'])->name('job-provider-download-report');
 });
 
 //Applicant 
