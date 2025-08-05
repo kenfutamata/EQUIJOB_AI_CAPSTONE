@@ -27,7 +27,8 @@ class AdminJobRatingController extends Controller
         $query = Feedbacks::query()
 
             ->with([
-                'jobApplication.jobPosting', 'applicant'
+                'jobApplication.jobPosting',
+                'applicant'
             ])
             ->where('feedbackType', 'Job Rating')
             ->whereHas('jobApplication.jobPosting');
@@ -93,8 +94,9 @@ class AdminJobRatingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Feedbacks $feedback)
     {
-        //
+        $feedback->delete();
+        return redirect()->back()->with('Delete_Success', 'Feedback deleted successfully');
     }
 }

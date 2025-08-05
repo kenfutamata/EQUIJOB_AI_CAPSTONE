@@ -68,7 +68,7 @@
           </div>
           <div class="flex flex-col justify-center px-4">
             <div class="text-lg font-semibold">Hired</div>
-            <div class="text-2xl">0</div>
+            <div class="text-2xl">{{$hiredCount}}</div>
           </div>
         </div>
 

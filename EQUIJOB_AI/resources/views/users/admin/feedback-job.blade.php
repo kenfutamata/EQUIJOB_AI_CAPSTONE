@@ -116,7 +116,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                 <button onclick="openviewDescriptionModal(this)" data-user='@json($feedback)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @elseif($feedback->status === 'Completed')
                                 <button onclick="openviewDescriptionModal(this)" data-user='@json($feedback)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
-                                <button onclick="openDeleteModal({{ $feedback->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                <button onclick="openDeleteFeedbackForm('{{ route('admin-feedback-job-feedback-delete', $feedback->id) }}')" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 @endif
                             </td>
                         </tr>
@@ -137,7 +137,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="viewDescriptionModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeviewDescriptionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            <h2 class="text-xl font-bold mb-4">System Feedback</h2>
+            <h2 class="text-xl font-bold mb-4">Job Feedback</h2>
             <div class="space-y-2">
                 <label class="block text-xs text-gray-500">First Name:</label>
                 <input id="modal_firstName" class="w-full border rounded px-2 py-1" readonly placeholder="First Name">
@@ -161,18 +161,18 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
         </div>
     </div>
 
-    <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div id="deleteFeedbackForm" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Delete User?</h3>
-                <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-semibold">Delete Feedback?</h3>
+                <button onclick="closeDeleteFeedbackForm()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <form id="deleteuser" method="POST" action="">
+            <form id="deleteFeedback" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
             </form>
-            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
+            <button onclick="closeDeleteFeedbackForm()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
     <script>
@@ -200,14 +200,14 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             document.getElementById('viewDescriptionModal').classList.add('hidden');
         }
 
-        function openDeleteModal(userId) {
-            const form = document.getElementById('deleteuser');
-            form.action = `/EQUIJOB/Admin/Manage-User-Applicants/Delete/${userId}`;
-            document.getElementById('DeleteRoleModal').classList.remove('hidden');
+        function openDeleteFeedbackForm(deleteURL) {
+            const form = document.getElementById('deleteFeedback');
+            form.action = deleteURL;
+            document.getElementById('deleteFeedbackForm').classList.remove('hidden');
         }
 
-        function closeDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.add('hidden');
+        function closeDeleteFeedbackForm() {
+            document.getElementById('deleteFeedbackForm').classList.add('hidden');
         }
 
         window.addEventListener('click', function(e) {

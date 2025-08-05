@@ -10,9 +10,7 @@
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
-  <!-- Navbar component -->
   <x-landing-page-navbar />
-  <!-- Error Message -->
   @if ($message = Session::get('error')??$message=Session::get('catch_error'))
   <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
     {{ $message }}
@@ -24,7 +22,6 @@
 
       <form id="signInForm" method="POST" action="{{route('login')}}" class="space-y-6" enctype="multipart/form-data">
         @csrf
-        <!-- Email Input -->
         <div>
           <label class="block text-gray-600 text-sm mb-1">Email</label>
           <input name="email" type="text" class="w-full h-12 px-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Email" id="email" name="email" required />
@@ -33,11 +30,9 @@
           @enderror
         </div>
 
-        <!-- Password Input -->
         <div class="relative">
           <label class="block text-gray-600 text-sm mb-1">Password</label>
           <input id="password" name="password" type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="password" name="password" required />
-          <!-- Toggle visibility -->
           <button type="button" onclick="togglePassword()" class="absolute right-3 top-9 text-gray-500 text-sm flex items-center space-x-1">
             <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a18.98 18.98 0 013.75-5.25M21 12s-3 7-10 7c-.62 0-1.23-.057-1.82-.167M9.53 9.53A3.001 3.001 0 0114.47 14.47" />
@@ -85,8 +80,7 @@
     </div>
   </div>
   <script>
-    //modall script
-    // Open modal
+
     document.querySelector('a[href="#roleModal"]').addEventListener('click', function(e) {
       e.preventDefault();
       document.getElementById('roleModal').classList.remove('hidden');

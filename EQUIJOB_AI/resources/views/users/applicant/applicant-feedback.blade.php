@@ -128,7 +128,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="viewDescriptionModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeviewDescriptionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            <h2 class="text-xl font-bold mb-4">System Feedback</h2>
+            <h2 class="text-xl font-bold mb-4">Job Feedback</h2>
             <div class="space-y-2">
                 <label class="block text-xs text-gray-500">First Name:</label>
                 <input id="modal_firstName" class="w-full border rounded px-2 py-1" readonly placeholder="First Name">
@@ -146,6 +146,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal_feedbackType" class="w-full border rounded px-2 py-1" readonly placeholder="Feedback Type">
                 <label class="block text-xs text-gray-500">Feedback Text:</label>
                 <textarea id="modal_feedbackText" class="w-full border rounded px-2 py-1" readonly placeholder="Feedback Text"></textarea>
+                <label class="block text-xs text-gray-500">Rating:</label>
+                <input id="modal_rating" class="w-full border rounded px-2 py-1" readonly placeholder="Rating">
             </div>
         </div>
     </div>
@@ -189,6 +191,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             document.getElementById('modal_position').value = position ?? 'N/A';
             document.getElementById('modal_companyName').value = companyName ?? 'N/A';
             document.getElementById('modal_feedbackText').value = feedback.feedbackText;
+            document.getElementById('modal_rating').value = feedback.rating;
             document.getElementById('viewDescriptionModal').classList.remove('hidden');
         }
 

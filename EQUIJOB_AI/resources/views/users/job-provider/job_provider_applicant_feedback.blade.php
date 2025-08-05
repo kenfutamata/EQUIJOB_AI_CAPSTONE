@@ -91,9 +91,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <th class="px-2 py-2">Last Name {!! sortArrow('lastName')!!}</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Position {!! sortArrow('email')!!}</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Company Name {!! sortArrow('email')!!}</th>
-                            <th class="px-2 py-2 max-w-[150px] break-words">Email {!! sortArrow('email')!!}</th>
-                            <th class="px-2 py-2">Phone Number {!! sortArrow('phoneNumber')!!}</th>
                             <th class="px-2 py-2">Feedback Type {!! sortArrow('feedbackType')!!}</th>
+                            <th class="px-2 py-2">Status {!! sortArrow('feedbackType')!!}</th>
                             <th class="px-2 py-2">Action {!! sortArrow('action')!!}</th>
                         </tr>
                     </thead>
@@ -104,9 +103,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $feedback->lastName }}</td>
                             <td class="px-2 py-2">{{ $feedback->jobPosting->position }}</td>
                             <td class="px-2 py-2">{{ $feedback->jobPosting->companyName }}</td>
-                            <td class="px-2 py-2 break-all max-w-[150px]">{{ $feedback->email }}</td>
-                            <td class="px-2 py-2">{{ $feedback->phoneNumber }}</td>
                             <td class="px-2 py-2">{{ $feedback->feedbackType }}</td>
+                            <td class="px-2 py-2">{{ $feedback->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 <button onclick="openviewDescriptionModal(this)" data-user='@json($feedback)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                             </td>
@@ -124,7 +122,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="viewDescriptionModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeviewDescriptionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-            <h2 class="text-xl font-bold mb-4">System Feedback</h2>
+            <h2 class="text-xl font-bold mb-4">Job Feedback</h2>
             <div class="space-y-2">
                 <label class="block text-xs text-gray-500">First Name:</label>
                 <input id="modal_firstName" class="w-full border rounded px-2 py-1" readonly placeholder="First Name">
@@ -132,26 +130,37 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal_lastName" class="w-full border rounded px-2 py-1" readonly placeholder="Last Name">
                 <label class="block text-xs text-gray-500">Email Address:</label>
                 <input id="modal_email" class="w-full border rounded px-2 py-1" readonly placeholder="Email">
+                <label class="block text-xs text-gray-500">Position:</label>
+                <input id="modal_position" class="w-full border rounded px-2 py-1" readonly placeholder="Position">
+                <label class="block text-xs text-gray-500">Company Name:</label>
+                <input id="modal_companyName" class="w-full border rounded px-2 py-1" readonly placeholder="Company Name">
                 <label class="block text-xs text-gray-500">Phone Number:</label>
                 <input id="modal_phoneNumber" class="w-full border rounded px-2 py-1" readonly placeholder="Phone Number">
                 <label class="block text-xs text-gray-500">Feedback Type:</label>
                 <input id="modal_feedbackType" class="w-full border rounded px-2 py-1" readonly placeholder="Feedback Type">
                 <label class="block text-xs text-gray-500">Feedback Text:</label>
                 <textarea id="modal_feedbackText" class="w-full border rounded px-2 py-1" readonly placeholder="Feedback Text"></textarea>
+                <label class="block text-xs text-gray-500">Rating:</label>
+                <input id="modal_rating" class="w-full border rounded px-2 py-1" readonly placeholder="Rating">
             </div>
         </div>
     </div>
 
- 
+
     <script>
         function openviewDescriptionModal(button) {
             const feedback = JSON.parse(button.getAttribute('data-user'));
+            const position = feedback.job_application?.job_posting?.position;
+            const companyName = feedback.job_application?.job_posting?.companyName;
             document.getElementById('modal_firstName').value = feedback.firstName;
             document.getElementById('modal_lastName').value = feedback.lastName;
             document.getElementById('modal_email').value = feedback.email;
+            document.getElementById('modal_position').value = position ?? 'N/A';
+            document.getElementById('modal_companyName').value = companyName ?? 'N/A';
             document.getElementById('modal_phoneNumber').value = feedback.phoneNumber;
             document.getElementById('modal_feedbackType').value = feedback.feedbackType;
             document.getElementById('modal_feedbackText').value = feedback.feedbackText;
+            document.getElementById('modal_rating').value = feedback.rating;
             document.getElementById('viewDescriptionModal').classList.remove('hidden');
         }
 

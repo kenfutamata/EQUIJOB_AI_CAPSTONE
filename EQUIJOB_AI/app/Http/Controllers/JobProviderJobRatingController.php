@@ -17,7 +17,8 @@ class JobProviderJobRatingController extends Controller
         $user = Auth::guard('job_provider')->user();
 
         $query = Feedbacks::query()
-        ->with(['jobPosting', 'applicant'])
+        ->with(['jobApplication.jobPosting', 'applicant'])
+        ->where('feedbackType', 'Job Rating')
         ->whereHas('jobPosting', function($q) use ($user){
             $q->where('jobProviderID', $user->id);
         });

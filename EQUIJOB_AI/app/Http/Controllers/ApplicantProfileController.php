@@ -91,7 +91,7 @@ class ApplicantProfileController extends Controller
                 $user->$key = $value;
             }
             $user->save();
-            return redirect()->route('applicant-profile')->with('success', 'Profile updated successfully.');
+            return redirect()->back()->with('success', 'Profile updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while updating the profile: ' . $e->getMessage());
         }

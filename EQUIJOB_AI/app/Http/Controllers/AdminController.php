@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobApplication;
 use App\Models\users;
 use App\Notifications\TestNotification;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class AdminController extends Controller
         $userCount = users::where('status', 'Active')->count();
         $applicantCount  = users::where('role', 'Applicant')->where('status', 'Active')->count();
         $jobProviderCount = users::where('role', 'Job Provider')->where('status', 'Active')->count();
-
+        $hiredCount = JobApplication::where('status', 'Hired')->count();
         // Fetch notifications correctly
         $notifications = $user?->notifications ?? collect();
         $unreadNotifications = $user?->unreadNotifications ?? collect();
@@ -26,7 +27,8 @@ class AdminController extends Controller
             'jobProviderCount',
             'applicantCount',
             'notifications',
-            'unreadNotifications'
+            'unreadNotifications', 
+            'hiredCount'
         ))->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
           ->header('Pragma', 'no-cache')
           ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');

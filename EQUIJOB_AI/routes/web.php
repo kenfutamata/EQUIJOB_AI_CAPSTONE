@@ -124,4 +124,5 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/EQUIJOB/Admin/Feedback-System-Review', [AdminContactUsController::class, 'index'])->name('admin-feedback-contact-us-system-review');
     Route::get('/EQUIJOB/Admin/Feedback-Job', [AdminJobRatingController::class, 'index'])->name('admin-feedback-job');
     Route::delete('/EQUIJOB/Admin/Feedback-System-Review/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-system-review-delete');
+    Route::delete('/EQUIJOB/Admin/Feedback-Job/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-job-feedback-delete');
 });

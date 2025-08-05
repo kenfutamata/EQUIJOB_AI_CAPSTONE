@@ -152,7 +152,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             <form id="deleteFeedback" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
             </form>
             <button onclick="closeDeleteFeedbackForm()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>

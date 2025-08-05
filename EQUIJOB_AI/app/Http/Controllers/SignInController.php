@@ -135,7 +135,7 @@ class SignInController extends Controller
             return redirect()->route('job-provider-dashboard')->with('success', 'Login Successful!');
         }
         return redirect()->back()
-            ->withInput($request->only('email')) // Keep email in the form
+            ->withInput($request->only('email'))
             ->with('error', 'Invalid credentials or your account is not yet active.');
     }
     public function ViewEmailConfirmationPage()

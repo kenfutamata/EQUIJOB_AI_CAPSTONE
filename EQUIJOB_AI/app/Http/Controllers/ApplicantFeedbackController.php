@@ -76,6 +76,8 @@ class ApplicantFeedbackController extends Controller
         ]);
         try {
             $feedback->status = 'Completed';
+            $feedback->feedbackText = $request->input('feedbackText'); 
+            $feedback->rating = $request->input('rating'); 
             $feedback->save();
 
             return redirect()->back()->with('Success', 'Feedback submitted successfully.');
