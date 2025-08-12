@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminContactUsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminGenerateReportsController;
 use App\Http\Controllers\AdminJobRatingController;
 use App\Http\Controllers\AdminManageJobPostingController;
 use App\Http\Controllers\AdminManageUserJobProviderController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\JobApplicantManageJobApplications;
 use App\Http\Controllers\JobPostingController;
 use App\Http\Controllers\JobProviderController;
+use App\Http\Controllers\JobProviderGenerateReports;
 use App\Http\Controllers\JobProviderJobRatingController;
 use App\Http\Controllers\JobProviderManageJobApplications;
 use App\Http\Controllers\JobProviderProfileController;
@@ -71,7 +73,8 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::post('/EQUIJOB/Job-Provider/Job-Posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
     Route::delete('/EQUIJOB/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/EQUIJOB/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
-    Route::get('/EQUIJOB/Job-Provider/Applicant-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+    Route::get('/EQUIJOB/Job-Provider/Job-Provider-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+    Route::put('/EQUIJOB/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController:: class, 'update'])->name('job-provider-profile-update'); 
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
     Route::post('/EQUIJOB/Job-Provider/Manage-Job-Applications/create-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider-manage-job-applications.google.meet.create_link');
     Route::get('/EQUIJOB/Job-Provider/Manage-Job-Applications/provider/google/redirect', [JobProviderManageJobApplications::class, 'redirectToGoogle'])->name('job-provider-manage-job-applications.provider.google.redirect');
@@ -81,6 +84,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::put('/EQUIJOB/Job-Provider/Manage-Job-Applications/reject/{id}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
     Route::delete('/EQUIJOB/Job-Provider/Manage-Job-Applications/Delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications.delete');
     Route::get('/EQUIJOB/Job-Provider/Applicant-Feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
+    Route::get('/EQUIJOB/Job-Provider/Generate-report', [JobProviderGenerateReports::class, 'index'])->name('job-provider-generate-report');
 });
 
 //Applicant 
@@ -125,4 +129,5 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/EQUIJOB/Admin/Feedback-Job', [AdminJobRatingController::class, 'index'])->name('admin-feedback-job');
     Route::delete('/EQUIJOB/Admin/Feedback-System-Review/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-system-review-delete');
     Route::delete('/EQUIJOB/Admin/Feedback-Job/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-job-feedback-delete');
+    Route::get('EQUIJOB/Admin/Generate-Report', [AdminGenerateReportsController::class, 'index'])->name('admin-generate-report');
 });

@@ -34,7 +34,6 @@ class CheckDbConnection extends Command
         $this->comment("User:   " . config('database.connections.pgsql.username'));
 
         try {
-            // The simplest possible query to test the connection.
             DB::connection()->getPdo();
             
             $this->info("✅ SUCCESS: Database connection is working.");

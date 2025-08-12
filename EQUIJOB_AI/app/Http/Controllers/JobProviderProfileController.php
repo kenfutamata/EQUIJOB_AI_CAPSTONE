@@ -57,9 +57,39 @@ class JobProviderProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $validateInformation = $request->validate([
+            'first_name' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
+            'last_name' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
+            'email' => 'string|email|max:255',
+            'business_permit' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'profile_picture' => 'file|mimes:jpg,jpeg,png|max:2048',
+        ]);
+        if ($request->hasFile('business_permit')) {
+            $file = $request->file('business_permit');
+            $filepath = $file->store('business_permit', 'public');
+            $validateInformation['business_permit'] = $filepath;
+        }
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filepath = $file->store('profile_picture', 'public');
+            $validateInformation['profile_picture'] = $filepath;
+        }
+
+        try {
+            $user = Auth::guard('job_provider')->user();
+            if (!$user instanceof \App\Models\User) {
+                $user = \App\Models\User::find($user->id);
+            }
+            foreach ($validateInformation as $key => $value) {
+                $user->$key = $value;
+            }
+            $user->save();
+            return redirect()->back()->with('success', 'Profile updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while updating the profile: ' . $e->getMessage());
+        }
     }
 
     /**
