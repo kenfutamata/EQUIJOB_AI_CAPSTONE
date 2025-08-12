@@ -38,6 +38,14 @@ Route::get('/EQUIJOB/Coming-Soon', function () {
     return view('placeholders.coming_soon');
 })->name('coming-soon');
 
+
+//test
+Route::get('/get-db-ip', function() {
+    $host = config('database.connections.pgsql.host');
+    $ip = gethostbyname($host);
+    dd("The IP address PHP is using is:", $ip);
+});
+
 Route::get('EQUIJOB/Privacy-Policy', function () {
     return view('placeholders.privacy_policy');
 })->name('privacy-policy');
