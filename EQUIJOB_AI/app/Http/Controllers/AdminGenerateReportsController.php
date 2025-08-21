@@ -98,8 +98,27 @@ class AdminGenerateReportsController extends Controller
             }
 
             //Query 4: Disapproved Applications 
+            $disapprovedApplications = JobApplication::query()
+            ->select(DB::raw('DATE(updated_at) as rejected_date'), DB::raw('COUNT(*) as count'))
+            ->where('status', 'Rejected')
+            ->whereYear('updated_at', $date->year)
+            ->whereMonth('updated_at', $date->month)
+            ->groupBy(DB::raw('DATE(updated_at)'))
+            ->orderBy(DB::raw('DATE(updated_at)'))
+            ->pluck('count', 'rejected_date');
 
-            if ($applicantChartData === null && $jobProviderChartData === null && $hiredChartData === null) {
+            $disapprovedDataPoints = []; 
+            foreach($period as $day){
+                $disapprovedDataPoints[] = $disapprovedApplications->get($day->format('Y-m-d'), 0); 
+            }
+
+            if(array_sum($disapprovedDataPoints) > 0){
+                $disapprovedChartData = [
+                    'labels' => $chartLabels, 
+                    'values'=>$disapprovedDataPoints,
+                ];
+            }
+            if ($applicantChartData === null && $jobProviderChartData === null && $hiredChartData === null && $disapprovedChartData === null) {
                 $errorMessage = 'No data available for ' . $date->format('F Y') . '.';
             }
         } catch (Exception $e) {
@@ -114,6 +133,7 @@ class AdminGenerateReportsController extends Controller
             'applicantChartData',
             'jobProviderChartData',
             'hiredChartData',
+            'disapprovedChartData', 
             'errorMessage',
             'selectedMonth',
             'notifications',

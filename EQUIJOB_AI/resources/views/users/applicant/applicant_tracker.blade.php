@@ -66,24 +66,22 @@
             <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
         </header>
 
-        <!-- Main Section -->
+        @if ($errors->any() || session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg m-4" role="alert">
+            <strong class="font-bold">Oops! Something went wrong.</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+                @if(session('error'))
+                <li>{{ session('error') }}</li>
+                @endif
+            </ul>
+        </div>
+        @endif
         <main class="flex-1 overflow-y-auto px-4 sm:px-6 py-6 bg-[#FCFDFF] flex justify-center items-center">
-            @if ($errors->any() || session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
-                <strong class="font-bold">Oops! Something went wrong.</strong>
-                <ul class="mt-2 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                    @if(session('error'))
-                    <li>{{ session('error') }}</li>
-                    @endif
-                </ul>
-            </div>
-            @endif
             <div class="max-w-6xl mx-auto space-y-8">
 
-                <!-- Title -->
                 <h1 class="font-audiowide text-3xl md:text-4xl text-gray-800">
                     <span class="text-[#25324B]">Job Application </span>
                     <span class="text-[#26A4FF]">Tracker</span>
@@ -91,7 +89,6 @@
 
 
 
-                <!-- Applicant ID Box -->
                 <div class="w-full max-w-3xl bg-white shadow-md border border-gray-300 rounded-lg p-6">
                     <label for="applicantId" class="block text-lg font-medium text-gray-700 mb-2">
                         Job Application Number

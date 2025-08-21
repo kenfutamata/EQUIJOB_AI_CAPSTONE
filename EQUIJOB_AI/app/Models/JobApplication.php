@@ -19,6 +19,7 @@ class JobApplication extends Model
         'appliedAt',
         'remarks',
         'interviewDate',
+        'reminderSentAt', 
         'interviewTime',
         'interviewLink', 
         'uploadResume',

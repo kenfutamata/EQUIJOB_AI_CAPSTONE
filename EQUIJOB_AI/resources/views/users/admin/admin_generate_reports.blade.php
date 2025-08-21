@@ -88,6 +88,17 @@
                     <p class="text-center py-10 text-gray-500">No Hired Applicants for this month.</p>
                     @endif
                 </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">
+                        Rejected Applicants for {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}
+                    </h2>
+                    @if($disapprovedChartData)
+                    <div class="mx-auto"><canvas id="rejectedApplicantsChart"></canvas></div>
+                    @else
+                    <p class="text-center py-10 text-gray-500">No Rejected/Disapproved Applicants for this month.</p>
+                    @endif
+                </div>
+
 
             </div>
             @else
@@ -112,7 +123,7 @@
                 }, 3000);
             }
 
-     @if($applicantChartData)
+            @if($applicantChartData)
             const applicantCtx = document.getElementById('applicantRegisteredChart').getContext('2d');
             const applicantData = @json($applicantChartData);
             new Chart(applicantCtx, {
@@ -128,11 +139,11 @@
                         tension: 0.1
                     }]
                 },
-                options: { /* ... your chart options ... */ }
+                options: {}
             });
-        @endif
+            @endif
 
-        @if($jobProviderChartData)
+            @if($jobProviderChartData)
             const providerCtx = document.getElementById('jobProviderChart').getContext('2d');
             const providerData = @json($jobProviderChartData);
             new Chart(providerCtx, {
@@ -148,16 +159,18 @@
                         tension: 0.1
                     }]
                 },
-                options: { /* ... your chart options ... */ }
+                options: {
+                    /* ... your chart options ... */ }
             });
-        @endif
+            @endif
 
-        // --- Chart 3: Hired Applicants ---
-        @if($hiredChartData)
+            // --- Chart 3: Hired Applicants ---
+            @if($hiredChartData)
             const hiredCtx = document.getElementById('hiredApplicantsChart').getContext('2d');
             const hiredData = @json($hiredChartData);
             new Chart(hiredCtx, {
-                type: 'bar', // A bar chart might be nice for this too
+                type: 'bar',
+                
                 data: {
                     labels: hiredData.labels,
                     datasets: [{
@@ -168,10 +181,31 @@
                         borderWidth: 1
                     }]
                 },
-                options: { /* ... your chart options ... */ }
+                options: {}
             });
-        @endif
-    });
+            @endif
+
+            @if($disapprovedChartData)
+            const rejectedCtx = document.getElementById('rejectedApplicantsChart').getContext('2d');
+            const rejectedData = @json($disapprovedChartData);
+            new Chart(rejectedCtx, {
+                type: 'bar',
+                data: {
+                    labels: rejectedData.labels,
+                    datasets: [{
+                        label: 'Applicants Rejected/Disapproved',
+                        data: rejectedData.values,
+                        backgroundColor: 'rgba(255, 0, 0, 0.6)',
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    /* ... your chart options ... */ }
+            });
+            @endif
+
+        });
     </script>
 
 </body>

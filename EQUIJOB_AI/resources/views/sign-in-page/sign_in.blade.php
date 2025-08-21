@@ -11,11 +11,17 @@
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
   <x-landing-page-navbar />
-  @if ($message = Session::get('error')??$message=Session::get('catch_error'))
-  <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
-    {{ $message }}
-    @endif
+  @if(session('Success'))
+  <div id="notification-bar"
+    class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 opacity-100 transition-opacity duration-500 ease-in-out">
+    {{ session('Success') }}
   </div>
+  @elseif(session('error'))
+  <div id="notification-bar"
+    class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 opacity-100 transition-opacity duration-500 ease-in-out">
+    {{ session('error') }}
+  </div>
+  @endif
   <div class="flex-grow flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6">
       <h2 class="text-2xl font-bold text-center">Sign in</h2>
@@ -24,7 +30,7 @@
         @csrf
         <div>
           <label class="block text-gray-600 text-sm mb-1">Email</label>
-          <input name="email" type="text" class="w-full h-12 px-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Email" id="email" name="email" required />
+          <input type="text" class="w-full h-12 px-4 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter Email" id="email" name="email" required />
           @error('email')
           <div class="text-red text-sm mt-1">{{ $message }}</div>
           @enderror
@@ -32,7 +38,7 @@
 
         <div class="relative">
           <label class="block text-gray-600 text-sm mb-1">Password</label>
-          <input id="password" name="password" type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="password" name="password" required />
+          <input type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="password" name="password" required />
           <button type="button" onclick="togglePassword()" class="absolute right-3 top-9 text-gray-500 text-sm flex items-center space-x-1">
             <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a18.98 18.98 0 013.75-5.25M21 12s-3 7-10 7c-.62 0-1.23-.057-1.82-.167M9.53 9.53A3.001 3.001 0 0114.47 14.47" />
@@ -80,13 +86,13 @@
     </div>
   </div>
   <script>
-
-    document.querySelector('a[href="#roleModal"]').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('roleModal').classList.remove('hidden');
+    document.querySelector('a[href="#"]').addEventListener('click', function(e) {
+      if (this.textContent.trim() === 'Sign up') {
+          e.preventDefault();
+          document.getElementById('roleModal').classList.remove('hidden');
+      }
     });
 
-    // Close modal
     function closeModal() {
       document.getElementById('roleModal').classList.add('hidden');
     }
@@ -101,9 +107,24 @@
       const icon = document.getElementById('eyeIcon');
       const isHidden = passwordInput.type === 'password';
       passwordInput.type = isHidden ? 'text' : 'password';
+      const span = icon.nextElementSibling;
+      if (isHidden) {
+          span.textContent = "Show";
+      } else {
+          span.textContent = "Hide";
+      }
     }
+
+    // Your fade-out logic, which is correct
+    setTimeout(() => {
+      const notif = document.getElementById('notification-bar');
+      if (notif) {
+        notif.classList.remove("opacity-100");
+        notif.classList.add("opacity-0");
+        setTimeout(() => notif.remove(), 500); 
+      }
+    }, 2500);
   </script>
-  </main>
 </body>
 
 </html>

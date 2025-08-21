@@ -39,13 +39,6 @@ Route::get('/EQUIJOB/Coming-Soon', function () {
 })->name('coming-soon');
 
 
-//test
-Route::get('/get-db-ip', function() {
-    $host = config('database.connections.pgsql.host');
-    $ip = gethostbyname($host);
-    dd("The IP address PHP is using is:", $ip);
-});
-
 Route::get('EQUIJOB/Privacy-Policy', function () {
     return view('placeholders.privacy_policy');
 })->name('privacy-policy');
@@ -57,6 +50,7 @@ Route::post('/EQUIJOB/Log-in', [SignInController::class, 'LoginUser'])->name('lo
 Route::get('/EQUIJOB/Log-in', function () {
     return redirect()->route('sign-in');
 });
+Route::get('/EQUIJOB/About-us', [LandingPageController::class, 'ViewAboutUsPage'])->name('about-us');
 
 //Contact Us 
 Route::get('/EQUIJOB/Contact-Us', [LandingPageController::class, 'ViewContactUsPage'])->name('contact-us');

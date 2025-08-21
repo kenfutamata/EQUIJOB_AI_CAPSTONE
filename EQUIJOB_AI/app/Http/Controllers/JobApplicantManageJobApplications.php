@@ -5,40 +5,44 @@ namespace App\Http\Controllers;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class JobApplicantManageJobApplications extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::guard('applicant')->user();
-        $search = request()->input('search');
+        $search = $request->input('search');
 
         $applicationsQuery = JobApplication::with(['jobPosting', 'applicant'])
-            ->where('applicantID', $user->id);
+            ->where('applicantID', $user->id)
+            ->join(DB::raw('"jobPosting"'), DB::raw('"jobApplications"."jobPostingID"'), '=', DB::raw('"jobPosting"."id"'))
+            ->select(
+                DB::raw('"jobApplications".*'),
+                DB::raw('"jobPosting"."position"'),
+                DB::raw('"jobPosting"."companyName"')
+            );
 
         if ($search) {
-            $applicationsQuery->whereHas('jobPosting', function ($q) use ($search) {
-                $q->where('position', 'like', "%{$search}%")
-                    ->orWhere('companyName', 'like', "%{$search}%")
-                    ->orWhere('sex', 'like', "%{$search}%")
-                    ->orWhere('age', 'like', "%{$search}%")
-                    ->orWhere('disability_type', 'like', "%{$search}%")
-                    ->orWhere('educationalAttainment', 'like', "%{$search}%")
-                    ->orWhere('jobPostingObjectives', 'like', "%{$search}%")
-                    ->orWhere('requirements', 'like', "%{$search}%")
-                    ->orWhere('experience', 'like', "%{$search}%")
-                    ->orWhere('skills', 'like', "%{$search}%")
-                    ->orWhere('contactPhone', 'like', "%{$search}%")
-                    ->orWhere('contactEmail', 'like', "%{$search}%")
-                    ->orWhere('remarks', 'like', "%{$search}%");
+            $applicationsQuery->where(function ($q) use ($search) {
+                $q->where('"jobApplications"."jobApplicationNumber"', 'like', "%{$search}%")
+                    ->orWhere('"jobPosting"."position"', 'like', "%{$search}%")
+                    ->orWhere('"jobPosting"."companyName"', 'like', "%{$search}%")
+                    ->orWhere('"jobApplications"."status"', 'like', "%{$search}%");
             });
-            $applicationsQuery->orWhere('status', 'like', "%{$search}%");
         }
 
-        $applications = $applicationsQuery->get();
+        $sortable = ['jobApplicationNumber', 'position', 'companyName', 'status'];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'jobApplicationNumber';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+
+        $applications = $applicationsQuery
+            ->orderBy($sort, $direction)
+            ->paginate(10);
+
         $notifications = $user->notifications ?? collect();
         $unreadNotifications = $user->unreadNotifications ?? collect();
 

@@ -86,10 +86,7 @@ class ApplicantMatchJobsController extends Controller
             }
         });
     } catch (QueryException $e) {
-        // This 'catch' block specifically listens for database errors.
-        
-        // Check if the error is the specific 'check violation' we're looking for.
-        if ($e->getCode() === '23514') { // '23514' is the SQLSTATE code for check violation
+        if ($e->getCode() === '23514') { 
             \Illuminate\Support\Facades\Log::error("DATABASE_CHECK_VIOLATION: " . $e->getMessage());
             
             return back()->with('error', 'The resume could not be saved because a value (like Disability Type) provided by the AI is not allowed by the system. Please try again or use the Resume Builder.');

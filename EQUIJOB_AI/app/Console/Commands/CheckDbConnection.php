@@ -40,7 +40,7 @@ class CheckDbConnection extends Command
             return 0; // Success exit code
 
         } catch (\Exception $e) {
-            $this->error("❌ FAILED: Could not connect to the database.");
+            $this->error("FAILED: Could not connect to the database.");
             $this->error("Error Message: " . $e->getMessage());
             return 1; // Failure exit code
         }

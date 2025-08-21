@@ -14,6 +14,9 @@ class LandingPageController extends Controller
         return view ('sign-in-page.sign_in'); 
     }
 
+    public function ViewAboutUsPage(){
+        return view('about_us'); 
+    }
     public function ViewContactUsPage(){
         return view('contact_us'); 
     }

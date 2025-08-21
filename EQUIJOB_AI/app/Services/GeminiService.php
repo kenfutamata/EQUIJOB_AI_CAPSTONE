@@ -26,7 +26,7 @@ class GeminiService
         // The official endpoint for the Gemini 1.5 Flash model
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={$apiKey}";
 
-        $textPrompt = "You are an expert HR data entry specialist. Analyze the attached resume file and extract the information. You MUST return the information ONLY as a valid JSON object. The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
+        $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. You MUST return the information ONLY as a valid JSON object. The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
 
         $fileData = [
             'inline_data' => [
@@ -71,7 +71,9 @@ class GeminiService
         $highestDegree = !empty($resumeData['education_details'][0]['degree']) ? $resumeData['education_details'][0]['degree'] : 'Not specified';
         $userProfileString = "## Candidate Profile:\n- Skills: " . ($resumeData['skills'] ?? 'N/A') . "\n- Experience Summary: " . ($resumeData['experience_summary'] ?? 'N/A') . "\n- Highest Education: " . $highestDegree . "\n- Disability: " . ($resumeData['disability_type'] ?? 'N/A') . "\n";
         $jobListingsString = "## Job Listings to Evaluate:\n";
-        foreach ($potentialJobs as $job) { $jobListingsString .= "### Job ID: {$job->id}\n- Position: {$job->position}\n- Required Skills: " . ($job->skills ?? 'N/A') . "\n- Required Experience: " . ($job->experience ?? 'N/A') . "\n- Required Education: " . ($job->educationalAttainment ?? 'N/A') . "\n- Disability Consideration: " . ($job->disabilityType ?? 'N/A') . "\n\n"; }
+        foreach ($potentialJobs as $job) { 
+            $jobListingsString .= "### Job ID: {$job->id}\n- Position: {$job->position}\n- Required Skills: " . ($job->skills ?? 'N/A') . "\n- Required Experience: " . ($job->experience ?? 'N/A') . "\n- Required Education: " . ($job->educationalAttainment ?? 'N/A') . "\n- Disability Consideration: " . ($job->disabilityType ?? 'N/A') . "\n\n"; 
+        }
         $prompt = "You are an expert HR recruiter... Return ONLY the JSON array. For example: [45, 12, 3]\n\n---\n{$userProfileString}---\n{$jobListingsString}---";
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={$apiKey}";
         try {

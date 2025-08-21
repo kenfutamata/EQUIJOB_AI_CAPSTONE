@@ -37,7 +37,6 @@
         @endif
         @endforeach
 
-        <!-- Page Header -->
         <div class="container mx-auto p-4 sm:p-8">
             <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
                 <h1 class="text-3xl font-bold text-gray-800">Job Provider Report</h1>
@@ -91,7 +90,6 @@
     </main>
 
 
-    <!-- Charts Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -170,16 +168,5 @@
         });
     </script>
 
-</body>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EQUIJOB-Job-Provider-Generate Report</title>
-</head>
-<body>
-<a href="{{ route('job-provider-download-report') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
-    Download My Feedback Report
-</a>
 </body>
 </html>

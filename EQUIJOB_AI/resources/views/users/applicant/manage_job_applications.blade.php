@@ -9,6 +9,19 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
 
+@php
+function sortArrow($column) {
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
+@endphp
+
 <body class="bg-white text-black">
     <div>
         <!-- Sidebar -->
@@ -52,15 +65,15 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Applicant Number</th>
-                            <th class="px-2 py-2">Position</th>
-                            <th class="px-2 py-2">Company Name</th>
+                            <th class="px-2 py-2">Applicant Number {!! sortArrow('jobApplicationNumber')!!}</th>
+                            <th class="px-2 py-2">Position {!! sortArrow('position')!!}</th>
+                            <th class="px-2 py-2">Company Name{!! sortArrow('companyName')!!}</th>
                             <th class="px-2 py-2">Applicant Name</th>
                             <th class="px-2 py-2">Applicant Phone Number</th>
                             <th class="px-2 py-2">Applicant Address</th>
                             <th class="px-2 py-2">Sex</th>
                             <th class="px-2 py-2">Applicant Disability Type</th>
-                            <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Status{!! sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>
@@ -70,6 +83,8 @@
                         $posting = $application->jobPosting;
                         $applicant = $application->applicant;
                         $modalData = array_merge($posting->toArray(), [
+                        'firstName' => $applicant->first_name ?? null, 
+                        'lastName' => $applicant->last_name ?? null, 
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
                         'remarks' => $application->remarks,
@@ -112,6 +127,10 @@
                         @endforeach
                     </tbody>
                 </table>
+                </table>
+                <div class="mt-4 flex justify-center">
+                    {!! $applications->links('pagination::tailwind') !!}
+                </div>
             </div>
         </main>
     </div>
@@ -121,12 +140,16 @@
             <button onclick="closeviewJobApplicationModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
             <h2 class="text-xl font-bold mb-4">View Job Application</h2>
             <div>
+                <label class="block text-xs text-gray-500">Applicant Name</label>
+                <input id="modal.applicantName" class="w-full border rounded px-2 py-1" readonly>
+            </div>
+            <div>
                 <label class="block text-xs text-gray-500">Position</label>
-                <input id="modal.position" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.position" class="w-full border rounded px-2 py-1" readonly>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Company Name</label>
-                <input id="modal.company_name" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.company_name" class="w-full border rounded px-2 py-1" readonly>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Resume</label>
@@ -138,11 +161,11 @@
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Interview Date</label>
-                <input id="modal.interviewDate" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.interviewDate" class="w-full border rounded px-2 py-1" readonly>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Time</label>
-                <input id="modal.interviewTime" class="w-full border rounded px-2 py-1" disabled>
+                <input id="modal.interviewTime" class="w-full border rounded px-2 py-1" readonly>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Google Meet Link</label>
@@ -219,6 +242,8 @@
 
         function openViewJobApplicationModal(button) {
             const applicationData = JSON.parse(button.getAttribute('data-application'));
+            const fullName = `${applicationData.firstName || ''} ${applicationData.lastName || ''}`.trim(); 
+            document.getElementById('modal.applicantName').value = fullName || 'N/A';
             document.getElementById('modal.position').value = applicationData.position ?? 'N/A';
             document.getElementById('modal.company_name').value = applicationData.companyName ?? 'N/A';
             document.getElementById('modal.remarks').value = applicationData.remarks ?? 'N/A';

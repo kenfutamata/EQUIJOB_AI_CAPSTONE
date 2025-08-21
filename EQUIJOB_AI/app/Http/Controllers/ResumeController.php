@@ -189,23 +189,20 @@ class ResumeController extends Controller
 
             $generatedContent = null;
             $maxRetries = 3;
-            $initialDelay = 1; // seconds
+            $initialDelay = 1; 
 
             for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
                 try {
                     $response = $client->generativeModel($modelName)->generateContent($promptForAI);
                     $generatedContent = $response->text();
-                    // If successful, break out of the retry loop
                     if (!empty($generatedContent)) {
                         break;
                     }
                 } catch (\Exception $e) {
                     Log::warning("Gemini API call failed on attempt " . ($attempt + 1) . ". Error: " . $e->getMessage());
-                    // If this was the last attempt, re-throw the exception to be caught by the outer catch block
                     if ($attempt === $maxRetries - 1) {
                         throw $e;
                     }
-                    // Wait before retrying (exponential backoff)
                     $delay = $initialDelay * (2 ** $attempt);
                     sleep($delay);
                 }
@@ -227,7 +224,6 @@ class ResumeController extends Controller
             return redirect()->route('applicant-resume-view-and-download')->with('success', 'Resume processed successfully with AI enhancements!');
         } catch (\Throwable $e) {
             Log::error('Error in ResumeController@store: ' . $e->getMessage());
-            // Provide a more user-friendly message for the specific "overloaded" error
             if (str_contains(strtolower($e->getMessage()), 'overloaded')) {
                 $errorMessage = 'The AI assistant is currently experiencing high demand and could not process your request. Your resume has been saved. Please try again in a few moments.';
             } else {

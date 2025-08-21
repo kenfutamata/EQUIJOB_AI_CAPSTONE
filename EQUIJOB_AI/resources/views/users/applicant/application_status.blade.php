@@ -68,17 +68,19 @@
 
         <main class="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
             @if($application)
-               @php
-                $stages = [
-                    'Pending' => 'Applied',
-                    'For Interview' => 'Interview',
-                    'On-Offer' => 'Offer',
-                    'Hired' => 'Hired'
-                ];
-                $currentStatus = $application->status;
-                $isRejected = $currentStatus === 'Rejected';
-                $progressWidth = array_search($currentStatus, array_keys($stages)) / (count($stages) - 1) * 100 . '%';
-                @endphp
+            @php
+            $stages = [
+            'Pending' => 'Applied',
+            'For Interview' => 'Interview',
+            'On-Offer' => 'Offer',
+            'Hired' => 'Hired',
+            'Withdraw' => 'Withdraw',
+            'Rejected' => 'Rejected',
+            ];
+            $currentStatus = $application->status;
+            $isRejected = $currentStatus === 'Rejected';
+            $progressWidth = array_search($currentStatus, array_keys($stages)) / (count($stages) - 1) * 100 . '%';
+            @endphp
 
 
             <div class="bg-white shadow-lg border border-gray-200 rounded-lg p-6 sm:p-8">
@@ -127,6 +129,8 @@
                     <p>Good News! The Job Provider has offer the position of {{$application->JobPosting->position}} on offer. If you wish to accept. please head to your Manage Job Applications to accept our offer .</p>
                     @elseif($currentStatus === 'Rejected')
                     <p>Thank you for your interest. After careful consideration, the hiring team has decided to move forward with other candidates at this time. Kindly Check your email for further details.</p>
+                    @elseif($currentStatus === 'Withdrawn')
+                    <p>Your Application has been Withdrawn.</p>
                     @if($application->remarks)
                     <p class="mt-2 text-sm text-gray-600"><strong>Reason:</strong> {{ $application->remarks }}</p>
                     @endif

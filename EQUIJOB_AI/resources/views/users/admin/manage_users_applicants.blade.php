@@ -47,14 +47,14 @@
 </head>
 @php
 function sortArrow($column) {
-$currentSort = request('sort');
-$direction = request('direction') === 'asc' ? 'desc' : 'asc';
-$arrow = request('sort') === $column
-? (request('direction') === 'asc' ? '↑' : '↓')
-: '↕';
-$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-$url = request()->url() . '?' . http_build_query($params);
-return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+    $currentSort = request('sort');
+    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
+    $arrow = request('sort') === $column
+    ? (request('direction') === 'asc' ? '↑' : '↓')
+    : '↕';
+    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+    $url = request()->url() . '?' . http_build_query($params);
+    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
 
