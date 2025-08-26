@@ -79,7 +79,16 @@
             ];
             $currentStatus = $application->status;
             $isRejected = $currentStatus === 'Rejected';
-            $progressWidth = array_search($currentStatus, array_keys($stages)) / (count($stages) - 1) * 100 . '%';
+            $progressBarStages = ['Pending', 'For Interview', 'On-Offer', 'Hired'];
+            $currentStageIndex = array_search($currentStatus, $progressBarStages);
+            $totalProgressStages = count($progressBarStages); 
+
+            if($currentStageIndex !== false && $totalProgressStages > 1){
+                $progressWidth = ($currentStageIndex / ($totalProgressStages - 1)) * 100 . '%';
+            }
+            else{
+                $progressWidth = '0%'; 
+            }
             @endphp
 
 

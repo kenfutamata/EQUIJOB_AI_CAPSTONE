@@ -12,7 +12,7 @@ class JobApplicantManageJobApplications extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+public function index(Request $request)
     {
         $user = Auth::guard('applicant')->user();
         $search = $request->input('search');

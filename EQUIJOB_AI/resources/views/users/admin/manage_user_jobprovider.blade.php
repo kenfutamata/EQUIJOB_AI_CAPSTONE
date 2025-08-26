@@ -100,10 +100,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <th class="px-4 py-3">First Name {!! sortArrow('first_name')!!}</th>
                             <th class="px-4 py-3">Last Name {!! sortArrow('last_name')!!}</th>
                             <th class="px-4 py-3">Email {!! sortArrow('email')!!}</th>
-                            <th class="px-4 py-3">Phone Number {!! sortArrow('phone_number')!!}</th>
                             <th class="px-4 py-3">Company {!! sortArrow('company_name')!!}</th>
                             <th class="px-4 py-3">Company Logo</th>
-                            <th class="px-4 py-3">Role {!! sortArrow('role')!!}</th>
                             <th class="px-4 py-3">Profile Picture</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Actions</th>
@@ -116,7 +114,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-4 py-3">{{ $user->first_name }}</td>
                             <td class="px-4 py-3">{{ $user->last_name }}</td>
                             <td class="px-4 py-3">{{ $user->email }}</td>
-                            <td class="px-4 py-3">{{ $user->phone_number }}</td>
                             <td class="px-4 py-3">{{ $user->company_name }}</td>
                             <td class="px-4 py-3">
                                 @if ($user->company_logo)
@@ -125,7 +122,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                 No Logo
                                 @endif
                             </td>
-                            <td class="px-4 py-3">{{ $user->role }}</td>
                             <td class="px-2 py-2">
                                 @if ($user->profile_picture)
                                 <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
@@ -200,9 +196,9 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             <form id="deleteuser" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
             </form>
-            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
+            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
 
@@ -229,7 +225,13 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     permitContainer.innerText = 'Unsupported file format';
                 }
             }
-            document.getElementById('modal_profile_picture').value = user.profile_picture;
+            const profilePicture = document.getElementById('modal_profile_picture');
+            if(user.profile_picture){
+                profilePicture.src = `/storage/${user.profile_picture}`;
+                profilePicture.style.display = 'block';
+            }else{
+                profilePicture.style.display = 'none';
+            }
             document.getElementById('modal_role').value = user.role;
             document.getElementById('modal_status').value = user.status;
 

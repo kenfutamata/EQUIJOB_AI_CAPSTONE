@@ -80,6 +80,8 @@
                         $modalData = [
                         'position' => $posting->position ?? 'N/A',
                         'companyName' => $posting->companyName ?? 'N/A',
+                        'firstName' => $applicant->first_name ?? 'N/A',
+                        'lastName' => $applicant->last_name ?? 'N/A',
                         'sex' => $applicant->gender ?? 'N/A',
                         'age' => $applicant->age ?? 'N/A',
                         'disabilityType' => $applicant->type_of_disability ?? 'N/A',
@@ -191,6 +193,10 @@
                 <input id="modal.company_name" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
+                <label class="block text-xs text-gray-500">Applicant Name</label>
+                <input id="modal.applicant_name" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
                 <label class="block text-xs text-gray-500">Sex</label>
                 <input id="modal.sex" class="w-full border rounded px-2 py-1" disabled>
             </div>
@@ -285,7 +291,7 @@
             <form id="deleteApplication" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">Yes</button>
             </form>
             <button onclick="closeDeleteApplicationModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
@@ -334,6 +340,7 @@
             const applicationData = JSON.parse(button.getAttribute('data-application'));
             document.getElementById('modal.position').value = applicationData.position ?? 'N/A';
             document.getElementById('modal.company_name').value = applicationData.companyName ?? 'N/A';
+            document.getElementById('modal.applicant_name').value = (applicationData.firstName ?? '') + ' ' + (applicationData.lastName ?? '');
             document.getElementById('modal.sex').value = applicationData.sex ?? 'N/A';
             document.getElementById('modal.age').value = applicationData.age ?? 'N/A';
             document.getElementById('modal.disability_type').value = applicationData.disabilityType ?? 'N/A';

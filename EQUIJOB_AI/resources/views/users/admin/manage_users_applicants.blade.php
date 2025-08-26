@@ -193,9 +193,9 @@ function sortArrow($column) {
             <form id="deleteuser" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
             </form>
-            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
+            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
 

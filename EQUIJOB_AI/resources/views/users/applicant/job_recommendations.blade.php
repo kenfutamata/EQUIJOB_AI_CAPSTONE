@@ -265,7 +265,7 @@
                             </div>
                             <div class="flex justify-end gap-2">
                                 <button type="button" onclick="closeApplyJobModal()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
-                                <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Add</button>
+                                <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Apply</button>
                             </div>
                             <input type="hidden" name="jobPostingID" id="apply_jobPostingID">
                             <input type="hidden" name="jobProviderID" id="apply_jobProviderID">

@@ -56,7 +56,6 @@
             @if($ratingsChartData || $trendsChartData)
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                {{-- Chart 1: Feedback Ratings --}}
                 <div class="bg-white p-6 rounded-lg shadow-md border">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">
                         Feedback Ratings for {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}

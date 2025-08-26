@@ -353,9 +353,9 @@
             <form id="deletejobpositng" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
             </form>
-            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
+            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
     <!-- Scripts -->
@@ -388,10 +388,8 @@
         }, 3000);
 
         function openViewJobPostingModal(button) {
-            // This part is correct
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
 
-            // Populate all the input/textarea fields
             document.getElementById('modal.position').value = jobposting.position || '';
             document.getElementById('modal.companyName').value = jobposting.companyName || '';
             document.getElementById('modal.sex').value = jobposting.sex || '';

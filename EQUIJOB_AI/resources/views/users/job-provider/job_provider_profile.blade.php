@@ -71,6 +71,12 @@
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                                 <div>
+                                    <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
+                                    <img src="{{ $user->company_logo ? asset('storage/' . $user->company_logo) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                                        alt="Company Logo"
+                                        class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
+                                </div>
+                                <div>
                                     <label class="block text-sm text-gray-600 mb-1">Business Permit</label>
                                     <div id="view_business_permit" class="mt-2"></div>
 
@@ -82,7 +88,7 @@
                             <button type="button"
                                 onclick="openModal()"
                                 class="bg-white border border-gray-400 px-6 py-2 rounded-md hover:bg-gray-100 font-semibold shadow-sm text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                Update
+                                Update Information
                             </button>
                         </div>
                     </div>
@@ -121,6 +127,11 @@
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Company Name</label>
                             <input type="text" name="company_name" value="{{ $user->company_name }}"
+                                class="w-full border rounded-md px-4 py-2 text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Upload Company Logo</label>
+                            <input type="file" name="company_logo"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
