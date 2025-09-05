@@ -118,13 +118,10 @@
             </div>
 
             <div id="viewJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
-                <!-- Modal Container -->
                 <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6">
 
-                    <!-- Close Button -->
                     <button onclick="closeViewJobPostingModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black text-xl">&times;</button>
 
-                    <!-- Header Section -->
                     <div class="flex flex-col md:flex-row gap-6">
                         <div class="flex-shrink-0">
                             <img id="modal-companyLogo" src="https://placehold.co/180x151" alt="Company Logo" class="w-44 h-auto border" style="display:block;" />

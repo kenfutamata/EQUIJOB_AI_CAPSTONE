@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Job Applicant- Manage Job Applications</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{{ asset('assets/applicant/applicant-manage-job-applications/css/manage_job_applications.css') }}" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
 
@@ -83,14 +84,18 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         $posting = $application->jobPosting;
                         $applicant = $application->applicant;
                         $modalData = array_merge($posting->toArray(), [
-                        'firstName' => $applicant->first_name ?? null, 
-                        'lastName' => $applicant->last_name ?? null, 
+                        'firstName' => $applicant->first_name ?? null,
+                        'lastName' => $applicant->last_name ?? null,
+                        'sex' => $applicant->gender,
+                        'contactPhone' => $applicant->phone_number,
+                        'disabilityType' => $applicant->type_of_disability,
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
                         'remarks' => $application->remarks,
                         'interviewDate' => $application->interviewDate ? $application->interviewDate->format('F j, Y') : null,
                         'interviewTime' => $application->interviewTime ? $application->interviewTime->format('g:i A') : null,
                         'interviewLink' => $application->interviewLink,
+                        'profile_picture' => $applicant->profile_picture ?? null,
                         ]);
                         @endphp
                         <tr>
@@ -127,58 +132,97 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         @endforeach
                     </tbody>
                 </table>
-                </table>
                 <div class="mt-4 flex justify-center">
                     {!! $applications->links('pagination::tailwind') !!}
                 </div>
             </div>
         </main>
     </div>
-    <!-- View Job Posting Modal -->
-    <div id="viewJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
-            <button onclick="closeviewJobApplicationModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
-            <h2 class="text-xl font-bold mb-4">View Job Application</h2>
-            <div>
-                <label class="block text-xs text-gray-500">Applicant Name</label>
-                <input id="modal.applicantName" class="w-full border rounded px-2 py-1" readonly>
+    <!-- View Job Applications Modal -->
+    <div id="viewJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
+        <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6">
+
+            <button onclick="closeviewJobApplicationModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black text-xl">&times;</button>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="flex-shrink-0">
+                    <img id="modal.applicantProfile" src="https://placehold.co/180x151" alt="Applicant Profile" class="w-44 h-auto border" style="display:block;" />
+                    <div id="modal.applicantInitial" class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-blue-500 font-bold text-lg" style="display:none;"></div>
+                </div>
+                <div>
+                    <h2 id="modal.applicantName" class="text-2xl font-semibold text-gray-800">Applicant's Name</h2>
+                    <p id="modal.position" class="text-xl text-gray-700 mt-1">Position</p>
+                    <p id="modal.companyName" class="text-xl text-gray-700 mt-1">Company Name</p>
+                </div>
             </div>
-            <div>
-                <label class="block text-xs text-gray-500">Position</label>
-                <input id="modal.position" class="w-full border rounded px-2 py-1" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Company Name</label>
-                <input id="modal.company_name" class="w-full border rounded px-2 py-1" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Resume</label>
-                <div id="modal_view_resume"></div>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Application Letter</label>
-                <div id="modal_view_application_letter"></div>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Interview Date</label>
-                <input id="modal.interviewDate" class="w-full border rounded px-2 py-1" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Time</label>
-                <input id="modal.interviewTime" class="w-full border rounded px-2 py-1" readonly>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Google Meet Link</label>
-                <input type="text" id="modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm" readonly>
-                <input type="hidden" name="modal.interviewLink" id="modal.interviewLink">
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 mt-2">Remarks</label>
-                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="border w-full md:max-w-xs p-4 flex flex-col gap-4">
+                    <h3 class="text-lg font-semibold border-b pb-1">Applicant Information</h3>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/disabled.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Disability Type</p>
+                            <p id="modal.disabilityType" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/salary.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Sex</p>
+                            <p id="modal.sex" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/phone.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Contact Number</p>
+                            <p id="modal.contactPhone" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/email.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Email Address</p>
+                            <p id="modal.contactEmail" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/workplace.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Resume</p>
+                            <div id="modal_view_resume"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/workplace.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Application Letter</p>
+                            <div id="modal_view_application_letter"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Interview Date</h3>
+                        <p id="modal.interviewDate" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Interview Time</h3>
+                        <p id="modal.interviewTime" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Google Meet Link</h3>
+                        <p id="modal.interviewLink" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Remarks</h3>
+                        <p id="modal.remarks" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
     <div id="withdrawJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
@@ -197,123 +241,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
         </div>
     </div>
 
-    <script>
-        function openDisapproveJobPostingModal(button) {
-            document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
-        }
+    <script src="{{ asset('assets/applicant/applicant-manage-job-applications/js/manage_job_applications.js') }}"></script>
 
-        function closeDisapproveJobPostingModal() {
-            document.getElementById('DisapproveJobPostingModal').classList.add('hidden');
-        }
-
-        function openAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.remove('hidden');
-        }
-
-        function closeAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.add('hidden');
-        }
-
-        function openDeleteModal(userId) {
-            const form = document.getElementById('deleteuser');
-            form.action = `/EQUIJOB/Admin/Manage-User-Applicants/Delete/${userId}`;
-            document.getElementById('DeleteRoleModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.add('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('viewJobApplicationModal');
-            if (e.target === modal) {
-                closeviewJobApplicationModal();
-            }
-        });
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '0';
-        }, 2500);
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.display = 'none';
-        }, 3000);
-
-        function openViewJobApplicationModal(button) {
-            const applicationData = JSON.parse(button.getAttribute('data-application'));
-            const fullName = `${applicationData.firstName || ''} ${applicationData.lastName || ''}`.trim(); 
-            document.getElementById('modal.applicantName').value = fullName || 'N/A';
-            document.getElementById('modal.position').value = applicationData.position ?? 'N/A';
-            document.getElementById('modal.company_name').value = applicationData.companyName ?? 'N/A';
-            document.getElementById('modal.remarks').value = applicationData.remarks ?? 'N/A';
-            document.getElementById('modal.interviewDate').value = applicationData.interviewDate ?? 'N/A';
-            document.getElementById('modal.interviewTime').value = applicationData.interviewTime ?? 'N/A';
-            document.getElementById('modal_meet_link').value = applicationData.interviewLink ?? 'N/A';
-            document.getElementById('modal.interviewLink').value = applicationData.interviewLink ?? '';
-
-            const resumeContainer = document.getElementById('modal_view_resume');
-            resumeContainer.innerHTML = '';
-            if (applicationData.uploadResume) {
-                const ext = applicationData.uploadResume.split('.').pop().toLowerCase();
-                const filePath = `/storage/${applicationData.uploadResume}`;
-                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Resume Preview"/></a>`;
-                } else if (ext === 'pdf') {
-                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
-                } else {
-                    resumeContainer.innerText = 'Unsupported file format';
-                }
-            } else {
-                resumeContainer.innerText = 'No resume uploaded.';
-            }
-
-            const applicationContainer = document.getElementById('modal_view_application_letter');
-            applicationContainer.innerHTML = '';
-            if (applicationData.uploadApplicationLetter) {
-                const ext = applicationData.uploadApplicationLetter.split('.').pop().toLowerCase();
-                const filePath = `/storage/${applicationData.uploadApplicationLetter}`;
-                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Application Letter Preview"/></a>`;
-                } else if (ext === 'pdf') {
-                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
-                } else {
-                    applicationContainer.innerText = 'Unsupported file format';
-                }
-            } else {
-                applicationContainer.innerText = 'No Application Letter uploaded.';
-            }
-
-            document.getElementById('viewJobApplicationModal').classList.remove('hidden');
-        }
-
-        function closeviewJobApplicationModal() {
-            document.getElementById('viewJobApplicationModal').classList.add('hidden');
-        }
-
-        function openWithdrawModal(button) {
-            const formActionUrl = button.getAttribute('data-url');
-            const form = document.getElementById('withdrawForm');
-            form.action = formActionUrl;
-            document.getElementById('withdrawJobApplicationModal').classList.remove('hidden');
-        }
-
-        function closeWithdrawModal() {
-            document.getElementById('withdrawJobApplicationModal').classList.add('hidden');
-        }
-    </script>
-    <!-- Style -->
-    <style>
-        .main-content-scroll {
-            margin-left: 234px;
-            padding-top: 4rem;
-            height: 100vh;
-            overflow-y: auto;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-            padding-bottom: 1.5rem;
-        }
-    </style>
 </body>
 
 </html>

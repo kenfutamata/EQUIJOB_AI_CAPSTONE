@@ -8,7 +8,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
-
+@php
+function sortArrow($column) {
+    $currentSort = request('sort');
+    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
+    $arrow = request('sort') === $column
+    ? (request('direction') === 'asc' ? '↑' : '↓')
+    : '↕';
+    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+    $url = request()->url() . '?' . http_build_query($params);
+    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
+@endphp
 <body class="bg-white text-black">
 
     <div>
@@ -69,17 +80,17 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Position</th>
-                            <th class="px-2 py-2">Company Name</th>
-                            <th class="px-2 py-2">Sex</th>
-                            <th class="px-2 py-2">Age</th>
-                            <th class="px-2 py-2">Disability Type</th>
-                            <th class="px-2 py-2">Educational Attainment</th>
-                            <th class="px-2 py-2">Work Environment</th>
-                            <th class="px-2 py-2">Experience</th>
-                            <th class="px-2 py-2">Skills</th>
-                            <th class="px-2 py-2">Requirements</th>
-                            <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Position {!!sortArrow('position')!!}</th>
+                            <th class="px-2 py-2">Company Name {!!sortArrow('companyName')!!}</th>
+                            <th class="px-2 py-2">Sex {!!sortArrow('sex')!!}</th>
+                            <th class="px-2 py-2">Age {!!sortArrow('age')!!}</th>
+                            <th class="px-2 py-2">Disability Type {!!sortArrow('disabilityType')!!}</th>
+                            <th class="px-2 py-2">Educational Attainment {!!sortArrow('educationalAttainment')!!}</th>
+                            <th class="px-2 py-2">Work Environment {!!sortArrow('workEnvironment')!!}</th>
+                            <th class="px-2 py-2">Experience {!!sortArrow('experience')!!}</th>
+                            <th class="px-2 py-2">Skills {!!sortArrow('skills')!!}</th>
+                            <th class="px-2 py-2">Requirements {!!sortArrow('requirements')!!}</th>
+                            <th class="px-2 py-2">Status {!!sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>
@@ -91,10 +102,10 @@
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->age }}</td>
                             <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
-                            <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
+                            <td class="px-2 py-2">{{ $posting->educationalAttainment ?:'No Educational Attainment provided'}}</td>
                             <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
-                            <td class="px-2 py-2">{{ $posting->experience }}</td>
-                            <td class="px-2 py-2">{{ $posting->skills }}</td>
+                            <td class="px-2 py-2">{{ $posting->experience ?: 'No Experience provided'}}</td>
+                            <td class="px-2 py-2">{{ $posting->skills ?: 'No Skills provided'}}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
@@ -169,14 +180,14 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">age</label>
-                    <input type="number" name="age" class="w-full border rounded px-2 py-1">
+                    <input type="number" name="age" class="w-full border rounded px-2 py-1" required>
                     @error('age')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Disability Type</label>
-                    <select name="disabilityType" class="w-full border rounded px-2 py-1">
+                    <select name="disabilityType" class="w-full border rounded px-2 py-1" required>
                         <option value="Physical">Physical</option>
                         <option value="Visual">Visual</option>
                         <option value="Hearing">Hearing</option>
@@ -195,7 +206,7 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Work Environment</label>
-                    <select name="workEnvironment" class="w-full border rounded px-2 py-1">
+                    <select name="workEnvironment" class="w-full border rounded px-2 py-1" required>
                         <option value="On-Site">On-Site</option>
                         <option value="Work From Home">Work From Home</option>
                         <option value="Hybrid">Hybrid</option>
@@ -207,7 +218,7 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Job Posting Objectives</label>
-                    <input name="jobPostingObjectives" class="w-full border rounded px-2 py-1">
+                    <input name="jobPostingObjectives" class="w-full border rounded px-2 py-1" required>
                     @error('jobPostingObjectives')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -228,7 +239,7 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Requirements</label>
-                    <textarea name="requirements" class="w-full border rounded px-2 py-1"></textarea>
+                    <textarea name="requirements" class="w-full border rounded px-2 py-1" required></textarea>
                     @error('requirements')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -249,14 +260,14 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Job Description</label>
-                    <textarea name="description" class="w-full border rounded px-2 py-1"></textarea>
+                    <textarea name="description" class="w-full border rounded px-2 py-1" required></textarea>
                     @error('description')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Salary Range</label>
-                    <input name="salaryRange" class="w-full border rounded px-2 py-1">
+                    <input name="salaryRange" class="w-full border rounded px-2 py-1" required>
                     @error('salaryRange')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -359,72 +370,7 @@
         </div>
     </div>
     <!-- Scripts -->
-    <script>
-        function openAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.remove('hidden');
-        }
-
-        function closeAddJobPostingModal() {
-            document.getElementById('addJobPostingModal').classList.add('hidden');
-        }
-
-        function openDeleteModal(button) {
-            const form = document.getElementById('deletejobpositng');
-            form.action = button.getAttribute('data-action');
-            document.getElementById('DeleteJobPostingModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('DeleteJobPostingModal').classList.add('hidden');
-        }
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '10';
-        }, 2500);
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.display = 'none';
-        }, 3000);
-
-        function openViewJobPostingModal(button) {
-            const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-
-            document.getElementById('modal.position').value = jobposting.position || '';
-            document.getElementById('modal.companyName').value = jobposting.companyName || '';
-            document.getElementById('modal.sex').value = jobposting.sex || '';
-            document.getElementById('modal.age').value = jobposting.age || '';
-            document.getElementById('modal.disabilityType').value = jobposting.disabilityType || '';
-            document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment || '';
-            document.getElementById('modal.workEnvironment').value = jobposting.workEnvironment || '';
-            document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives || '';
-            document.getElementById('modal.experience').value = jobposting.experience || '';
-            document.getElementById('modal.skills').value = jobposting.skills || '';
-            document.getElementById('modal.requirements').value = jobposting.requirements || '';
-            document.getElementById('modal.contactPhone').value = jobposting.contactPhone || '';
-            document.getElementById('modal.contactEmail').value = jobposting.contactEmail || '';
-            document.getElementById('modal.description').value = jobposting.description || '';
-            document.getElementById('modal.salaryRange').value = jobposting.salaryRange || '';
-            document.getElementById('modal.remarks').value = jobposting.remarks || '';
-            const companyLogo = document.getElementById('modal.companyLogo');
-            if (jobposting.companyLogo) {
-                companyLogo.src = `/storage/${jobposting.companyLogo}`;
-                companyLogo.style.display = 'block';
-            } else {
-                companyLogo.style.display = 'none';
-            }
-            document.getElementById('viewJobPostingModal').classList.remove('hidden');
-        }
-
-        function closeViewJobPostingModal() {
-            document.getElementById('viewJobPostingModal').classList.add('hidden');
-        }
-
-        document.getElementById('companyLogoInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            document.getElementById('companyLogoFilename').textContent = file ? file.name : '';
-        });
-    </script>
+    <script src="{{ asset('assets/job-provider/manage-job-posting/js/job_posting.js') }}"></script>
 
 </body>
 

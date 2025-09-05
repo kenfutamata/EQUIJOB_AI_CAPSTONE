@@ -8,7 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/applicant_profile.css') }}">
+    <script src="{{ asset('assets/applicant/applicant-profile/js/applicant_profile.js') }}"></script>
+
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </head>
@@ -178,20 +179,7 @@
         </div>
     </div>
 
-    <script>
-        function openModal() {
-            document.getElementById('updateProfileModal').classList.remove('hidden');
-        }
 
-        function closeModal() {
-            document.getElementById('updateProfileModal').classList.add('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('updateProfileModal');
-            if (e.target === modal) closeModal();
-        });
-    </script>
 </body>
 
 </html>

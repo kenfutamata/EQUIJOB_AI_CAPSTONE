@@ -26,6 +26,7 @@ class AdminManageUserJobProviderController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
+                        ->orWhere('userID', 'like', "%{$search}%")
                         ->orwhere('first_name', 'like', "%{$search}%")
                         ->orWhere('last_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
@@ -41,7 +42,6 @@ class AdminManageUserJobProviderController extends Controller
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
         $query->orderBy($sort, $direction);
-
         $users = $query->latest()->paginate(10);
         $response = response()->view('users.admin.manage_user_jobprovider', compact('admin', 'users', 'notifications', 'unreadNotifications', 'search'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
@@ -90,7 +90,10 @@ class AdminManageUserJobProviderController extends Controller
         $user = users::findOrFail($id);
         $user->status = 'Active';
         $user->save();
-        Mail::to($user->email)->send(new EmailConfirmation());
+        $maildata = [
+            'userID'=>$user->userID,
+        ];
+        Mail::to($user->email)->send(new EmailConfirmation($maildata));
 
         return redirect()->back()->with('Success', 'Email Successfully sent to user');
     }

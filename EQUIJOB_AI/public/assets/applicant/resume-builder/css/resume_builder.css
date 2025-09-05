@@ -1,0 +1,6 @@
+/* Additional styles for better UX if needed */
+.remove-experience-btn,
+.remove-education-btn {
+    line-height: 1;
+    /* Adjust for better vertical alignment of × */
+}

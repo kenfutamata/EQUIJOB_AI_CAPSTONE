@@ -96,22 +96,17 @@ class JobProviderManageJobApplications extends Controller
                     'error_description' => $accessToken['error_description'] ?? 'No description provided by Google.'
                 ]);
 
-                // Return a more informative error to the front-end.
                 return response()->json(['error' => 'Authentication service failed. Please check application logs for details.'], 500);
             }
 
-            // Set the newly fetched access token on the client.
             $client->setAccessToken($accessToken);
 
-            // Make the API call to create the meeting.
             $meetService = new Google_Service_Meet($client);
             $space = new Google_Service_Meet_Space();
             $createdSpace = $meetService->spaces->create($space);
 
-            // Success: Return the link.
             return response()->json(['meetLink' => $createdSpace->getMeetingUri()]);
         } catch (\Exception $e) {
-            // Catch any other exceptions during the process.
             Log::error('Failed to create Google Meet link due to an exception.', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()

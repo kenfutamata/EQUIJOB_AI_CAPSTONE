@@ -1,0 +1,9 @@
+.main-content-scroll {
+    margin-left: 234px;
+    padding-top: 4rem;
+    height: 100vh;
+    overflow-y: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+}

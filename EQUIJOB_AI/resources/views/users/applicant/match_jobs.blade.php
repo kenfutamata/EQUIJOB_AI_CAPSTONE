@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
 </head>
+
 <body class="bg-[#FCFDFF] min-h-screen">
   <!-- Sidebar -->
   <div class="fixed top-0 left-0 w-[234px] h-full z-40 bg-[#c3d2f7]">
@@ -27,21 +29,21 @@
   <div class="ml-[234px] pt-6 flex justify-center items-start min-h-screen px-1">
     <div class="bg-white max-w-xl w-full rounded-[30px] border border-gray-300 p-8 shadow-md text-center">
       <h1 class="text-3xl font-semibold mb-6">Upload Resume</h1>
-      
+
       @if ($errors->any() || session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
-          <strong class="font-bold">Oops! Something went wrong.</strong>
-          <ul class="mt-2 list-disc list-inside">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-            @if(session('error'))
-                <li>{{ session('error') }}</li>
-            @endif
-          </ul>
-        </div>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+        <strong class="font-bold">Oops! Something went wrong.</strong>
+        <ul class="mt-2 list-disc list-inside">
+          @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+          @if(session('error'))
+          <li>{{ session('error') }}</li>
+          @endif
+        </ul>
+      </div>
       @endif
-      
+
 
       <form action="{{ route('applicant-match-jobs-upload-resume') }}" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
         @csrf
@@ -57,12 +59,8 @@
     </div>
   </div>
 
-  <script>
-    function showFileName() {
-      const input = document.getElementById('resume');
-      const display = document.getElementById('fileNameDisplay');
-      display.textContent = input.files.length > 0 ? `Selected file: ${input.files[0].name}` : '';
-    }
-  </script>
+  <script src="{{ asset('assets/applicant/ai-job-matching/js/match_jobs.js') }}"></script>
+
 </body>
+
 </html>

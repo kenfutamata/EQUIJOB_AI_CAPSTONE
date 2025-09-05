@@ -17,21 +17,18 @@ public function index(Request $request)
         $user = Auth::guard('applicant')->user();
         $search = $request->input('search');
 
-        $applicationsQuery = JobApplication::with(['jobPosting', 'applicant'])
-            ->where('applicantID', $user->id)
-            ->join(DB::raw('"jobPosting"'), DB::raw('"jobApplications"."jobPostingID"'), '=', DB::raw('"jobPosting"."id"'))
-            ->select(
-                DB::raw('"jobApplications".*'),
-                DB::raw('"jobPosting"."position"'),
-                DB::raw('"jobPosting"."companyName"')
-            );
+        $applicationsQuery = JobApplication::with(['applicant'])
+            ->where('jobApplications.applicantID', $user->id)
+            ->join('jobPosting', 'jobApplications.jobPostingID', '=', 'jobPosting.id')
+            ->select('jobApplications.*', 'jobPosting.position', 'jobPosting.companyName');
 
         if ($search) {
             $applicationsQuery->where(function ($q) use ($search) {
-                $q->where('"jobApplications"."jobApplicationNumber"', 'like', "%{$search}%")
-                    ->orWhere('"jobPosting"."position"', 'like', "%{$search}%")
-                    ->orWhere('"jobPosting"."companyName"', 'like', "%{$search}%")
-                    ->orWhere('"jobApplications"."status"', 'like', "%{$search}%");
+
+                $q->where('jobApplications.jobApplicationNumber', 'like', "%{$search}%")
+                    ->orWhere('jobPosting.position', 'like', "%{$search}%")
+                    ->orWhere('jobPosting.companyName', 'like', "%{$search}%")
+                    ->orWhere('jobApplications.status', 'like', "%{$search}%");
             });
         }
 

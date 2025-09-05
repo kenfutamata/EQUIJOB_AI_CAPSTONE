@@ -82,20 +82,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Partners Section -->
-    <section id="partners" class="py-16 lg:py-20 px-6 lg:px-16 bg-gray-50">
-        <div class="container mx-auto text-center">
-            <h2 class="text-3xl md:text-4xl font-semibold font-poppins mb-12 text-gray-800">Our Partners</h2>
-            <div class="flex flex-wrap justify-center items-center gap-10 md:gap-16 lg:gap-20">
-                <img src="{{ asset('assets/photos/landing_page/finance.png') }}" alt="Partner 1 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="{{ asset('assets/photos/landing_page/tmobile.png') }}" alt="Partner 2 Logo" class="h-16 md:h-5 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="{{ asset('assets/photos/landing_page/dell.png') }}" alt="Partner 3 Logo" class="h-16 md:h-20 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-                <img src="{{ asset('assets/photos/landing_page/accenture.png') }}" alt="Partner 4 Logo" class="h-16 md:h-5 w-auto opacity-70 hover:opacity-100 transition duration-300" />
-            </div>
-        </div>
-    </section>
-
      <!-- Resources Section -->
     <section id="resources" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
         <div class="container mx-auto">
@@ -173,7 +159,6 @@
                         <h3 class="text-xl font-semibold text-gray-700 mb-2 font-poppins">Can employers use EQUIJOB to improve their hiring practices?</h3>
                         <p class="text-gray-600 leading-relaxed">Yes, EQUIJOB provides employers with resources on disability inclusion and best practices for equitable hiring, helping to create a more inclusive workforce.</p>
                     </div>
-                    <!-- Add more Q&A pairs here -->
                      <div>
                         <h3 class="text-xl font-semibold text-gray-700 mb-2 font-poppins">Is EQUIJOB accessible for users with various disabilities?</h3>
                         <p class="text-gray-600 leading-relaxed">Absolutely. Accessibility is a core principle. The platform is designed with features and considerations to support users with a wide range of disabilities.</p>
@@ -187,14 +172,11 @@
         </div>
     </section>
 
-     <!-- Footer Section -->
     <footer id="footer" class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700">
         <div class="container mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-                <!-- Logo/Brand Column -->
                 <div class="lg:col-span-2 mb-6 lg:mb-0">
                      <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
-                     <!-- Placeholder for Logo Image if available -->
                      <img src="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
                      <p class="text-sm text-gray-600 leading-relaxed">Fostering disability-inclusive employment for a more equitable and empowered workforce.</p>
                 </div>

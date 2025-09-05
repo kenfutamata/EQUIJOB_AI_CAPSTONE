@@ -24,12 +24,15 @@ class ResumeViewAndDownloadController extends Controller
             // Always treat as comma-separated string
             $skillsList = array_filter(array_map('trim', explode(',', $resume->skills)));
         }
-
+        $notifications = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
         $response = response()->view('users.applicant.resume-view', [
             'user' => $user,
             'resume' => $resume,
             'generatedSummary' => $generatedSummary,
             'skillsList' => $skillsList,
+            'notifications' => $notifications,
+            'unreadNotifications' => $unreadNotifications,
         ]);
 
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');

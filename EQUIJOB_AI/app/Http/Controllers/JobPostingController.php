@@ -35,8 +35,11 @@ class JobPostingController extends Controller
                     ->orWhere('remarks', 'like', "%{$search}%");
             });
         });
+        $sortable = ['position', 'companyName', 'sex', 'age', 'disabilityType', 'educationalAttainment', 'experience', 'skills', 'requirements', 'status'];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'created_at';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
-        $postings = $postingsQuery->latest()->paginate(10)->withQueryString(); // Use pagination
+        $postings = $postingsQuery->orderBy($sort, $direction)->paginate(10)->withQueryString(); 
 
         $notifications = $user->notifications ?? collect();
         $unreadNotifications = $user->unreadNotifications ?? collect();
@@ -63,14 +66,14 @@ class JobPostingController extends Controller
             'sex' => 'required|string|max:10',
             'age' => 'required|integer|min:18|max:65',
             'disabilityType' => 'required|string|max:100',
-            'educationalAttainment' => 'required|string|max:255',
+            'educationalAttainment' => 'nullable|string|max:255',
             'workEnvironment' => 'required|string|max:255',
             'salaryRange' => 'required|string|max:100',
             'jobPostingObjectives' => 'required|string|max:1000',
             'requirements' => 'required|string|max:1000',
             'description' => 'required|string|max:1000',
-            'experience' => 'required|string|max:255',
-            'skills' => 'required|string|max:1000',
+            'experience' => 'nullable|string|max:255',
+            'skills' => 'nullable|string|max:1000',
             'contactPhone' => 'required|string|max:15',
             'contactEmail' => 'nullable|email|max:255',
             'companyLogo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -79,7 +82,6 @@ class JobPostingController extends Controller
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }
-
         $validatedData['companyLogo'] = $user->company_logo;
 
         $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();

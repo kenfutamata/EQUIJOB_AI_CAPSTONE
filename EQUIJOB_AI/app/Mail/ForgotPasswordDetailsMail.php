@@ -9,14 +9,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EmailConfirmation extends Mailable
+class ForgotPasswordDetailsMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $maildata; 
+    public $maildata;
     public function __construct($maildata)
     {
         $this->maildata = $maildata; 
@@ -28,7 +28,7 @@ class EmailConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'User Account CONFIRMED',
+            subject: 'Request Password Update Details',
         );
     }
 
@@ -38,7 +38,7 @@ class EmailConfirmation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'sign-in-page.sign_up.sign_up_confirmation.email_confirmation',
+            view: 'sign-in-page.forgot-password.password_request_email_details',
             with:[
                 'maildata'=>$this->maildata
             ],

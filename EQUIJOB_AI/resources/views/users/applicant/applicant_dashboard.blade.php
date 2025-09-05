@@ -17,7 +17,6 @@
     <x-applicant-sidebar />
   </aside>
 
-  <!-- Sidebar overlay for mobile -->
   <div
     x-show="sidebarOpen"
     @click="sidebarOpen = false"
@@ -33,10 +32,8 @@
     x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
     class="fixed inset-y-0 left-0 w-[234px] bg-white z-30 lg:hidden shadow-lg flex flex-col overflow-y-auto">
-    <!-- Wrapper to keep everything aligned -->
-    <div class="flex flex-col h-full bg-[#c7d4f8]"> <!-- Match background color here -->
+    <div class="flex flex-col h-full bg-[#c7d4f8]"> 
 
-      <!-- Close Button -->
       <div class="flex justify-end p-4 bg-[#c7d4f8]">
         <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -64,7 +61,6 @@
             d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
-      <!-- Topbar Blade component -->
       <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
     </header>
 
@@ -84,7 +80,6 @@
           </div>
         </div>
 
-        <!-- Interview Card -->
         <div class="flex items-center border border-black h-[83px] bg-white w-full">
           <div class="flex items-center justify-center w-[70px] sm:w-[88px] h-full border-r border-black/20">
             <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/image_136.png') }}" alt="Interview icon"
@@ -96,7 +91,6 @@
           </div>
         </div>
 
-        <!-- On Offer Card -->
         <div class="flex items-center border border-black h-[83px] bg-white w-full">
           <div class="flex items-center justify-center w-[70px] sm:w-[88px] h-full border-r border-black/20">
             <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/email_1.png') }}" alt="On Offer icon"

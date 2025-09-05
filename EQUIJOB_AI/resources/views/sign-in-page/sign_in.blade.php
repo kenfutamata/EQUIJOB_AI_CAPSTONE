@@ -7,6 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Sign In</title>
   <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}" />
+  <script src="{{ asset('assets/sign-in/js/sign_in.js') }}" defer></script>
+
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -51,7 +53,7 @@
         </div>
 
         <div class="text-right">
-          <a href="#" class="text-sm text-red-500 hover:underline">Forgot Password?</a>
+          <a href="{{route('forgot-password')}}" class="text-sm text-red-500 hover:underline">Forgot Password?</a>
         </div>
 
         <button type="submit" class="w-full h-12 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition text-lg font-semibold">Sign in</button>
@@ -64,9 +66,7 @@
     </div>
   </div>
 
-  <!-- Modal Background -->
   <div id="roleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <!-- Modal Box -->
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
       <div class="flex justify-between items-center">
         <h3 class="text-xl font-semibold text-gray-800">Job Applicant or Job Provider?</h3>
@@ -85,46 +85,6 @@
       </div>
     </div>
   </div>
-  <script>
-    document.querySelector('a[href="#"]').addEventListener('click', function(e) {
-      if (this.textContent.trim() === 'Sign up') {
-          e.preventDefault();
-          document.getElementById('roleModal').classList.remove('hidden');
-      }
-    });
-
-    function closeModal() {
-      document.getElementById('roleModal').classList.add('hidden');
-    }
-
-    window.addEventListener('click', function(e) {
-      const modal = document.getElementById('roleModal');
-      if (e.target === modal) closeModal();
-    });
-
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const icon = document.getElementById('eyeIcon');
-      const isHidden = passwordInput.type === 'password';
-      passwordInput.type = isHidden ? 'text' : 'password';
-      const span = icon.nextElementSibling;
-      if (isHidden) {
-          span.textContent = "Show";
-      } else {
-          span.textContent = "Hide";
-      }
-    }
-
-    // Your fade-out logic, which is correct
-    setTimeout(() => {
-      const notif = document.getElementById('notification-bar');
-      if (notif) {
-        notif.classList.remove("opacity-100");
-        notif.classList.add("opacity-0");
-        setTimeout(() => notif.remove(), 500); 
-      }
-    }, 2500);
-  </script>
 </body>
 
 </html>

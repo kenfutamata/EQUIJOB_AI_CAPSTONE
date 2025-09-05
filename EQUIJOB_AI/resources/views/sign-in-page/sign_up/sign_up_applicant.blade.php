@@ -13,9 +13,7 @@
   <!-- Navbar -->
   <x-landing-page-navbar />
 
-  <!-- Registration Form Section -->
-  <!-- Error Message -->
-  @if ($message = Session::get('error'))
+@if ($message = Session::get('error'))
   <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700" role="alert">
     {{ $message }}
   </div>
