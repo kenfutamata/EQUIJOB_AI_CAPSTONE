@@ -1,5 +1,4 @@
 @php
-
 $is_pdf = $is_pdf ?? false;
 @endphp
 <!DOCTYPE html>
@@ -12,6 +11,8 @@ $is_pdf = $is_pdf ?? false;
     @if(!$is_pdf)
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Added Alpine.js for mobile sidebar interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @endif
 
     <style>
@@ -78,19 +79,48 @@ $is_pdf = $is_pdf ?? false;
     </style>
 </head>
 
-<body class="@if(!$is_pdf) bg-gray-100 h-screen overflow-hidden @endif">
+<!-- Initialized Alpine.js state for the sidebar toggle -->
+<body x-data="{ sidebarOpen: false }" class="@if(!$is_pdf) bg-gray-100 h-screen overflow-hidden @endif">
 
     @if(!$is_pdf)
-    <div class="w-[234px] bg-white hidden lg:block fixed inset-y-0 left-0 z-40">
+    <!-- Mobile Sidebar Overlay -->
+    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
+        <div class="flex justify-end p-4">
+             <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <x-applicant-sidebar />
+    </aside>
+
+    <!-- Static Desktop Sidebar -->
+    <div class="w-[234px] bg-white hidden lg:block fixed inset-y-0 left-0 z-20">
         <x-applicant-sidebar />
     </div>
-    <div class="fixed top-0 left-0 lg:left-[234px] right-0 h-16 bg-white shadow-sm z-30">
-        <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
-    </div>
+
+    <!-- Topbar with Hamburger Menu -->
+    <header class="fixed top-0 left-0 lg:left-[234px] right-0 h-16 bg-white shadow-sm z-10 flex items-center">
+        <!-- Hamburger Button - visible only on mobile -->
+        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-4 text-gray-600 hover:text-gray-900 focus:outline-none">
+            <span class="sr-only">Open sidebar</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+        <!-- Topbar Content -->
+        <div class="flex-1">
+            <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        </div>
+    </header>
     @endif
 
     <div class="@if(!$is_pdf) pt-16 lg:ml-[234px] h-[calc(100vh-4rem)] overflow-y-auto @endif">
-        <div class="@if(!$is_pdf) print-area w-full max-w-4xl p-6 bg-white shadow-lg rounded-lg mt-6 mb-10 mx-auto @endif">
+        <main class="@if(!$is_pdf) print-area w-full max-w-4xl p-4 md:p-6 bg-white shadow-lg rounded-lg my-6 mx-auto @endif">
 
             @if(!$is_pdf)
             <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Your Generated Resume</h1>
@@ -186,13 +216,14 @@ $is_pdf = $is_pdf ?? false;
             @endif
 
             @if(!$is_pdf)
-            <div class="mt-8 text-center">
-                <a href="{{ route('applicant-resume-download') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg shadow">Download as PDF</a>
-                <a href="{{ route('applicant-resume-builder') }}" class="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow">Edit Resume</a>
+            <!-- Responsive action buttons: stack on small screens, row on larger -->
+            <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="{{ route('applicant-resume-download') }}" class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg shadow">Download as PDF</a>
+                <a href="{{ route('applicant-resume-builder') }}" class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow">Edit Resume</a>
             </div>
             @endif
 
-        </div>
+        </main>
     </div>
 </body>
 

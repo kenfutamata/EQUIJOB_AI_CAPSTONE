@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{csrf_token()}}">
     <title>EQUIJOB - Job Provider- Manage Job Applications</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="bg-white text-black">
@@ -22,22 +23,21 @@
             <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
         </div>
 
-        <!-- Main Content -->
         <main class="main-content-scroll bg-gray-50">
             @if(session('Success'))
-            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 justify-center items-center">
                 {{ session('Success') }}
             </div>
             @elseif(session('error'))
-            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 justify-center items-center">
                 {{ session('error') }}
             </div>
             @elseif ($errors->any())
-            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 max-w-md w-full">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 max-w-md w-full justify-center items-center">
                 <h4 class="font-bold mb-1">Please correct the following errors:</h4>
                 <ul class="list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -84,13 +84,17 @@
                         'lastName' => $applicant->last_name ?? 'N/A',
                         'sex' => $applicant->gender ?? 'N/A',
                         'age' => $applicant->age ?? 'N/A',
+                        'contactPhone' => $applicant->phone_number ?? 'N/A',
+                        'contactEmail' => $applicant->email ?? 'N/A',
                         'disabilityType' => $applicant->type_of_disability ?? 'N/A',
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
                         'remarks' => $application->remarks,
                         'interviewDate' => $application->interviewDate ? \Carbon\Carbon::parse($application->interviewDate)->format('F j, Y') : null,
                         'interviewTime' => $application->interviewTime ? \Carbon\Carbon::parse($application->interviewTime)->format('g:i A') : null,
-                        'interviewLink' => $application->interviewLink
+                        'interviewLink' => $application->interviewLink,
+                        'profile_picture' => $applicant->profile_picture ?? null,
+
                         ];
                         @endphp
                         <tr>
@@ -112,14 +116,12 @@
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
-                                <button
-                                    onclick="openCreateInterviewDetailsModal({{ $application->id }})"
-                                    class="bg-green-500 text-white px-2 py-1 rounded">
+                                <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.delete', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
                                     For Interview
                                 </button>
                                 <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
-                                    onclick="openDeleteApplicationModal({{$application->id}})"
+                                    onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -139,7 +141,7 @@
                                 </form>
                                 <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
-                                    onclick="openDeleteApplicationModal({{$application->id}})"
+                                    onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -151,7 +153,7 @@
                                     View
                                 </button>
                                 <button
-                                    onclick="openDeleteApplicationModal({{$application->id}})"
+                                    onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -163,7 +165,7 @@
                                     View
                                 </button>
                                 <button
-                                    onclick="openDeleteApplicationModal({{$application->id}})"
+                                    onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
                                     Delete
                                 </button>
@@ -180,86 +182,116 @@
         </main>
     </div>
 
-    <div id="viewJobApplicationsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
-            <button onclick="closeViewJobApplicationsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
-            <h2 class="text-xl font-bold mb-4">View Job Application</h2>
-            <div>
-                <label class="block text-xs text-gray-500">Position</label>
-                <input id="modal.position" class="w-full border rounded px-2 py-1" disabled>
+    <div id="viewJobApplicationsModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
+        <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6">
+
+            <button onclick="closeViewJobApplicationsModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black text-xl">&times;</button>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="flex-shrink-0">
+                    <img id="modal-applicantProfile" alt="Applicant Profile" class="w-44 h-auto border rounded-full" style="display:block;" />
+                    <div id="modal-applicantInitial" class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-blue-500 font-bold text-lg" style="display:none;"></div>
+                </div>
+                <div>
+                    <h2 id="modal-applicantName" class="text-2xl font-semibold text-gray-800">Applicant's Name</h2>
+                    <p id="modal-position" class="text-xl text-gray-700 mt-1">Position</p>
+                    <p id="modal-companyName" class="text-xl text-gray-700 mt-1">Company Name</p>
+                </div>
             </div>
-            <div>
-                <label class="block text-xs text-gray-500">Company Name</label>
-                <input id="modal.company_name" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Applicant Name</label>
-                <input id="modal.applicant_name" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Sex</label>
-                <input id="modal.sex" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Age</label>
-                <input id="modal.age" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Disability Type</label>
-                <input id="modal.disability_type" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Resume</label>
-                <div id="modal_view_resume"></div>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Application Letter</label>
-                <div id="modal_view_application_letter"></div>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Interview Date</label>
-                <input id="modal.interviewDate" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Time</label>
-                <input id="modal.interviewTime" class="w-full border rounded px-2 py-1" disabled>
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500">Google Meet Link</label>
-                <input type="text" id="modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm" readonly>
-                <input type="hidden" name="modal.interviewLink" id="modal.interviewLink">
-            </div>
-            <div>
-                <label class="block text-xs text-gray-500 mt-2">Remarks</label>
-                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="border w-full md:max-w-xs p-4 flex flex-col gap-4">
+                    <h3 class="text-lg font-semibold border-b pb-1">Applicant Information</h3>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/disability.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Disability Type</p>
+                            <p id="modal-disabilityType" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/gender.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Sex</p>
+                            <p id="modal-sex" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/phone.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Contact Number</p>
+                            <p id="modal-contactPhone" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/email.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Email Address</p>
+                            <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/resume.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Resume</p>
+                            <div id="modal_view_resume"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/applicationletter.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Application Letter</p>
+                            <div id="modal_view_application_letter"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Interview Date</h3>
+                        <p id="modal-interviewDate" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Interview Time</h3>
+                        <p id="modal-interviewTime" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Google Meet Link</h3>
+                        <p id="modal-interviewLink" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="border p-4">
+                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Remarks</h3>
+                        <p id="modal-remarks" class="text-sm text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="createInterviewDetailsModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
-            <button onclick="closeCreateInterviewDetailsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            <button onclick="closeCreateInterviewDetailsModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             <form id="interviewForm" action="" method="POST" class="space-y-4">
                 @csrf
                 <h2 class="text-xl font-bold mb-4">Schedule Interview</h2>
                 <div>
                     <label for="interviewDate" class="block text-sm font-medium text-gray-700">Interview Date</label>
-                    <input type="date" id="interviewDate" name="interviewDate" class="mt-1 block w-full border border-gray-300 rounded-md" required>
+                    <input type="date" name="interviewDate" class="mt-1 block w-full border border-gray-300 rounded-md" required>
                 </div>
                 <div>
                     <label for="interviewTime" class="block text-sm font-medium text-gray-700">Interview Time</label>
-                    <input type="time" id="interviewTime" name="interviewTime" class="mt-1 block w-full border border-gray-300 rounded-md" required>
+                    <input type="time" name="interviewTime" class="mt-1 block w-full border border-gray-300 rounded-md" required>
                 </div>
                 <div>
                     <label for="create_modal_meet_link" class="block text-sm font-medium text-gray-700">Google Meet Link</label>
-                    <input type="text" id="create_modal_meet_link" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md" readonly placeholder="Generating link...">
+                    <div class="flex items-center gap-2 mt-1">
+                        <input type="text" id="create_modal_meet_link" class="block w-full bg-gray-100 border border-gray-300 rounded-md" readonly placeholder="Click Generate Link ->">
+                        <button type="button" id="generate-meet-link-btn" data-url="{{ route('job-provider.meet.create') }}" class="bg-blue-500 text-white px-3 py-1.5 rounded text-sm whitespace-nowrap">Generate</button>
+                    </div>
                     <input type="hidden" name="interviewLink" id="interviewLink">
                 </div>
                 <div class="flex justify-end gap-4 pt-4">
                     <button type="button" onclick="closeCreateInterviewDetailsModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md">Cancel</button>
-                    <button type="submit" id="submitInterviewBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400" disabled>
-                        Schedule Interview
-                    </button>
+                    <button type="submit" id="submitInterviewBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400" disabled>Schedule</button>
                 </div>
             </form>
         </div>
@@ -291,134 +323,12 @@
             <form id="deleteApplication" method="POST" action="">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">Yes</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Yes</button>
             </form>
             <button onclick="closeDeleteApplicationModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
-    
-    <script>
-        async function openCreateInterviewDetailsModal(applicationId) {
-            const modal = document.getElementById('createInterviewDetailsModal');
-            const form = document.getElementById('interviewForm');
-            const meetLinkInput = document.getElementById('create_modal_meet_link');
-            const hiddenLinkInput = document.getElementById('interviewLink');
-            const submitBtn = document.getElementById('submitInterviewBtn');
-            form.action = `/EQUIJOB/Job-Provider/Manage-Job-Applications/${applicationId}/schedule-interview`;
-            meetLinkInput.value = 'Generating link, please wait...';
-            hiddenLinkInput.value = '';
-            submitBtn.disabled = true;
-            modal.classList.remove('hidden');
-
-            try {
-                const response = await fetch("{{ route('job-provider-manage-job-applications.google.meet.create_link') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    meetLinkInput.value = data.meetLink;
-                    hiddenLinkInput.value = data.meetLink;
-                    submitBtn.disabled = false;
-                } else {
-                    meetLinkInput.value = `Error: ${data.error || 'Could not generate link.'}`;
-                }
-            } catch (error) {
-                meetLinkInput.value = 'A network error occurred. Please try again.';
-                console.error('Fetch error:', error);
-            }
-        }
-
-        function closeCreateInterviewDetailsModal() {
-            document.getElementById('createInterviewDetailsModal').classList.add('hidden');
-        }
-
-        function openViewJobApplicationsModal(button) {
-            const applicationData = JSON.parse(button.getAttribute('data-application'));
-            document.getElementById('modal.position').value = applicationData.position ?? 'N/A';
-            document.getElementById('modal.company_name').value = applicationData.companyName ?? 'N/A';
-            document.getElementById('modal.applicant_name').value = (applicationData.firstName ?? '') + ' ' + (applicationData.lastName ?? '');
-            document.getElementById('modal.sex').value = applicationData.sex ?? 'N/A';
-            document.getElementById('modal.age').value = applicationData.age ?? 'N/A';
-            document.getElementById('modal.disability_type').value = applicationData.disabilityType ?? 'N/A';
-            document.getElementById('modal.remarks').value = applicationData.remarks ?? 'N/A';
-            document.getElementById('modal.interviewDate').value = applicationData.interviewDate ?? 'N/A';
-            document.getElementById('modal.interviewTime').value = applicationData.interviewTime ?? 'N/A';
-            document.getElementById('modal_meet_link').value = applicationData.interviewLink ?? 'N/A';
-            document.getElementById('modal.interviewLink').value = applicationData.interviewLink ?? '';
-
-            const resumeContainer = document.getElementById('modal_view_resume');
-            resumeContainer.innerHTML = '';
-            if (applicationData.uploadResume) {
-                const ext = applicationData.uploadResume.split('.').pop().toLowerCase();
-                const filePath = `/storage/${applicationData.uploadResume}`;
-                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Resume Preview"/></a>`;
-                } else if (ext === 'pdf') {
-                    resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
-                } else {
-                    resumeContainer.innerText = 'Unsupported file format';
-                }
-            } else {
-                resumeContainer.innerText = 'No resume uploaded.';
-            }
-
-            const applicationContainer = document.getElementById('modal_view_application_letter');
-            applicationContainer.innerHTML = '';
-            if (applicationData.uploadApplicationLetter) {
-                const ext = applicationData.uploadApplicationLetter.split('.').pop().toLowerCase();
-                const filePath = `/storage/${applicationData.uploadApplicationLetter}`;
-                if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
-                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Application Letter Preview"/></a>`;
-                } else if (ext === 'pdf') {
-                    applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
-                } else {
-                    applicationContainer.innerText = 'Unsupported file format';
-                }
-            } else {
-                applicationContainer.innerText = 'No letter uploaded.';
-            }
-            document.getElementById('viewJobApplicationsModal').classList.remove('hidden');
-        }
-
-        function closeViewJobApplicationsModal() {
-            document.getElementById('viewJobApplicationsModal').classList.add('hidden');
-        }
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '0';
-        }, 3500); // Increased time slightly for readability of lists
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.display = 'none';
-        }, 4000);
-
-        function openRejectJobApplicationModal(button) {
-            const formActionUrl = button.getAttribute('data-url');
-            const form = document.getElementById('rejectForm');
-            form.action = formActionUrl;
-            document.getElementById('rejectJobApplicationModal').classList.remove('hidden');
-        }
-
-        function closeRejectJobApplicationModal() {
-            document.getElementById('rejectJobApplicationModal').classList.add('hidden');
-        }
-
-        function openDeleteApplicationModal(applicationId) {
-            const form = document.getElementById('deleteApplication');
-            form.action = `/EQUIJOB/Job-Provider/Manage-Job-Applications/Delete/${applicationId}`;
-            document.getElementById('DeleteApplicationModal').classList.remove('hidden');
-        }
-
-        function closeDeleteApplicationModal() {
-            document.getElementById('DeleteApplicationModal').classList.add('hidden');
-        }
-    </script>
+    <script src="{{ asset('assets/job-provider/manage-job-applications/js/job_provider_job_applications.js') }}"></script>
 
     <!-- Style -->
     <style>

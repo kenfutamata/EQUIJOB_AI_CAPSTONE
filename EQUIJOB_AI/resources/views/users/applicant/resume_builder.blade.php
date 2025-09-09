@@ -6,22 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Resume Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/applicant_profile.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/applicant/resume-builder/css/resume_builder.css') }}">
 </head>
 
-<body class="bg-gray-100 text-gray-800 font-sans antialiased h-screen overflow-hidden">
+<body x-data="{ sidebarOpen: false }" class="bg-gray-100 text-gray-800 font-sans antialiased h-screen overflow-hidden">
 
     @if (session('error'))
-    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-auto max-w-md" role="alert">
+    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-md" role="alert">
         {{ session('error') }}
     </div>
     @endif
 
     @if ($errors->any())
-    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-auto max-w-lg shadow-lg" role="alert">
+    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-lg shadow-lg" role="alert">
         <div class="flex items-center">
             <svg aria-hidden="true" class="w-5 h-5 mr-2 text-red-700" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
@@ -36,19 +37,60 @@
     </div>
     @endif
 
-
     <div class="flex h-full">
 
-        <div class="w-[234px] bg-white hidden lg:block fixed inset-y-0 left-0 z-40">
-            <x-applicant-sidebar />
-        </div>
+            x-show="sidebarOpen"
+            @click="sidebarOpen = false"
+            x-transition.opacity
+            class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
 
-        <div class="flex flex-col flex-1 ml-[234px] h-full">
-
-            <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
-                <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+        <aside
+            x-show="sidebarOpen"
+            x-transition:enter="transition transform duration-300"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition transform duration-300"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            class="fixed inset-y-0 left-0 w-[234px] bg-white z-40 lg:hidden shadow-lg flex flex-col overflow-y-auto">
+            <div class="flex flex-col h-full bg-[#c7d4f8]">
+                <div class="flex justify-end p-4">
+                    <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto">
+                    <x-applicant-sidebar />
+                </div>
             </div>
-            <div class="mt-16 h-[calc(100vh-4rem)] overflow-y-auto p-6 space-y-8">
+        </aside>
+
+        <aside class="hidden lg:flex lg:flex-col lg:w-[234px] lg:fixed lg:inset-y-0 lg:z-20">
+            <div class="flex flex-col h-full bg-[#c7d4f8]">
+                <div class="flex-1 overflow-y-auto pt-8">
+                    <x-applicant-sidebar />
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex flex-col flex-1 lg:ml-[234px] h-full">
+            <header class="fixed top-0 left-0 right-0 lg:left-[234px] h-16 z-10 bg-white border-b border-gray-200 flex items-center">
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-4 text-gray-600 hover:text-gray-900 focus:outline-none">
+                    <span class="sr-only">Open sidebar</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <div class="flex-1">
+                    <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+                </div>
+            </header>
+
+            <main class="mt-16 h-[calc(100vh-4rem)] overflow-y-auto p-4 md:p-6 space-y-8">
 
                 <form method="POST" action="{{route('applicant-resume-builder-store')}}" enctype="multipart/form-data" class="space-y-8">
                     @csrf
@@ -104,11 +146,10 @@
                         </div>
                     </section>
 
-                    <!-- Experience -->
                     <section id="experienceSection" class="bg-white p-6 shadow rounded-lg">
-                        <div class="flex justify-between items-center mb-4">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-4">
                             <h2 class="text-2xl font-semibold">Experience</h2>
-                            <button type="button" id="addExperienceBtn" class="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600 text-sm">
+                            <button type="button" id="addExperienceBtn" class="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600 text-sm self-start sm:self-auto">
                                 + Add Experience
                             </button>
                         </div>
@@ -145,11 +186,10 @@
                         </div>
                     </section>
 
-                    <!-- Education -->
                     <section class="bg-white p-6 shadow rounded-lg">
-                        <div class="flex justify-between items-center mb-4">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-4">
                             <h2 class="text-2xl font-semibold">Education</h2>
-                            <button type="button" id="addEducationBtn" class="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600 text-sm">
+                            <button type="button" id="addEducationBtn" class="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600 text-sm self-start sm:self-auto">
                                 + Add Education
                             </button>
                         </div>
@@ -185,6 +225,7 @@
                             @endif
                         </div>
                     </section>
+                    
                     <section class="bg-white p-6 shadow rounded-lg">
                         <h2 class="text-2xl font-semibold mb-4">Skills</h2>
                         <label for="skills" class="block text-sm text-gray-600 mb-1">Enter skills separated by commas (e.g., JavaScript, Project Management, Team Leadership)</label>
@@ -198,7 +239,7 @@
                     </div>
                 </form>
 
-            </div>
+            </main>
         </div>
     </div>
     <script>
@@ -207,7 +248,7 @@
             education: {{ old('educations') ? count(old('educations')) : 0 }}
         };
     </script>
-    
+
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>
 </body>
 

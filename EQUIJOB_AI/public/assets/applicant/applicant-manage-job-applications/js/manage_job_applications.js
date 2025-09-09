@@ -47,7 +47,7 @@ function openViewJobApplicationModal(button) {
     document.getElementById('modal.remarks').textContent = applicationData.remarks ?? 'N/A';
     document.getElementById('modal.interviewDate').textContent = applicationData.interviewDate ?? 'N/A';
     document.getElementById('modal.interviewTime').textContent = applicationData.interviewTime ?? 'N/A';
-    document.getElementById('modal.interviewLink').textContent = applicationData.interviewLink ?? '';
+    document.getElementById('modal.interviewLink').textContent = applicationData.interviewLink ?? 'N/A';
     document.getElementById('modal.disabilityType').textContent = applicationData.disabilityType ?? 'N/A';
     document.getElementById('modal.sex').textContent = applicationData.gender ?? 'N/A';
     document.getElementById('modal.contactPhone').textContent = applicationData.contactPhone ?? 'N/A';

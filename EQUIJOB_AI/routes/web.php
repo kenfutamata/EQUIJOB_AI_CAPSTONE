@@ -84,12 +84,13 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::delete('/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
     Route::get('/Job-Provider/Job-Provider-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
-    Route::put('/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController:: class, 'update'])->name('job-provider-profile-update'); 
+    Route::put('/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController::class, 'update'])->name('job-provider-profile-update');
     Route::get('/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
     Route::post('/Job-Provider/Manage-Job-Applications/create-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider-manage-job-applications.google.meet.create_link');
     Route::get('/Job-Provider/Manage-Job-Applications/provider/google/redirect', [JobProviderManageJobApplications::class, 'redirectToGoogle'])->name('job-provider-manage-job-applications.provider.google.redirect');
     Route::get('/Job-Provider/Manage-Job-Applications/provider/google/callback', [JobProviderManageJobApplications::class, 'handleGoogleCallback'])->name('job-provider-manage-job-applications.provider.google.callback');
     Route::post('/Job-Provider/Manage-Job-Applications/{application}/schedule-interview', [JobProviderManageJobApplications::class, 'scheduleInterview'])->name('job-provider-manage-job-applications.scheduleinterview');
+    Route::post('/job-provider/applications/generate-meet-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider.meet.create'); 
     Route::put('/Job-Provider/Manage-Job-Applications/update-to-offer/{application}', [JobProviderManageJobApplications::class, 'updateApplicationToOffer'])->name('job-provider-manage-job-applications.update-to-offer');
     Route::put('/Job-Provider/Manage-Job-Applications/reject/{id}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
     Route::delete('/Job-Provider/Manage-Job-Applications/Delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications.delete');

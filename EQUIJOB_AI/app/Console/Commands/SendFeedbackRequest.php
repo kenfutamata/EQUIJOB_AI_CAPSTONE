@@ -16,7 +16,7 @@ class SendFeedbackRequest extends Command
      *
      * @var string
      */
-    protected $signature = 'feedback:send-request';
+    protected $signature = 'feedback:send-requests';
 
     /**
      * The console command description.

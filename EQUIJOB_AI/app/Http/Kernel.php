@@ -25,6 +25,10 @@ class Kernel extends HttpKernel
         // Other middlewares...
     ];
 
+    protected $commands = [
+        \App\Console\Commands\SendFeedbackRequest::class,
+    ];
+
     // DELETE THIS ENTIRE METHOD FROM THIS FILE
     /*
     protected function schedule(Schedule $schedule)
@@ -39,5 +43,5 @@ class Kernel extends HttpKernel
      *
      * @return void
      */
-     // This method might not even exist in your Http Kernel, which is fine.
+    // This method might not even exist in your Http Kernel, which is fine.
 }

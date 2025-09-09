@@ -53,7 +53,7 @@ class JobApplication extends Model
     }
     public function applicant()
     {
-        return $this->belongsTo(\App\Models\User::class, 'applicantID');
+        return $this->belongsTo(\App\Models\User::class, 'applicantID', 'id');
     }
     public function jobPosting()
     {
