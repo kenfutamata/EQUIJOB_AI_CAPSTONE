@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Job Provider-Job Posting</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 @php
 function sortArrow($column) {
@@ -369,7 +369,6 @@ function sortArrow($column) {
             <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
-    <!-- Scripts -->
     <script src="{{ asset('assets/job-provider/manage-job-posting/js/job_posting.js') }}"></script>
 
 </body>

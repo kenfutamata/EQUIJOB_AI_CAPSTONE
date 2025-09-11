@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Administrator Generate Reports</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon"
-        href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -160,7 +160,8 @@
                     }]
                 },
                 options: {
-                    /* ... your chart options ... */ }
+                    /* ... your chart options ... */
+                }
             });
             @endif
 
@@ -170,7 +171,7 @@
             const hiredData = @json($hiredChartData);
             new Chart(hiredCtx, {
                 type: 'bar',
-                
+
                 data: {
                     labels: hiredData.labels,
                     datasets: [{
@@ -201,7 +202,8 @@
                     }]
                 },
                 options: {
-                    /* ... your chart options ... */ }
+                    /* ... your chart options ... */
+                }
             });
             @endif
 

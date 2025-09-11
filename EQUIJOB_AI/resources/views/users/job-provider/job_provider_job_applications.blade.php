@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{csrf_token()}}">
     <title>EQUIJOB - Job Provider- Manage Job Applications</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 
 </head>
 
@@ -25,11 +24,11 @@
 
         <main class="main-content-scroll bg-gray-50">
             @if(session('Success'))
-            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 justify-center items-center">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 flex justify-center items-center">
                 {{ session('Success') }}
             </div>
             @elseif(session('error'))
-            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 justify-center items-center">
+            <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 flex justify-center items-center">
                 {{ session('error') }}
             </div>
             @elseif ($errors->any())

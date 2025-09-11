@@ -7,7 +7,7 @@
   <title>EQUIJOB - About Us</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -69,71 +69,58 @@
     </div>
   </section>
 
-<section class="py-20 px-6 md:px-16 bg-white">
-  <h2 class="text-4xl font-semibold text-center mb-12">Meet Our Team</h2>
+  <section class="py-20 px-6 md:px-16 bg-white">
+    <h2 class="text-4xl font-semibold text-center mb-12">Meet Our Team</h2>
 
-  <!-- Main Grid (Top 3 Members) -->
-  <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    <!-- Member -->
-    <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
-      <img src="{{ asset('assets/photos/landing_page/kezekiah.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
-      <h3 class="text-xl font-medium text-center">Kezekiah Yatong</h3>
-      <p class="text-blue-600 text-center font-medium">Project Manager</p>
-      <p class="text-gray-600 text-sm mt-2 text-center">Leads the team and ensures timely completion of the capstone.</p>
-    </div>
+    <!-- Main Grid (Top 3 Members) -->
+    <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Member -->
+      <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
+        <img src="{{ asset('assets/photos/landing_page/kezekiah.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
+        <h3 class="text-xl font-medium text-center">Kezekiah Yatong</h3>
+        <p class="text-blue-600 text-center font-medium">Project Manager</p>
+        <p class="text-gray-600 text-sm mt-2 text-center">Leads the team and ensures timely completion of the capstone.</p>
+      </div>
 
-    <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
-      <img src="{{ asset('assets/photos/landing_page/kento.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
-      <h3 class="text-xl font-medium text-center">Kento Futamata</h3>
-      <p class="text-blue-600 text-center font-medium">Hacker</p>
-      <p class="text-gray-600 text-sm mt-2 text-center">Develops the system and core functionality for the capstone.</p>
-    </div>
+      <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
+        <img src="{{ asset('assets/photos/landing_page/kento.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
+        <h3 class="text-xl font-medium text-center">Kento Futamata</h3>
+        <p class="text-blue-600 text-center font-medium">Hacker</p>
+        <p class="text-gray-600 text-sm mt-2 text-center">Develops the system and core functionality for the capstone.</p>
+      </div>
 
-    <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
-      <img src="{{ asset('assets/photos/landing_page/janine.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
-      <h3 class="text-xl font-medium text-center">Janine Alolod</h3>
-      <p class="text-blue-600 text-center font-medium">Hipster</p>
-      <p class="text-gray-600 text-sm mt-2 text-center">Focuses on design and user experience for engaging interfaces.</p>
-    </div>
-  </div>
-
-  <div class="max-w-4xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-2">
-      <div class="p-6 text-center">
-        <img src="{{ asset('assets/photos/landing_page/sara.jpg') }}" alt="Team Member" class="w-20 h-20 mx-auto rounded-full mb-4">
-        <h3 class="text-lg font-semibold">Sara Pahara</h3>
-        <p class="text-blue-600 font-medium">Hustler</p>
-        <p class="text-gray-600 text-sm mt-2">Promotes the project, documents progress, and ensures clarity.</p>
+      <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
+        <img src="{{ asset('assets/photos/landing_page/janine.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
+        <h3 class="text-xl font-medium text-center">Janine Alolod</h3>
+        <p class="text-blue-600 text-center font-medium">Hipster</p>
+        <p class="text-gray-600 text-sm mt-2 text-center">Focuses on design and user experience for engaging interfaces.</p>
       </div>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-2">
-
-      <div class="p-6 text-center">
-        <img src="{{ asset('assets/photos/landing_page/lance.jpg') }}" alt="Team Member" class="w-20 h-20 mx-auto rounded-full mb-4">
-        <h3 class="text-lg font-semibold">Lance Paul Montenmar</h3>
-        <p class="text-blue-600 font-medium">Tester</p>
-        <p class="text-gray-600 text-sm mt-2">Tests the system for errors and ensures functionality.</p>
+    <div class="max-w-4xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-2">
+        <div class="p-6 text-center">
+          <img src="{{ asset('assets/photos/landing_page/sara.jpg') }}" alt="Team Member" class="w-20 h-20 mx-auto rounded-full mb-4">
+          <h3 class="text-lg font-semibold">Sara Pahara</h3>
+          <p class="text-blue-600 font-medium">Hustler</p>
+          <p class="text-gray-600 text-sm mt-2">Promotes the project, documents progress, and ensures clarity.</p>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700">
-    <div class="max-w-6xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-        <div class="lg:col-span-2">
-          <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
-          <img src="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
-          <p class="text-sm text-gray-600 leading-relaxed">
-            Fostering disability-inclusive employment for a more equitable and empowered workforce.
-          </p>
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-2">
+
+        <div class="p-6 text-center">
+          <img src="{{ asset('assets/photos/landing_page/lance.jpg') }}" alt="Team Member" class="w-20 h-20 mx-auto rounded-full mb-4">
+          <h3 class="text-lg font-semibold">Lance Paul Montenmar</h3>
+          <p class="text-blue-600 font-medium">Tester</p>
+          <p class="text-gray-600 text-sm mt-2">Tests the system for errors and ensures functionality.</p>
         </div>
       </div>
     </div>
-  </footer>
+  </section>
 
+  <!-- Footer -->
+  <x-footer />
 </body>
 
 </html>

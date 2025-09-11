@@ -9,7 +9,7 @@
     <!-- Added Alpine.js for interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="{{ asset('assets/applicant/applicant-manage-job-applications/css/manage_job_applications.css') }}" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 @php

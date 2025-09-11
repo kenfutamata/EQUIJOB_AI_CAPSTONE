@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EQUIJOB - Admin Manage User Applicants</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <style>
         /* Ensure sidebar is always fixed */
         .sidebar-fixed {
@@ -134,7 +134,7 @@ function sortArrow($column) {
                                     <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
                                 </form>
                                 @endif
-                                <button onclick="openDeleteModal({{ $user->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                                <button onclick="openDeleteModal('{{route('admin-manage-user-applicants-delete', $user->id)}}')" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -226,9 +226,9 @@ function sortArrow($column) {
             document.getElementById('viewProfileModal').classList.add('hidden');
         }
 
-        function openDeleteModal(userId) {
+        function openDeleteModal(url) {
             const form = document.getElementById('deleteuser');
-            form.action = `/EQUIJOB/Admin/Manage-User-Applicants/Delete/${userId}`;
+            form.action = url;
             document.getElementById('DeleteRoleModal').classList.remove('hidden');
         }
 

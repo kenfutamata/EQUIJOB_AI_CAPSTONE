@@ -27,7 +27,7 @@ return new class extends Migration
             $table->text('skills')->nullable();
             $table->text('description')->nullable();
             $table->text('requirements');
-            $table->string('status')->default('Pending'); // e.g., active, closed, pending
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }

@@ -35,3 +35,5 @@ setTimeout(() => {
     setTimeout(() => notif.remove(), 500); 
   }
 }, 2500);
+
+

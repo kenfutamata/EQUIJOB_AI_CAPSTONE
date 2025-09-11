@@ -8,7 +8,7 @@
     <title>EQUIJOB-Forgot Password</title>
     <script src="{{ asset('assets/sign-in/forgot-password/js/forgot_password.js') }}"></script>
 
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">

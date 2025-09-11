@@ -7,7 +7,7 @@
     <title>EQUIJOB - Job Provider Generate Reports</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon"
-        href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>

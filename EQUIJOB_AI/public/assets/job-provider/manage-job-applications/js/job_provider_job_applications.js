@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- MODAL CONTROL FUNCTIONS ---
 
-    // View Application Modal
     window.openViewJobApplicationsModal = function (button) {
         const modal = document.getElementById('viewJobApplicationsModal');
         const data = JSON.parse(button.getAttribute('data-application'));
@@ -18,8 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-interviewTime').textContent = data.interviewTime || 'Not Scheduled';
         document.getElementById('modal-interviewLink').innerHTML = data.interviewLink ? `<a href="${data.interviewLink}" target="_blank" class="text-blue-600 hover:underline">Join Meeting</a>` : 'No link provided';
         document.getElementById('modal-remarks').textContent = data.remarks || 'No remarks.';
-
-        // Handle profile picture
         const profileImg = document.getElementById('modal-applicantProfile');
         if (data.profile_picture) {
             profileImg.src = `/storage/${data.profile_picture}`;
@@ -27,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
             profileImg.src = `https://ui-avatars.com/api/?name=${data.firstName}+${data.lastName}&background=random`;
         }
 
-        // Handle resume and application letter links
         const resumeContainer = document.getElementById('modal_view_resume');
         resumeContainer.innerHTML = data.uploadResume ? `<a href="/storage/${data.uploadResume}" target="_blank" class="text-blue-600 hover:underline">View Resume</a>` : '<span>Not provided</span>';
 
@@ -58,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.classList.add('hidden');
     };
 
-    // Reject Application Modal
     window.openRejectJobApplicationModal = function (button) {
         const modal = document.getElementById('rejectJobApplicationModal');
         const form = document.getElementById('rejectForm');

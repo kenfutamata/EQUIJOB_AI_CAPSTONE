@@ -12,7 +12,7 @@
     <script src="{{ asset('assets/landing_page/js/landing_page/landing_page.js') }}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body class="bg-white text-gray-800">
@@ -174,15 +174,16 @@
         </div>
     </section>
 
-    <footer id="footer" class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-                <div class="lg:col-span-2 mb-6 lg:mb-0">
-                    <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
-                    <img src="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
-                    <p class="text-sm text-gray-600 leading-relaxed">Fostering disability-inclusive employment for a more equitable and empowered workforce.</p>
-                </div>
-            </div>
+    <footer id="footer" class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700 flex justify-center items-center">
+        <div class="container mx-auto flex flex-col justify-center items-center">
+            <img src="{{ asset('assets/photos/landing_page/equijob_logo.png') }}" alt="Equijob Logo" class="mx-auto w-32 h-auto mb-4">
+            <p class="text-sm text-gray-600 leading-relaxed text-center max-w-xl">
+                Fostering disability-inclusive employment for a more equitable and empowered workforce.
+            </p>
+            <p class="text-sm text-gray-600 leading-relaxed text-center max-w-xl">
+                Copyright &copy; EQUIJOB. All rights reserved.
+            </p>
+        </div>
     </footer>
 
 </body>

@@ -39,7 +39,7 @@
 
     <div class="flex h-full">
 
-            x-show="sidebarOpen"
+        <div x-show="sidebarOpen"
             @click="sidebarOpen = false"
             x-transition.opacity
             class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
@@ -52,7 +52,7 @@
             x-transition:leave="transition transform duration-300"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
-            class="fixed inset-y-0 left-0 w-[234px] bg-white z-40 lg:hidden shadow-lg flex flex-col overflow-y-auto">
+            class="fixed inset-y-0 left-0 w-[234px] bg-white z-40 lg:hidden shadow-lg flex flex-col">
             <div class="flex flex-col h-full bg-[#c7d4f8]">
                 <div class="flex justify-end p-4">
                     <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
@@ -63,15 +63,14 @@
                         </svg>
                     </button>
                 </div>
-                <div class="flex-1 overflow-y-auto">
+                <div class="flex-1 overflow-y-auto min-h-0">
                     <x-applicant-sidebar />
                 </div>
             </div>
         </aside>
-
         <aside class="hidden lg:flex lg:flex-col lg:w-[234px] lg:fixed lg:inset-y-0 lg:z-20">
             <div class="flex flex-col h-full bg-[#c7d4f8]">
-                <div class="flex-1 overflow-y-auto pt-8">
+                <div class="flex-1 overflow-y-auto min-h-0">
                     <x-applicant-sidebar />
                 </div>
             </div>
@@ -225,7 +224,7 @@
                             @endif
                         </div>
                     </section>
-                    
+
                     <section class="bg-white p-6 shadow rounded-lg">
                         <h2 class="text-2xl font-semibold mb-4">Skills</h2>
                         <label for="skills" class="block text-sm text-gray-600 mb-1">Enter skills separated by commas (e.g., JavaScript, Project Management, Team Leadership)</label>
@@ -244,8 +243,16 @@
     </div>
     <script>
         const initialCounts = {
-            experience: {{ old('experience') ? count(old('experience')) : 0 }},
-            education: {{ old('educations') ? count(old('educations')) : 0 }}
+            experience: {
+                {
+                    old('experience') ? count(old('experience')) : 0
+                }
+            },
+            education: {
+                {
+                    old('educations') ? count(old('educations')) : 0
+                }
+            }
         };
     </script>
 

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('feedbacks', function (Blueprint $table) {
-            $table->enum('status', ['Pending', 'For Posting', 'Disapproved'])->change();
-        });  
+        Schema::table('jobPosting', function (Blueprint $table) {
+            if (!Schema::hasColumn('jobPosting', 'status')) {
+                $table->string('status')->default('Pending')->after('requirements');
+            }
+        });
     }
 
     /**
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('feedbacks', function (Blueprint $table) {
-            $table->string('status')->change();
-        });
+        //
     }
 };

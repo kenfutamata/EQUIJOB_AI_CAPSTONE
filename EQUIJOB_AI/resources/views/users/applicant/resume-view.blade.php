@@ -9,7 +9,7 @@ $is_pdf = $is_pdf ?? false;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Generated Resume</title>
     @if(!$is_pdf)
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Added Alpine.js for mobile sidebar interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -79,14 +79,11 @@ $is_pdf = $is_pdf ?? false;
     </style>
 </head>
 
-<!-- Initialized Alpine.js state for the sidebar toggle -->
 <body x-data="{ sidebarOpen: false }" class="@if(!$is_pdf) bg-gray-100 h-screen overflow-hidden @endif">
 
     @if(!$is_pdf)
-    <!-- Mobile Sidebar Overlay -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
 
-    <!-- Mobile Sidebar -->
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
         <div class="flex justify-end p-4">
              <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
@@ -98,12 +95,10 @@ $is_pdf = $is_pdf ?? false;
         <x-applicant-sidebar />
     </aside>
 
-    <!-- Static Desktop Sidebar -->
     <div class="w-[234px] bg-white hidden lg:block fixed inset-y-0 left-0 z-20">
         <x-applicant-sidebar />
     </div>
 
-    <!-- Topbar with Hamburger Menu -->
     <header class="fixed top-0 left-0 lg:left-[234px] right-0 h-16 bg-white shadow-sm z-10 flex items-center">
         <!-- Hamburger Button - visible only on mobile -->
         <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-4 text-gray-600 hover:text-gray-900 focus:outline-none">

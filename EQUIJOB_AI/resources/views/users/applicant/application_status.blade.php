@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>EQUIJOB - Job Applicant - Application Status</title>
-    <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <style>
         .progress-bar {
             transition: width 0.5s ease-in-out;

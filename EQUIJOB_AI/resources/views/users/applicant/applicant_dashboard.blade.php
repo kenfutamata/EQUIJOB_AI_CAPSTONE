@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <title>EQUIJOB - Job Applicant</title>
-  <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body class="bg-[#FCFDFF] text-gray-800 font-sans antialiased h-full flex">
@@ -32,7 +32,7 @@
     x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
     class="fixed inset-y-0 left-0 w-[234px] bg-white z-30 lg:hidden shadow-lg flex flex-col overflow-y-auto">
-    <div class="flex flex-col h-full bg-[#c7d4f8]"> 
+    <div class="flex flex-col h-full bg-[#c7d4f8]">
 
       <div class="flex justify-end p-4 bg-[#c7d4f8]">
         <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">

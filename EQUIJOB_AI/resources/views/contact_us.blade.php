@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('assets/landing_page/css/contact_us.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/landing_page/js/landing_page/contact_us.js') }}"></script>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo (2).png')}}">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -80,19 +80,7 @@
         </form>
     </main>
 
-    <footer class="bg-gray-100 pt-16 pb-8 px-6 lg:px-16 text-gray-700">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-                <div class="lg:col-span-2">
-                    <a href="#" class="text-2xl font-bold text-blue-600 font-poppins mb-4 inline-block">EQUIJOB</a>
-                    <img src="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" alt="Equijob Logo" class="w-32 h-auto mb-4">
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        Fostering disability-inclusive employment for a more equitable and empowered workforce.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
+        <x-footer/>
 
 </body>
 

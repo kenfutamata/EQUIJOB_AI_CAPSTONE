@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <title>EQUIJOB - Job Provider</title>
-  <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body class="bg-[#FCFDFF] text-gray-800 font-sans antialiased h-full flex">

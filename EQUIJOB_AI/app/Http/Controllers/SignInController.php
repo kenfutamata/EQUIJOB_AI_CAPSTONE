@@ -79,7 +79,7 @@ class SignInController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'required|string|max:15',
-            'company_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'company_name' => 'required|string|max:255|',
             'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'business_permit' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',

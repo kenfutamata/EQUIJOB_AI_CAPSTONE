@@ -8,11 +8,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body x-data="{ sidebarOpen: false }" class="bg-[#FCFDFF] min-h-screen">
-  
+
   <div
     x-show="sidebarOpen"
     @click="sidebarOpen = false"
@@ -47,7 +47,7 @@
 
   <aside class="hidden lg:flex lg:flex-col lg:w-[234px] lg:fixed lg:inset-y-0 lg:z-20">
     <div class="flex flex-col h-full bg-[#c7d4f8]">
-      <div class="flex-1 overflow-y-auto pt-8">
+      <div class="flex-1 overflow-y-auto min-h-0">
         <x-applicant-sidebar />
       </div>
     </div>
@@ -108,7 +108,7 @@
   </div>
 
 
-  <script src="{{ asset('assets/applicant/ai-job-matching/js/match_jobs.js') }}"></script> 
+  <script src="{{ asset('assets/applicant/ai-job-matching/js/match_jobs.js') }}"></script>
 
 </body>
 
