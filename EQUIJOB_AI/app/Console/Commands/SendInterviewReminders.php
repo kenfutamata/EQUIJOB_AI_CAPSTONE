@@ -33,7 +33,7 @@ class SendInterviewReminders extends Command
         $this->info('Starting to send interview reminders...');
 
         $applications = JobApplication::query()
-            ->with(['applicant', 'jobPosting.jobProvider']) // Eager load all needed relationships
+            ->with(['applicant', 'jobPosting.jobProvider']) 
             ->whereNotNull('interviewDate')
             ->whereNull('reminderSentAt')
             ->whereDate('interviewDate', now()->addDay()->toDateString())

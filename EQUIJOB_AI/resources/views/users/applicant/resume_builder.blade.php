@@ -8,8 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/applicant_profile.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/applicant/resume-builder/css/resume_builder.css') }}">
 </head>
 
@@ -241,20 +239,13 @@
             </main>
         </div>
     </div>
-    <script>
-        const initialCounts = {
-            experience: {
-                {
-                    old('experience') ? count(old('experience')) : 0
-                }
-            },
-            education: {
-                {
-                    old('educations') ? count(old('educations')) : 0
-                }
-            }
-        };
-    </script>
+<script>
+    const initialCounts = {
+        experience: {{ old('experience') ? count(old('experience')) : 0 }},
+        education: {{ old('educations') ? count(old('educations')) : 0 }}
+    };
+</script>
+
 
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>
 </body>

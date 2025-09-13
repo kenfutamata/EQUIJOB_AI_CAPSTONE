@@ -115,7 +115,7 @@
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
-                                <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.delete', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
+                                <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.scheduleinterview', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
                                     For Interview
                                 </button>
                                 <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
@@ -274,7 +274,7 @@
                 <h2 class="text-xl font-bold mb-4">Schedule Interview</h2>
                 <div>
                     <label for="interviewDate" class="block text-sm font-medium text-gray-700">Interview Date</label>
-                    <input type="date" name="interviewDate" class="mt-1 block w-full border border-gray-300 rounded-md" required>
+                    <input type="date" name="interviewDate" class="mt-1 block w-full border border-gray-300 rounded-md" required min="{{date('Y-m-d')}}" required>
                 </div>
                 <div>
                     <label for="interviewTime" class="block text-sm font-medium text-gray-700">Interview Time</label>
