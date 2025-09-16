@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <title>EQUIJOB - Admin</title>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
 
 <body class="bg-[#FCFDFF] min-h-screen flex flex-col md:flex-row">
@@ -18,9 +18,12 @@
   <div class="flex flex-col flex-1 w-full lg:ml-[234px] min-h-screen">
 
     <div class="w-full border-b border-gray-200 shadow-sm z-10">
-      <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications"/>
+      <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
     </div>
-
+    <div class="border-b border-gray-200 bg-white px-4 py-2">
+      <h1 class="text-2xl font-semibold text-gray-800">Admin Dashboard</h1>
+      <p class="text-gray-600">Welcome back, {{$user->first_name}}!</p>
+    </div>
     <main class="flex-1 overflow-y-auto px-6 py-10 bg-[#FCFDFF]">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
@@ -69,4 +72,5 @@
   </div>
 
 </body>
+
 </html>

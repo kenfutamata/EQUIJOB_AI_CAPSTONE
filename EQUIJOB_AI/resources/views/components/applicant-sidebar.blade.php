@@ -21,6 +21,10 @@
                 <span>Application Management</span>
             </a>
             <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{route('applicant-application-tracker')}}">
+                <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/job_collections.png') }}" alt="collections Icon" />
+                <span>Job Collections</span>
+            </a>
+            <a class="flex items-center gap-3 px-2 py-2 rounded bg-[#B3C7F7] text-[#262626] font-semibold hover:bg-[#a4b8e0]" href="{{route('applicant-application-tracker')}}">
                 <img src="{{ asset('assets/photos/dashboard/applicant-dashboard/applicant_tracker.png') }}" alt="Tracker Icon" />
                 <span>Applicant Tracker</span>
             </a>

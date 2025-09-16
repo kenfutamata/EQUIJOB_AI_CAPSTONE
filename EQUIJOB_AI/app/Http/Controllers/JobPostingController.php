@@ -72,6 +72,7 @@ class JobPostingController extends Controller
             'jobPostingObjectives' => 'required|string|max:1000',
             'requirements' => 'required|string|max:1000',
             'description' => 'required|string|max:1000',
+            'category'=>'required|string|max:100', 
             'experience' => 'nullable|string|max:255',
             'skills' => 'nullable|string|max:1000',
             'contactPhone' => 'required|string|max:15',

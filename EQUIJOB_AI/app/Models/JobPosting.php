@@ -77,6 +77,7 @@ class JobPosting extends Model
         'jobPostingObjectives',
         'workEnvironment', 
         'requirements',
+        'category',
         'status',
         'description',
         'experience',

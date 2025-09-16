@@ -25,12 +25,12 @@ class AdminManageJobPostingController extends Controller
             })
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('company_name', 'like', "%{$search}%")
+                    $q->where('companyName', 'like', "%{$search}%")
                         ->orWhere('sex', 'like', "%{$search}%")
                         ->orWhere('age', 'like', "%{$search}%")
-                        ->orWhere('disability_type', 'like', "%{$search}%")
-                        ->orWhere('educational_attainment', 'like', "%{$search}%")
-                        ->orWhere('job_posting_objectives', 'like', "%{$search}%")
+                        ->orWhere('disabilityType', 'like', "%{$search}%")
+                        ->orWhere('educationalAttainment', 'like', "%{$search}%")
+                        ->orWhere('jobPostingObjectives', 'like', "%{$search}%")
                         ->orWhere('requirements', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%")
                         ->orWhere('experience', 'like', "%{$search}%")

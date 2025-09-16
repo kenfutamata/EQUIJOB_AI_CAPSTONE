@@ -61,6 +61,7 @@
                             <th class="px-2 py-2">Work Environment</th>
                             <th class="px-2 py-2">Experience</th>
                             <th class="px-2 py-2">Skills</th>
+                            <th class="px-2 py-2">Category</th>
                             <th class="px-2 py-2">Requirements</th>
                             <th class="px-2 py-2">Status</th>
                             <th class="px-2 py-2">Actions</th>
@@ -76,9 +77,9 @@
                             <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
                             <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
                             <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
-
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
+                            <td class="px-2 py-2">{{ $posting->category }}</td>
                             <td class="px-2 py-2">{{ $posting->requirements }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
@@ -167,6 +168,10 @@
             <div>
                 <label class="block text-xs text-gray-500">Job Description</label>
                 <textarea id="modal.description" class="w-full border rounded px-2 py-1" disabled></textarea>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500">Category</label>
+                <input  id="modal.category" class="w-full border rounded px-2 py-1" disabled></textarea>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Salary Range</label>
@@ -261,6 +266,7 @@
             document.getElementById('modal.contactPhone').value = jobposting.contactPhone;
             document.getElementById('modal.contactEmail').value = jobposting.contactEmail;
             document.getElementById('modal.description').value = jobposting.description;
+            document.getElementById('modal.category').value = jobposting.category;
             document.getElementById('modal.salaryRange').value = jobposting.salaryRange;
             document.getElementById('modal.remarks').value = jobposting.remarks || '';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');

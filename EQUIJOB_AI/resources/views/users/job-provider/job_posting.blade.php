@@ -10,16 +10,17 @@
 </head>
 @php
 function sortArrow($column) {
-    $currentSort = request('sort');
-    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-    $arrow = request('sort') === $column
-    ? (request('direction') === 'asc' ? '↑' : '↓')
-    : '↕';
-    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-    $url = request()->url() . '?' . http_build_query($params);
-    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
+
 <body class="bg-white text-black">
 
     <div>
@@ -89,7 +90,7 @@ function sortArrow($column) {
                             <th class="px-2 py-2">Work Environment {!!sortArrow('workEnvironment')!!}</th>
                             <th class="px-2 py-2">Experience {!!sortArrow('experience')!!}</th>
                             <th class="px-2 py-2">Skills {!!sortArrow('skills')!!}</th>
-                            <th class="px-2 py-2">Requirements {!!sortArrow('requirements')!!}</th>
+                            <th class="px-2 py-2">Category {!!sortArrow('catrgory')!!}</th>
                             <th class="px-2 py-2">Status {!!sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
@@ -106,7 +107,7 @@ function sortArrow($column) {
                             <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
                             <td class="px-2 py-2">{{ $posting->experience ?: 'No Experience provided'}}</td>
                             <td class="px-2 py-2">{{ $posting->skills ?: 'No Skills provided'}}</td>
-                            <td class="px-2 py-2">{{ $posting->requirements }}</td>
+                            <td class="px-2 py-2">{{ $posting->category }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)'
@@ -241,6 +242,29 @@ function sortArrow($column) {
                     <label class="block text-xs text-gray-500">Requirements</label>
                     <textarea name="requirements" class="w-full border rounded px-2 py-1" required></textarea>
                     @error('requirements')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500">Category</label>
+                    <select name="category" class="w-full border rounded px-2 py-1" required>
+                        <option value="IT & Software">IT & Software</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Business & Finance">Business & Finance</option>
+                        <option value="Sales & Marketing">Sales & Marketing</option>
+                        <option value="Customer Service">Customer Service</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Design & Creatives">Design & Creatives</option>
+                        <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Transport & Logistics">Transport & Logistics</option>
+                        <option value="Government">Government</option>
+                        <option value="Science & Research">Science & Research</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    @error('category')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
                 </div>
