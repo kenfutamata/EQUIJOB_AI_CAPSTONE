@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminManageUsersController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\ApplicantFeedbackController;
 use App\Http\Controllers\ApplicantJobApplicationController;
+use App\Http\Controllers\ApplicantJobCollectionsController;
 use App\Http\Controllers\ApplicantMatchJobsController;
 use App\Http\Controllers\ApplicantProfileController;
 use App\Http\Controllers\ApplicationTrackerController;
@@ -119,6 +120,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/Applicant/Application-Tracker/status', [ApplicationTrackerController::class, 'show'])->name('applicant-application-tracker-show');
     Route::get('/Applicant/Applicant-Feedback', [ApplicantFeedbackController::class, 'index'])->name('applicant-feedback');
     Route::put('/Applicant/Applicant-Feedback/{feedback}', [ApplicantFeedbackController::class, 'update'])->name('applicant-feedback-update');
+    Route::get('/Applicant/Job-Collections', [ApplicantJobCollectionsController::class, 'index'])->name('applicant-job-collections');
 });
 
 //admin
