@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data.profile_picture) {
             profileImg.src = `/storage/${data.profile_picture}`;
         } else {
-            profileImg.src = `https://ui-avatars.com/api/?name=${data.firstName}+${data.lastName}&background=random`;
+            profileImg.src = `/assets/applicant/applicant-dashboard/profile_pic.png`;
+            profileImg.style.display = 'block';
         }
 
         const resumeContainer = document.getElementById('modal_view_resume');
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('rejectJobApplicationModal').classList.add('hidden');
     };
 
-    window.openDeleteApplicationModal = function (url){
+    window.openDeleteApplicationModal = function (url) {
         const form = document.getElementById('deleteApplication');
         form.action = url;
         document.getElementById('DeleteApplicationModal').classList.remove('hidden');

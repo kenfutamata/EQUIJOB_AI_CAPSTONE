@@ -10,7 +10,7 @@
         <nav class="hidden md:flex gap-8 text-sm font-semibold text-white">
           <a href="{{route('about-us')}}" class="text-gray-100 hover:text-green-300 transition">About Us</a>
           <a href="{{route('contact-us')}}" class="text-gray-100 hover:text-green-300 transition">Contact Us</a>
-          <a href="{{route('contact-us')}}" class="text-gray-100 hover:text-green-300 transition">Jobs</a>
+          <a href="{{route('jobs')}}" class="text-gray-100 hover:text-green-300 transition">Jobs</a>
 
         </nav>
 

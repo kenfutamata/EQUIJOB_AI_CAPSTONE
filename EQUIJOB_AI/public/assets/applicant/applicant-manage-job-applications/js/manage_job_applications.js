@@ -34,13 +34,11 @@ function openViewJobApplicationModal(button) {
         profilePictureImg.style.display = 'block';
         document.getElementById('modal.applicantInitial').style.display = 'none';
     } else {
-        profilePictureImg.style.display = 'none';
-        const initials = (applicationData.firstName?.[0] || '') + (applicationData.lastName?.[0] || '');
-        const initialsDiv = document.getElementById('modal.applicantInitial');
-        initialsDiv.textContent = initials.toUpperCase() || 'N/A';
-        initialsDiv.style.display = 'flex';
+        profilePictureImg.src = `/assets/applicant/applicant-dashboard/profile_pic.png`;
+        profilePictureImg.style.display = 'block';
+        document.getElementById('modal.applicantInitial').style.display = 'none';
     }
-    
+
     document.getElementById('modal.applicantName').textContent = fullName || 'N/A';
     document.getElementById('modal.position').textContent = applicationData.position ?? 'N/A';
     document.getElementById('modal.companyName').textContent = applicationData.companyName ?? 'N/A';

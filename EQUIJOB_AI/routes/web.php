@@ -71,6 +71,8 @@ Route::post('/Sign-up-Applicant/login', [SignInController::class, 'SignUpJobAppl
 Route::post('/Sign-up-JobProvider/login', [SignInController::class, 'SignUpJobProvider'])->name('sign-up-job-provider-register');
 Route::get('/Email-Confirmation', [SignInController::class, 'ViewEmailConfirmationPage'])->name('email-confirmation');
 
+//Jobs Page
+Route::get('/jobs', [LandingPageController::class, 'ViewJobsPage'])->name('jobs');
 // notification
 Route::delete('/Notification/Delete/{id}', [NotificationController::class, 'destroy'])->name('notification-delete');
 

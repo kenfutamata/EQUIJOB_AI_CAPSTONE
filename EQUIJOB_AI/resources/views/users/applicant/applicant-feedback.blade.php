@@ -121,7 +121,6 @@ function sortArrow($column) {
         </main>
     </div>
 
-    <!-- MODALS (Structure is already responsive) -->
     <div id="viewDescriptionModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeviewDescriptionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
@@ -162,6 +161,9 @@ function sortArrow($column) {
                     <div>
                         <label for="feedbackText" class="block text-sm font-medium text-gray-700">Your Feedback:</label>
                         <textarea id="feedbackText" name="feedbackText" rows="4" class="mt-1 w-full border rounded px-2 py-1 shadow-sm" required></textarea>
+                        @error('feedbackText')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="rating" class="block text-sm font-medium text-gray-700">Your Rating (1-5):</label>
@@ -173,6 +175,9 @@ function sortArrow($column) {
                             <option value="4">4 - Very Good</option>
                             <option value="5">5 - Excellent</option>
                         </select>
+                        @error('rating')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p
+                        @enderror
                     </div>
                     <button type="submit" class="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">Submit Feedback</button>
                 </div>

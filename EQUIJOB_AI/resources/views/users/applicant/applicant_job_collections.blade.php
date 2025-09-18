@@ -164,6 +164,13 @@
               <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium"></p>
             </div>
           </div>
+          <div class="flex items-start gap-3">
+            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/category.png') }}" alt="Icon" class="w-6 h-6" />
+            <div>
+              <p class="text-sm text-gray-700">Category</p>
+              <p id="modal-category" class="text-sm text-blue-600 font-medium"></p>
+            </div>
+          </div>
         </div>
 
         <div class="flex-1 flex flex-col gap-6">
@@ -204,6 +211,7 @@
     document.getElementById('modal-contactEmail').textContent = jobposting.contactEmail || 'No contact email provided';
     document.getElementById('modal-description').textContent = jobposting.description || 'No description provided';
     document.getElementById('modal-salaryRange').textContent = jobposting.salaryRange || 'No Salary Range provided';
+    document.getElementById('modal-category').textContent = jobposting.category || 'No Category provided';
 
     const companyLogo = document.getElementById('modal-companyLogo');
     if (jobposting.companyLogo) {
@@ -213,7 +221,6 @@
       companyLogo.style.display = 'none';
     }
 
-    // Show modal
     document.getElementById('viewJobDetailsModal').classList.remove('hidden');
   }
 
