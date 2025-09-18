@@ -190,11 +190,11 @@
                 <h3 class="text-xl font-semibold">Please Input your Remarks for Disapproval of Job Posting</h3>
                 <button onclick="closeDisapproveJobPostingModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <form id="remarks" method="POST" action="{{route('admin-manage-job-posting-disapproved', $posting->id)}}">
+            <form id="disapproveForm" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="mb-4">
-                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
                     <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
                     <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
             </form>
@@ -203,6 +203,9 @@
     <!-- Scripts -->
     <script>
         function openDisapproveJobPostingModal(button) {
+            const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
+            const form = document.getElementById('disapproveForm');
+            form.action = `/Admin/Manage-Job-Posting/Disapproved/${jobposting.id}`;
             document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
         }
 

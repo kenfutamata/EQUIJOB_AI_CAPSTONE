@@ -88,10 +88,11 @@ class AdminManageJobPostingController extends Controller
 
     public function updateDisapproved(string $id)
     {
-        $JobPosting = JobPosting::findOrFail($id);
         $validateInformation = request()->validate([
             'remarks' => 'required|string|max:1000',
         ]);
+        $JobPosting = JobPosting::findOrFail($id);
+
         $JobPosting->status = 'Disapproved';
         $JobPosting->remarks = $validateInformation['remarks'];
         $JobPosting->save();
