@@ -74,7 +74,7 @@
                             class="flex-1 bg-blue-600 text-white text-center px-4 py-2 rounded hover:bg-blue-700 transition">
                             View Details
                         </button>
-                        <a href="{{route('applicant-match-jobs')}}"
+                        <a href="{{route('sign-in')}}"
                             class="flex-1 bg-green-600 text-white text-center px-4 py-2 rounded hover:bg-green-700 transition">
                             Apply Now
                         </a>

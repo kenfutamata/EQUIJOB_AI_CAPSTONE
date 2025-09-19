@@ -298,7 +298,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </div>
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeAddJobPostingModal()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Add</button>
+                    <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">Submit</button>
                 </div>
             </form>
         </div>
