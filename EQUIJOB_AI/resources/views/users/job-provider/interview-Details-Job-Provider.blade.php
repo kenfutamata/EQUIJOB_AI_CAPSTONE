@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <p class="text-gray-700">
-                        Please be Informed that your Interview with {{$jobApplication->applicant->first_name}} {{$jobApplication->applicant->last_name}} for the 
+                        Please be Informed that your Interview with {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}} for the 
                         <br>
                         Position for {{$jobApplication->jobPosting->position}} will be tomorrow. Here are the interview details:
                             <br>
@@ -27,7 +27,7 @@
                             <br>
                             Google Meet Link: {{$jobApplication->interviewLink}}
                             <br>
-                            Applicant Name: {{$jobApplication->applicant->first_name}} {{$jobApplication->applicant->last_name}}
+                            Applicant Name: {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}}
                     </p>
                 </div>
                 <div>

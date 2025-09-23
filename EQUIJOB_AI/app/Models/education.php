@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  *
  * @property int $id
- * @property int $resume_id
+ * @property int $resumeID
  * @property string|null $school
  * @property string|null $degree
  * @property string|null $location
@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Model;
 class education extends Model
 {
     protected $fillable = [
-        'resume_id',
+        'resumeID',
         'school',
         'degree',
         'location',
@@ -46,6 +46,6 @@ class education extends Model
 
     public function resume()
     {
-        return $this->belongsTo(resume::class, 'resume_id');
+        return $this->belongsTo(resume::class, 'resumeID');
     }
 }

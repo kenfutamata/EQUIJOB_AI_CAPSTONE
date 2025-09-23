@@ -153,7 +153,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Name</label>
-                    <input name="companyName" class="w-full border rounded px-2 py-1" value="{{$user->company_name}}" readonly>
+                    <input name="companyName" class="w-full border rounded px-2 py-1" value="{{$user->companyName}}" readonly>
                     @error('companyName')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -171,9 +171,9 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Company Logo</label>
-                    @if($user->company_logo)
-                    <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-16 h-16 object-cover border rounded mb-2" id="companyLogo" name="companyLogo" style="display: block;">
-                    <span id="companyLogoFilename">{{ $user->company_logo ? basename($user->company_logo) : 'No file chosen' }}</span>
+                    @if($user->companyLogo)
+                    <img src="{{ asset('storage/' . $user->companyLogo) }}" alt="Company Logo" class="w-16 h-16 object-cover border rounded mb-2" id="companyLogo" name="companyLogo" style="display: block;">
+                    <span id="companyLogoFilename">{{ $user->companyLogo ? basename($user->companyLogo) : 'No file chosen' }}</span>
                     @endif
                     @error('companyLogo')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -270,7 +270,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Phone</label>
-                    <input name="contactPhone" class="w-full border rounded px-2 py-1" value="{{$user->phone_number}}" readonly>
+                    <input name="contactPhone" class="w-full border rounded px-2 py-1" value="{{$user->phoneNumber}}" readonly>
                     @error('contactPhone')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror

@@ -97,12 +97,12 @@ function sortArrow($column) {
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
                             <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
-                            <th class="px-2 py-2">First Name {!! sortArrow('first_name')!!}</th>
-                            <th class="px-2 py-2">Last Name {!! sortArrow('last_name')!!}</th>
+                            <th class="px-2 py-2">First Name {!! sortArrow('firstName')!!}</th>
+                            <th class="px-2 py-2">Last Name {!! sortArrow('lastName')!!}</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Email {!! sortArrow('email')!!}</th>
-                            <th class="px-2 py-2">Phone {!! sortArrow('phone_number')!!}</th>
-                            <th class="px-2 py-2">DOB {!! sortArrow('date_of_birth')!!}</th>
-                            <th class="px-2 py-2">Disability {!! sortArrow('type_of_disability')!!}</th>
+                            <th class="px-2 py-2">Phone {!! sortArrow('phoneNumber')!!}</th>
+                            <th class="px-2 py-2">DOB {!! sortArrow('dateOfBirth')!!}</th>
+                            <th class="px-2 py-2">Disability {!! sortArrow('typeOfDisability')!!}</th>
                             <th class="px-2 py-2">Profile Picture</th>
                             <th class="px-2 py-2">Role {!! sortArrow('role')!!}</th>
                             <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
@@ -113,15 +113,15 @@ function sortArrow($column) {
                         @foreach ($users as $user)
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3">{{ $user->userID}}</td>
-                            <td class="px-2 py-2">{{ $user->first_name }}</td>
-                            <td class="px-2 py-2">{{ $user->last_name }}</td>
+                            <td class="px-2 py-2">{{ $user->firstName }}</td>
+                            <td class="px-2 py-2">{{ $user->lastName }}</td>
                             <td class="px-2 py-2 break-all max-w-[150px]">{{ $user->email }}</td>
-                            <td class="px-2 py-2">{{ $user->phone_number }}</td>
-                            <td class="px-2 py-2">{{ $user->date_of_birth }}</td>
-                            <td class="px-2 py-2">{{ $user->type_of_disability }}</td>
+                            <td class="px-2 py-2">{{ $user->phoneNumber }}</td>
+                            <td class="px-2 py-2">{{ $user->dateOfBirth }}</td>
+                            <td class="px-2 py-2">{{ $user->typeOfDisability }}</td>
                             <td class="px-2 py-2">
-                                @if ($user->profile_picture)
-                                <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
+                                @if ($user->profilePicture)
+                                <img src="{{ asset('storage/' . $user->profilePicture) }}" class="w-8 h-8 object-cover mx-auto">
                                 @else No Picture @endif
                             </td>
                             <td class="px-2 py-2">{{ $user->role }}</td>
@@ -153,28 +153,28 @@ function sortArrow($column) {
             <h2 class="text-xl font-bold mb-4">Applicant Profile</h2>
             <div class="space-y-2">
                 <label class="block text-xs text-gray-500">First Name:</label>
-                <input id="modal_first_name" class="w-full border rounded px-2 py-1" readonly placeholder="First Name">
+                <input id="modal_firstName" class="w-full border rounded px-2 py-1" readonly placeholder="First Name">
                 <label class="block text-xs text-gray-500">Last Name:</label>
-                <input id="modal_last_name" class="w-full border rounded px-2 py-1" readonly placeholder="Last Name">
+                <input id="modal_lastName" class="w-full border rounded px-2 py-1" readonly placeholder="Last Name">
                 <label class="block text-xs text-gray-500">Email Address:</label>
                 <input id="modal_email" class="w-full border rounded px-2 py-1" readonly placeholder="Email">
                 <label class="block text-xs text-gray-500">Address:</label>
                 <input id="modal_address" class="w-full border rounded px-2 py-1" readonly placeholder="Address">
                 <label class="block text-xs text-gray-500">Phone Number:</label>
-                <input id="modal_phone_number" class="w-full border rounded px-2 py-1" readonly placeholder="Phone Number">
+                <input id="modal_phoneNumber" class="w-full border rounded px-2 py-1" readonly placeholder="Phone Number">
                 <label class="block text-xs text-gray-500">Date of Birth:</label>
-                <input id="modal_date_of_birth" class="w-full border rounded px-2 py-1" readonly placeholder="Date of Birth">
+                <input id="modal_dateOfBirth" class="w-full border rounded px-2 py-1" readonly placeholder="Date of Birth">
                 <label class="block text-xs text-gray-500">PWD ID:</label>
-                <input id="modal_pwd_id" class="w-full border rounded px-2 py-1" readonly placeholder="PWD ID">
+                <input id="modal_pwdId" class="w-full border rounded px-2 py-1" readonly placeholder="PWD ID">
                 <label class="block text-xs text-gray-500">Disability:</label>
-                <input id="type_of_disability" class="w-full border rounded px-2 py-1" readonly placeholder="Type of Disability">
+                <input id="typeOfDisability" class="w-full border rounded px-2 py-1" readonly placeholder="Type of Disability">
                 <div>
                     <label class="block text-xs text-gray-500">PWD Card:</label>
                     <img id="modal_pwd_card" class="w-16 h-16 object-cover border rounded" style="display:none;">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Profile Picture:</label>
-                    <img id="modal_profile_picture" class="w-16 h-16 object-cover border rounded" style="display:none;">
+                    <img id="modal_profilePicture" class="w-16 h-16 object-cover border rounded" style="display:none;">
                 </div>
                 <label class="block text-xs text-gray-500">Role:</label>
                 <input id="modal_role" class="w-full border rounded px-2 py-1" readonly placeholder="Role">
@@ -203,20 +203,20 @@ function sortArrow($column) {
     <script>
         function openProfileModal(button) {
             const user = JSON.parse(button.getAttribute('data-user'));
-            document.getElementById('modal_first_name').value = user.first_name;
-            document.getElementById('modal_last_name').value = user.last_name;
+            document.getElementById('modal_firstName').value = user.firstName;
+            document.getElementById('modal_lastName').value = user.lastName;
             document.getElementById('modal_email').value = user.email;
             document.getElementById('modal_address').value = user.address;
-            document.getElementById('modal_phone_number').value = user.phone_number;
-            document.getElementById('modal_date_of_birth').value = user.date_of_birth;
-            document.getElementById('modal_pwd_id').value = user.pwd_id;
-            document.getElementById('type_of_disability').value = user.type_of_disability;
+            document.getElementById('modal_phoneNumber').value = user.phoneNumber;
+            document.getElementById('modal_dateOfBirth').value = user.dateOfBirth;
+            document.getElementById('modal_pwdId').value = user.pwdId;
+            document.getElementById('typeOfDisability').value = user.typeOfDisability;
             const pwdCardImg = document.getElementById('modal_pwd_card');
             pwdCardImg.src = user.upload_pwd_card ? `/storage/${user.upload_pwd_card}` : '';
             pwdCardImg.style.display = user.upload_pwd_card ? 'block' : 'none';
-            const profilePictureImg = document.getElementById('modal_profile_picture');
-            profilePictureImg.src = user.profile_picture ? `/storage/${user.profile_picture}` : '';
-            profilePictureImg.style.display = user.profile_picture ? 'block' : 'none';
+            const profilePictureImg = document.getElementById('modal_profilePicture');
+            profilePictureImg.src = user.profilePicture ? `/storage/${user.profilePicture}` : '';
+            profilePictureImg.style.display = user.profilePicture ? 'block' : 'none';
             document.getElementById('modal_role').value = user.role;
             document.getElementById('modal_status').value = user.status;
             document.getElementById('viewProfileModal').classList.remove('hidden');

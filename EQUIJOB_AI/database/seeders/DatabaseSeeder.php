@@ -20,16 +20,16 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         users::factory()->create([
-            'first_name' => 'admin',
-            'last_name' => 'admin',
+            'firstName' => 'admin',
+            'lastName' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
             'role' => 'Admin',
             'status' => 'Active',
-            'phone_number' => '1234567890',
-            'date_of_birth' => '1990-01-01',
-            'type_of_disability' => 'Physical',
-            'pwd_id' => 'none',
+            'phoneNumber' => '1234567890',
+            'dateOfBirth' => '1990-01-01',
+            'typeOfDisability' => 'Physical',
+            'pwdId' => 'none',
             'upload_pwd_card' => 'none',
         ]);
     }

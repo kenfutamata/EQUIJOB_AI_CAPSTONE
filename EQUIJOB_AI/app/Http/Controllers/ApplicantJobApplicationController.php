@@ -69,10 +69,10 @@ class ApplicantJobApplicationController extends Controller
             $newApplication = JobApplication::create($applicationData);
 
             $maildata = [
-                'firstName' => $applicant->first_name,
-                'lastName' => $applicant->last_name,
-                'jobProvidersFirstName' => $jobProvider->first_name,
-                'jobProvidersLastName' => $jobProvider->last_name,
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
+                'jobProvidersFirstName' => $jobProvider->firstName,
+                'jobProvidersLastName' => $jobProvider->lastName,
                 'position' => $posting->position,
                 'companyName' => $posting->companyName,
                 'applicationNumber' => $applicationData['jobApplicationNumber'],
@@ -129,12 +129,12 @@ class ApplicantJobApplicationController extends Controller
             $jobProvider = Auth::guard('job_provider')->user();
 
             $maildata = [
-                'firstName' => $applicant->first_name,
-                'lastName' => $applicant->last_name,
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
                 'companyName' => $jobPosting->companyName,
                 'position' => $jobPosting->position,
-                'jobProviderFirstName'=> $jobProvider->first_name,
-                'jobProviderLastName'=> $jobProvider->last_name,
+                'jobProviderFirstName'=> $jobProvider->firstName,
+                'jobProviderLastName'=> $jobProvider->lastName,
                 'jobProviderEmail'=> $jobProvider->email,
                 'jobProviderPhone'=> $jobProvider->phone,
             ];

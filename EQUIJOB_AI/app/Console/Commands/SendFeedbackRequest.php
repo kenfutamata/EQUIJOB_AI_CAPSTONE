@@ -63,20 +63,20 @@ class SendFeedbackRequest extends Command
                         $feedback = Feedbacks::create([
                             'jobPostingID'     => $application->jobPostingID,
                             'applicantID'      => $application->applicantID,
-                            'firstName'        => $applicant->first_name,
-                            'lastName'         => $applicant->last_name,
+                            'firstName'        => $applicant->firstName,
+                            'lastName'         => $applicant->lastName,
                             'email'            => $applicant->email,
-                            'phoneNumber'      => $applicant->phone_number,
+                            'phoneNumber'      => $applicant->phoneNumber,
                             'feedbackType'     => 'Job Rating',
                             'status'           => 'Sent',
                         ]);
                         $maildata = [
-                            'firstName'        => $applicant->first_name,
-                            'lastName'         => $applicant->last_name,
+                            'firstName'        => $applicant->firstName,
+                            'lastName'         => $applicant->lastName,
                             'email'            => $applicant->email,
-                            'jobProviderFirstName' => $application->jobPosting->jobProvider->first_name,
-                            'jobProviderLastName' => $application->jobPosting->jobProvider->last_name,
-                            'companyName'      => $application->jobPosting->jobProvider->company_name,
+                            'jobProviderFirstName' => $application->jobPosting->jobProvider->firstName,
+                            'jobProviderLastName' => $application->jobPosting->jobProvider->lastName,
+                            'companyName'      => $application->jobPosting->jobProvider->companyName,
                             'position'         => $application->jobPosting->position,
                         ];
                         Mail::to($applicant->email)->send(new \App\Mail\NotifyApplicantFeedbackSent($maildata));

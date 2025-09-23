@@ -110,28 +110,28 @@ function sortArrow($column) {
                             $applicant = $application->applicant;
                             // Ensure objects exist before accessing properties
                             $modalData = array_merge($posting ? $posting->toArray() : [], [
-                                'firstName' => $applicant->first_name ?? null,
-                                'lastName' => $applicant->last_name ?? null,
+                                'firstName' => $applicant->firstName ?? null,
+                                'lastName' => $applicant->lastName ?? null,
                                 'sex' => $applicant->gender ?? null,
-                                'contactPhone' => $applicant->phone_number ?? null,
+                                'contactPhone' => $applicant->phoneNumber ?? null,
                                 'contactEmail' => $applicant->email ?? null,
-                                'disabilityType' => $applicant->type_of_disability ?? null,
+                                'disabilityType' => $applicant->typeOfDisability ?? null,
                                 'uploadResume' => $application->uploadResume,
                                 'uploadApplicationLetter' => $application->uploadApplicationLetter,
                                 'remarks' => $application->remarks,
                                 'interviewDate' => $application->interviewDate ? $application->interviewDate->format('F j, Y') : null,
                                 'interviewTime' => $application->interviewTime ? $application->interviewTime->format('g:i A') : null,
                                 'interviewLink' => $application->interviewLink,
-                                'profile_picture' => $applicant->profile_picture ?? null,
+                                'profilePicture' => $applicant->profilePicture ?? null,
                             ]);
                         @endphp
                         <tr>
                             <td class="px-3 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-3 py-2">{{ $posting->position ?? 'N/A' }}</td>
                             <td class="px-3 py-2">{{ $posting->companyName ?? 'N/A' }}</td>
-                            <td class="px-3 py-2 hidden md:table-cell">{{ $applicant->first_name ?? '' }} {{ $applicant->last_name ?? ''}}</td>
-                            <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->phone_number ?? 'N/A' }}</td>
-                            <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->type_of_disability ?? 'N/A'}}</td>
+                            <td class="px-3 py-2 hidden md:table-cell">{{ $applicant->firstName ?? '' }} {{ $applicant->lastName ?? ''}}</td>
+                            <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->phoneNumber ?? 'N/A' }}</td>
+                            <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->typeOfDisability ?? 'N/A'}}</td>
                             <td class="px-3 py-2">{{ $application->status ?? 'N/A'}}</td>
                             <td class="px-3 py-2 space-y-1">
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded w-full sm:w-auto">View</button>

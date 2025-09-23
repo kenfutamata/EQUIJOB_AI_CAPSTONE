@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('job_posting', function (Blueprint $table) {
-            if (!Schema::hasColumn('job_posting', 'company_logo')) {
-                $table->string('company_logo')->nullable()->after('sex');
+            if (!Schema::hasColumn('job_posting', 'companyLogo')) {
+                $table->string('companyLogo')->nullable()->after('sex');
             }
         });
     }
@@ -24,8 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('job_posting', function (Blueprint $table) {
-            if (Schema::hasColumn('job_posting', 'company_logo')) {
-                $table->dropColumn('company_logo');
+            if (Schema::hasColumn('job_posting', 'companyLogo')) {
+                $table->dropColumn('companyLogo');
             }
         });
     }

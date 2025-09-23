@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\Model;
  * 
  *
  * @property int $id
- * @property int $user_id
- * @property string $first_name
- * @property string $last_name
+ * @property int $userID
+ * @property string $firstName
+ * @property string $lastName
  * @property string|null $dob
  * @property string|null $address
  * @property string $email
  * @property string|null $phone
- * @property string|null $type_of_disability
+ * @property string|null $typeOfDisability
  * @property string|null $experience
  * @property string|null $photo
  * @property string|null $summary
  * @property string|null $skills
- * @property string|null $ai_generated_summary
+ * @property string|null $aiGeneratedSummary
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\education> $educations
@@ -52,9 +52,9 @@ use Illuminate\Database\Eloquent\Model;
 class Resume extends Model
 {
     protected $fillable = [
-        'user_id',
-        'first_name',
-        'last_name',
+        'userID',
+        'firstName',
+        'lastName',
         'dob',
         'address',
         'email',
@@ -63,19 +63,19 @@ class Resume extends Model
         'photo',
         'summary',
         'skills',
-        'type_of_disability'
+        'typeOfDisability'
     ];
     protected $table = 'resume';
 
     public function experiences(){
-        return $this->hasMany(experience::class, 'resume_id');
+        return $this->hasMany(experience::class, 'resumeID');
     }
 
     public function educations(){
-        return $this->hasMany(education::class, 'resume_id');
+        return $this->hasMany(education::class, 'resumeID');
     }
 
     public function user(){
-        return $this->belongsTo(users::class, 'user_id');
+        return $this->belongsTo(users::class, 'userID');
     }
 }

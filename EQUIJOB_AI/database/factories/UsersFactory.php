@@ -27,16 +27,16 @@ class UsersFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => 'admin',
-            'last_name' => 'admin',
+            'firstName' => 'admin',
+            'lastName' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
             'role' => 'admin',
             'status' => 'active',
-            'phone_number' => $this->faker->phoneNumber(),
-            'date_of_birth' => $this->faker->date(),
-            'type_of_disability' => $this->faker->word(),
-            'pwd_id' => $this->faker->word(),
+            'phoneNumber' => $this->faker->phoneNumber(),
+            'dateOfBirth' => $this->faker->date(),
+            'typeOfDisability' => $this->faker->word(),
+            'pwdId' => $this->faker->word(),
             'upload_pwd_card' => $this->faker->word(),
         ];
     }

@@ -83,7 +83,7 @@ class JobPostingController extends Controller
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }
-        $validatedData['companyLogo'] = $user->company_logo;
+        $validatedData['companyLogo'] = $user->companyLogo;
 
         $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();
         $validatedData['status'] = 'Pending';

@@ -24,21 +24,21 @@ class AdminManageUsersController extends Controller
         $query = \App\Models\users::query()->where('role', 'Applicant')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
+                    $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($search) . '%'])
                         ->orWhere('userID', 'like', "%{$search}%")
 
-                        ->orWhere('first_name', 'like', "%{$search}%")
-                        ->orWhere('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('firstName', 'like', "%{$search}%")
+                        ->orWhere('firstName', 'like', "%{$search}%")
+                        ->orWhere('lastName', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('address', 'like', "%{$search}%")
-                        ->orWhere('phone_number', 'like', "%{$search}%")
-                        ->orWhere('type_of_disability', 'like', "%{$search}%")
-                        ->orWhere('pwd_id', 'like', "%{$search}%")
+                        ->orWhere('phoneNumber', 'like', "%{$search}%")
+                        ->orWhere('typeOfDisability', 'like', "%{$search}%")
+                        ->orWhere('pwdId', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%");
                 });
             });
-        $sortable = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'date_of_birth', 'type_of_disability', 'role', 'status'];
+        $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'dateOfBirth', 'typeOfDisability', 'role', 'status'];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 

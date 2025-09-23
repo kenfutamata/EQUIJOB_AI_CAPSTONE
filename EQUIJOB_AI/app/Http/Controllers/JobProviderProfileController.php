@@ -60,28 +60,28 @@ class JobProviderProfileController extends Controller
     public function update(Request $request)
     {
         $validateInformation = $request->validate([
-            'first_name' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
-            'last_name' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
+            'lastName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
             'email' => 'string|email|max:255',
-            'business_permit' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'company_name' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
-            'company_logo'=> 'file|mimes:jpg,jpeg,png|max:2048',
-            'profile_picture' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'businessPermit' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'companyName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
+            'companyLogo'=> 'file|mimes:jpg,jpeg,png|max:2048',
+            'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
-        if($request->hasFile('company_logo')){
-            $file = $request->file('company_logo'); 
-            $filepath = $file->store('company_logo', 'public'); 
-            $validateInformation['company_logo'] = $filepath;
+        if($request->hasFile('companyLogo')){
+            $file = $request->file('companyLogo'); 
+            $filepath = $file->store('companyLogo', 'public'); 
+            $validateInformation['companyLogo'] = $filepath;
         }
-        if ($request->hasFile('business_permit')) {
-            $file = $request->file('business_permit');
-            $filepath = $file->store('business_permit', 'public');
-            $validateInformation['business_permit'] = $filepath;
+        if ($request->hasFile('businessPermit')) {
+            $file = $request->file('businessPermit');
+            $filepath = $file->store('businessPermit', 'public');
+            $validateInformation['businessPermit'] = $filepath;
         }
-        if ($request->hasFile('profile_picture')) {
-            $file = $request->file('profile_picture');
-            $filepath = $file->store('profile_picture', 'public');
-            $validateInformation['profile_picture'] = $filepath;
+        if ($request->hasFile('profilePicture')) {
+            $file = $request->file('profilePicture');
+            $filepath = $file->store('profilePicture', 'public');
+            $validateInformation['profilePicture'] = $filepath;
         }
 
         try {

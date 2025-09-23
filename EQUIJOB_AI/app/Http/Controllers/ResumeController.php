@@ -28,7 +28,7 @@ class ResumeController extends Controller
         $prompt .= "Create a professional and impactful resume for the candidate with the following details:\n\n";
 
         $prompt .= "Personal Information:\n";
-        $prompt .= "Name: {$resume->first_name} {$resume->last_name}\n";
+        $prompt .= "Name: {$resume->firstName} {$resume->lastName}\n";
         if ($resume->dob) {
             $prompt .= "Date of Birth: " . \Carbon\Carbon::parse($resume->dob)->format('Y-m-d') . "\n";
         }
@@ -40,8 +40,8 @@ class ResumeController extends Controller
             $prompt .= "Phone: {$resume->phone}\n";
         }
         // Add Disability Type if present
-        if (!empty($resume->type_of_disability) && strcasecmp(trim($resume->type_of_disability), "Select Disability Type") !== 0) {
-            $prompt .= "Disability Type: {$resume->type_of_disability}\n";
+        if (!empty($resume->typeOfDisability) && strcasecmp(trim($resume->typeOfDisability), "Select Disability Type") !== 0) {
+            $prompt .= "Disability Type: {$resume->typeOfDisability}\n";
         }
         if ($resume->summary) {
             $prompt .= "Summary/Objectives (User Provided): {$resume->summary}\n";
@@ -57,7 +57,7 @@ class ResumeController extends Controller
         if ($resume->experiences->isNotEmpty()) {
             $prompt .= "Work Experience:\n";
             foreach ($resume->experiences as $exp) {
-                $prompt .= "- Job Title: {$exp->job_title}\n";
+                $prompt .= "- Job Title: {$exp->jobTitle}\n";
                 $prompt .= "  Employer: {$exp->employer}\n";
                 if ($exp->location) {
                     $prompt .= "  Location: {$exp->location}\n";
@@ -109,19 +109,19 @@ class ResumeController extends Controller
         $applicantUser = Auth::guard('applicant')->user();
 
         $validatedData = $request->validate([
-            'resume.first_name' => 'required|string|max:255',
-            'resume.last_name' => 'required|string|max:255',
+            'resume.firstName' => 'required|string|max:255',
+            'resume.lastName' => 'required|string|max:255',
             'resume.dob' => 'nullable|date',
             'resume.address' => 'nullable|string|max:255',
             'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
             'resume.phone' => 'nullable|string|max:15',
-            'resume.type_of_disability' => 'nullable|string|max:255',
+            'resume.typeOfDisability' => 'nullable|string|max:255',
             'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'resume.summary' => 'nullable|string',
             'resume.skills' => 'nullable|string|max:1000',
             'experience' => 'nullable|array',
-            'experience.*.employer' => 'nullable|string|max:255|required_with:experience.*.job_title',
-            'experience.*.job_title' => 'nullable|string|max:255|required_with:experience.*.employer',
+            'experience.*.employer' => 'nullable|string|max:255|required_with:experience.*.jobTitle',
+            'experience.*.jobTitle' => 'nullable|string|max:255|required_with:experience.*.employer',
             'experience.*.location' => 'nullable|string|max:255',
             'experience.*.year' => 'nullable|string|max:255',
             'experience.*.responsibilities' => 'nullable|string',
@@ -137,8 +137,8 @@ class ResumeController extends Controller
         try {
 
             $resumeInputData = $validatedData['resume'];
-            if (!isset($resumeInputData['type_of_disability'])) {
-                $resumeInputData['type_of_disability'] = '';
+            if (!isset($resumeInputData['typeOfDisability'])) {
+                $resumeInputData['typeOfDisability'] = '';
             }
             $skillsRaw = $request->input('skills') ?? '';
             $resumeInputData['skills'] = $skillsRaw;
@@ -150,14 +150,14 @@ class ResumeController extends Controller
             if (isset($path)) {
                 $resumeInputData['photo'] = $path;
             }
-            $resumeInstance = Resume::updateOrCreate(['user_id' => $applicantUser->id], $resumeInputData);
+            $resumeInstance = Resume::updateOrCreate(['userID' => $applicantUser->id], $resumeInputData);
             $resumeInstance->experiences()->delete();
             if (!empty($validatedData['experience'])) {
                 foreach ($validatedData['experience'] as $exp) {
-                    if (!empty($exp['employer']) && !empty($exp['job_title'])) {
+                    if (!empty($exp['employer']) && !empty($exp['jobTitle'])) {
                         $resumeInstance->experiences()->create([
                             'employer' => $exp['employer'],
-                            'job_title' => $exp['job_title'],
+                            'jobTitle' => $exp['jobTitle'],
                             'location' => $exp['location'] ?? null,
                             'year' => $exp['year'] ?? null,
                             'description' => $exp['responsibilities'] ?? null,
@@ -213,7 +213,7 @@ class ResumeController extends Controller
                 $generatedContent = 'AI could not generate additional content for the resume.';
             }
 
-            $resumeInstance->ai_generated_summary = $generatedContent;
+            $resumeInstance->aiGeneratedSummary = $generatedContent;
             $resumeInstance->save();
 
             $resumeData = $resumeInstance->load('experiences', 'educations')->toArray();

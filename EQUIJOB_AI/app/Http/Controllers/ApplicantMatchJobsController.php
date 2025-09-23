@@ -64,13 +64,13 @@ class ApplicantMatchJobsController extends Controller
             }
 
             $resume = \App\Models\Resume::updateOrCreate(
-                ['user_id' => $user->id],
+                ['userID' => $user->id],
                 [
                     'skills' => $parsedData['skills'] ?? '',
                     'experience' => $parsedData['experience_summary'] ?? null,
-                    'type_of_disability' => $disabilityTypeToSave, 
-                    'first_name' => $user->first_name ?? 'N/A',
-                    'last_name' => $user->last_name ?? 'N/A',
+                    'typeOfDisability' => $disabilityTypeToSave, 
+                    'firstName' => $user->firstName ?? 'N/A',
+                    'lastName' => $user->lastName ?? 'N/A',
                     'email' => $user->email,
                 ]
             );
@@ -145,8 +145,8 @@ class ApplicantMatchJobsController extends Controller
 
         if (!empty($resumeData['experience_details'])) {
             foreach ($resumeData['experience_details'] as $exp) {
-                if (!empty($exp['job_title'])) {
-                    $keywords[] = $exp['job_title'];
+                if (!empty($exp['jobTitle'])) {
+                    $keywords[] = $exp['jobTitle'];
                 }
             }
         }

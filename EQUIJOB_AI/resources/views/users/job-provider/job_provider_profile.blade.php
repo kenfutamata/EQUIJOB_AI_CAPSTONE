@@ -34,7 +34,7 @@
                 <div class="max-w-5xl mx-auto">
 
                     <div class="flex flex-col items-center mb-8">
-                        <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                        <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                             alt="Profile Picture"
                             class="rounded-md w-[200px] h-[200px] object-cover mb-4 shadow-md">
                     </div>
@@ -44,12 +44,12 @@
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                                    <input type="text" value="{{ $user->first_name }}" readonly
+                                    <input type="text" value="{{ $user->firstName }}" readonly
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                                    <input type="text" value="{{ $user->last_name }}" readonly
+                                    <input type="text" value="{{ $user->lastName }}" readonly
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                                 <div>
@@ -59,7 +59,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Phone Number</label>
-                                    <input type="text" value="{{ $user->phone_number }}" readonly
+                                    <input type="text" value="{{ $user->phoneNumber }}" readonly
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                             </div>
@@ -67,18 +67,18 @@
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Company Name</label>
-                                    <input type="text" value="{{ $user->company_name }}" readonly
+                                    <input type="text" value="{{ $user->companyName }}" readonly
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
-                                    <img src="{{ $user->company_logo ? asset('storage/' . $user->company_logo) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                                    <img src="{{ $user->companyLogo ? asset('storage/' . $user->companyLogo) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                                         alt="Company Logo"
                                         class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Business Permit</label>
-                                    <div id="view_business_permit" class="mt-2"></div>
+                                    <div id="view_businessPermit" class="mt-2"></div>
 
                                 </div>
                             </div>
@@ -111,12 +111,12 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                            <input type="text" name="first_name" value="{{ $user->first_name }}"
+                            <input type="text" name="firstName" value="{{ $user->firstName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                            <input type="text" name="last_name" value="{{ $user->last_name }}"
+                            <input type="text" name="lastName" value="{{ $user->lastName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                         </div>
                         <div>
@@ -126,22 +126,22 @@
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Company Name</label>
-                            <input type="text" name="company_name" value="{{ $user->company_name }}"
+                            <input type="text" name="companyName" value="{{ $user->companyName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Company Logo</label>
-                            <input type="file" name="company_logo"
+                            <input type="file" name="companyLogo"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Business Permit</label>
-                            <input type="file" name="business_permit"
+                            <input type="file" name="businessPermit"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Profile</label>
-                            <input type="file" name="profile_picture"
+                            <input type="file" name="profilePicture"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                     </div>
@@ -157,10 +157,10 @@
 
         <script>
             const userData = @json($user);
-            const businessPermitContainer = document.getElementById('view_business_permit');
+            const businessPermitContainer = document.getElementById('view_businessPermit');
 
-            if (userData && userData.business_permit) {
-                const permitPath = userData.business_permit;
+            if (userData && userData.businessPermit) {
+                const permitPath = userData.businessPermit;
                 const filePath = `/storage/${permitPath}`;
 
                 const extension = permitPath.split('.').pop().toLowerCase();

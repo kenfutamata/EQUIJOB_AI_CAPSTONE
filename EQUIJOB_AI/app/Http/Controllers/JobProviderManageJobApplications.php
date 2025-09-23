@@ -47,9 +47,9 @@ class JobProviderManageJobApplications extends Controller
                             ->orWhere('disabilityType', 'like', $searchTerm);
                     })
                     ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
-                        $q3->where('first_name', 'like', $searchTerm)
-                            ->orWhere('last_name', 'like', $searchTerm)
-                            ->orWhere('phone_number', 'like', $searchTerm);
+                        $q3->where('firstName', 'like', $searchTerm)
+                            ->orWhere('lastName', 'like', $searchTerm)
+                            ->orWhere('phoneNumber', 'like', $searchTerm);
                     });
             });
         }
@@ -98,15 +98,15 @@ class JobProviderManageJobApplications extends Controller
             $jobPosting = $application->jobPosting;
 
             $mailData = [
-                'firstName' => $applicant->first_name,
-                'lastName' => $applicant->last_name,
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
                 'position' => $jobPosting->position,
                 'companyName' => $jobPosting->companyName,
                 'interviewDate' => \Carbon\Carbon::parse($validated['interviewDate'])->format('F j, Y'),
                 'interviewTime' => \Carbon\Carbon::parse($validated['interviewTime'])->format('g:i A'),
                 'interviewLink' => $validated['interviewLink'],
-                'jobProviderFirstName' => $jobProvider->first_name,
-                'jobProviderLastName' => $jobProvider->last_name,
+                'jobProviderFirstName' => $jobProvider->firstName,
+                'jobProviderLastName' => $jobProvider->lastName,
             ];
 
             Mail::to($applicant->email)->send(new InterviewDetailsSent($mailData, 'applicant'));
@@ -132,12 +132,12 @@ class JobProviderManageJobApplications extends Controller
             $jobProvider = Auth::guard('job_provider')->user();
 
             $mailData = [
-                'firstName' => $applicant->first_name,
-                'lastName' => $applicant->last_name,
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
                 'companyName' => $jobPosting->companyName,
                 'position' => $jobPosting->position,
-                'jobProviderFirstName' => $jobProvider->first_name,
-                'jobProviderLastName' => $jobProvider->last_name,
+                'jobProviderFirstName' => $jobProvider->firstName,
+                'jobProviderLastName' => $jobProvider->lastName,
             ];
 
             Mail::to($applicant->email)->send(new SendOnOfferDetails($mailData));
@@ -168,12 +168,12 @@ class JobProviderManageJobApplications extends Controller
             $jobPosting = $application->jobPosting;
             $jobProvider = Auth::guard('job_provider')->user();
             $maildata = [
-                'firstName' => $applicant->first_name,
-                'lastName' => $applicant->last_name,
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
                 'position' => $applicant->position,
                 'companyName' => $jobPosting->companyName,
-                'jobProviderFirstName' => $jobProvider->first_name,
-                'jobProviderLastName' => $jobProvider->last_name,
+                'jobProviderFirstName' => $jobProvider->firstName,
+                'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
             Mail::to($applicant->email)->send(new disapprovalDetailssent($maildata));

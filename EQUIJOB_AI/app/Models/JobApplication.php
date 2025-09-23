@@ -46,8 +46,8 @@ class JobApplication extends Model
                         ->orWhereRaw('"disabilityType" LIKE ?', [$searchTerm]); 
                 })
                 ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
-                    $q3->where('first_name', 'like', $searchTerm)
-                        ->orWhere('last_name', 'like', $searchTerm);
+                    $q3->where('firstName', 'like', $searchTerm)
+                        ->orWhere('lastName', 'like', $searchTerm);
                 });
         });
     }

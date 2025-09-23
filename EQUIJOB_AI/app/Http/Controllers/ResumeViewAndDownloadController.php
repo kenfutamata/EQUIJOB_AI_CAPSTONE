@@ -15,7 +15,7 @@ class ResumeViewAndDownloadController extends Controller
     public function index()
     {
         $user = Auth::guard('applicant')->user();
-        $resume = Resume::with(['experiences', 'educations'])->where('user_id', $user->id)->first();
+        $resume = Resume::with(['experiences', 'educations'])->where('userID', $user->id)->first();
         $generatedSummary = $resume->summary ?? "No AI summary generated yet.";
 
         $skillsList = [];
@@ -45,7 +45,7 @@ class ResumeViewAndDownloadController extends Controller
     public function download()
     {
     $user = Auth::guard('applicant')->user(); 
-    $resume = Resume::with(['experiences', 'educations'])->where('user_id', $user->id)->first();
+    $resume = Resume::with(['experiences', 'educations'])->where('userID', $user->id)->first();
     $generatedSummary = $resume->summary ?? "No AI summary generated yet.";
     $skillsList = [];
     if (!empty($resume->skills)) {

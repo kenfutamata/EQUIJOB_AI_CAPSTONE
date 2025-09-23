@@ -11,7 +11,6 @@ $is_pdf = $is_pdf ?? false;
     @if(!$is_pdf)
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Added Alpine.js for mobile sidebar interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @endif
 
@@ -137,13 +136,13 @@ $is_pdf = $is_pdf ?? false;
                         Personal Information
                     </h2>
                     <div class="grid grid-cols-1 @if(!$is_pdf) sm:grid-cols-2 @endif gap-x-6 gap-y-2 text-gray-800">
-                        <div><span class="font-semibold">Name:</span> <span>{{ $resume->first_name ?? '' }} {{ $resume->last_name ?? '' }}</span></div>
+                        <div><span class="font-semibold">Name:</span> <span>{{ $resume->firstName ?? '' }} {{ $resume->lastName ?? '' }}</span></div>
                         <div><span class="font-semibold">Email:</span> <span>{{ $resume->email ?? '' }}</span></div>
                         <div><span class="font-semibold">Phone:</span> <span>{{ $resume->phone ?? '' }}</span></div>
                         <div><span class="font-semibold">Address:</span> <span>{{ $resume->address ?? '' }}</span></div>
                     </div>
                     @php
-                    $disabilityType = $resume->type_of_disability ?? null;
+                    $disabilityType = $resume->typeOfDisability ?? null;
                     $isPlaceholderDisability = (is_string($disabilityType) && strcasecmp(trim($disabilityType), "Select Disability Type") === 0);
                     @endphp
                     @if(!empty(trim((string)$disabilityType)) && !$isPlaceholderDisability)
@@ -180,7 +179,7 @@ $is_pdf = $is_pdf ?? false;
                 <h2 class="text-2xl font-semibold text-blue-600 mb-3">Experience</h2>
                 @foreach($resume->experiences as $exp)
                 <div class="mb-4 pb-2 border-b border-gray-200 last:border-b-0">
-                    <h3 class="text-xl font-medium">{{ $exp->job_title ?? 'N/A' }} at {{ $exp->employer ?? 'N/A' }}</h3>
+                    <h3 class="text-xl font-medium">{{ $exp->jobTitle ?? 'N/A' }} at {{ $exp->employer ?? 'N/A' }}</h3>
                     <p class="text-sm text-gray-600">{{ $exp->location ?? '' }} ({{ $exp->year ?? '' }})</p>
                     @if($exp->description)<p class="mt-1 text-gray-700">{{ $exp->description }}</p>@endif
                 </div>

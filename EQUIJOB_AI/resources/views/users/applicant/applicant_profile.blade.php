@@ -37,7 +37,7 @@
             <div class="max-w-5xl mx-auto">
 
                 <div class="flex flex-col items-center mb-8">
-                    <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                    <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                         alt="Profile Picture"
                         class="rounded-md w-[200px] h-[200px] object-cover mb-4 shadow-md">
                 </div>
@@ -47,12 +47,12 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                                <input type="text" value="{{ $user->first_name }}" disabled
+                                <input type="text" value="{{ $user->firstName }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                                <input type="text" value="{{ $user->last_name }}" disabled
+                                <input type="text" value="{{ $user->lastName }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                             <div>
@@ -62,7 +62,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Phone Number</label>
-                                <input type="text" value="{{ $user->phone_number }}" disabled
+                                <input type="text" value="{{ $user->phoneNumber }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Date of Birth</label>
-                                <input type="date" value="{{ $user->date_of_birth }}" disabled
+                                <input type="date" value="{{ $user->dateOfBirth }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                             <div>
@@ -80,12 +80,12 @@
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
-                                <input type="text" value="{{ $user->pwd_id }}" disabled
+                                <input type="text" value="{{ $user->pwdId }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Disability Type</label>
-                                <input type="text" value="{{ $user->type_of_disability }}" disabled
+                                <input type="text" value="{{ $user->typeOfDisability }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm" />
                             </div>
                         </div>
@@ -118,12 +118,12 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                        <input type="text" name="first_name" value="{{ $user->first_name }}"
+                        <input type="text" name="firstName" value="{{ $user->firstName }}"
                             class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                        <input type="text" name="last_name" value="{{ $user->last_name }}"
+                        <input type="text" name="lastName" value="{{ $user->lastName }}"
                             class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                     </div>
                     <div>
@@ -138,12 +138,12 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Date of Birth</label>
-                        <input type="date" name="date_of_birth" value="{{ $user->date_of_birth }}"
+                        <input type="date" name="dateOfBirth" value="{{ $user->dateOfBirth }}"
                             class="w-full border rounded-md px-4 py-2 text-sm" max="{{ date('Y-m-d') }}" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
-                        <input type="text" name="pwd_id" value="{{ $user->pwd_id }}"
+                        <input type="text" name="pwdId" value="{{ $user->pwdId }}"
                             pattern="\d{3}-\d{3}-\d{3}" class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
                     <div>
@@ -153,9 +153,9 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Disability Type</label>
-                        <select class="w-full border rounded-md px-4 py-2 text-sm" id="type_of_disability"
-                            name="type_of_disability">
-                            <option value="{{ $user->type_of_disability }}">{{ $user->type_of_disability }}</option>
+                        <select class="w-full border rounded-md px-4 py-2 text-sm" id="typeOfDisability"
+                            name="typeOfDisability">
+                            <option value="{{ $user->typeOfDisability }}">{{ $user->typeOfDisability }}</option>
                             <option disabled>Select Disability Type</option>
                             <option>Physical</option>
                             <option>Visual</option>
@@ -165,7 +165,7 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Upload Profile</label>
-                        <input type="file" name="profile_picture"
+                        <input type="file" name="profilePicture"
                             class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
                 </div>

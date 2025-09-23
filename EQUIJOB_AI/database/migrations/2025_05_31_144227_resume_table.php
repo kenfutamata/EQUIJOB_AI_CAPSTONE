@@ -13,27 +13,27 @@ return new class extends Migration
     {
         Schema::create('resume', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('first_name');
-            $table->string('last_name'); 
+            $table->foreignId('userID')->constrained('users')->onDelete('cascade');
+            $table->string('firstName');
+            $table->string('lastName'); 
             $table->date('dob')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->enum('type_of_disability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();
+            $table->enum('typeOfDisability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();
             $table->text('experience')->nullable();
             $table->string('photo')->nullable(); 
             $table->text('summary')->nullable();
             $table->text('skills')->nullable();
-            $table->text('ai_generated_summary')->nullable();
+            $table->text('aiGeneratedSummary')->nullable();
             $table->timestamps();
         });
 
             Schema::create('experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('resume_id')->constrained('resume')->onDelete('cascade');
+            $table->foreignId('resumeID')->constrained('resume')->onDelete('cascade');
             $table->string('employer')->nullable(); 
-            $table->string('job_title')->nullable();
+            $table->string('jobTitle')->nullable();
             $table->string('location')->nullable();
             $table->string('year')->nullable();
             $table->text('description')->nullable();
@@ -42,7 +42,7 @@ return new class extends Migration
 
             Schema::create('educations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('resume_id')->constrained('resume')->onDelete('cascade');
+            $table->foreignId('resumeID')->constrained('resume')->onDelete('cascade');
             $table->string('school')->nullable();
             $table->string('degree')->nullable();
             $table->string('location')->nullable();
@@ -62,7 +62,7 @@ return new class extends Migration
         Schema::dropIfExists('experiences');
         Schema::dropIfExists('educations');
         Schema::table('resume', function (Blueprint $table) {
-            $table->dropColumn(['ai_generated_summary']);
+            $table->dropColumn(['aiGeneratedSummary']);
         });
 
     }

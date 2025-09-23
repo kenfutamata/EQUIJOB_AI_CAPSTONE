@@ -29,15 +29,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">First Name</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="First Name" id="first_name" name="first_name" pattern="[A-Za-z\s]+" value="{{ old('first_name') }}" required>
-            @error('first_name')
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="First Name" id="firstName" name="firstName" pattern="[A-Za-z\s]+" value="{{ old('firstName') }}" required>
+            @error('firstName')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Last Name</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Last Name" id="last_name" name="last_name" pattern="[A-Za-z\s]+" value="{{ old('last_name') }}" required>
-            @error('last_name')
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Last Name" id="lastName" name="lastName" pattern="[A-Za-z\s]+" value="{{ old('lastName') }}" required>
+            @error('lastName')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
@@ -50,8 +50,8 @@
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Phone Number</label>
-            <input type="tel" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Phone Number" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" required>
-            @error('phone_number')
+            <input type="tel" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Phone Number" id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" required>
+            @error('phoneNumber')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
@@ -71,8 +71,8 @@
           </div>
           <div>
             <label class="block mb-2 text-gray-600 text-sm font-medium">Company</label>
-            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="company_name" name="company_name" value="{{ old('company_name') }}" required>
-            @error('company_name')
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="companyName" name="companyName" value="{{ old('companyName') }}" required>
+            @error('companyName')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
@@ -80,8 +80,8 @@
         <div>
           <label class="block mb-2 text-gray-600 text-sm font-medium">Company Logo</label>
           <div class="flex flex-col">
-            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="company_logo" name="company_logo" accept="image/*" required>
-            @error('company_logo')
+            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="companyLogo" name="companyLogo" accept="image/*" required>
+            @error('companyLogo')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
@@ -89,8 +89,8 @@
         <div>
           <label class="block mb-2 text-gray-600 text-sm font-medium">Business Permit</label>
           <div class="flex flex-col">
-            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="business_permit" name="business_permit" accept="image/*, application/pdf " required>
-            @error('business_permit')
+            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="businessPermit" name="businessPermit" accept="image/*, application/pdf " required>
+            @error('businessPermit')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>

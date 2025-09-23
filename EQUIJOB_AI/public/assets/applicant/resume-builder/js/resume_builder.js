@@ -17,8 +17,8 @@
                 <input type="text" id="experience_${index}_employer" name="experience[${index}][employer]" class="w-full border border-black bg-gray-300 h-11 px-3" value="${data.employer || ''}" />
             </div>
             <div>
-                <label for="experience_${index}_job_title" class="block text-lg">Job Title</label>
-                <input type="text" id="experience_${index}_job_title" name="experience[${index}][job_title]" class="w-full border border-black bg-gray-300 h-11 px-3" value="${data.job_title || ''}" />
+                <label for="experience_${index}_jobTitle" class="block text-lg">Job Title</label>
+                <input type="text" id="experience_${index}_jobTitle" name="experience[${index}][jobTitle]" class="w-full border border-black bg-gray-300 h-11 px-3" value="${data.jobTitle || ''}" />
             </div>
             <div>
                 <label for="experience_${index}_location" class="block text-lg">Location</label>

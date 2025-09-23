@@ -11,22 +11,22 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * 
  *
  * @property int $id
- * @property string $first_name
- * @property string $last_name
+ * @property string $firstName
+ * @property string $lastName
  * @property string $email
  * @property string $password
  * @property string|null $address
- * @property string $phone_number
- * @property string|null $date_of_birth
+ * @property string $phoneNumber
+ * @property string|null $dateOfBirth
  * @property string|null $gender
- * @property string|null $type_of_disability
- * @property string|null $pwd_id
+ * @property string|null $typeOfDisability
+ * @property string|null $pwdId
  * @property string|null $upload_pwd_card
  * @property string $role
  * @property string $status
- * @property string|null $company_name
- * @property string|null $company_logo
- * @property string|null $profile_picture
+ * @property string|null $companyName
+ * @property string|null $companyLogo
+ * @property string|null $profilePicture
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $userID
@@ -66,22 +66,22 @@ class users extends Authenticatable
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'firstName',
+        'lastName',
         'email',
         'password',
-        'phone_number',
-        'date_of_birth',
+        'phoneNumber',
+        'dateOfBirth',
         'address',
         'gender', 
-        'type_of_disability',
-        'pwd_id',
+        'typeOfDisability',
+        'pwdId',
         'upload_pwd_card',
         'role',
         'status',
-        'company_name',
-        'company_logo',
-        'business_permit', 
+        'companyName',
+        'companyLogo',
+        'businessPermit', 
         'userID'
     ];
 
@@ -97,7 +97,7 @@ class users extends Authenticatable
     }
 
     public function resume(){
-         return $this->hasOne(\App\Models\Resume::class, 'user_id');
+         return $this->hasOne(\App\Models\Resume::class, 'userID');
     }
 
         public function jobPostings()

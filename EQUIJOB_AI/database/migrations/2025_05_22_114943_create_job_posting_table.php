@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_provider_id')->constrained('users')->onDelete('cascade');
             $table->string('postion'); 
-            $table->string('company_name');
+            $table->string('companyName');
             $table->enum('sex', ['Male', 'Female']);
             $table->integer('age'); 
             $table->enum('disability_type', ['Physical', 'Visual', 'Hearing', 'Intellectual']);

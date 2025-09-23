@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-interviewLink').innerHTML = data.interviewLink ? `<a href="${data.interviewLink}" target="_blank" class="text-blue-600 hover:underline">Join Meeting</a>` : 'No link provided';
         document.getElementById('modal-remarks').textContent = data.remarks || 'No remarks.';
         const profileImg = document.getElementById('modal-applicantProfile');
-        if (data.profile_picture) {
-            profileImg.src = `/storage/${data.profile_picture}`;
+        if (data.profilePicture) {
+            profileImg.src = `/storage/${data.profilePicture}`;
         } else {
             profileImg.src = `/assets/applicant/applicant-dashboard/profile_pic.png`;
             profileImg.style.display = 'block';

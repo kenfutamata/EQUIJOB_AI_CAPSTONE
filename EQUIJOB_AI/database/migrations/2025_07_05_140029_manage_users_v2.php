@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'business_permit')) {
-                $table->string('business_permit')->nullable()->after('company_logo');
+            if (!Schema::hasColumn('users', 'businessPermit')) {
+                $table->string('businessPermit')->nullable()->after('companyLogo');
             }
         });
     }
@@ -24,8 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'business_permit')) {
-                $table->dropColumn('business_permit');
+            if (Schema::hasColumn('users', 'businessPermit')) {
+                $table->dropColumn('businessPermit');
             }
         });
     }

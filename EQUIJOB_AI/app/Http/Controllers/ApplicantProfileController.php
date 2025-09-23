@@ -60,26 +60,26 @@ class ApplicantProfileController extends Controller
     public function update(Request $request)
     {
         $validateInformation = $request->validate([
-            'first_name' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
-            'last_name' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
+            'lastName' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
             'email' => 'string|email|max:255',
-            'phone_number' => 'string|max:11',
-            'date_of_birth' => 'date|before_or_equal:today',
+            'phoneNumber' => 'string|max:11',
+            'dateOfBirth' => 'date|before_or_equal:today',
             'address' => 'string|max:255',
-            'type_of_disability' => 'string|max:255',
-            'pwd_id' => 'string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
+            'typeOfDisability' => 'string|max:255',
+            'pwdId' => 'string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
             'upload_pwd_card' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'profile_picture' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
         if ($request->hasFile('upload_pwd_card')) {
             $file = $request->file('upload_pwd_card');
             $filepath = $file->store('upload_pwd_card', 'public');
             $validateInformation['upload_pwd_card'] = $filepath;
         }
-        if ($request->hasFile('profile_picture')) {
-            $file = $request->file('profile_picture');
-            $filepath = $file->store('profile_picture', 'public');
-            $validateInformation['profile_picture'] = $filepath;
+        if ($request->hasFile('profilePicture')) {
+            $file = $request->file('profilePicture');
+            $filepath = $file->store('profilePicture', 'public');
+            $validateInformation['profilePicture'] = $filepath;
         }
 
         try {

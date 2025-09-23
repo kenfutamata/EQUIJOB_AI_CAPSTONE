@@ -79,20 +79,20 @@
                         $modalData = [
                         'position' => $posting->position ?? 'N/A',
                         'companyName' => $posting->companyName ?? 'N/A',
-                        'firstName' => $applicant->first_name ?? 'N/A',
-                        'lastName' => $applicant->last_name ?? 'N/A',
+                        'firstName' => $applicant->firstName ?? 'N/A',
+                        'lastName' => $applicant->lastName ?? 'N/A',
                         'sex' => $applicant->gender ?? 'N/A',
                         'age' => $applicant->age ?? 'N/A',
-                        'contactPhone' => $applicant->phone_number ?? 'N/A',
+                        'contactPhone' => $applicant->phoneNumber ?? 'N/A',
                         'contactEmail' => $applicant->email ?? 'N/A',
-                        'disabilityType' => $applicant->type_of_disability ?? 'N/A',
+                        'disabilityType' => $applicant->typeOfDisability ?? 'N/A',
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
                         'remarks' => $application->remarks,
                         'interviewDate' => $application->interviewDate ? \Carbon\Carbon::parse($application->interviewDate)->format('F j, Y') : null,
                         'interviewTime' => $application->interviewTime ? \Carbon\Carbon::parse($application->interviewTime)->format('g:i A') : null,
                         'interviewLink' => $application->interviewLink,
-                        'profile_picture' => $applicant->profile_picture ?? null,
+                        'profilePicture' => $applicant->profilePicture ?? null,
 
                         ];
                         @endphp
@@ -100,12 +100,12 @@
                             <td class="px-2 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-2 py-2">{{ $posting->position ?? '' }}</td>
                             <td class="px-2 py-2">{{ $posting->companyName ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->first_name ?? '' }} {{ $applicant->last_name ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->phone_number ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->firstName ?? '' }} {{ $applicant->lastName ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->phoneNumber ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->gender ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->address ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->email ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->type_of_disability ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->typeOfDisability ?? '' }}</td>
                             <td class="px-2 py-2">{{ $application->status ?? '' }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if ($application->status === 'Pending')

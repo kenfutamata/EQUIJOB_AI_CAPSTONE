@@ -41,16 +41,16 @@ class SignInController extends Controller
     public function SignUpJobApplicant(Request $request)
     {
         $validateInformation =  $request->validate([
-            'first_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
-            'last_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'lastName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'phone_number' => 'required|string|max:11',
-            'date_of_birth' => 'required|date|before_or_equal:today',
+            'phoneNumber' => 'required|string|max:11',
+            'dateOfBirth' => 'required|date|before_or_equal:today',
             'address' => 'required|string|max:255',
             'gender' => 'required|string|max:255|',
-            'type_of_disability' => 'required|string|max:255',
-            'pwd_id' => 'nullable|string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
+            'typeOfDisability' => 'required|string|max:255',
+            'pwdId' => 'nullable|string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
@@ -74,27 +74,27 @@ class SignInController extends Controller
     public function SignUpJobProvider(Request $request)
     {
         $validateInformation = $request->validate([
-            'first_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
-            'last_name' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
+            'lastName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'phone_number' => 'required|string|max:15',
-            'company_name' => 'required|string|max:255|',
-            'company_logo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'business_permit' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'phoneNumber' => 'required|string|max:15',
+            'companyName' => 'required|string|max:255|',
+            'companyLogo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'businessPermit' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
         ]);
         try {
-            if ($request->hasFile('company_logo')) {
-                $file = $request->file('company_logo');
-                $filepath = $file->store('company_logo', 'public');
-                $validateInformation['company_logo'] = $filepath;
+            if ($request->hasFile('companyLogo')) {
+                $file = $request->file('companyLogo');
+                $filepath = $file->store('companyLogo', 'public');
+                $validateInformation['companyLogo'] = $filepath;
             }
-            if ($request->hasFile('business_permit')) {
-                $file = $request->file('business_permit');
-                $filepath = $file->store('business_permit', 'public');
-                $validateInformation['business_permit'] = $filepath;
+            if ($request->hasFile('businessPermit')) {
+                $file = $request->file('businessPermit');
+                $filepath = $file->store('businessPermit', 'public');
+                $validateInformation['businessPermit'] = $filepath;
             }
             $validateInformation['role'] = $validateInformation['role'] ?? 'Job Provider';
             $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';

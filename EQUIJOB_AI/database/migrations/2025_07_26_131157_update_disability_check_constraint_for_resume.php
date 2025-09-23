@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         // Define the name of the constraint to make the code cleaner
-        $constraintName = 'resume_type_of_disability_check';
+        $constraintName = 'resume_typeOfDisability_check';
 
         // Use a try-catch block in case the constraint doesn't exist, to avoid errors
         try {
@@ -41,7 +41,7 @@ return new class extends Migration
         // Now, add the new, correct constraint with the complete list of allowed values
         DB::statement("
             ALTER TABLE resume ADD CONSTRAINT {$constraintName}
-            CHECK (type_of_disability IN ({$sqlValues}))
+            CHECK (typeOfDisability IN ({$sqlValues}))
         ");
     }
 
@@ -52,7 +52,7 @@ return new class extends Migration
     {
         // This is the code to run if you ever need to "undo" this migration.
         // It's good practice to include it.
-        $constraintName = 'resume_type_of_disability_check';
+        $constraintName = 'resume_typeOfDisability_check';
         DB::statement("ALTER TABLE resume DROP CONSTRAINT {$constraintName};");
     }
 };

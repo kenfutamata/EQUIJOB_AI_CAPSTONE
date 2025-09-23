@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * 
  *
  * @property int $id
- * @property int $resume_id
+ * @property int $resumeID
  * @property string|null $employer
- * @property string|null $job_title
+ * @property string|null $jobTitle
  * @property string|null $location
  * @property string|null $year
  * @property string|null $description
@@ -34,9 +34,9 @@ use Illuminate\Database\Eloquent\Model;
 class experience extends Model
 {
     protected $fillable = [
-        'resume_id',
+        'resumeID',
         'employer',
-        'job_title',
+        'jobTitle',
         'location',
         'year',
         'description'
@@ -46,6 +46,6 @@ class experience extends Model
 
     public function resume()
     {
-        return $this->belongsTo(resume::class, 'resume_id');
+        return $this->belongsTo(resume::class, 'resumeID');
     }
 }

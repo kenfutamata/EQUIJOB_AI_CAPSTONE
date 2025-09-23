@@ -65,7 +65,7 @@
     </header>
     <div class="border-b border-gray-200 bg-white px-4 py-2">
       <h1 class="text-2xl font-semibold text-gray-800">Applicant Dashboard</h1>
-      <p class="text-gray-600">Welcome back, {{$user->first_name}}!</p>
+      <p class="text-gray-600">Welcome back, {{$user->firstName}}!</p>
     </div>
 
     <!-- Main Content -->

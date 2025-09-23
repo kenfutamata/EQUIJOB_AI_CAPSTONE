@@ -235,11 +235,11 @@
                 @endif
                 <div>
                     <label class="block text-xs text-gray-500">First Name</label>
-                    <input name="firstName" class="w-full border rounded px-2 py-1" readonly value="{{ $user->first_name }}">
+                    <input name="firstName" class="w-full border rounded px-2 py-1" readonly value="{{ $user->firstName }}">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Last Name</label>
-                    <input name="lastName" class="w-full border rounded px-2 py-1" readonly value="{{ $user->last_name }}">
+                    <input name="lastName" class="w-full border rounded px-2 py-1" readonly value="{{ $user->lastName }}">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Position</label>
@@ -265,11 +265,11 @@
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Disability Type</label>
-                    <input type="text" name="disabilityType" class="w-full border rounded px-2 py-1" readonly value="{{ $user->type_of_disability}}">
+                    <input type="text" name="disabilityType" class="w-full border rounded px-2 py-1" readonly value="{{ $user->typeOfDisability}}">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Phone</label>
-                    <input name="contactPhone" class="w-full border rounded px-2 py-1" value="{{$user->phone_number}}" readonly>
+                    <input name="contactPhone" class="w-full border rounded px-2 py-1" value="{{$user->phoneNumber}}" readonly>
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Contact Email</label>

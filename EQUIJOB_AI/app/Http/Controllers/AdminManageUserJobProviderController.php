@@ -25,19 +25,19 @@ class AdminManageUserJobProviderController extends Controller
             ->where('role', 'Job Provider')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->whereRaw("LOWER(CONCAT(first_name, ' ', last_name)) LIKE ?", ['%' . strtolower($search) . '%'])
+                    $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($search) . '%'])
                         ->orWhere('userID', 'like', "%{$search}%")
-                        ->orwhere('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orwhere('firstName', 'like', "%{$search}%")
+                        ->orWhere('lastName', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('address', 'like', "%{$search}%")
-                        ->orWhere('phone_number', 'like', "%{$search}%")
-                        ->orWhere('type_of_disability', 'like', "%{$search}%")
-                        ->orWhere('pwd_id', 'like', "%{$search}%")
+                        ->orWhere('phoneNumber', 'like', "%{$search}%")
+                        ->orWhere('typeOfDisability', 'like', "%{$search}%")
+                        ->orWhere('pwdId', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%");
                 });
             });
-        $sortable = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'company_name', 'role',];
+        $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'companyName', 'role',];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 

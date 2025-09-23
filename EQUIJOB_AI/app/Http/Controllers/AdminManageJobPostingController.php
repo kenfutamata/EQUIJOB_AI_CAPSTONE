@@ -42,7 +42,7 @@ class AdminManageJobPostingController extends Controller
                 });
             });
 
-        $sortable = ['company_name', 'position', 'status', 'created_at'];
+        $sortable = ['companyName', 'position', 'status', 'created_at'];
         $sort = in_array($request->input('sort'), $sortable) ? $request->input('sort') : 'created_at';
         $direction = $request->input('direction') === 'asc' ? 'asc' : 'desc';
 

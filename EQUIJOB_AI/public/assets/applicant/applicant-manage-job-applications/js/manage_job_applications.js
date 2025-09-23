@@ -29,8 +29,8 @@ function openViewJobApplicationModal(button) {
 
     const fullName = `${applicationData.firstName || ''} ${applicationData.lastName || ''}`.trim();
     const profilePictureImg = document.getElementById('modal.applicantProfile');
-    if (applicationData.profile_picture) {
-        profilePictureImg.src = `/storage/${applicationData.profile_picture}`;
+    if (applicationData.profilePicture) {
+        profilePictureImg.src = `/storage/${applicationData.profilePicture}`;
         profilePictureImg.style.display = 'block';
         document.getElementById('modal.applicantInitial').style.display = 'none';
     } else {

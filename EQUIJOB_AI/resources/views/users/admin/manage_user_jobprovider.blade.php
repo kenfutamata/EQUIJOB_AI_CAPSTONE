@@ -64,10 +64,10 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
                             <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
-                            <th class="px-4 py-3">First Name {!! sortArrow('first_name')!!}</th>
-                            <th class="px-4 py-3">Last Name {!! sortArrow('last_name')!!}</th>
+                            <th class="px-4 py-3">First Name {!! sortArrow('firstName')!!}</th>
+                            <th class="px-4 py-3">Last Name {!! sortArrow('lastName')!!}</th>
                             <th class="px-4 py-3">Email {!! sortArrow('email')!!}</th>
-                            <th class="px-4 py-3">Company {!! sortArrow('company_name')!!}</th>
+                            <th class="px-4 py-3">Company {!! sortArrow('companyName')!!}</th>
                             <th class="px-4 py-3">Company Logo</th>
                             <th class="px-4 py-3">Profile Picture</th>
                             <th class="px-4 py-3">Status</th>
@@ -78,20 +78,20 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         @foreach ($users as $user)
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3">{{ $user->userID }}</td>
-                            <td class="px-4 py-3">{{ $user->first_name }}</td>
-                            <td class="px-4 py-3">{{ $user->last_name }}</td>
+                            <td class="px-4 py-3">{{ $user->firstName }}</td>
+                            <td class="px-4 py-3">{{ $user->lastName }}</td>
                             <td class="px-4 py-3">{{ $user->email }}</td>
-                            <td class="px-4 py-3">{{ $user->company_name }}</td>
+                            <td class="px-4 py-3">{{ $user->companyName }}</td>
                             <td class="px-4 py-3">
-                                @if ($user->company_logo)
-                                <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" class="w-[30px] h-[30px] object-cover">
+                                @if ($user->companyLogo)
+                                <img src="{{ asset('storage/' . $user->companyLogo) }}" alt="Company Logo" class="w-[30px] h-[30px] object-cover">
                                 @else
                                 No Logo
                                 @endif
                             </td>
                             <td class="px-2 py-2">
-                                @if ($user->profile_picture)
-                                <img src="{{ asset('storage/' . $user->profile_picture) }}" class="w-8 h-8 object-cover mx-auto">
+                                @if ($user->profilePicture)
+                                <img src="{{ asset('storage/' . $user->profilePicture) }}" class="w-8 h-8 object-cover mx-auto">
                                 @else No Picture @endif
                             </td>
                             <td class="px-4 py-3">{{ $user->status }}</td>
@@ -130,22 +130,22 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             </div>
             <div class="space-y-4">
                 <label class="block text-xs text-gray-500">First Name:</label>
-                <input id="modal_first_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <input id="modal_firstName" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Last Name:</label>
-                <input id="modal_last_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <input id="modal_lastName" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Email Address:</label>
                 <input id="modal_email" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Phone Number:</label>
-                <input id="modal_phone_number" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <input id="modal_phoneNumber" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Name:</label>
-                <input id="modal_company_name" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <input id="modal_companyName" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Logo:</label>
-                <img id="modal_company_logo" class="w-[100px] h-[100px] object-cover" />
+                <img id="modal_companyLogo" class="w-[100px] h-[100px] object-cover" />
                 <label class="block text-xs text-gray-500">Business Permit:</label>
-                <div id="modal_business_permit_container">
+                <div id="modal_businessPermit_container">
                 </div>
                 <label class="block text-xs text-gray-500">Profile Picture:</label>
-                <img id="modal_profile_picture" class="w-[100px] h-[100px] object-cover" />
+                <img id="modal_profilePicture" class="w-[100px] h-[100px] object-cover" />
                 <label class="block text-xs text-gray-500">Role:</label>
                 <input id="modal_role" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Status:</label>

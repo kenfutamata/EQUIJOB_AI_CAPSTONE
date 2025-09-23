@@ -1,16 +1,16 @@
 function openProfileModal(button) {
     const user = JSON.parse(button.getAttribute('data-user'));
-    document.getElementById('modal_first_name').value = user.first_name;
-    document.getElementById('modal_last_name').value = user.last_name;
+    document.getElementById('modal_firstName').value = user.firstName;
+    document.getElementById('modal_lastName').value = user.lastName;
     document.getElementById('modal_email').value = user.email;
-    document.getElementById('modal_phone_number').value = user.phone_number;
-    document.getElementById('modal_company_name').value = user.company_name;
-    const permitContainer = document.getElementById('modal_business_permit_container');
+    document.getElementById('modal_phoneNumber').value = user.phoneNumber;
+    document.getElementById('modal_companyName').value = user.companyName;
+    const permitContainer = document.getElementById('modal_businessPermit_container');
     permitContainer.innerHTML = '';
 
-    if (user.business_permit) {
-        const fileExtension = user.business_permit.split('.').pop().toLowerCase();
-        const filePath = `/storage/${user.business_permit}`;
+    if (user.businessPermit) {
+        const fileExtension = user.businessPermit.split('.').pop().toLowerCase();
+        const filePath = `/storage/${user.businessPermit}`;
 
         if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
             permitContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
@@ -20,9 +20,9 @@ function openProfileModal(button) {
             permitContainer.innerText = 'Unsupported file format';
         }
     }
-    const profilePicture = document.getElementById('modal_profile_picture');
-    if(user.profile_picture){
-        profilePicture.src = `/storage/${user.profile_picture}`;
+    const profilePicture = document.getElementById('modal_profilePicture');
+    if(user.profilePicture){
+        profilePicture.src = `/storage/${user.profilePicture}`;
         profilePicture.style.display = 'block';
     }else{
         profilePicture.style.display = 'none';
@@ -30,9 +30,9 @@ function openProfileModal(button) {
     document.getElementById('modal_role').value = user.role;
     document.getElementById('modal_status').value = user.status;
 
-    const logo = document.getElementById('modal_company_logo');
-    if (user.company_logo) {
-        logo.src = `/storage/${user.company_logo}`;
+    const logo = document.getElementById('modal_companyLogo');
+    if (user.companyLogo) {
+        logo.src = `/storage/${user.companyLogo}`;
         logo.style.display = 'block';
     } else {
         logo.style.display = 'none';

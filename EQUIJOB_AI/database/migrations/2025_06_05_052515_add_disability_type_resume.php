@@ -15,8 +15,8 @@ return new class extends Migration
             if (!Schema::hasColumn('resume', 'disability_type')) {
                 $table->string('disability_type')->nullable()->after('phone');
             }
-            if (!Schema::hasColumn('resume', 'ai_generated_summary')) {
-                $table->text('ai_generated_summary')->nullable()->after('skills');
+            if (!Schema::hasColumn('resume', 'aiGeneratedSummary')) {
+                $table->text('aiGeneratedSummary')->nullable()->after('skills');
             }
         });
     }

@@ -13,22 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('firstName');
+            $table->string('lastName');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('address')->nullable();
-            $table->string('phone_number');
-            $table->date('date_of_birth')->nullable();
+            $table->string('phoneNumber');
+            $table->date('dateOfBirth')->nullable();
             $table->enum('gender', ['Male', 'Female'])->nullable();
-            $table->enum('type_of_disability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();
-            $table->string('pwd_id')->nullable();
+            $table->enum('typeOfDisability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();
+            $table->string('pwdId')->nullable();
             $table->string('upload_pwd_card')->nullable();
             $table->enum('role', ['Applicant', 'Job Provider', 'Admin']);
             $table->enum('status', ['Active', 'Inactive'])->default('inactive');
-            $table->string('company_name')->nullable();
-            $table->string('company_logo')->nullable();
-            $table->string('profile_picture')->nullable();
+            $table->string('companyName')->nullable();
+            $table->string('companyLogo')->nullable();
+            $table->string('profilePicture')->nullable();
             $table->timestamps();
         });
 
@@ -40,7 +40,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('userID')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

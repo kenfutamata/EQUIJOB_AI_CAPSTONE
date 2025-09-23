@@ -29,8 +29,8 @@
         <!-- First Name -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">First Name</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="First Name" id="first_name" name="first_name" pattern="[A-Za-z\s]+" required>
-          @error('first_name')
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="First Name" id="firstName" name="firstName" pattern="[A-Za-z\s]+" required>
+          @error('firstName')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -38,8 +38,8 @@
         <!-- Last Name -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">Last Name</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Last Name" id="last_name" name="last_name" pattern="[A-Za-z\s]+" required>
-          @error('last_name')
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Last Name" id="lastName" name="lastName" pattern="[A-Za-z\s]+" required>
+          @error('lastName')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -56,9 +56,9 @@
         <!-- Phone Number -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">Phone Number</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Phone Number" id="phone_number" name="phone_number" pattern="^(\+?\d{1,3})?[-.\s()]?\d{3,4}[-.\s()]?\d{3,4}[-.\s()]?\d{3,4}$"
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Phone Number" id="phoneNumber" name="phoneNumber" pattern="^(\+?\d{1,3})?[-.\s()]?\d{3,4}[-.\s()]?\d{3,4}[-.\s()]?\d{3,4}$"
             required>
-          @error('phone_number')
+          @error('phoneNumber')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -66,8 +66,8 @@
         <!-- Date of Birth -->
         <div class="flex flex-col relative">
           <label class="text-stone-500 text-base mb-1">Date of Birth</label>
-          <input type="date" class="h-14 px-4 rounded-xl border border-stone-300" id="date_of_birth" name="date_of_birth" required max="{{date('Y-m-d')}}" required>
-          @error('date_of_birth')
+          <input type="date" class="h-14 px-4 rounded-xl border border-stone-300" id="dateOfBirth" name="dateOfBirth" required max="{{date('Y-m-d')}}" required>
+          @error('dateOfBirth')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -94,7 +94,7 @@
         <!-- Type of Disability -->
         <div class="flex flex-col relative">
           <label class="text-stone-500 text-base mb-1">Type of Disability</label>
-          <select class="h-14 px-4 rounded-xl border border-stone-300" id="type_of_disability" name="type_of_disability" required>
+          <select class="h-14 px-4 rounded-xl border border-stone-300" id="typeOfDisability" name="typeOfDisability" required>
             <option selected disabled>Select Disability Type</option>
             <option>Physical</option>
             <option>Visual</option>
@@ -127,8 +127,8 @@
         <!-- PWD ID -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">PWD ID</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID format: 123-456-789" id="pwd_id" name="pwd_id" pattern="\d{3}-\d{3}-\d{3}" required>
-          @error('pwd_id')
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID format: 123-456-789" id="pwdId" name="pwdId" pattern="\d{3}-\d{3}-\d{3}" required>
+          @error('pwdId')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>

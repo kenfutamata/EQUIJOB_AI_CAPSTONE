@@ -7,7 +7,7 @@
     <title>EQUIJOB - Resume Builder</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <link rel="stylesheet" href="{{ asset('assets/applicant/resume-builder/css/resume_builder.css') }}">
 </head>
 
@@ -99,16 +99,16 @@
                         <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="first_name" class="block text-lg">First Name</label>
-                                <input type="text" id="first_name" name="resume[first_name]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.first_name', $user->first_name) }}" required />
+                                <label for="firstName" class="block text-lg">First Name</label>
+                                <input type="text" id="firstName" name="resume[firstName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.firstName', $user->firstName) }}" required />
                             </div>
                             <div>
-                                <label for="last_name" class="block text-lg">Last Name</label>
-                                <input type="text" id="last_name" name="resume[last_name]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.last_name', $user->last_name) }}" required />
+                                <label for="lastName" class="block text-lg">Last Name</label>
+                                <input type="text" id="lastName" name="resume[lastName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.lastName', $user->lastName) }}" required />
                             </div>
                             <div>
                                 <label for="dob" class="block text-lg">Date of Birth</label>
-                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->date_of_birth) }}" />
+                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" />
                             </div>
                             <div>
                                 <label for="address" class="block text-lg">Address</label>
@@ -120,16 +120,16 @@
                             </div>
                             <div>
                                 <label for="phone" class="block text-lg">Phone Number</label>
-                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phone_number) }}" />
+                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" />
                             </div>
                             <div>
                                 <label for="disability_type" class="block text-lg">Disability Type</label>
-                                <select id="type_of_disability" name="resume[type_of_disability]" class="w-full border border-black bg-gray-300 h-11 px-3">
-                                    <option value="" disabled {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
-                                    <option value="Physical" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Physical' ? 'selected' : '' }}>Physical</option>
-                                    <option value="Visual" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Visual' ? 'selected' : '' }}>Visual</option>
-                                    <option value="Hearing" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
-                                    <option value="Intellectual" {{ old('resume.type_of_disability', $user->type_of_disability ?? '') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
+                                <select id="typeOfDisability" name="resume[typeOfDisability]" class="w-full border border-black bg-gray-300 h-11 px-3">
+                                    <option value="" disabled {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
+                                    <option value="Physical" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Physical' ? 'selected' : '' }}>Physical</option>
+                                    <option value="Visual" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Visual' ? 'selected' : '' }}>Visual</option>
+                                    <option value="Hearing" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
+                                    <option value="Intellectual" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
                                 </select>
                             </div>
                             <div>
@@ -161,8 +161,8 @@
                                         <input type="text" id="experience_{{$key}}_employer" name="experience[{{$key}}][employer]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['employer'] ?? '' }}" />
                                     </div>
                                     <div>
-                                        <label for="experience_{{$key}}_job_title" class="block text-lg">Job Title</label>
-                                        <input type="text" id="experience_{{$key}}_job_title" name="experience[{{$key}}][job_title]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['job_title'] ?? '' }}" />
+                                        <label for="experience_{{$key}}_jobTitle" class="block text-lg">Job Title</label>
+                                        <input type="text" id="experience_{{$key}}_jobTitle" name="experience[{{$key}}][jobTitle]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['jobTitle'] ?? '' }}" />
                                     </div>
                                     <div>
                                         <label for="experience_{{$key}}_location" class="block text-lg">Location</label>

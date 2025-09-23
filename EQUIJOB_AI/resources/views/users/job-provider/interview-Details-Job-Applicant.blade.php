@@ -13,7 +13,7 @@
         <div class="bg-white border-4 border-blue-400 rounded-lg p-8">
             <div class="space-y-6">
                 <div>
-                    <p class="text-gray-800 text-base">Hello {{$jobApplication->applicant->first_name}} {{$jobApplication->applicant->last_name}}</p>
+                    <p class="text-gray-800 text-base">Hello {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}}</p>
                 </div>
                 <div>
                     <p class="text-gray-700">

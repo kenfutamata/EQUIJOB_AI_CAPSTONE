@@ -13,10 +13,10 @@ return new class extends Migration
     {
             Schema::table('resume', function (Blueprint $table) {
             if (!Schema::hasColumn('resume', 'disability_type')) {
-            $table->enum('type_of_disability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();        
+            $table->enum('typeOfDisability', ['Physical', 'Visual', 'Hearing', 'Intellectual'])->nullable();        
             }
-            if (!Schema::hasColumn('resume', 'ai_generated_summary')) {
-                $table->text('ai_generated_summary')->nullable()->after('skills');
+            if (!Schema::hasColumn('resume', 'aiGeneratedSummary')) {
+                $table->text('aiGeneratedSummary')->nullable()->after('skills');
             }
         });
     }
