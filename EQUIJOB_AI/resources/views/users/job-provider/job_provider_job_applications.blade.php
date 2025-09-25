@@ -9,6 +9,18 @@
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 
 </head>
+@php
+function sortArrow($column) {
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
+@endphp
 
 <body class="bg-white text-black">
     <div>
@@ -58,16 +70,16 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Applicant Number</th>
-                            <th class="px-2 py-2">Position</th>
-                            <th class="px-2 py-2">Company Name</th>
+                            <th class="px-2 py-2">Applicant Number {!! sortArrow('jobApplicationNumber')!!}</th>
+                            <th class="px-2 py-2">Position {!! sortArrow('position')!!}</th>
+                            <th class="px-2 py-2">Company Name {!! sortArrow('companyName')!!}</th>
                             <th class="px-2 py-2">Applicant Name</th>
                             <th class="px-2 py-2">Applicant Phone Number</th>
                             <th class="px-2 py-2">Sex</th>
                             <th class="px-2 py-2">Applicant Address</th>
                             <th class="px-2 py-2">Email Address</th>
                             <th class="px-2 py-2">Applicant Disability Type</th>
-                            <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>

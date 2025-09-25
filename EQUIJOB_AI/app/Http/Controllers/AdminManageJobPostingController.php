@@ -26,23 +26,18 @@ class AdminManageJobPostingController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('companyName', 'like', "%{$search}%")
-                        ->orWhere('sex', 'like', "%{$search}%")
-                        ->orWhere('age', 'like', "%{$search}%")
+                        ->orWhere('position', 'like', "%{$search}%")
                         ->orWhere('disabilityType', 'like', "%{$search}%")
                         ->orWhere('educationalAttainment', 'like', "%{$search}%")
-                        ->orWhere('jobPostingObjectives', 'like', "%{$search}%")
-                        ->orWhere('requirements', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhere('workEnvironment', 'like', "%{$search}%")
                         ->orWhere('experience', 'like', "%{$search}%")
+                        ->orWhere('category', 'like', "%{$search}%")
                         ->orWhere('skills', 'like', "%{$search}%")
-                        ->orWhere('contactPhone', 'like', "%{$search}%")
-                        ->orWhere('contactEmail', 'like', "%{$search}%")
-                        ->orWhere('position', 'like', "%{$search}%")
-                        ->orWhere('remarks', 'like', "%{$search}%");
-                });
+                        ->orWhere('status', 'like', "%{$search}%");              
+                    });
             });
 
-        $sortable = ['companyName', 'position', 'status', 'created_at'];
+        $sortable = ['position', 'companyName', 'disabilityType', 'educationalAttainment', 'workEnvironment', 'experience', 'skills', 'category', 'status'];
         $sort = in_array($request->input('sort'), $sortable) ? $request->input('sort') : 'created_at';
         $direction = $request->input('direction') === 'asc' ? 'asc' : 'desc';
 

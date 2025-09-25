@@ -53,8 +53,13 @@ class JobProviderManageJobApplications extends Controller
                     });
             });
         }
+        $sortable = ['jobApplicationNumber', 'position', 'companyName','status'];
+        $sort = in_array($request->sort, $sortable) ? $request->sort : 'jobApplicationNumber';
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
-        $applications = $applicationsQuery->latest()->paginate(10)->withQueryString();
+        $applications = $applicationsQuery
+            ->orderBy($sort, $direction)
+            ->paginate(10);
 
         return view('users.job-provider.job_provider_job_applications', [
             'user' => $user,

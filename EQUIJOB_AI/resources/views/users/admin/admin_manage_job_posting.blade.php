@@ -8,7 +8,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
 </head>
-
+@php
+function sortArrow($column) {
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+}
+@endphp
 <body class="bg-white text-black">
     <div>
         <!-- Sidebar -->
@@ -52,18 +63,15 @@
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
-                            <th class="px-2 py-2">Position</th>
-                            <th class="px-2 py-2">Company Name</th>
-                            <th class="px-2 py-2">Sex</th>
-                            <th class="px-2 py-2">Age</th>
-                            <th class="px-2 py-2">Disability Type</th>
-                            <th class="px-2 py-2">Educational Attainment</th>
-                            <th class="px-2 py-2">Work Environment</th>
-                            <th class="px-2 py-2">Experience</th>
-                            <th class="px-2 py-2">Skills</th>
-                            <th class="px-2 py-2">Category</th>
-                            <th class="px-2 py-2">Requirements</th>
-                            <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Position {!! sortArrow('position')!!}</th>
+                            <th class="px-2 py-2">Company Name {!! sortArrow('companyName')!!}</th>
+                            <th class="px-2 py-2">Disability Type {!! sortArrow('disabilityType')!!}</th>
+                            <th class="px-2 py-2">Educational Attainment {!! sortArrow('educationalAttainment')!!}</th>
+                            <th class="px-2 py-2">Work Environment {!! sortArrow('workEnvironment')!!}</th>
+                            <th class="px-2 py-2">Experience {!! sortArrow('experience')!!}</th>
+                            <th class="px-2 py-2">Skills {!! sortArrow('skills')!!}</th>
+                            <th class="px-2 py-2">Category {!! sortArrow('category')!!}</th>
+                            <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
                     </thead>
@@ -72,15 +80,12 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-2 py-2">{{ $posting->position }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->companyName }}</td>
-                            <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>
-                            <td class="px-2 py-2">{{ $posting->age }}</td>
                             <td class="px-2 py-2">{{ $posting->disabilityType }}</td>
                             <td class="px-2 py-2">{{ $posting->educationalAttainment }}</td>
                             <td class="px-2 py-2">{{ $posting->workEnvironment }}</td>
                             <td class="px-2 py-2">{{ $posting->experience }}</td>
                             <td class="px-2 py-2">{{ $posting->skills }}</td>
                             <td class="px-2 py-2">{{ $posting->category }}</td>
-                            <td class="px-2 py-2">{{ $posting->requirements }}</td>
                             <td class="px-2 py-2">{{ $posting->status }}</td>
                             <td class="px-2 py-2 space-y-1">
                                 @if ($posting->status === 'Pending')

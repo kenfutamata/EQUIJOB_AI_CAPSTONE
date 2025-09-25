@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Applicant Sign Up</title>
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/photos/landing_page/equijob_logo (2).png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
   <script src="{{ asset('assets/sign-up/js/sign_up_applicant.js') }}" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
