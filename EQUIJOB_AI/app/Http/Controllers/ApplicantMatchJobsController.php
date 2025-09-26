@@ -68,9 +68,9 @@ class ApplicantMatchJobsController extends Controller
                 [
                     'skills' => $parsedData['skills'] ?? '',
                     'experience' => $parsedData['experience_summary'] ?? null,
-                    'typeOfDisability' => $disabilityTypeToSave, 
-                    'firstName' => $user->firstName ?? 'N/A',
-                    'lastName' => $user->lastName ?? 'N/A',
+                    'type_of_disability' => $disabilityTypeToSave, 
+                    'first_name' => $user->first_name ?? 'N/A',
+                    'last_name' => $user->last_name ?? 'N/A',
                     'email' => $user->email,
                 ]
             );
@@ -145,8 +145,8 @@ class ApplicantMatchJobsController extends Controller
 
         if (!empty($resumeData['experience_details'])) {
             foreach ($resumeData['experience_details'] as $exp) {
-                if (!empty($exp['jobTitle'])) {
-                    $keywords[] = $exp['jobTitle'];
+                if (!empty($exp['job_title'])) {
+                    $keywords[] = $exp['job_title'];
                 }
             }
         }
