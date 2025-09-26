@@ -30,12 +30,15 @@ class JobProviderManageJobApplications extends Controller
     {
         $user = Auth::guard('job_provider')->user();
         $search = $request->input('search');
+        $jobApplicationTable = (new JobApplication())->getTable();
+        $applicantTable = 'users';
+        $jobPostingTable = 'jobPosting';
 
-        $applicationsQuery = JobApplication::with(['jobPosting', 'applicant'])
-            ->whereHas('jobPosting', function ($query) use ($user) {
-                $query->where('jobProviderID', $user->id);
-            });
-
+        $applicationsQuery = JobApplication::query()
+        ->join($applicantTable, "{$jobApplicationTable}.applicantID", '=', "{$applicantTable}.id")
+        ->join($jobPostingTable, "{$jobApplicationTable}.jobPostingID", '=', "{$jobPostingTable}.id")
+        ->where("{$jobPostingTable}.jobProviderID", $user->id)
+        ->with(['applicant', 'jobPosting']);
         if ($search) {
             $searchTerm = '%' . $search . '%';
             $applicationsQuery->where(function ($q) use ($searchTerm) {
@@ -49,17 +52,35 @@ class JobProviderManageJobApplications extends Controller
                     ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
                         $q3->where('firstName', 'like', $searchTerm)
                             ->orWhere('lastName', 'like', $searchTerm)
-                            ->orWhere('phoneNumber', 'like', $searchTerm);
+                            ->orWhere('phoneNumber', 'like', $searchTerm)
+                            ->orWhere('gender', 'like', $searchTerm)
+                            ->orWhere('address', 'like', $searchTerm)
+                            ->orWhere('emailAddress', 'like', $searchTerm)
+                            ->orWhere('disabilityType', 'like', $searchTerm);
+
                     });
             });
         }
-        $sortable = ['jobApplicationNumber', 'position', 'companyName','status'];
-        $sort = in_array($request->sort, $sortable) ? $request->sort : 'jobApplicationNumber';
+        $sortable = ['jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber", 
+                    'firstName' => "{$applicantTable}.firstName", 
+                    'lastName' =>"{$applicantTable}.lastName", 
+                    'phoneNumber' => "{$applicantTable}.phoneNumber", 
+                    'gender' => "{$applicantTable}.sex", 
+                    'address' => "{$applicantTable}.address", 
+                    'emailAddress' => "{$applicantTable}.emailAddress", 
+                    'disabilityType' => "{$applicantTable}.disabilityType", 
+                    'position' => "{$jobPostingTable}.position", 
+                    'companyName' =>"{$jobPostingTable}.companyName",
+                    'status' => "{$jobApplicationTable}.status"
+                ];
+                    
+        $sort = $sortable[$request->input('sort')] ?? "{$jobApplicationTable}.jobApplicationNumber";
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
-        $applications = $applicationsQuery
-            ->orderBy($sort, $direction)
-            ->paginate(10);
+        $applications=$applicationsQuery
+        ->select("{$jobApplicationTable}.*")
+        ->orderBy($sort, $direction)
+        ->paginate(10);
 
         return view('users.job-provider.job_provider_job_applications', [
             'user' => $user,

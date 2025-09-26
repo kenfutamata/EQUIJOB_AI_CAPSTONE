@@ -12,31 +12,62 @@ class JobApplicantManageJobApplications extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index(Request $request)
+    public function index(Request $request)
     {
         $user = Auth::guard('applicant')->user();
         $search = $request->input('search');
+        $jobApplicationTable = (new JobApplication())->getTable();
+        $applicantTable = 'users';
+        $jobPostingTable = 'jobPosting';
 
-        $applicationsQuery = JobApplication::with(['applicant'])
-            ->where('jobApplications.applicantID', $user->id)
-            ->join('jobPosting', 'jobApplications.jobPostingID', '=', 'jobPosting.id')
-            ->select('jobApplications.*', 'jobPosting.position', 'jobPosting.companyName');
+        $applicationsQuery = JobApplication::query()
+            ->join($applicantTable, "{$jobApplicationTable}.applicantID", '=', "{$applicantTable}.id")
+            ->join($jobPostingTable, "{$jobApplicationTable}.jobPostingID", '=', "{$jobPostingTable}.id")
+            ->where("{$applicantTable}.id", $user->id)
+            ->with(['applicant', 'jobPosting']);
 
         if ($search) {
-            $applicationsQuery->where(function ($q) use ($search) {
-
-                $q->where('jobApplications.jobApplicationNumber', 'like', "%{$search}%")
-                    ->orWhere('jobPosting.position', 'like', "%{$search}%")
-                    ->orWhere('jobPosting.companyName', 'like', "%{$search}%")
-                    ->orWhere('jobApplications.status', 'like', "%{$search}%");
+            $searchTerm = '%' . $search . '%';
+            $applicationsQuery->where(function ($q) use ($searchTerm) {
+                $q->where('jobApplicationNumber', 'like', $searchTerm)
+                    ->orWhere('status', 'like', $searchTerm)
+                    ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
+                        $q2->where('position', 'like', $searchTerm)
+                            ->orWhere('companyName', 'like', $searchTerm)
+                            ->orWhere('disabilityType', 'like', $searchTerm);
+                    })
+                    ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
+                        $q3->where('firstName', 'like', $searchTerm)
+                            ->orWhere('lastName', 'like', $searchTerm)
+                            ->orWhere('phoneNumber', 'like', $searchTerm)
+                            ->orWhere('gender', 'like', $searchTerm)
+                            ->orWhere('address', 'like', $searchTerm)
+                            ->orWhere('emailAddress', 'like', $searchTerm)
+                            ->orWhere('disabilityType', 'like', $searchTerm);
+                    });
             });
         }
 
-        $sortable = ['jobApplicationNumber', 'position', 'companyName', 'status'];
-        $sort = in_array($request->sort, $sortable) ? $request->sort : 'jobApplicationNumber';
+
+        $sortable = [
+            'jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber",
+            'firstName' => "{$applicantTable}.firstName",
+            'lastName' => "{$applicantTable}.lastName",
+            'phoneNumber' => "{$applicantTable}.phoneNumber",
+            'gender' => "{$applicantTable}.sex",
+            'address' => "{$applicantTable}.address",
+            'emailAddress' => "{$applicantTable}.emailAddress",
+            'disabilityType' => "{$applicantTable}.disabilityType",
+            'position' => "{$jobPostingTable}.position",
+            'companyName' => "{$jobPostingTable}.companyName",
+            'status' => "{$jobApplicationTable}.status"
+        ];
+
+        $sort = $sortable[$request->input('sort')] ?? "{$jobApplicationTable}.jobApplicationNumber";
         $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
         $applications = $applicationsQuery
+            ->select("{$jobApplicationTable}.*")
             ->orderBy($sort, $direction)
             ->paginate(10);
 

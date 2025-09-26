@@ -73,12 +73,13 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <th class="px-2 py-2">Applicant Number {!! sortArrow('jobApplicationNumber')!!}</th>
                             <th class="px-2 py-2">Position {!! sortArrow('position')!!}</th>
                             <th class="px-2 py-2">Company Name {!! sortArrow('companyName')!!}</th>
-                            <th class="px-2 py-2">Applicant Name</th>
-                            <th class="px-2 py-2">Applicant Phone Number</th>
-                            <th class="px-2 py-2">Sex</th>
-                            <th class="px-2 py-2">Applicant Address</th>
-                            <th class="px-2 py-2">Email Address</th>
-                            <th class="px-2 py-2">Applicant Disability Type</th>
+                            <th class="px-2 py-2">Applicant First Name {!! sortArrow('firstName')!!}</th>
+                            <th class="px-2 py-2">Applicant Last Name {!! sortArrow('lastName')!!}</th>
+                            <th class="px-2 py-2">Applicant Phone Number {!! sortArrow('phoneNumber')!!}</th>
+                            <th class="px-2 py-2">Sex {!! sortArrow('gender')!!}</th>
+                            <th class="px-2 py-2">Applicant Address {!! sortArrow('address')!!}</th>
+                            <th class="px-2 py-2">Email Address {!! sortArrow('emailAddress')!!}</th>
+                            <th class="px-2 py-2">Applicant Disability Type {!! sortArrow('disabilityType')!!}</th>
                             <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
                             <th class="px-2 py-2">Actions</th>
                         </tr>
@@ -112,7 +113,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-2 py-2">{{ $posting->position ?? '' }}</td>
                             <td class="px-2 py-2">{{ $posting->companyName ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->firstName ?? '' }} {{ $applicant->lastName ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->firstName ?? '' }}</td>
+                            <td class="px-2 py-2">{{ $applicant->lastName ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->phoneNumber ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->gender ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->address ?? '' }}</td>
@@ -359,4 +361,4 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     </style>
 </body>
 
-</html>
+</html

@@ -14,19 +14,19 @@
 
 @php
 function sortArrow($column) {
-    $currentSort = request('sort');
-    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-    $arrow = request('sort') === $column
-        ? (request('direction') === 'asc' ? '↑' : '↓')
-        : '↕';
-    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-    $url = request()->url() . '?' . http_build_query($params);
-    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
 
 <body x-data="{ sidebarOpen: false }" class="bg-gray-50 text-black flex min-h-screen">
-    
+
     <!-- Mobile Sidebar Overlay -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
 
@@ -95,10 +95,11 @@ function sortArrow($column) {
                         <tr>
                             <th class="px-3 py-2">App Number {!! sortArrow('jobApplicationNumber')!!}</th>
                             <th class="px-3 py-2">Position {!! sortArrow('position')!!}</th>
-                            <th class="px-3 py-2">Company Name{!! sortArrow('companyName')!!}</th>
-                            <th class="px-3 py-2 hidden md:table-cell">Applicant Name</th>
-                            <th class="px-3 py-2 hidden lg:table-cell">Phone Number</th>
-                            <th class="px-3 py-2 hidden lg:table-cell">Disability Type</th>
+                            <th class="px-3 py-2">Company Name {!! sortArrow('companyName')!!}</th>
+                            <th class="px-3 py-2 hidden md:table-cell">Applicant First Name {!! sortArrow('firstName')!!}</th>
+                            <th class="px-3 py-2 hidden md:table-cell">Applicant Last Name {!! sortArrow('lastName')!!}</th>
+                            <th class="px-3 py-2 hidden lg:table-cell">Phone Number {!! sortArrow('phoneNumber')!!}</th>
+                            <th class="px-3 py-2 hidden lg:table-cell">Disability Type {!! sortArrow('disabilityType')!!}</th>
                             <th class="px-3 py-2">Status{!! sortArrow('status')!!}</th>
                             <th class="px-3 py-2">Actions</th>
                         </tr>
@@ -106,30 +107,31 @@ function sortArrow($column) {
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($applications as $application)
                         @php
-                            $posting = $application->jobPosting;
-                            $applicant = $application->applicant;
-                            // Ensure objects exist before accessing properties
-                            $modalData = array_merge($posting ? $posting->toArray() : [], [
-                                'firstName' => $applicant->firstName ?? null,
-                                'lastName' => $applicant->lastName ?? null,
-                                'sex' => $applicant->gender ?? null,
-                                'contactPhone' => $applicant->phoneNumber ?? null,
-                                'contactEmail' => $applicant->email ?? null,
-                                'disabilityType' => $applicant->typeOfDisability ?? null,
-                                'uploadResume' => $application->uploadResume,
-                                'uploadApplicationLetter' => $application->uploadApplicationLetter,
-                                'remarks' => $application->remarks,
-                                'interviewDate' => $application->interviewDate ? $application->interviewDate->format('F j, Y') : null,
-                                'interviewTime' => $application->interviewTime ? $application->interviewTime->format('g:i A') : null,
-                                'interviewLink' => $application->interviewLink,
-                                'profilePicture' => $applicant->profilePicture ?? null,
-                            ]);
+                        $posting = $application->jobPosting;
+                        $applicant = $application->applicant;
+                        // Ensure objects exist before accessing properties
+                        $modalData = array_merge($posting ? $posting->toArray() : [], [
+                        'firstName' => $applicant->firstName ?? null,
+                        'lastName' => $applicant->lastName ?? null,
+                        'sex' => $applicant->gender ?? null,
+                        'contactPhone' => $applicant->phoneNumber ?? null,
+                        'contactEmail' => $applicant->email ?? null,
+                        'disabilityType' => $applicant->typeOfDisability ?? null,
+                        'uploadResume' => $application->uploadResume,
+                        'uploadApplicationLetter' => $application->uploadApplicationLetter,
+                        'remarks' => $application->remarks,
+                        'interviewDate' => $application->interviewDate ? $application->interviewDate->format('F j, Y') : null,
+                        'interviewTime' => $application->interviewTime ? $application->interviewTime->format('g:i A') : null,
+                        'interviewLink' => $application->interviewLink,
+                        'profilePicture' => $applicant->profilePicture ?? null,
+                        ]);
                         @endphp
                         <tr>
                             <td class="px-3 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-3 py-2">{{ $posting->position ?? 'N/A' }}</td>
                             <td class="px-3 py-2">{{ $posting->companyName ?? 'N/A' }}</td>
-                            <td class="px-3 py-2 hidden md:table-cell">{{ $applicant->firstName ?? '' }} {{ $applicant->lastName ?? ''}}</td>
+                            <td class="px-3 py-2 hidden md:table-cell">{{ $applicant->firstName ?? '' }}</td>
+                            <td class="px-3 py-2 hidden md:table-cell">{{ $applicant->lastName ?? '' }}</td>
                             <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->phoneNumber ?? 'N/A' }}</td>
                             <td class="px-3 py-2 hidden lg:table-cell">{{ $applicant->typeOfDisability ?? 'N/A'}}</td>
                             <td class="px-3 py-2">{{ $application->status ?? 'N/A'}}</td>
