@@ -7,6 +7,8 @@
     <meta name="csrf-token" content="{{csrf_token()}}">
     <title>EQUIJOB - Job Provider- Manage Job Applications</title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+    <link href="{{asset('assets/job-provider/manage-job-applications/css/job_provider_job_applications.css')}}" rel="stylesheet">
+
 
 </head>
 @php
@@ -342,8 +344,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
         </div>
     </div>
     <script src="{{ asset('assets/job-provider/manage-job-applications/js/job_provider_job_applications.js') }}"></script>
-
-    <!-- Style -->
     <style>
         .main-content-scroll {
             margin-left: 234px;
@@ -359,6 +359,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             transition: opacity 0.5s ease-in-out;
         }
     </style>
+
 </body>
 
 </html

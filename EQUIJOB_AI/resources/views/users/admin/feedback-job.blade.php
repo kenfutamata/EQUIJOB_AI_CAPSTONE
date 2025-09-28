@@ -7,43 +7,7 @@
     <title>EQUIJOB - Job Rating Review</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
-    <style>
-        /* Ensure sidebar is always fixed */
-        .sidebar-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 234px;
-            height: 100vh;
-            z-index: 40;
-            background-color: #c3d2f7;
-        }
-
-        /* Ensure topbar is always fixed */
-        .topbar-fixed {
-            position: fixed;
-            top: 0;
-            left: 234px;
-            right: 0;
-            height: 64px;
-            z-index: 30;
-            background: #fff;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        /* Main content below topbar */
-        .main-content-scroll {
-            margin-left: 234px;
-            margin-top: 64px;
-            height: calc(100vh - 64px);
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        #notification-bar {
-            transition: opacity 0.5s;
-        }
-    </style>
+    <link href="{{ asset('assets/admin/feedbacks/css/feedback-job.css') }}" rel="stylesheet">
 </head>
 @php
 function sortArrow($column) {
@@ -175,55 +139,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             <button onclick="closeDeleteFeedbackForm()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
-    <script>
-        function openviewDescriptionModal(button) {
-            const feedback = JSON.parse(button.getAttribute('data-user'));
-
-            const position = feedback.job_application?.job_posting?.position;
-            const companyName = feedback.job_application?.job_posting?.companyName;
-
-            document.getElementById('modal_firstName').value = feedback.firstName;
-            document.getElementById('modal_lastName').value = feedback.lastName;
-            document.getElementById('modal_email').value = feedback.email;
-            document.getElementById('modal_phoneNumber').value = feedback.phoneNumber;
-            document.getElementById('modal_feedbackType').value = feedback.feedbackType;
-            document.getElementById('modal_feedbackText').value = feedback.feedbackText;
-            document.getElementById('modal_rating').value = feedback.rating ?? 'Not Yet Rated by Applicant';
-
-            document.getElementById('modal_position').value = position ?? 'N/A';
-            document.getElementById('modal_companyName').value = companyName ?? 'N/A';
-
-            document.getElementById('viewDescriptionModal').classList.remove('hidden')
-        }
-
-        function closeviewDescriptionModal() {
-            document.getElementById('viewDescriptionModal').classList.add('hidden');
-        }
-
-        function openDeleteFeedbackForm(deleteURL) {
-            const form = document.getElementById('deleteFeedback');
-            form.action = deleteURL;
-            document.getElementById('deleteFeedbackForm').classList.remove('hidden');
-        }
-
-        function closeDeleteFeedbackForm() {
-            document.getElementById('deleteFeedbackForm').classList.add('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('viewProfileModal');
-            if (e.target === modal) closeModal();
-        });
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '0';
-        }, 2500);
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.display = 'none';
-        }, 3000);
-    </script>
+    <script src="{{ asset('assets/admin/feedbacks/js/feedback-job.js') }}"></script>
 </body>
 
 </html>

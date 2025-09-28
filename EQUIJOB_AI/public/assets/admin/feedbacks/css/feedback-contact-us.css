@@ -1,0 +1,32 @@
+.sidebar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 234px;
+    height: 100vh;
+    z-index: 40;
+    background-color: #c3d2f7;
+}
+
+ .topbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 234px;
+    right: 0;
+    height: 64px;
+    z-index: 30;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.main-content-scroll {
+    margin-left: 234px;
+    margin-top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+#notification-bar {
+    transition: opacity 0.5s;
+}

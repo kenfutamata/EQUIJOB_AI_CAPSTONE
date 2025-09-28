@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <style>
-        /* Ensure sidebar is always fixed */
         .sidebar-fixed {
             position: fixed;
             top: 0;
@@ -19,7 +18,6 @@
             background-color: #c3d2f7;
         }
 
-        /* Ensure topbar is always fixed */
         .topbar-fixed {
             position: fixed;
             top: 0;
@@ -31,7 +29,6 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
-        /* Main content below topbar */
         .main-content-scroll {
             margin-left: 234px;
             margin-top: 64px;
@@ -198,58 +195,7 @@ function sortArrow($column) {
             <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
-
-
-    <script>
-        function openProfileModal(button) {
-            const user = JSON.parse(button.getAttribute('data-user'));
-            document.getElementById('modal_firstName').value = user.firstName;
-            document.getElementById('modal_lastName').value = user.lastName;
-            document.getElementById('modal_email').value = user.email;
-            document.getElementById('modal_address').value = user.address;
-            document.getElementById('modal_phoneNumber').value = user.phoneNumber;
-            document.getElementById('modal_dateOfBirth').value = user.dateOfBirth;
-            document.getElementById('modal_pwdId').value = user.pwdId;
-            document.getElementById('typeOfDisability').value = user.typeOfDisability;
-            const pwdCardImg = document.getElementById('modal_pwd_card');
-            pwdCardImg.src = user.upload_pwd_card ? `/storage/${user.upload_pwd_card}` : '';
-            pwdCardImg.style.display = user.upload_pwd_card ? 'block' : 'none';
-            const profilePictureImg = document.getElementById('modal_profilePicture');
-            profilePictureImg.src = user.profilePicture ? `/storage/${user.profilePicture}` : '';
-            profilePictureImg.style.display = user.profilePicture ? 'block' : 'none';
-            document.getElementById('modal_role').value = user.role;
-            document.getElementById('modal_status').value = user.status;
-            document.getElementById('viewProfileModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('viewProfileModal').classList.add('hidden');
-        }
-
-        function openDeleteModal(url) {
-            const form = document.getElementById('deleteuser');
-            form.action = url;
-            document.getElementById('DeleteRoleModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('DeleteRoleModal').classList.add('hidden');
-        }
-
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('viewProfileModal');
-            if (e.target === modal) closeModal();
-        });
-
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.opacity = '0';
-        }, 2500);
-        setTimeout(() => {
-            const notif = document.getElementById('notification-bar');
-            if (notif) notif.style.display = 'none';
-        }, 3000);
-    </script>
+    <script src="{{ asset('assets/admin/manage_users/js/manage_users_applicants.js') }}"></script>
 </body>
 
 </html>

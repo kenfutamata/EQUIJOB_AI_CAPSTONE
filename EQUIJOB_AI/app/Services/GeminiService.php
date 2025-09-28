@@ -23,7 +23,6 @@ class GeminiService
             return null;
         }
 
-        // The official endpoint for the Gemini 1.5 Flash model
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
         $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. You MUST return the information ONLY as a valid JSON object. The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
@@ -52,7 +51,6 @@ class GeminiService
                 return null;
             }
             
-            // Extract the text from the successful response
             $responseText = $response->json('candidates.0.content.parts.0.text', '');
             $jsonResponse = $this->cleanJsonString($responseText);
 

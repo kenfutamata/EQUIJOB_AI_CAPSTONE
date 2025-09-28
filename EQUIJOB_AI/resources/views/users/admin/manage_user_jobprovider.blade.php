@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EQUIJOB - Admin Manage Job Providers</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel= "stylesheet" href="{{ asset('assets/job-provider/manage-users/manage_user_jobprovider/css/manage_user_jobprovider.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/manage_users/css/manage_user_jobprovider.css') }}" />
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
-    
+
 </head>
 
 @php
@@ -168,7 +168,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
-    <script src="{{ asset('assets/job-provider/manage-users/manage_user_jobprovider/js/manage_user_jobprovider.js') }}"></script>
 </body>
+<script src="{{ asset('assets/admin/manage_users/js/manage_user_jobprovider.js') }}" defer></script>
 
 </html>

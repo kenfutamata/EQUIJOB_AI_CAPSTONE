@@ -202,7 +202,6 @@
                     }]
                 },
                 options: {
-                    /* ... your chart options ... */
                 }
             });
             @endif

@@ -116,38 +116,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Reviews Section -->
-    <section id="reviews" class="py-16 lg:py-24 px-6 lg:px-16 bg-gray-50">
-        <div class="container mx-auto">
-            <h2 class="text-3xl md:text-4xl font-semibold font-poppins text-center mb-12 text-gray-800">What People Say</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Review 1 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“As a job seeker with a disability, I finally found a platform that understands my needs. The assistive features and virtual interview options gave me confidence and a real chance.”</p>
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full" src="{{ asset('assets/photos/landing_page/pp1.jpg') }}" alt="John Doe">
-                        <div>
-                            <p class="font-semibold font-poppins text-gray-800">Maria Doe</p>
-                            <p class="text-sm text-gray-500">Job Applicant</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Review 2 -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <p class="text-lg italic text-gray-700 mb-6 leading-relaxed">“We love how EQUIJOB provides resources on inclusive hiring. It's helped us build a more diverse and supportive workplace.”</p>
-                    <div class="flex items-center gap-4">
-                        <img class="w-12 h-12 rounded-full" src="{{ asset('assets/photos/landing_page/pp2.jpg') }}" alt="Maria L.">
-                        <div>
-                            <p class="font-semibold font-poppins text-gray-800">John Doe</p>
-                            <p class="text-sm text-gray-500">Job Provider</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- FAQ Section -->
     <section id="faq" class="py-16 lg:py-24 px-6 lg:px-16 bg-white">
         <div class="container mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">

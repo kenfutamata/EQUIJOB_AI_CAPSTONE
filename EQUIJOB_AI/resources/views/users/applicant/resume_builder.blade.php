@@ -100,27 +100,27 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="firstName" class="block text-lg">First Name</label>
-                                <input type="text" id="firstName" name="resume[firstName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.firstName', $user->firstName) }}" required />
+                                <input type="text" id="firstName" name="resume[firstName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.firstName', $user->firstName) }}" readonly />
                             </div>
                             <div>
                                 <label for="lastName" class="block text-lg">Last Name</label>
-                                <input type="text" id="lastName" name="resume[lastName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.lastName', $user->lastName) }}" required />
+                                <input type="text" id="lastName" name="resume[lastName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.lastName', $user->lastName) }}" readonly />
                             </div>
                             <div>
                                 <label for="dob" class="block text-lg">Date of Birth</label>
-                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" />
+                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" readonly/>
                             </div>
                             <div>
                                 <label for="address" class="block text-lg">Address</label>
-                                <input type="text" id="address" name="resume[address]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.address', $user->address) }}" />
+                                <input type="text" id="address" name="resume[address]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.address', $user->address) }}" readonly />
                             </div>
                             <div>
                                 <label for="email" class="block text-lg">Email Address</label>
-                                <input type="email" id="email" name="resume[email]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.email', $user->email) }}" required />
+                                <input type="email" id="email" name="resume[email]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.email', $user->email) }}" readonly />
                             </div>
                             <div>
                                 <label for="phone" class="block text-lg">Phone Number</label>
-                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" />
+                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" readonly/>
                             </div>
                             <div>
                                 <label for="disability_type" class="block text-lg">Disability Type</label>
@@ -170,7 +170,7 @@
                                     </div>
                                     <div>
                                         <label for="experience_{{$key}}_year" class="block text-lg">Year</label>
-                                        <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}" />
+                                        <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}"/>
                                     </div>
                                     <div class="md:col-span-2">
                                         <label for="experience_{{$key}}_responsibilities" class="block text-lg">Responsibilities/Description</label>
