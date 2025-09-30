@@ -163,7 +163,7 @@ $is_pdf = $is_pdf ?? false;
                 @if($photoPath)
                 <div class="flex-shrink-0 flex flex-col items-center @if(!$is_pdf) ml-0 md:ml-6 mt-8 md:mt-0 border border-gray-200 bg-white rounded p-3 shadow-sm @else ml-6 @endif" style="width: 136px;">
                     <div class="@if(!$is_pdf) p-1 bg-gray-50 rounded-md border border-gray-300 shadow-sm @endif">
-                        <img src="@if($is_pdf){{ public_path('storage/' . $photoPath) }}@else{{ asset('storage/' . $photoPath) }}@endif" alt="Applicant Photo" class="w-auto rounded-sm" style="max-height: 160px;">
+                        <img src="@if($is_pdf){{ storage_path('storage/' . $photoPath) }}@else{{ asset('storage/' . $photoPath) }}@endif" alt="Applicant Photo" class="w-auto rounded-sm" style="max-height: 160px;">
                     </div>
                 </div>
                 @endif
@@ -210,7 +210,6 @@ $is_pdf = $is_pdf ?? false;
             @endif
 
             @if(!$is_pdf)
-            <!-- Responsive action buttons: stack on small screens, row on larger -->
             <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a href="{{ route('applicant-resume-download') }}" class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg shadow">Download as PDF</a>
                 <a href="{{ route('applicant-resume-builder') }}" class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow">Edit Resume</a>
