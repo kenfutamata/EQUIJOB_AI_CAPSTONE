@@ -135,7 +135,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
 
-            Mail::to($applicant->email)->send(new InterviewDetailsSent($mailData, 'applicant'));
+            Mail::to($applicant)->send(new InterviewDetailsSent($mailData, 'applicant'));
             $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
 
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Successfully Scheduled Interview');
@@ -166,7 +166,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
 
-            Mail::to($applicant->email)->send(new SendOnOfferDetails($mailData));
+            Mail::to($applicant)->send(new SendOnOfferDetails($mailData));
             $applicant->notify(new PositionOnOfferNotificationSent($application, 'applicant'));
 
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application and Position is on-offer');
@@ -202,7 +202,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
-            Mail::to($applicant->email)->send(new disapprovalDetailssent($maildata));
+            Mail::to($applicant)->send(new disapprovalDetailssent($maildata));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
         } catch (\Exception $e) {
             Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());

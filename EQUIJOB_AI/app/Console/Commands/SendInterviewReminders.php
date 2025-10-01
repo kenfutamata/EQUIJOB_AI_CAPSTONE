@@ -33,7 +33,7 @@ class SendInterviewReminders extends Command
         $this->info('Starting to send interview reminders...');
 
         $applications = JobApplication::query()
-            ->with(['applicant', 'jobPosting.jobProvider']) 
+            ->with(['applicant', 'jobPosting.jobProvider'])
             ->whereNotNull('interviewDate')
             ->whereNull('reminderSentAt')
             ->whereDate('interviewDate', now()->addDay()->toDateString())
@@ -48,19 +48,17 @@ class SendInterviewReminders extends Command
 
         foreach ($applications as $application) {
             try {
-                $applicantEmail = $application->applicant?->email;
+                $applicant = $application->applicant;
+                $jobProvider = $application->jobPosting?->jobProvider;
 
-                $jobProviderEmail = $application->jobPosting?->jobProvider?->email;
-
-                if ($applicantEmail) {
-                    Mail::to($applicantEmail)->send(new SendInterviewDetailsJobApplicantMail($application));
-                    $this->info("Reminder sent to applicant: {$applicantEmail}");
+                if ($applicant) {
+                    Mail::to($applicant)->send(new SendInterviewDetailsJobApplicantMail($application));
+                    $this->info("Reminder sent to applicant: {$applicant}");
                 }
 
-                if ($jobProviderEmail) {
-                    // CORRECTED: Class name should be PascalCase
-                    Mail::to($jobProviderEmail)->send(new SendInterviewDetailsJobProviderMail($application));
-                    $this->info("Reminder sent to provider: {$jobProviderEmail}");
+                if ($jobProvider) {
+                    Mail::to($jobProvider)->send(new SendInterviewDetailsJobProviderMail($application));
+                    $this->info("Reminder sent to provider: {$jobProvider}");
                 }
 
                 $application->update(['reminderSentAt' => now()]);

@@ -93,7 +93,7 @@ class AdminManageUsersController extends Controller
         $maildata = [
             'userID' => $user->userID,
         ];
-        Mail::to($user->email)->send(new EmailConfirmation($maildata));
+        Mail::to($user)->send(new EmailConfirmation($maildata));
 
         return redirect()->back()->with('Success', 'Email Successfully sent to user');
     }

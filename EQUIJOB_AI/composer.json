@@ -18,8 +18,8 @@
         "openai-php/client": "^0.13.0",
         "sendinblue/api-v3-sdk": "^8.4",
         "spatie/pdf-to-text": "^1.54",
-        "symfony/brevo-mailer": "*",
-        "symfony/http-client": "*"
+        "symfony/brevo-mailer": "^7.3",
+        "symfony/http-client": "^7.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.5",

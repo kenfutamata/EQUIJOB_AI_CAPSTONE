@@ -28,26 +28,27 @@ class JobApplicantManageJobApplications extends Controller
 
         if ($search) {
             $searchTerm = '%' . $search . '%';
-            $applicationsQuery->where(function ($q) use ($searchTerm) {
-                $q->where('jobApplicationNumber', 'like', $searchTerm)
-                    ->orWhere('status', 'like', $searchTerm)
+            // You've already defined this variable, which is great!
+            $jobApplicationTable = (new JobApplication())->getTable();
+
+            $applicationsQuery->where(function ($q) use ($searchTerm, $jobApplicationTable) {
+                $q->where("{$jobApplicationTable}.jobApplicationNumber", 'like', $searchTerm)
+                    ->orWhere("{$jobApplicationTable}.status", 'like', $searchTerm)
                     ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                         $q2->where('position', 'like', $searchTerm)
                             ->orWhere('companyName', 'like', $searchTerm)
                             ->orWhere('disabilityType', 'like', $searchTerm);
                     })
                     ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
-                        $q3->where('firstName', 'like', $searchTerm)
+                        $q3->where('firstName', 'like', 'searchTerm')
                             ->orWhere('lastName', 'like', $searchTerm)
                             ->orWhere('phoneNumber', 'like', $searchTerm)
                             ->orWhere('gender', 'like', $searchTerm)
                             ->orWhere('address', 'like', $searchTerm)
-                            ->orWhere('emailAddress', 'like', $searchTerm)
                             ->orWhere('disabilityType', 'like', $searchTerm);
                     });
             });
         }
-
 
         $sortable = [
             'jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber",

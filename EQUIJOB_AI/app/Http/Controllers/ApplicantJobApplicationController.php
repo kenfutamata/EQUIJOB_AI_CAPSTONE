@@ -140,7 +140,7 @@ class ApplicantJobApplicationController extends Controller
                 'jobProviderPhone'=> $jobProvider->phone,
             ];
 
-            Mail::to($applicant->email)->send(new HiredStatusSent($maildata));
+            Mail::to($applicant)->send(new HiredStatusSent($maildata));
             return redirect()->back()->with('Success', 'Application Updated to Hired');
         } catch (\Exception $e) {
             Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
