@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
@@ -33,6 +34,12 @@ class JobApplication extends Model
         'hiredAt' => 'datetime',
     ];
 
+    public function name(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->firstName . ' ' . $this->lastName
+        );
+    }
     public function scopeSearch($query, $search)
     {
         $searchTerm = "%{$search}%";

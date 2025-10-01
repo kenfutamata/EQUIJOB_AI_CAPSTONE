@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+// THIS IS THE MAIN FIX: Use the full path to Laravel's Attribute class
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,11 +19,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    // THIS IS THE SECOND FIX: List the actual database columns
     protected $fillable = [
-        'name',
+        'firstName',
+        'lastName',
         'email',
         'password',
-
     ];
 
     /**
@@ -43,6 +47,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * Get the user's full name.
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::get(
+            fn() => $this->firstName . ' ' . $this->lastName
+        );
+    }
 
     public function jobPostings()
     {

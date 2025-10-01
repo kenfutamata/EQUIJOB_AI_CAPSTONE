@@ -71,6 +71,7 @@ class ApplicantJobApplicationController extends Controller
             $maildata = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
+                'email' => $applicant->email,
                 'jobProvidersFirstName' => $jobProvider->firstName,
                 'jobProvidersLastName' => $jobProvider->lastName,
                 'position' => $posting->position,
@@ -78,7 +79,7 @@ class ApplicantJobApplicationController extends Controller
                 'applicationNumber' => $applicationData['jobApplicationNumber'],
             ];
 
-            Mail::to($applicant->email)->send(new jobApplicationEmailSent($maildata));
+            Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
             $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider')); 
 
         } catch (\Exception $e) {

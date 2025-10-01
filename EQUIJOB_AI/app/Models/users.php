@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 
 /**
  * 
@@ -103,6 +105,13 @@ class users extends Authenticatable
         public function jobPostings()
     {
         return $this->hasMany(JobPosting::class, 'jobProviderID');
+    }
+
+    protected function name(): Attribute
+    {
+        return Attribute::get(
+            fn() => $this->firstName . ' ' . $this->lastName
+        );
     }
 
 }
