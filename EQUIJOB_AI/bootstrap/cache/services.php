@@ -35,6 +35,7 @@
     31 => 'Termwind\\Laravel\\TermwindServiceProvider',
     32 => 'Phiki\\Adapters\\Laravel\\PhikiServiceProvider',
     33 => 'App\\Providers\\AppServiceProvider',
+    34 => 'App\\Providers\\BrevoMailServiceProvider',
   ),
   'eager' => 
   array (
@@ -55,6 +56,7 @@
     14 => 'Termwind\\Laravel\\TermwindServiceProvider',
     15 => 'Phiki\\Adapters\\Laravel\\PhikiServiceProvider',
     16 => 'App\\Providers\\AppServiceProvider',
+    17 => 'App\\Providers\\BrevoMailServiceProvider',
   ),
   'deferred' => 
   array (
