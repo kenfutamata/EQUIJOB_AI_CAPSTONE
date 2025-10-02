@@ -35,15 +35,18 @@ class JobProviderManageJobApplications extends Controller
         $jobPostingTable = 'jobPosting';
 
         $applicationsQuery = JobApplication::query()
-        ->join($applicantTable, "{$jobApplicationTable}.applicantID", '=', "{$applicantTable}.id")
-        ->join($jobPostingTable, "{$jobApplicationTable}.jobPostingID", '=', "{$jobPostingTable}.id")
-        ->where("{$jobPostingTable}.jobProviderID", $user->id)
-        ->with(['applicant', 'jobPosting']);
+            ->join($applicantTable, "{$jobApplicationTable}.applicantID", '=', "{$applicantTable}.id")
+            ->join($jobPostingTable, "{$jobApplicationTable}.jobPostingID", '=', "{$jobPostingTable}.id")
+            ->where("{$jobPostingTable}.jobProviderID", $user->id)
+            ->with(['applicant', 'jobPosting']);
+
+        // ========== START OF CORRECTIONS ==========
         if ($search) {
             $searchTerm = '%' . $search . '%';
-            $applicationsQuery->where(function ($q) use ($searchTerm) {
-                $q->where('jobApplicationNumber', 'like', $searchTerm)
-                    ->orWhere('status', 'like', $searchTerm)
+            $applicationsQuery->where(function ($q) use ($searchTerm, $jobApplicationTable) {
+                // FIX #1: Added table prefix to ambiguous columns
+                $q->where("{$jobApplicationTable}.jobApplicationNumber", 'like', $searchTerm)
+                    ->orWhere("{$jobApplicationTable}.status", 'like', $searchTerm)
                     ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                         $q2->where('position', 'like', $searchTerm)
                             ->orWhere('companyName', 'like', $searchTerm)
@@ -55,32 +58,37 @@ class JobProviderManageJobApplications extends Controller
                             ->orWhere('phoneNumber', 'like', $searchTerm)
                             ->orWhere('gender', 'like', $searchTerm)
                             ->orWhere('address', 'like', $searchTerm)
-                            ->orWhere('emailAddress', 'like', $searchTerm)
                             ->orWhere('disabilityType', 'like', $searchTerm);
-
                     });
             });
         }
-        $sortable = ['jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber", 
-                    'firstName' => "{$applicantTable}.firstName", 
-                    'lastName' =>"{$applicantTable}.lastName", 
-                    'phoneNumber' => "{$applicantTable}.phoneNumber", 
-                    'gender' => "{$applicantTable}.sex", 
-                    'address' => "{$applicantTable}.address", 
-                    'emailAddress' => "{$applicantTable}.emailAddress", 
-                    'disabilityType' => "{$applicantTable}.disabilityType", 
-                    'position' => "{$jobPostingTable}.position", 
-                    'companyName' =>"{$jobPostingTable}.companyName",
-                    'status' => "{$jobApplicationTable}.status"
-                ];
-                    
-        $sort = $sortable[$request->input('sort')] ?? "{$jobApplicationTable}.jobApplicationNumber";
-        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
 
-        $applications=$applicationsQuery
-        ->select("{$jobApplicationTable}.*")
-        ->orderBy($sort, $direction)
-        ->paginate(10);
+        $sortable = [
+            'jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber",
+            'firstName' => "{$applicantTable}.firstName",
+            'lastName' =>"{$applicantTable}.lastName",
+            'phoneNumber' => "{$applicantTable}.phoneNumber",
+            'gender' => "{$applicantTable}.sex",
+            'address' => "{$applicantTable}.address",
+            'emailAddress' => "{$applicantTable}.emailAddress",
+            'disabilityType' => "{$applicantTable}.disabilityType",
+            'position' => "{$jobPostingTable}.position",
+            'companyName' =>"{$jobPostingTable}.companyName",
+            'status' => "{$jobApplicationTable}.status"
+        ];
+
+        if ($request->has('sort')) {
+            $sort = $sortable[$request->input('sort')] ?? "{$jobApplicationTable}.created_at";
+            $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        } else {
+            $sort = "{$jobApplicationTable}.created_at";
+            $direction = 'desc';
+        }
+
+        $applications = $applicationsQuery
+            ->select("{$jobApplicationTable}.*")
+            ->orderBy($sort, $direction)
+            ->paginate(10);
 
         return view('users.job-provider.job_provider_job_applications', [
             'user' => $user,
@@ -202,7 +210,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
-            Mail::to($applicant)->send(new disapprovalDetailssent($maildata));
+            Mail::to($applicant)->send(new DisapprovalDetailsSent($maildata));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
         } catch (\Exception $e) {
             Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());

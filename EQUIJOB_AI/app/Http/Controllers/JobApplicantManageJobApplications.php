@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobApplication;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class JobApplicantManageJobApplications extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $user = Auth::guard('applicant')->user();
         $search = $request->input('search');
@@ -28,19 +29,18 @@ class JobApplicantManageJobApplications extends Controller
 
         if ($search) {
             $searchTerm = '%' . $search . '%';
-            // You've already defined this variable, which is great!
-            $jobApplicationTable = (new JobApplication())->getTable();
+            // The $jobApplicationTable variable is already defined above, no need to redefine it here.
 
             $applicationsQuery->where(function ($q) use ($searchTerm, $jobApplicationTable) {
                 $q->where("{$jobApplicationTable}.jobApplicationNumber", 'like', $searchTerm)
                     ->orWhere("{$jobApplicationTable}.status", 'like', $searchTerm)
                     ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                         $q2->where('position', 'like', $searchTerm)
-                            ->orWhere('companyName', 'like', $searchTerm)
+                            ->orWhere('companyName', 'like', 'searchTerm')
                             ->orWhere('disabilityType', 'like', $searchTerm);
                     })
                     ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
-                        $q3->where('firstName', 'like', 'searchTerm')
+                        $q3->where('firstName', 'like', $searchTerm)
                             ->orWhere('lastName', 'like', $searchTerm)
                             ->orWhere('phoneNumber', 'like', $searchTerm)
                             ->orWhere('gender', 'like', $searchTerm)
@@ -63,13 +63,22 @@ class JobApplicantManageJobApplications extends Controller
             'companyName' => "{$jobPostingTable}.companyName",
             'status' => "{$jobApplicationTable}.status"
         ];
-
-        $sort = $sortable[$request->input('sort')] ?? "{$jobApplicationTable}.jobApplicationNumber";
-        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        
+        // START: Sorting Logic Change
+        if ($request->has('sort') && isset($sortable[$request->input('sort')])) {
+            // If a valid sort column is specified in the URL, use it.
+            $sort = $sortable[$request->input('sort')];
+            $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        } else {
+            // Default sorting: show the latest applications first.
+            $sort = "{$jobApplicationTable}.created_at";
+            $direction = 'desc';
+        }
+        // END: Sorting Logic Change
 
         $applications = $applicationsQuery
             ->select("{$jobApplicationTable}.*")
-            ->orderBy($sort, $direction)
+            ->orderBy($sort, $direction) // Apply the determined sort and direction
             ->paginate(10);
 
         $notifications = $user->notifications ?? collect();
@@ -129,4 +138,4 @@ class JobApplicantManageJobApplications extends Controller
     {
         //
     }
-}
+}   
