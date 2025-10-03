@@ -93,6 +93,7 @@ function sortArrow($column) {
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-4 py-3">#</th>
                             <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
                             <th class="px-2 py-2">First Name {!! sortArrow('firstName')!!}</th>
                             <th class="px-2 py-2">Last Name {!! sortArrow('lastName')!!}</th>
@@ -109,6 +110,7 @@ function sortArrow($column) {
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($users as $user)
                         <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3">{{ $users ->firstItem() + $loop->index}}</td>
                             <td class="px-4 py-3">{{ $user->userID}}</td>
                             <td class="px-2 py-2">{{ $user->firstName }}</td>
                             <td class="px-2 py-2">{{ $user->lastName }}</td>

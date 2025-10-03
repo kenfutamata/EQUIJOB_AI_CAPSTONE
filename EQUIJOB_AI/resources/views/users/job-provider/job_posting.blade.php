@@ -81,6 +81,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-2 py-2">#</th>
                             <th class="px-2 py-2">Position {!!sortArrow('position')!!}</th>
                             <th class="px-2 py-2">Company Name {!!sortArrow('companyName')!!}</th>
                             <th class="px-2 py-2">Sex {!!sortArrow('sex')!!}</th>
@@ -98,6 +99,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($postings as $posting)
                         <tr class="hover:bg-gray-50">
+                            <td class="px-2 py-2">{{ $postings->firstItem() + $loop->index }}</td>
                             <td class="px-2 py-2">{{ $posting->position }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->companyName }}</td>
                             <td class="px-2 py-2 max-w-[150px] break-words">{{ $posting->sex }}</td>

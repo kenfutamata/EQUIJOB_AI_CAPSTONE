@@ -72,6 +72,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-2 py-2">#</th>
                             <th class="px-2 py-2">Applicant Number {!! sortArrow('jobApplicationNumber')!!}</th>
                             <th class="px-2 py-2">Position {!! sortArrow('position')!!}</th>
                             <th class="px-2 py-2">Company Name {!! sortArrow('companyName')!!}</th>
@@ -112,6 +113,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         ];
                         @endphp
                         <tr>
+                            <td class="px-2 py-2">{{ $applications->firstItem() + $loop->index }}</td>
                             <td class="px-2 py-2">{{ $application->jobApplicationNumber ?? $application->id }}</td>
                             <td class="px-2 py-2">{{ $posting->position ?? '' }}</td>
                             <td class="px-2 py-2">{{ $posting->companyName ?? '' }}</td>

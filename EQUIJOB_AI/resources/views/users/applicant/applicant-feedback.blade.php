@@ -49,7 +49,6 @@ function sortArrow($column) {
     <div class="flex flex-col flex-1 lg:ml-[234px]">
         <header class="fixed top-0 left-0 lg:left-[234px] right-0 h-16 z-10 bg-white border-b border-gray-200 flex items-center">
             <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-4 text-gray-600 hover:text-gray-900 focus:outline-none">
-                <span class="sr-only">Open sidebar</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
@@ -79,6 +78,7 @@ function sortArrow($column) {
                 <table class="min-w-full text-sm text-left sm:text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-3 py-2">#</th>
                             <th class="px-3 py-2">Name {!! sortArrow('firstName')!!}</th>
                             <th class="px-3 py-2 hidden md:table-cell">Position {!! sortArrow('position')!!}</th>
                             <th class="px-3 py-2 hidden lg:table-cell">Company Name {!! sortArrow('companyName')!!}</th>
@@ -90,6 +90,7 @@ function sortArrow($column) {
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($feedbacks as $feedback)
                         <tr class="hover:bg-gray-50">
+                            <td class="px-3 py-2">{{ $feedbacks->firstItem() + $loop->index }}</td>
                             <td class="px-3 py-2">{{ $feedback->firstName }} {{ $feedback->lastName }}</td>
                             <td class="px-3 py-2 hidden md:table-cell">{{ $feedback->jobPosting->position }}</td>
                             <td class="px-3 py-2 hidden lg:table-cell">{{ $feedback->jobPosting->companyName }}</td>

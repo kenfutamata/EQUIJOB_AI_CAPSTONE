@@ -64,13 +64,10 @@ class JobApplicantManageJobApplications extends Controller
             'status' => "{$jobApplicationTable}.status"
         ];
         
-        // START: Sorting Logic Change
         if ($request->has('sort') && isset($sortable[$request->input('sort')])) {
-            // If a valid sort column is specified in the URL, use it.
             $sort = $sortable[$request->input('sort')];
             $direction = $request->direction === 'desc' ? 'desc' : 'asc';
         } else {
-            // Default sorting: show the latest applications first.
             $sort = "{$jobApplicationTable}.created_at";
             $direction = 'desc';
         }
@@ -78,7 +75,7 @@ class JobApplicantManageJobApplications extends Controller
 
         $applications = $applicationsQuery
             ->select("{$jobApplicationTable}.*")
-            ->orderBy($sort, $direction) // Apply the determined sort and direction
+            ->orderBy($sort, $direction) 
             ->paginate(10);
 
         $notifications = $user->notifications ?? collect();

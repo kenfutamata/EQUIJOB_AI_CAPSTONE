@@ -6,6 +6,7 @@ use App\Models\Feedbacks;
 use Google\Service\Forms\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ApplicantFeedbackController extends Controller
 {
@@ -83,6 +84,7 @@ class ApplicantFeedbackController extends Controller
             return redirect()->back()->with('Success', 'Feedback submitted successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('Error', 'Failed to submit feedback: ' . $e->getMessage());
+            Log::error('Failed to submit feedback: ' . $e->getMessage());
         }
     }
 

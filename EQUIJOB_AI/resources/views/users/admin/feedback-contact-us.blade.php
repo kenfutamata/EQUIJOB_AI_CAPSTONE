@@ -55,6 +55,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-2 py-2">#</th>
                             <th class="px-2 py-2">First Name {!! sortArrow('firstName')!!}</th>
                             <th class="px-2 py-2">Last Name {!! sortArrow('lastName')!!}</th>
                             <th class="px-2 py-2 max-w-[150px] break-words">Email {!! sortArrow('email')!!}</th>
@@ -66,6 +67,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($feedbacks as $feedback)
                         <tr class="hover:bg-gray-50">
+                            <td class="px-2 py-2">{{ $feedbacks->firstItem() + $loop->index }}</td>
                             <td class="px-2 py-2">{{ $feedback->firstName }}</td>
                             <td class="px-2 py-2">{{ $feedback->lastName }}</td>
                             <td class="px-2 py-2 break-all max-w-[150px]">{{ $feedback->email }}</td>

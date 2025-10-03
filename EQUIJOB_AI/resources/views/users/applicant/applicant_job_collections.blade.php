@@ -199,7 +199,6 @@
   function openJobDetailsModal(button) {
     const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
 
-    // Only update fields that exist in the modal
     document.getElementById('modal-position').textContent = jobposting.position || 'No Position provided';
     document.getElementById('modal-companyName').textContent = jobposting.companyName || 'No Company provided';
     document.getElementById('modal-disabilityType').textContent = jobposting.disabilityType || 'No Disability Type provided';

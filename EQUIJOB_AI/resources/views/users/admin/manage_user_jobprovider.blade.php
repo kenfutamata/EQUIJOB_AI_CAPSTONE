@@ -63,6 +63,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-gray-100 font-semibold">
                         <tr>
+                            <th class="px-4 py-3">#</th>
                             <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
                             <th class="px-4 py-3">First Name {!! sortArrow('firstName')!!}</th>
                             <th class="px-4 py-3">Last Name {!! sortArrow('lastName')!!}</th>
@@ -77,6 +78,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <tbody class="divide-y divide-gray-200">
                         @foreach ($users as $user)
                         <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3">{{ $users->firstItem() + $loop->index }}</td>
                             <td class="px-4 py-3">{{ $user->userID }}</td>
                             <td class="px-4 py-3">{{ $user->firstName }}</td>
                             <td class="px-4 py-3">{{ $user->lastName }}</td>

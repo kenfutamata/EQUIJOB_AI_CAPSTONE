@@ -21,7 +21,7 @@ function closeviewDescriptionModal() {
 function openFeedbackSubmitModal(feedback) {
     const modal = document.getElementById('submitFeedbackDetails');
     const form = document.getElementById('submitFeedback');
-    const url = `{{ url('/Applicant/Applicant-Feedback') }}/${feedback.id}`;
+    const url = `/Applicant/Applicant-Feedback/${feedback.id}`;
     form.action = url;
     modal.classList.remove('hidden');
 }
