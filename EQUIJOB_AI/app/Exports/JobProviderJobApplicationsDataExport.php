@@ -71,6 +71,6 @@ class JobProviderJobApplicationsDataExport implements FromCollection
         return $applicationsQuery
             ->select("{$jobApplicationTable}.*")
             ->orderBy($sortColumn, $direction)
-            ->get(); // ✅ Collection for Excel
+            ->get(); 
     }
 }
