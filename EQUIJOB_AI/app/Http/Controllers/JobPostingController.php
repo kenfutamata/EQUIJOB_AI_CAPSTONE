@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JobProviderJobPostingDataExport;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\JobPostingNotificationSent;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JobPostingController extends Controller
 {
@@ -127,5 +129,19 @@ class JobPostingController extends Controller
         $jobPosting = JobPosting::findOrFail($id);
         $jobPosting->delete();
         return redirect()->back()->with('Delete_Success', 'Job posting deleted successfully');
+    }
+
+        public function export(Request $request)
+    {
+        $user = Auth::guard('job_provider')->user();
+
+        return Excel::download(
+            new JobProviderJobPostingDataExport(
+                $request->search,
+                $request->sort,
+                $request->direction
+            ),
+            "Job Provider Job Postings {$user->companyName}.xlsx"
+        );
     }
 }

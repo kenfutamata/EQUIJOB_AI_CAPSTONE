@@ -44,14 +44,14 @@
 </head>
 @php
 function sortArrow($column) {
-    $currentSort = request('sort');
-    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-    $arrow = request('sort') === $column
-    ? (request('direction') === 'asc' ? '↑' : '↓')
-    : '↕';
-    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-    $url = request()->url() . '?' . http_build_query($params);
-    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
 
@@ -82,7 +82,9 @@ function sortArrow($column) {
                 <div class="flex gap-2">
                     <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
                     <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
+                    <a href="{{ route('admin-manage-user-applicants-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
                 </div>
+
                 <form method="GET" action="{{ route('admin-manage-user-applicants') }}" class="flex items-center gap-1">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Applicants"
                         class="border rounded-l px-2 py-1 w-32 text-sm" />

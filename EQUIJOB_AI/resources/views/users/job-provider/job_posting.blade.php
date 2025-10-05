@@ -62,6 +62,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <span class="text-blue-500">Job Postings</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('job-provider-job-posting-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
+
                     <button type="button"
                         onclick="openAddJobPostingModal()"
                         class="bg-blue-500 text-white px-3 py-1 rounded text-sm">Add Job Posting</button>

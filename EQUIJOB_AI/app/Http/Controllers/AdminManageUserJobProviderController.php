@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JobProviderUsersExport;
 use App\Mail\EmailConfirmation;
 use App\Models\User;
 use App\Models\users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminManageUserJobProviderController extends Controller
 {
@@ -107,5 +109,17 @@ class AdminManageUserJobProviderController extends Controller
         $user = users::findOrFail($id);
         $user->delete();
         return redirect()->back()->with('Delete_Success', 'User deleted successfully');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new JobProviderUsersExport(
+            $request->search, 
+            $request->sort, 
+            $request->direction
+        ),
+        'Job Providers Users.xlsx' 
+    );
+        
     }
 }

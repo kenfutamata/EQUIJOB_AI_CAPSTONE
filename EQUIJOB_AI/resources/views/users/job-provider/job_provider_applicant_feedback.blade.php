@@ -46,6 +46,9 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <span class="text-gray-800">Applicant Feedback</span>
                     <span class="text-blue-500">Review</span>
                 </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('job-provider-applicant-feedback-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
+                </div>
             </div>
             <div class="overflow-x-auto bg-white shadow rounded-lg">
                 <table class="min-w-full text-sm text-center">

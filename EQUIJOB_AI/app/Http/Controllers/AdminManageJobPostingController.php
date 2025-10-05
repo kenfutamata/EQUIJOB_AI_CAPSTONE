@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JobPostingsDataExport;
 use App\Models\JobPosting;
 use App\Notifications\ApprovedJobPostingNotification;
 use App\Notifications\DisapprovedJobPostingSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\JobPostingStatusUpdated;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminManageJobPostingController extends Controller
 {
@@ -133,5 +135,16 @@ class AdminManageJobPostingController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new JobPostingsDataExport(
+            $request->search, 
+            $request->sort, 
+            $request->direction
+        ),
+        'Job Postings.xlsx' 
+    );
     }
 }

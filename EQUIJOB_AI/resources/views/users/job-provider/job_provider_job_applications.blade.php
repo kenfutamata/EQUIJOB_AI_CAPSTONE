@@ -62,6 +62,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <span class="text-blue-500">Job Applications</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('job-provider-job-applications-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
+
                     <form method="GET" action="" class="flex items-center gap-1 ml-auto">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Applications" class="border rounded-l px-2 py-1 w-32 text-sm" />
                         <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>

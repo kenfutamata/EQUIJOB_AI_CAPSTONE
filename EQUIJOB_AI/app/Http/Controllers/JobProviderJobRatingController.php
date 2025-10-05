@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JobProviderApplicantFeedbackDataExport;
 use App\Models\Feedbacks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JobProviderJobRatingController extends Controller
 {
@@ -87,5 +89,16 @@ class JobProviderJobRatingController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function export(Request $request)
+    {
+        $user = Auth::guard('job_provider')->user();
+
+        return Excel::download(new JobProviderApplicantFeedbackDataExport(
+            $request->search,
+            $request->sort_column,
+            $request->sort_direction
+        ), "Job Provider Applicant Feedback {$user->companyName}.xlsx");
     }
 }

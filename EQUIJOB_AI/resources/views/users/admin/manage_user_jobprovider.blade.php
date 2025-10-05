@@ -51,6 +51,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <div class="flex gap-2">
                     <a href="{{ route('admin-manage-user-applicants') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Applicants</a>
                     <a href="{{ route('admin-manage-user-job-providers') }}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Providers</a>
+                    <a href="{{ route('admin-manage-user-jobproviders-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
+
                 </div>
                 <form method="GET" action="{{ route('admin-manage-user-job-providers') }}" class="flex items-center gap-1">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Providers"

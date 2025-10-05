@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AdminSystemRatingDataExport;
 use App\Models\Feedbacks;
 use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminContactUsController extends Controller
 {
@@ -82,5 +84,16 @@ class AdminContactUsController extends Controller
     {
         $feedback->delete();
         return redirect()->back()->with('Delete_Success', 'Feedback deleted successfully');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new AdminSystemRatingDataExport(
+            $request->search,
+            $request->sort,
+            $request->direction
+        ),
+            'EQUIJOB System Rating.xlsx'
+        );
     }
 }

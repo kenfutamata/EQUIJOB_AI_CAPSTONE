@@ -57,7 +57,7 @@ function openViewJobPostingModal(button) {
     document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
     document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
     document.getElementById('modal.workEnvironment').value = jobposting.workEnvironment;
-
+    
     document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
     document.getElementById('modal.experience').value = jobposting.experience;
     document.getElementById('modal.skills').value = jobposting.skills;

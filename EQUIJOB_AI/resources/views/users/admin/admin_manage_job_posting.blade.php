@@ -20,6 +20,7 @@ $url = request()->url() . '?' . http_build_query($params);
 return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
+
 <body class="bg-white text-black">
     <div>
         <!-- Sidebar -->
@@ -51,6 +52,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <span class="text-blue-500">Job Postings</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('admin-manage-job-posting-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
+
                     <form method="GET" action="{{ route('admin-manage-job-posting') }}" class="flex items-center gap-1 ml-auto">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Posting" class="border rounded-l px-2 py-1 w-32 text-sm" />
                         <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
@@ -178,7 +181,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Category</label>
-                <input  id="modal.category" class="w-full border rounded px-2 py-1" disabled></textarea>
+                <input id="modal.category" class="w-full border rounded px-2 py-1" disabled></textarea>
             </div>
             <div>
                 <label class="block text-xs text-gray-500">Salary Range</label>
@@ -201,7 +204,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 @csrf
                 @method('PUT')
                 <div class="mb-4">
-                <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
                     <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
                     <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
             </form>

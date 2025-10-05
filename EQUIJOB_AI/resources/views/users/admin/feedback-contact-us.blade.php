@@ -49,6 +49,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <div class="flex gap-2">
                     <a href="{{route('admin-feedback-job')}}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">Job Rating</a>
                     <a href="{{route('admin-feedback-contact-us-system-review')}}" class="bg-blue-500 text-white px-2 py-1 rounded text-base">System Review</a>
+                    <a href="{{ route('admin-feedback-system-review-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
                 </div>
             </div>
             <div class="overflow-x-auto bg-white shadow rounded-lg">

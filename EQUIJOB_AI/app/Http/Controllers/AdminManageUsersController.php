@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JobApplicantUsersExport;
 use App\Mail\EmailConfirmation;
 use App\Models\User;
 use App\Models\users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminManageUsersController extends Controller
 {
@@ -26,7 +28,6 @@ class AdminManageUsersController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($search) . '%'])
                         ->orWhere('userID', 'like', "%{$search}%")
-
                         ->orWhere('firstName', 'like', "%{$search}%")
                         ->orWhere('firstName', 'like', "%{$search}%")
                         ->orWhere('lastName', 'like', "%{$search}%")
@@ -51,7 +52,16 @@ class AdminManageUsersController extends Controller
         return $response;
     }
 
-
+    public function export(Request $request)
+    {
+        return Excel::download(new JobApplicantUsersExport(
+            $request->search, 
+            $request->sort,
+            $request->direction
+        ), 
+        'job_applicants.xlsx'
+    );
+    }
 
     /**
      * Show the form for creating a new resource.

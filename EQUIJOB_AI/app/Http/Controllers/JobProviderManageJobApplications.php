@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 // Use specific Form Requests for validation
+
+use App\Exports\JobProviderJobApplicationsDataExport;
+use App\Exports\JobProviderJobPostingDataExport;
 use App\Http\Requests\RejectApplicationRequest;
 use App\Http\Requests\ScheduleInterviewRequest;
 // Consolidate Mail and Notification usage
@@ -20,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JobProviderManageJobApplications extends Controller
 {
@@ -40,11 +44,9 @@ class JobProviderManageJobApplications extends Controller
             ->where("{$jobPostingTable}.jobProviderID", $user->id)
             ->with(['applicant', 'jobPosting']);
 
-        // ========== START OF CORRECTIONS ==========
         if ($search) {
             $searchTerm = '%' . $search . '%';
             $applicationsQuery->where(function ($q) use ($searchTerm, $jobApplicationTable) {
-                // FIX #1: Added table prefix to ambiguous columns
                 $q->where("{$jobApplicationTable}.jobApplicationNumber", 'like', $searchTerm)
                     ->orWhere("{$jobApplicationTable}.status", 'like', $searchTerm)
                     ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
@@ -66,14 +68,14 @@ class JobProviderManageJobApplications extends Controller
         $sortable = [
             'jobApplicationNumber' => "{$jobApplicationTable}.jobApplicationNumber",
             'firstName' => "{$applicantTable}.firstName",
-            'lastName' =>"{$applicantTable}.lastName",
+            'lastName' => "{$applicantTable}.lastName",
             'phoneNumber' => "{$applicantTable}.phoneNumber",
             'gender' => "{$applicantTable}.sex",
             'address' => "{$applicantTable}.address",
             'emailAddress' => "{$applicantTable}.emailAddress",
             'disabilityType' => "{$applicantTable}.disabilityType",
             'position' => "{$jobPostingTable}.position",
-            'companyName' =>"{$jobPostingTable}.companyName",
+            'companyName' => "{$jobPostingTable}.companyName",
             'status' => "{$jobApplicationTable}.status"
         ];
 
@@ -121,6 +123,15 @@ class JobProviderManageJobApplications extends Controller
         $jobProvider = Auth::guard('job_provider')->user();
 
         try {
+            $duplicate = JobApplication::where('id', '!=', $application->id)
+                ->where('applicantID', $application->applicantID)
+                ->where('interviewDate', $validated['interviewDate'])
+                ->where('interviewTime', $validated['interviewTime'])
+                ->first();
+
+            if ($duplicate) {
+                return redirect()->back()->with('error', 'The Date and time has been occupied by another existing interview. please try again.');
+            }
             $application->update([
                 'status' => 'For Interview',
                 'interviewDate' => $validated['interviewDate'],
@@ -130,7 +141,6 @@ class JobProviderManageJobApplications extends Controller
 
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
-
             $mailData = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
@@ -142,7 +152,6 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderFirstName' => $jobProvider->firstName,
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
-
             Mail::to($applicant)->send(new InterviewDetailsSent($mailData, 'applicant'));
             $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
 
@@ -232,5 +241,19 @@ class JobProviderManageJobApplications extends Controller
             Log::error('Failed to delete application ' . $id . ': ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to Delete Application');
         }
+    }
+
+    public function export(Request $request)
+    {
+        $user = Auth::guard('job_provider')->user();
+
+        return Excel::download(
+            new JobProviderJobApplicationsDataExport(
+                $request->search,
+                $request->sort,
+                $request->direction
+            ),
+            "Job Provider Job Applications {$user->companyName}.xlsx"
+        );
     }
 }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AdminJobRatingDataExport;
 use App\Models\Feedbacks;
 use App\Models\JobApplication;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminJobRatingController extends Controller
 {
@@ -98,5 +100,17 @@ class AdminJobRatingController extends Controller
     {
         $feedback->delete();
         return redirect()->back()->with('Delete_Success', 'Feedback deleted successfully');
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new AdminJobRatingDataExport(
+                $request->search,
+                $request->sort,
+                $request->direction
+            ),
+            'EQUIJOB Job Rating.xlsx'
+        );
     }
 }

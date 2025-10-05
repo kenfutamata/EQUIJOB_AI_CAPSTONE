@@ -82,22 +82,25 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/Job-Provider/Job-Provider-Dashboard', [JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
     Route::get('/Job-Provider/Job-Provider-Dashboard/Logout', [JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
     Route::get('/Job-Provider/Job-Provider-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
-    Route::get('/EQUIIJOB/Job-Provider/Job-Posting', [JobPostingController::class, 'index'])->name('job-provider-job-posting');
+    Route::get('/Job-Provider/Job-Posting/Export', [JobPostingController::class, 'export'])->name('job-provider-job-posting-export');
+    Route::get('/Job-Provider/Job-Posting', [JobPostingController::class, 'index'])->name('job-provider-job-posting');
     Route::post('/Job-Provider/Job-Posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
     Route::delete('/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
     Route::get('/Job-Provider/Job-Provider-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
     Route::put('/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController::class, 'update'])->name('job-provider-profile-update');
     Route::get('/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
+    Route::get('/Job-Provider/Manage-Job-Applications/Export', [JobProviderManageJobApplications::class, 'export'])->name('job-provider-job-applications-export');
     Route::post('/Job-Provider/Manage-Job-Applications/create-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider-manage-job-applications.google.meet.create_link');
     Route::get('/Job-Provider/Manage-Job-Applications/provider/google/redirect', [JobProviderManageJobApplications::class, 'redirectToGoogle'])->name('job-provider-manage-job-applications.provider.google.redirect');
     Route::get('/Job-Provider/Manage-Job-Applications/provider/google/callback', [JobProviderManageJobApplications::class, 'handleGoogleCallback'])->name('job-provider-manage-job-applications.provider.google.callback');
     Route::post('/Job-Provider/Manage-Job-Applications/{application}/schedule-interview', [JobProviderManageJobApplications::class, 'scheduleInterview'])->name('job-provider-manage-job-applications.scheduleinterview');
-    Route::post('/job-provider/applications/generate-meet-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider.meet.create'); 
+    Route::post('/job-provider/applications/generate-meet-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider.meet.create');
     Route::put('/Job-Provider/Manage-Job-Applications/update-to-offer/{application}', [JobProviderManageJobApplications::class, 'updateApplicationToOffer'])->name('job-provider-manage-job-applications.update-to-offer');
     Route::put('/Job-Provider/Manage-Job-Applications/reject/{id}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
     Route::delete('/Job-Provider/Manage-Job-Applications/Delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications.delete');
     Route::get('/Job-Provider/Applicant-Feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
+    Route::get('/Job-Provider/Applicant-Feedback/Export', [JobProviderJobRatingController::class, 'export'])->name('job-provider-applicant-feedback-export');
     Route::get('/Job-Provider/Generate-report', [JobProviderGenerateReports::class, 'index'])->name('job-provider-generate-report');
 });
 
@@ -135,6 +138,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/Admin/Manage-User-JobProviders', [AdminManageUserJobProviderController::class, 'index'])->name('admin-manage-user-job-providers');
     Route::delete('/Admin/Manage-User-JobProviders/Delete/{id}', [AdminManageUserJobProviderController::class, 'destroy'])->name('admin-manage-user-job-providers-delete');
     Route::delete('/Admin/Manage-User-Applicants/Delete/{id}', [AdminManageUsersController::class, 'destroy'])->name('admin-manage-user-applicants-delete');
+    Route::get('Admin/Manage-Job-Posting/Export', [AdminManageJobPostingController::class, 'export'])->name('admin-manage-job-posting-export');
     Route::get('/Admin/Manage-Job-Posting', [AdminManageJobPostingController::class, 'index'])->name('admin-manage-job-posting');
     Route::put('/Admin/Manage-Job-Posting/For-Posting/{id}', [AdminManageJobPostingController::class, 'updateForPosting'])->name('admin-manage-job-posting-for-posting');
     Route::put('/Admin/Manage-Job-Posting/Disapproved/{id}', [AdminManageJobPostingController::class, 'updateDisapproved'])->name('admin-manage-job-posting-disapproved');
@@ -143,5 +147,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/Admin/Feedback-Job', [AdminJobRatingController::class, 'index'])->name('admin-feedback-job');
     Route::delete('/Admin/Feedback-System-Review/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-system-review-delete');
     Route::delete('/Admin/Feedback-Job/Delete/{feedback}', [AdminContactUsController::class, 'destroy'])->name('admin-feedback-job-feedback-delete');
+    Route::get('/Admin/Feedback-System-Review/Export', [AdminContactUsController::class, 'export'])->name('admin-feedback-system-review-export');
+    Route::get('/Admin/Feedback-Job/Export', [AdminJobRatingController::class, 'export'])->name('admin-feedback-job-export');
     Route::get('/Admin/Generate-Report', [AdminGenerateReportsController::class, 'index'])->name('admin-generate-report');
+    Route::get('Admin/Manage-User-Applicants/Export', [AdminManageUsersController::class, 'export'])->name('admin-manage-user-applicants-export');
+    Route::get('Admin/Manage-User-Job-Providers/Export', [AdminManageUserJobProviderController::class, 'export'])->name('admin-manage-user-jobproviders-export');
 });
