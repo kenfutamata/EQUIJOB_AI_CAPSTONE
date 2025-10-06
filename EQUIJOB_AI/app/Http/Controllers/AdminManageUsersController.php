@@ -26,9 +26,8 @@ class AdminManageUsersController extends Controller
         $query = \App\Models\users::query()->where('role', 'Applicant')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($search) . '%'])
+                    $q->whereRaw('LOWER(CONCAT("firstName", \' \', "lastName")) LIKE ?', ['%' . strtolower($search) . '%'])
                         ->orWhere('userID', 'like', "%{$search}%")
-                        ->orWhere('firstName', 'like', "%{$search}%")
                         ->orWhere('firstName', 'like', "%{$search}%")
                         ->orWhere('lastName', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
@@ -54,13 +53,14 @@ class AdminManageUsersController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new JobApplicantUsersExport(
-            $request->search, 
-            $request->sort,
-            $request->direction
-        ), 
-        'job_applicants.xlsx'
-    );
+        return Excel::download(
+            new JobApplicantUsersExport(
+                $request->search,
+                $request->sort,
+                $request->direction
+            ),
+            'job_applicants.xlsx'
+        );
     }
 
     /**

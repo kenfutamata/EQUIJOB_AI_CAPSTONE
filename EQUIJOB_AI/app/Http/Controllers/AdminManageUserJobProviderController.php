@@ -27,7 +27,7 @@ class AdminManageUserJobProviderController extends Controller
             ->where('role', 'Job Provider')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
-                    $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($search) . '%'])
+                    $q->whereRaw('LOWER(CONCAT("firstName",\' \' , "lastName")) LIKE ?', ['%' . strtolower($search) . '%'])
                         ->orWhere('userID', 'like', "%{$search}%")
                         ->orwhere('firstName', 'like', "%{$search}%")
                         ->orWhere('lastName', 'like', "%{$search}%")
