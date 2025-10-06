@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,51 +33,17 @@ class JobProviderProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
+    public function store(Request $request)
+    {
+        //
+    }
 
     /**
      * Display the specified resource.
      */
-   public function store(Request $request)
+    public function show(string $id)
     {
-        // 1. Validate the input for the job posting itself
-        $validatedData = $request->validate([
-            'position' => 'required|string|max:255',
-            'sex' => 'required|string',
-            'age' => 'required|integer',
-            'disabilityType' => 'required|string',
-            'educationalAttainment' => 'required|string',
-            'salaryRange' => 'required|string',
-            'workEnvironment' => 'required|string',
-            'category' => 'required|string',
-            'description' => 'required|string',
-            'experience' => 'required|string',
-            'skills' => 'required|string',
-            'requirements' => 'required|string',
-            'contactPhone' => 'required|string',
-            'contactEmail' => 'required|email',
-            // Do NOT validate companyName or companyLogo here, we get it from the user
-        ]);
-
-        // 2. Get the currently authenticated job provider
-        $provider = Auth::guard('job_provider')->user();
-
-        // 3. Create a new JobPosting instance
-        $jobPosting = new JobPosting($validatedData);
-
-        // 4. THIS IS THE CRITICAL FIX:
-        //    Copy the correct, verified information from the provider's profile
-        //    to the new job posting record. This avoids data duplication and typos.
-        $jobPosting->jobProviderID = $provider->id;
-        $jobPosting->companyName = $provider->companyName;
-        $jobPosting->companyLogo = $provider->companyLogo; // <-- This copies the correct path
-
-        // 5. Save the new job posting to the database
-        $jobPosting->save();
-
-        // 6. Redirect back with a success message
-        //    (Change 'job-provider-dashboard' to your actual route name)
-        return redirect()->route('job-provider-dashboard')->with('success', 'Job has been posted successfully!');
+        //
     }
 
     /**
