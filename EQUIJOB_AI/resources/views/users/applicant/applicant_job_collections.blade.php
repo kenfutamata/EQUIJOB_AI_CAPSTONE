@@ -89,16 +89,28 @@
         </select>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($collections as $collection)
-          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
-            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $collection->position }}</h2>
-            <p class="text-gray-600 mb-4">{{ Str::limit($collection->description, 100) }}</p>
-            <p class="text-gray-500 text-sm mb-4">Category: {{ $collection->category }}</p>
+            {{-- START: MODIFICATION 1 --}}
+            @php
+              // Create a temporary array from the collection data
+              $jobData = $collection->toArray();
+              // Overwrite the companyLogo with a full, accessible URL if it exists
+              $jobData['companyLogo'] = $collection->companyLogo ? asset('storage/' . $collection->companyLogo) : null;
+            @endphp
+            {{-- END: MODIFICATION 1 --}}
+          
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
+              <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $collection->position }}</h2>
+              <p class="text-gray-600 mb-4">{{ Str::limit($collection->description, 100) }}</p>
+              <p class="text-gray-500 text-sm mb-4">Category: {{ $collection->category }}</p>
 
-            <p class="text-gray-500 text-sm mb-4">Company Name: {{ $collection->companyName }}</p>
-            <button onclick="openJobDetailsModal(this)" data-jobposting='@json($collection)' class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300">View Details</button>
-            <a href="{{route('applicant-match-jobs')}}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">Apply Now</a>
+              <p class="text-gray-500 text-sm mb-4">Company Name: {{ $collection->companyName }}</p>
+              
+              {{-- Pass the modified $jobData array to the button --}}
+              <button onclick="openJobDetailsModal(this)" data-jobposting='@json($jobData)' class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300">View Details</button>
+              
+              <a href="{{route('applicant-match-jobs')}}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">Apply Now</a>
 
-          </div>
+            </div>
           @endforeach
         </div>
       </div>
@@ -212,13 +224,17 @@
     document.getElementById('modal-salaryRange').textContent = jobposting.salaryRange || 'No Salary Range provided';
     document.getElementById('modal-category').textContent = jobposting.category || 'No Category provided';
 
+    // START: MODIFICATION 2
     const companyLogo = document.getElementById('modal-companyLogo');
     if (jobposting.companyLogo) {
-      companyLogo.src = `/storage/${jobposting.companyLogo}`;
+      // The `jobposting.companyLogo` now contains the full, correct URL
+      companyLogo.src = jobposting.companyLogo;
       companyLogo.style.display = 'block';
     } else {
+      // If no logo, hide the image element
       companyLogo.style.display = 'none';
     }
+    // END: MODIFICATION 2
 
     document.getElementById('viewJobDetailsModal').classList.remove('hidden');
   }

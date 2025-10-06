@@ -79,7 +79,7 @@ class SendFeedbackRequest extends Command
                             'companyName'      => $application->jobPosting->jobProvider->companyName,
                             'position'         => $application->jobPosting->position,
                         ];
-                        Mail::to($applicant->email)->send(new \App\Mail\NotifyApplicantFeedbackSent($maildata));
+                        Mail::to($applicant)->send(new \App\Mail\NotifyApplicantFeedbackSent($maildata));
 
                         $this->info("---> Email sent and pending feedback #{$feedback->id} created.");
                         $processedCount++;
