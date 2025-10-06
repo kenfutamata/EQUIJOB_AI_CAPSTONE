@@ -28,7 +28,7 @@ class ForgotPasswordController extends Controller
                 $maildata = [
                     'email' => $request->email,
                 ];
-                Mail::to($request->email)->send(new ForgotPasswordDetailsMail($maildata));
+                Mail::to($user)->send(new ForgotPasswordDetailsMail($maildata));
                 return view('sign-in-page.forgot-password.password_request_sent', compact('user'))->with('Success', 'Password reset details have been sent to your email.');
             } else {
                 return back()->withErrors(['error' => 'No user found with this email address.']);
