@@ -40,7 +40,7 @@ class AdminManageUsersController extends Controller
             });
         $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'dateOfBirth', 'typeOfDisability', 'role', 'status'];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
-        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        $direction = $request->direction === 'desc' ? 'desc' : 'desc';
 
         $query->orderBy($sort, $direction);
         $users = $query->orderBy($sort, $direction)->paginate(10);

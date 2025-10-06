@@ -41,7 +41,7 @@ class AdminManageUserJobProviderController extends Controller
             });
         $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'companyName', 'role',];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
-        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        $direction = $request->direction === 'desc' ? 'desc' : 'desc';
 
         $query->orderBy($sort, $direction);
         $users = $query->latest()->paginate(10);
