@@ -62,6 +62,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($collections as $collection)
+
                 <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition duration-300 flex flex-col">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-semibold text-gray-800">{{ $collection->position }}</h2>
@@ -70,10 +71,13 @@
                     <p class="text-gray-600 mb-3">{{ Str::limit($collection->description, 100) }}</p>
                     <p class="text-gray-500 text-sm mb-2">Company: <span class="font-medium">{{ $collection->companyName }}</span></p>
                     <div class="mt-auto flex gap-2">
-                        <button onclick="openJobDetailsModal(this)" data-jobposting='@json($collection)'
+                        <!-- START: MODIFICATION 1 -->
+                        <button onclick="openJobDetailsModal(this)"
+                            data-jobposting='@json(array_merge($collection->toArray(), ["companyLogoUrl" => $collection->companyLogo ? asset("storage/" . $collection->companyLogo) : asset("assets/photos/default-company.png")]))'
                             class="flex-1 bg-blue-600 text-white text-center px-4 py-2 rounded hover:bg-blue-700 transition">
                             View Details
                         </button>
+                        <!-- END: MODIFICATION 1 -->
                         <a href="{{route('sign-in')}}"
                             class="flex-1 bg-green-600 text-white text-center px-4 py-2 rounded hover:bg-green-700 transition">
                             Apply Now
@@ -100,9 +104,10 @@
 
             <div class="flex flex-col md:flex-row gap-6">
                 <div class="flex-shrink-0">
-                    <img id="modal-companyLogo" src="https://placehold.co/180x151"
-                        alt="Company Logo"
-                        class="w-44 h-auto border rounded" style="display:block;" />
+                    <!-- START: MODIFICATION 2 -->
+                    <img id="modal-companyLogo" src="" alt="Company Logo"
+                        class="w-44 h-auto border rounded hidden" />
+                    <!-- END: MODIFICATION 2 -->
                 </div>
                 <div>
                     <h2 id="modal-companyName" class="text-2xl font-semibold text-gray-800">Company Name</h2>

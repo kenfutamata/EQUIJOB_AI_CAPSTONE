@@ -88,7 +88,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::delete('/Job-Provider/Job-Posting/Delete/{id}', [JobPostingController::class, 'destroy'])->name('job-provider-job-posting-delete');
     Route::get('/Job-Provider/Job-Posting/{id}', [JobPostingController::class, 'show'])->name('job-provider-job-posting-show');
     Route::get('/Job-Provider/Job-Provider-Profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
-    Route::put('/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController::class, 'update'])->name('job-provider-profile-update');
+    Route::put('/Job-Provider/Job-Provider-Profile/{id}', [JobProviderProfileController::class, 'store'])->name('job-provider-profile-update');
     Route::get('/Job-Provider/Manage-Job-Applications', [JobProviderManageJobApplications::class, 'index'])->name('job-provider-manage-job-applications');
     Route::get('/Job-Provider/Manage-Job-Applications/Export', [JobProviderManageJobApplications::class, 'export'])->name('job-provider-job-applications-export');
     Route::post('/Job-Provider/Manage-Job-Applications/create-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider-manage-job-applications.google.meet.create_link');
