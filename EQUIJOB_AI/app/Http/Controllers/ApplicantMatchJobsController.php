@@ -30,81 +30,79 @@ class ApplicantMatchJobsController extends Controller
     }
 
 
- public function matchWithPdf(Request $request)
-{
-    $request->validate([
-        'resume' => 'required|file|mimes:pdf|max:5120',
-    ]);
+    public function matchWithPdf(Request $request)
+    {
+        $request->validate([
+            'resume' => 'required|file|mimes:pdf|max:5120',
+        ]);
 
-    try {
-        $file = $request->file('resume');
-        $filePath = $file->getRealPath();
-        $mimeType = $file->getMimeType();
+        try {
+            $file = $request->file('resume');
+            $filePath = $file->getRealPath();
+            $mimeType = $file->getMimeType();
 
-        $parsedData = $this->geminiService->extractInformationFromResumeFile($filePath, $mimeType);
+            $parsedData = $this->geminiService->extractInformationFromResumeFile($filePath, $mimeType);
 
-        if (!$parsedData) {
-            return back()->with('error', 'The AI could not understand the resume content. Please try a different file.');
+            if (!$parsedData) {
+                return back()->with('error', 'The AI could not understand the resume content. Please try a different file.');
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("AI_PROCESSING_FAILED: " . $e->getMessage());
+            return back()->with('error', 'An unexpected error occurred while processing the resume.');
         }
 
-    } catch (\Exception $e) {
-        \Illuminate\Support\Facades\Log::error("AI_PROCESSING_FAILED: " . $e->getMessage());
-        return back()->with('error', 'An unexpected error occurred while processing the resume.');
-    }
+        try {
+            $user = Auth::guard('applicant')->user();
+            DB::transaction(function () use ($user, $parsedData) {
+                $disabilityTypeFromAI = $parsedData['disability_type'] ?? null;
 
-    try {
-        $user = Auth::guard('applicant')->user();
-        DB::transaction(function () use ($user, $parsedData) {
-            $disabilityTypeFromAI = $parsedData['disability_type'] ?? null;
-            
-            if (empty(trim($disabilityTypeFromAI))) {
-                $disabilityTypeToSave = 'Not Specified';
-            } else {
-                $disabilityTypeToSave = $disabilityTypeFromAI;
+                if (empty(trim($disabilityTypeFromAI))) {
+                    $disabilityTypeToSave = 'Not Specified';
+                } else {
+                    $disabilityTypeToSave = $disabilityTypeFromAI;
+                }
+
+                $resume = \App\Models\Resume::updateOrCreate(
+                    ['userID' => $user->id],
+                    [
+                        'skills' => $parsedData['skills'] ?? '',
+                        'experience' => $parsedData['experience_summary'] ?? null,
+                        'type_of_disability' => $disabilityTypeToSave,
+                        'first_name' => $user->first_name ?? 'N/A',
+                        'last_name' => $user->last_name ?? 'N/A',
+                        'email' => $user->email,
+                    ]
+                );
+
+                $resume->experiences()->delete();
+                if (!empty($parsedData['experience_details'])) {
+                    $resume->experiences()->createMany($parsedData['experience_details']);
+                }
+
+                $resume->educations()->delete();
+                if (!empty($parsedData['education_details'])) {
+                    $resume->educations()->createMany($parsedData['education_details']);
+                }
+            });
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23514') {
+                \Illuminate\Support\Facades\Log::error("DATABASE_CHECK_VIOLATION: " . $e->getMessage());
+
+                return back()->with('error', 'The resume could not be saved because a value (like Disability Type) provided by the AI is not allowed by the system. Please try again or use the Resume Builder.');
             }
 
-            $resume = \App\Models\Resume::updateOrCreate(
-                ['userID' => $user->id],
-                [
-                    'skills' => $parsedData['skills'] ?? '',
-                    'experience' => $parsedData['experience_summary'] ?? null,
-                    'type_of_disability' => $disabilityTypeToSave, 
-                    'first_name' => $user->first_name ?? 'N/A',
-                    'last_name' => $user->last_name ?? 'N/A',
-                    'email' => $user->email,
-                ]
-            );
-
-            $resume->experiences()->delete();
-            if (!empty($parsedData['experience_details'])) {
-                $resume->experiences()->createMany($parsedData['experience_details']);
-            }
-
-            $resume->educations()->delete();
-            if (!empty($parsedData['education_details'])) {
-                $resume->educations()->createMany($parsedData['education_details']);
-            }
-        });
-    } catch (QueryException $e) {
-        if ($e->getCode() === '23514') { 
-            \Illuminate\Support\Facades\Log::error("DATABASE_CHECK_VIOLATION: " . $e->getMessage());
-            
-            return back()->with('error', 'The resume could not be saved because a value (like Disability Type) provided by the AI is not allowed by the system. Please try again or use the Resume Builder.');
+            throw $e;
         }
 
-        throw $e;
-    }
+        $potentialJobs = $this->getPotentialJobsFromData($parsedData);
+        $rankedJobIds = [];
+        if ($potentialJobs->isNotEmpty()) {
+            $rankedJobIds = $this->geminiService->getAiJobMatches($parsedData, $potentialJobs);
+        }
 
-    $potentialJobs = $this->getPotentialJobsFromData($parsedData);
-    $rankedJobIds = [];
-    if ($potentialJobs->isNotEmpty()) {
-        $rankedJobIds = $this->geminiService->getAiJobMatches($parsedData, $potentialJobs);
+        session(['recommended_job_ids' => $rankedJobIds]);
+        return redirect()->route('applicant-match-jobs-recommended-jobs');
     }
-
-    // STORE IDS AND REDIRECT
-    session(['recommended_job_ids' => $rankedJobIds]);
-    return redirect()->route('applicant-match-jobs-recommended-jobs');
-}
 
     public function showRecommendations()
     {
@@ -112,18 +110,12 @@ class ApplicantMatchJobsController extends Controller
 
         $recommendedJobs = collect();
         if (!empty($jobIds)) {
-
-            $jobIdOrder = implode(',', $jobIds);
-
-
             $orderClause = "CASE id ";
             foreach ($jobIds as $index => $id) {
-
                 $position = $index + 1;
                 $orderClause .= "WHEN {$id} THEN {$position} ";
             }
             $orderClause .= "END";
-
 
             $recommendedJobs = JobPosting::whereIn('id', $jobIds)
                 ->orderByRaw($orderClause)
@@ -138,10 +130,16 @@ class ApplicantMatchJobsController extends Controller
     }
 
 
+    /**
+     * Finds potential jobs by performing a case-insensitive search
+     * based on keywords extracted from the resume data.
+     *
+     * @param array $resumeData
+     * @return \Illuminate\Support\Collection
+     */
     private function getPotentialJobsFromData(array $resumeData): \Illuminate\Support\Collection
     {
         $keywords = array_map('trim', explode(',', $resumeData['skills'] ?? ''));
-
 
         if (!empty($resumeData['experience_details'])) {
             foreach ($resumeData['experience_details'] as $exp) {
@@ -151,28 +149,27 @@ class ApplicantMatchJobsController extends Controller
             }
         }
 
-
         if (!empty($resumeData['education_details'][0]['degree'])) {
             $keywords[] = $resumeData['education_details'][0]['degree'];
         }
 
-        $keywords = array_unique(array_filter($keywords));
+        $lowerCaseKeywords = array_map('strtolower', array_unique(array_filter($keywords)));
 
-        if (empty($keywords)) {
+        if (empty($lowerCaseKeywords)) {
             return collect();
         }
 
-
         $query = JobPosting::query()->where('status', 'For Posting');
 
-        $query->where(function ($q) use ($keywords) {
-            foreach ($keywords as $keyword) {
-                $q->orWhere('skills', 'LIKE', "%{$keyword}%")
-                    ->orWhere('position', 'LIKE', "%{$keyword}%")
-                    ->orWhere('description', 'LIKE', "%{$keyword}%")
-                    ->orWhere('requirements', 'LIKE', "%{$keyword}%")
-                    ->orWhere('experience', 'LIKE', "%{$keyword}%")
-                    ->orWhere('educationalAttainment', 'LIKE', "%{$keyword}%");
+        $query->where(function ($q) use ($lowerCaseKeywords) {
+            foreach ($lowerCaseKeywords as $keyword) {
+                // Wrap column names in double quotes to preserve case-sensitivity for PostgreSQL
+                $q->orWhere(DB::raw('LOWER("skills")'), 'LIKE', "%{$keyword}%")
+                    ->orWhere(DB::raw('LOWER("position")'), 'LIKE', "%{$keyword}%")
+                    ->orWhere(DB::raw('LOWER("description")'), 'LIKE', "%{$keyword}%")
+                    ->orWhere(DB::raw('LOWER("requirements")'), 'LIKE', "%{$keyword}%")
+                    ->orWhere(DB::raw('LOWER("experience")'), 'LIKE', "%{$keyword}%")
+                    ->orWhere(DB::raw('LOWER("educationalAttainment")'), 'LIKE', "%{$keyword}%");
             }
         });
 

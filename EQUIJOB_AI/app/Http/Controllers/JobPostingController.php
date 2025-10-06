@@ -39,7 +39,7 @@ class JobPostingController extends Controller
         });
         $sortable = ['position', 'companyName', 'sex', 'age', 'disabilityType', 'educationalAttainment', 'experience', 'skills', 'requirements', 'status'];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'created_at';
-        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+        $direction = $request->direction === 'desc' ? 'desc' : 'desc';
 
         $postings = $postingsQuery->orderBy($sort, $direction)->paginate(10)->withQueryString(); 
 
@@ -66,7 +66,7 @@ class JobPostingController extends Controller
             'position' => 'required|string|max:100',
             'companyName' => 'required|string|max:100',
             'sex' => 'required|string|max:10',
-            'age' => 'required|integer|min:18|max:65',
+            'age' => 'required|string|max:65',
             'disabilityType' => 'required|string|max:100',
             'educationalAttainment' => 'nullable|string|max:255',
             'workEnvironment' => 'required|string|max:255',

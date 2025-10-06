@@ -185,7 +185,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">age</label>
-                    <input type="number" name="age" class="w-full border rounded px-2 py-1" required>
+                    <input type="text" name="age" class="w-full border rounded px-2 py-1" required>
                     @error('age')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                     @enderror
