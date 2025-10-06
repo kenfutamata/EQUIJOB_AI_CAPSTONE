@@ -29,7 +29,6 @@ class JobApplicantManageJobApplications extends Controller
 
         if ($search) {
             $searchTerm = '%' . $search . '%';
-            // The $jobApplicationTable variable is already defined above, no need to redefine it here.
 
             $applicationsQuery->where(function ($q) use ($searchTerm, $jobApplicationTable) {
                 $q->where("{$jobApplicationTable}.jobApplicationNumber", 'like', $searchTerm)
@@ -71,7 +70,6 @@ class JobApplicantManageJobApplications extends Controller
             $sort = "{$jobApplicationTable}.created_at";
             $direction = 'desc';
         }
-        // END: Sorting Logic Change
 
         $applications = $applicationsQuery
             ->select("{$jobApplicationTable}.*")
