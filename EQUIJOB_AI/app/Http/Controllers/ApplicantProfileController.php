@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,7 +58,7 @@ class ApplicantProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
             'firstName' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
@@ -72,14 +73,12 @@ class ApplicantProfileController extends Controller
             'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
         if ($request->hasFile('upload_pwd_card')) {
-            $file = $request->file('upload_pwd_card');
-            $filepath = $file->store('upload_pwd_card', 'public');
-            $validateInformation['upload_pwd_card'] = $filepath;
+            $url = $supabase->upload($request->file('upload_pwd_card'), 'upload_pwd_card');
+            $validateInformation['upload_pwd_card'] = $url;
         }
         if ($request->hasFile('profilePicture')) {
-            $file = $request->file('profilePicture');
-            $filepath = $file->store('profilePicture', 'public');
-            $validateInformation['profilePicture'] = $filepath;
+            $url = $supabase->upload($request->file('profilePicture'), 'profilePicture');
+            $validateInformation['profilePicture'] = $url;
         }
 
         try {

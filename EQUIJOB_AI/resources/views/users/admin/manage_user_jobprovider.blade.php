@@ -61,69 +61,79 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 </form>
             </div>
 
-            <div class="overflow-x-auto bg-white shadow rounded-lg">
-                <table class="min-w-full text-sm text-center">
-                    <thead class="bg-gray-100 font-semibold">
-                        <tr>
-                            <th class="px-4 py-3">#</th>
-                            <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
-                            <th class="px-4 py-3">First Name {!! sortArrow('firstName')!!}</th>
-                            <th class="px-4 py-3">Last Name {!! sortArrow('lastName')!!}</th>
-                            <th class="px-4 py-3">Email {!! sortArrow('email')!!}</th>
-                            <th class="px-4 py-3">Company {!! sortArrow('companyName')!!}</th>
-                            <th class="px-4 py-3">Company Logo</th>
-                            <th class="px-4 py-3">Profile Picture</th>
-                            <th class="px-4 py-3">Status</th>
-                            <th class="px-4 py-3">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach ($users as $user)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $users->firstItem() + $loop->index }}</td>
-                            <td class="px-4 py-3">{{ $user->userID }}</td>
-                            <td class="px-4 py-3">{{ $user->firstName }}</td>
-                            <td class="px-4 py-3">{{ $user->lastName }}</td>
-                            <td class="px-4 py-3">{{ $user->email }}</td>
-                            <td class="px-4 py-3">{{ $user->companyName }}</td>
-                            <td class="px-4 py-3">
-                                @if ($user->companyLogo)
-                                <img src="{{ asset('storage/' . $user->companyLogo) }}" alt="Company Logo" class="w-[30px] h-[30px] object-cover">
-                                @else
-                                No Logo
-                                @endif
-                            </td>
-                            <td class="px-2 py-2">
-                                @if ($user->profilePicture)
-                                <img src="{{ asset('storage/' . $user->profilePicture) }}" class="w-8 h-8 object-cover mx-auto">
-                                @else No Picture @endif
-                            </td>
-                            <td class="px-4 py-3">{{ $user->status }}</td>
-                            <td class="px-4 py-3 space-y-1">
-                                <button type="button"
-                                    onclick="openProfileModal(this)"
-                                    data-user='@json($user)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+            <table class="min-w-full text-sm text-center">
+                <thead class="bg-gray-100 font-semibold">
+                    <tr>
+                        <th class="px-4 py-3">#</th>
+                        <th class="px-4 py-3">User Id {!! sortArrow('userID')!!}</th>
+                        <th class="px-4 py-3">First Name {!! sortArrow('firstName')!!}</th>
+                        <th class="px-4 py-3">Last Name {!! sortArrow('lastName')!!}</th>
+                        <th class="px-4 py-3">Email {!! sortArrow('email')!!}</th>
+                        <th class="px-4 py-3">Company {!! sortArrow('companyName')!!}</th>
+                        <th class="px-4 py-3">Company Logo</th>
+                        <th class="px-4 py-3">Profile Picture</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach ($users as $user)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3">{{ $users->firstItem() + $loop->index }}</td>
+                        <td class="px-4 py-3">{{ $user->userID }}</td>
+                        <td class="px-4 py-3">{{ $user->firstName }}</td>
+                        <td class="px-4 py-3">{{ $user->lastName }}</td>
+                        <td class="px-4 py-3">{{ $user->email }}</td>
+                        <td class="px-4 py-3">{{ $user->companyName }}</td>
+                        <td class="px-4 py-3">
+                            @if ($user->companyLogo)
+                            @php
+                            $logoUrl = Str::startsWith($user->companyLogo, 'http')
+                            ? $user->companyLogo
+                            : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}";
+                            @endphp
+                            <img src="{{ $logoUrl }}" alt="Company Logo" class="w-[30px] h-[30px] object-cover rounded">
+                            @else
+                            No Logo
+                            @endif
+                        </td>
+                        <td class="px-2 py-2">
+                            @if ($user->profilePicture)
+                            @php
+                            $profileUrl = Str::startsWith($user->profilePicture, 'http')
+                            ? $user->profilePicture
+                            : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}";
+                            @endphp
+                            <img src="{{$profileUrl}}" class="w-8 h-8 object-cover mx-auto">
+                            @else No Picture 
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">{{ $user->status }}</td>
+                        <td class="px-4 py-3 space-y-1">
+                            <button type="button"
+                                onclick="openProfileModal(this)"
+                                data-user='@json($user)'
+                                class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
 
-                                @if($user->status === 'Inactive')
-                                <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
-                                </form>
-                                @endif
-                                <button onclick="openDeleteModal('{{route('admin-manage-user-job-providers-delete', $user->id)}}')"
-                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="mt-4 flex justify-center">
-                    {!! $users->links('pagination::tailwind') !!}
-                </div>
+                            @if($user->status === 'Inactive')
+                            <form action="{{ route('admin-manage-user-Job-Providers-accept', $user->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">Accept</button>
+                            </form>
+                            @endif
+                            <button onclick="openDeleteModal('{{route('admin-manage-user-job-providers-delete', $user->id)}}')"
+                                class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <div class="mt-4 flex justify-center">
+                {!! $users->links('pagination::tailwind') !!}
             </div>
-        </main>
+    </div>
+    </main>
     </div>
 
     <div id="viewProfileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
@@ -173,6 +183,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
         </div>
     </div>
 </body>
-<script src="{{ asset('assets/admin/manage_users/js/manage_user_jobprovider.js') }}" defer></script>
+<script src="{{ asset('assets/admin/manage_users/js/manage_user_jobprovider.js') }}"></script>
 
 </html>

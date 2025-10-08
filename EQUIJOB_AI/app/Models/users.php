@@ -82,6 +82,7 @@ class users extends Authenticatable
         'role',
         'status',
         'companyName',
+        'companyAddress',
         'companyLogo',
         'businessPermit', 
         'userID'

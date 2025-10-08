@@ -91,7 +91,12 @@
 
     @if($user->role == 'Applicant')
     <a href="{{ route('applicant-profile') }}" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]">
-      <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
+      @php
+        $profileUrl = Str::startsWith($user->profilePicture, 'http')
+        ? $user->profilePicture
+        : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
+      @endphp
+      <img src="{{ $profileUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
       <div class="text-xs font-medium">
         <div class="text-[11px]">{{ $user->firstName }} {{ $user->lastName }}</div>
         <div class="text-[12px] text-gray-600">{{ $user->role }}</div>

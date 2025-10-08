@@ -71,7 +71,7 @@ class SignInController extends Controller
             return redirect()->back()->with('error', 'An error occurred while creating the user: ' . $e->getMessage());
         }
     }
-    public function SignUpJobProvider(Request $request)
+    public function SignUpJobProvider(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
             'firstName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
@@ -80,6 +80,7 @@ class SignInController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'phoneNumber' => 'required|string|max:15',
             'companyName' => 'required|string|max:255|',
+            'companyAddress' => 'required|string|max:100',
             'companyLogo' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'businessPermit' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
@@ -87,14 +88,12 @@ class SignInController extends Controller
         ]);
         try {
             if ($request->hasFile('companyLogo')) {
-                $file = $request->file('companyLogo');
-                $filepath = $file->store('companyLogo', 'public');
-                $validateInformation['companyLogo'] = $filepath;
+                $url = $supabase->upload($request->file('companyLogo'), 'companyLogo');
+                $validateInformation['companyLogo'] = $url;
             }
             if ($request->hasFile('businessPermit')) {
-                $file = $request->file('businessPermit');
-                $filepath = $file->store('businessPermit', 'public');
-                $validateInformation['businessPermit'] = $filepath;
+                $url = $supabase->upload($request->file('businessPermit'), 'businessPermit');
+                $validateInformation['businessPermit'] = $url;
             }
             $validateInformation['role'] = $validateInformation['role'] ?? 'Job Provider';
             $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';

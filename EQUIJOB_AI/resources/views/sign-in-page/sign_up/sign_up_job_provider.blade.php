@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Provider Sign Up</title>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="{{ asset('assets/sign-up/js/sign_up_job_provider.js') }}" defer></script>
 </head>
@@ -70,46 +70,54 @@
             @enderror
           </div>
           <div>
-            <label class="block mb-2 text-gray-600 text-sm font-medium">Company</label>
+            <label class="block mb-2 text-gray-600 text-sm font-medium">Company Name</label>
             <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Name" id="companyName" name="companyName" value="{{ old('companyName') }}" required>
             @error('companyName')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
-        </div>
-        <div>
-          <label class="block mb-2 text-gray-600 text-sm font-medium">Company Logo</label>
-          <div class="flex flex-col">
-            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="companyLogo" name="companyLogo" accept="image/*" required>
-            @error('companyLogo')
+          <div>
+            <label class="block mb-2 text-gray-600 text-sm font-medium">Company Address</label>
+            <input type="text" class="w-full rounded-xl border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Company Address" id="companyAddress" name="companyAddress" value="{{ old('companyAddress') }}" required>
+            @error('companyAddress')
             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
           </div>
-        </div>
-        <div>
-          <label class="block mb-2 text-gray-600 text-sm font-medium">Business Permit</label>
-          <div class="flex flex-col">
-            <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="businessPermit" name="businessPermit" accept="image/*, application/pdf " required>
-            @error('businessPermit')
-            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-            @enderror
+          <div>
+            <label class="block mb-2 text-gray-600 text-sm font-medium">Company Logo</label>
+            <div class="flex flex-col">
+              <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="companyLogo" name="companyLogo" accept="image/*" required>
+              @error('companyLogo')
+              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
+            </div>
           </div>
-        </div>
-        <div class="md:col-span-2 text-sm text-gray-600">
-          <input type="checkbox" id="checkAgree" onchange="checkAgreement()"> By signing up, you agree to our <a href="" onclick="openAgreementModal(); return false;" class="text-blue-600 underline">Terms and Conditions and Privacy Policy</a>.
-        </div>
-        <div class="flex flex-col gap-4 pt-6">
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition" id="sign_up_button">
-            Sign Up
-          </button>
-          <a href="{{ route('sign-in') }}" class="w-full text-center bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
-            Back to Login
-          </a>
+          <div>
+            <label class="block mb-2 text-gray-600 text-sm font-medium">Business Permit</label>
+            <div class="flex flex-col">
+              <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="businessPermit" name="businessPermit" accept="image/*, application/pdf " required>
+              @error('businessPermit')
+              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
+          <div class="md:col-span-2 text-sm text-gray-600">
+            <input type="checkbox" id="checkAgree" onchange="checkAgreement()"> By signing up, you agree to our <a href="" onclick="openAgreementModal(); return false;" class="text-blue-600 underline">Terms and Conditions and Privacy Policy</a>.
+          </div>
+          <div class="flex flex-col gap-4 pt-6">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition" id="sign_up_button">
+              Sign Up
+            </button>
+            <a href="{{ route('sign-in') }}" class="w-full text-center bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
+              Back to Login
+            </a>
+          </div>
         </div>
       </form>
-
     </div>
   </div>
+  <x-footer />
+
   <!--Agreement modal-->
   <div id="agreementModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-10 space-y-10">
@@ -151,7 +159,7 @@
         </p>
       </div>
     </div>
-    <x-footer />
+  </div>
 
 </body>
 

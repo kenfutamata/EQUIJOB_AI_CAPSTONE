@@ -37,7 +37,12 @@
             <div class="max-w-5xl mx-auto">
 
                 <div class="flex flex-col items-center mb-8">
-                    <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                    @php
+                    $profileUrl = Str::startsWith($user->profilePicture, 'http')
+                    ? $user->profilePicture
+                    : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
+                    @endphp
+                    <img src="{{ $profileUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                         alt="Profile Picture"
                         class="rounded-md w-[200px] h-[200px] object-cover mb-4 shadow-md">
                 </div>

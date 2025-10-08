@@ -122,7 +122,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $user->typeOfDisability }}</td>
                             <td class="px-2 py-2">
                                 @if ($user->profilePicture)
-                                <img src="{{ asset('storage/' . $user->profilePicture) }}" class="w-8 h-8 object-cover mx-auto">
+                                @php
+                                $profileUrl = Str::startsWith($user->profilePicture, 'http')
+                                ? $user->profilePicture
+                                : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}";
+                                @endphp
+                                <img src="{{$profileUrl}}" class="w-8 h-8 object-cover mx-auto">
                                 @else No Picture @endif
                             </td>
                             <td class="px-2 py-2">{{ $user->role }}</td>

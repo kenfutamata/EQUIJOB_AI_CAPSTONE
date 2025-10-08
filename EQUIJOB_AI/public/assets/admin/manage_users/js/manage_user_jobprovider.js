@@ -1,17 +1,19 @@
-function openProfileModal(button) {
+const SUPABASE_BASE_URL = "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage";
+
+window.openProfileModal = function (button) {
     const user = JSON.parse(button.getAttribute('data-user'));
     document.getElementById('modal_firstName').value = user.firstName;
     document.getElementById('modal_lastName').value = user.lastName;
     document.getElementById('modal_email').value = user.email;
     document.getElementById('modal_phoneNumber').value = user.phoneNumber;
     document.getElementById('modal_companyName').value = user.companyName;
+
     const permitContainer = document.getElementById('modal_businessPermit_container');
     permitContainer.innerHTML = '';
 
     if (user.businessPermit) {
-        const fileExtension = user.businessPermit.split('.').pop().toLowerCase();
-        const filePath = `/storage/${user.businessPermit}`;
-
+        const filePath = user.businessPermit.startsWith('http') ? user.businessPermit : `${SUPABASE_BASE_URL}/businessPermit/${user.businessPermit}`;
+        const fileExtension = filePath.split('.').pop().toLowerCase();
         if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
             permitContainer.innerHTML = `<img src="${filePath}" class="w-[100px] h-[100px] object-cover" />`;
         } else if (fileExtension === 'pdf') {
@@ -20,45 +22,40 @@ function openProfileModal(button) {
             permitContainer.innerText = 'Unsupported file format';
         }
     }
+
     const profilePicture = document.getElementById('modal_profilePicture');
-    if(user.profilePicture){
-        profilePicture.src = `/storage/${user.profilePicture}`;
-        profilePicture.style.display = 'block';
-    }else{
-        profilePicture.style.display = 'none';
-    }
+    profilePicture.src = user.profilePicture? `${SUPABASE_BASE_URL}/${user.profilePicture}`: '';
+    profilePicture.style.display = user.profilePicture ? 'block' : 'none';
+
+    const logo = document.getElementById('modal_companyLogo');
+    logo.src = user.companyLogo ? user.companyLogo : '';
+    logo.style.display = user.companyLogo ? 'block' : 'none';
+
     document.getElementById('modal_role').value = user.role;
     document.getElementById('modal_status').value = user.status;
 
-    const logo = document.getElementById('modal_companyLogo');
-    if (user.companyLogo) {
-        logo.src = `/storage/${user.companyLogo}`;
-        logo.style.display = 'block';
-    } else {
-        logo.style.display = 'none';
-    }
-
     document.getElementById('viewProfileModal').classList.remove('hidden');
-}
+};
 
-function closeModal() {
+window.closeModal = function () {
     document.getElementById('viewProfileModal').classList.add('hidden');
-}
+};
 
-function openDeleteModal(url) {
+window.openDeleteModal = function (url) {
     const form = document.getElementById('deleteuser');
     form.action = url;
     document.getElementById('DeleteRoleModal').classList.remove('hidden');
-}
+};
 
-function closeDeleteModal() {
+window.closeDeleteModal = function () {
     document.getElementById('DeleteRoleModal').classList.add('hidden');
-}
+};
 
 setTimeout(() => {
     const notif = document.getElementById('notification-bar');
     if (notif) notif.style.opacity = '0';
 }, 2500);
+
 setTimeout(() => {
     const notif = document.getElementById('notification-bar');
     if (notif) notif.style.display = 'none';
