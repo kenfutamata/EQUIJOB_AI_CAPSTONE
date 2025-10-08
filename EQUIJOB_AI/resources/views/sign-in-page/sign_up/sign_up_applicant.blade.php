@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Applicant Sign Up</title>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
   <script src="{{ asset('assets/sign-up/js/sign_up_applicant.js') }}" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -96,12 +96,18 @@
           <label class="text-stone-500 text-base mb-1">Type of Disability</label>
           <select class="h-14 px-4 rounded-xl border border-stone-300" id="typeOfDisability" name="typeOfDisability" required>
             <option selected disabled>Select Disability Type</option>
-            <option>Physical</option>
-            <option>Visual</option>
-            <option>Hearing</option>
-            <option>Intellectual</option>
+            <option value="Deaf or Hard of Hearing">Deaf or Hard of Hearing</option>
+            <option value="Intellectual Disability">Intellectual Disability</option>
+            <option value="Learning Disability">Learning Disability</option>
+            <option value="Mental Disability">Mental Disability</option>
+            <option value="Physical Disability (Orthopedic)">Physical Disability (Orthopedic)</option>
+            <option value="Psychosocial Disability">Psychosocial Disability</option>
+            <option value="Speech and Language Impairment">Speech and Language Impairment</option>
+            <option value="Visual Disability">Visual Disability</option>
+            <option value="Cancer (RA11215)">Cancer (RA11215)</option>
+            <option value="Rare Disease (RA10747)">Rare Disease (RA10747)</option>
           </select>
-          @error('disability_type')
+          @error('disabilityType')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -119,7 +125,7 @@
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">Confirm Password</label>
           <input type="password" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="Confirm Password" id="password_confirmation" name="password_confirmation" required>
-          @error('password_confirmation')
+          @error('passwordConfirmation')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
@@ -127,7 +133,7 @@
         <!-- PWD ID -->
         <div class="flex flex-col">
           <label class="text-stone-500 text-base mb-1">PWD ID</label>
-          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID format: 123-456-789" id="pwdId" name="pwdId" pattern="\d{3}-\d{3}-\d{3}" required>
+          <input type="text" class="h-14 px-4 rounded-xl border border-stone-300" placeholder="PWD ID format: 13-5416-000-0000123" id="pwdId" name="pwdId" pattern="\d{2}-\d{4}-\d{3}-\d{7}" required>
           @error('pwdId')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
@@ -157,10 +163,11 @@
       </form>
     </div>
   </div>
+  <x-footer />
 
 
   <!--Agreement modal-->
-  <div id="agreementModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+  <div id="agreementModal" role="dialog" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-10 space-y-10">
       <div class="flex justify-between items-center">
         <h3 class="text-xl font-semibold">Terms & Conditions</h3>
@@ -200,8 +207,6 @@
         </p>
       </div>
     </div>
-      <x-footer />
-
 </body>
 
 </html>

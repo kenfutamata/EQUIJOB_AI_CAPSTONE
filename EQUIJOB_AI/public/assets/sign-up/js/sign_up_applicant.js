@@ -1,4 +1,4 @@
-bfunction openAgreementModal(){
+function openAgreementModal(){
     document.getElementById('agreementModal').classList.remove('hidden');
 }
 

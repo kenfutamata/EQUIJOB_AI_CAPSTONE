@@ -193,10 +193,17 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <div>
                     <label class="block text-xs text-gray-500">Disability Type</label>
                     <select name="disabilityType" class="w-full border rounded px-2 py-1" required>
-                        <option value="Physical">Physical</option>
-                        <option value="Visual">Visual</option>
-                        <option value="Hearing">Hearing</option>
-                        <option value="Intellectual">Intellectual</option>
+  <option selected disabled>Select Disability Type</option>
+                            <option value="Deaf or Hard of Hearing">Deaf or Hard of Hearing</option>
+                            <option value="Intellectual Disability">Intellectual Disability</option>
+                            <option value="Learning Disability">Learning Disability</option>
+                            <option value="Mental Disability">Mental Disability</option>
+                            <option value="Physical Disability (Orthopedic)">Physical Disability (Orthopedic)</option>
+                            <option value="Psychosocial Disability">Psychosocial Disability</option>
+                            <option value="Speech and Language Impairment">Speech and Language Impairment</option>
+                            <option value="Visual Disability">Visual Disability</option>
+                            <option value="Cancer (RA11215)">Cancer (RA11215)</option>
+                            <option value="Rare Disease (RA10747)">Rare Disease (RA10747)</option>
                     </select>
                     @error('disabilityType')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>

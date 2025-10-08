@@ -9,10 +9,10 @@ function openProfileModal(button) {
     document.getElementById('modal_pwdId').value = user.pwdId;
     document.getElementById('typeOfDisability').value = user.typeOfDisability;
     const pwdCardImg = document.getElementById('modal_pwd_card');
-    pwdCardImg.src = user.upload_pwd_card ? `/storage/${user.upload_pwd_card}` : '';
+    pwdCardImg.src = user.upload_pwd_card ? user.upload_pwd_card : '';
     pwdCardImg.style.display = user.upload_pwd_card ? 'block' : 'none';
     const profilePictureImg = document.getElementById('modal_profilePicture');
-    profilePictureImg.src = user.profilePicture ? `/storage/${user.profilePicture}` : '';
+    profilePictureImg.src = user.profilePicture ? user.profilePicture : '';
     profilePictureImg.style.display = user.profilePicture ? 'block' : 'none';
     document.getElementById('modal_role').value = user.role;
     document.getElementById('modal_status').value = user.status;
@@ -33,7 +33,7 @@ function closeDeleteModal() {
     document.getElementById('DeleteRoleModal').classList.add('hidden');
 }
 
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     const modal = document.getElementById('viewProfileModal');
     if (e.target === modal) closeModal();
 });

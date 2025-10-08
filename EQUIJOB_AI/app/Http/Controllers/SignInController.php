@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\users;
+use App\Services\SupabaseStorageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,7 @@ class SignInController extends Controller
         $next = $number + 1;
         return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
     }
-    public function SignUpJobApplicant(Request $request)
+    public function SignUpJobApplicant(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation =  $request->validate([
             'firstName' => 'required|string|max:255|regex:/^[A-Za-z\s]+$/',
@@ -49,16 +50,15 @@ class SignInController extends Controller
             'dateOfBirth' => 'required|date|before_or_equal:today',
             'address' => 'required|string|max:255',
             'gender' => 'required|string|max:255|',
-            'typeOfDisability' => 'required|string|max:255',
-            'pwdId' => 'nullable|string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
+            'typeOfDisability' => 'required|string|max:255', 
+            'pwdId' => 'nullable|string|max:19|regex:/^\d{2}-\d{4}-\d{3}-\d{7}$/',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'role' => 'nullable|string',
             'status' => 'nullable|string',
         ]);
         if ($request->hasFile('upload_pwd_card')) {
-            $file = $request->file('upload_pwd_card');
-            $filepath = $file->store('upload_pwd_card', 'public');
-            $validateInformation['upload_pwd_card'] = $filepath;
+            $url = $supabase->upload($request->file('upload_pwd_card'), 'upload_pwd_card');
+            $validateInformation['upload_pwd_card'] = $url;
         }
         $validateInformation['role'] = $validateInformation['role'] ?? 'Applicant';
         $validateInformation['status'] = $validateInformation['status'] ?? 'Inactive';

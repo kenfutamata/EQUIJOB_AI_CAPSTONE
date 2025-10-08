@@ -144,7 +144,7 @@
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
                         <input type="text" name="pwdId" value="{{ $user->pwdId }}"
-                            pattern="\d{3}-\d{3}-\d{3}" class="w-full border rounded-md px-4 py-2 text-sm" />
+                            pattern="\d{2}-\d{4}-\d{3}-\d{7}" class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Upload PWD Card</label>
@@ -155,12 +155,17 @@
                         <label class="block text-sm text-gray-600 mb-1">Disability Type</label>
                         <select class="w-full border rounded-md px-4 py-2 text-sm" id="typeOfDisability"
                             name="typeOfDisability">
-                            <option value="{{ $user->typeOfDisability }}">{{ $user->typeOfDisability }}</option>
-                            <option disabled>Select Disability Type</option>
-                            <option>Physical</option>
-                            <option>Visual</option>
-                            <option>Hearing</option>
-                            <option>Intellectual</option>
+                            <option selected disabled>Select Disability Type</option>
+                            <option value="Deaf or Hard of Hearing">Deaf or Hard of Hearing</option>
+                            <option value="Intellectual Disability">Intellectual Disability</option>
+                            <option value="Learning Disability">Learning Disability</option>
+                            <option value="Mental Disability">Mental Disability</option>
+                            <option value="Physical Disability (Orthopedic)">Physical Disability (Orthopedic)</option>
+                            <option value="Psychosocial Disability">Psychosocial Disability</option>
+                            <option value="Speech and Language Impairment">Speech and Language Impairment</option>
+                            <option value="Visual Disability">Visual Disability</option>
+                            <option value="Cancer (RA11215)">Cancer (RA11215)</option>
+                            <option value="Rare Disease (RA10747)">Rare Disease (RA10747)</option>
                         </select>
                     </div>
                     <div>

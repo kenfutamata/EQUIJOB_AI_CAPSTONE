@@ -67,7 +67,7 @@ class ApplicantProfileController extends Controller
             'dateOfBirth' => 'date|before_or_equal:today',
             'address' => 'string|max:255',
             'typeOfDisability' => 'string|max:255',
-            'pwdId' => 'string|max:12|regex:/^\d{3}-\d{3}-\d{3}$/',
+            'pwdId' => 'string|max:19|regex:/^\d{2}-\d{4}-\d{3}-\d{7}$/',
             'upload_pwd_card' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
             'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
         ]);
