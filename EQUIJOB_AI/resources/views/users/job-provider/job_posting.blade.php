@@ -163,6 +163,13 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     @enderror
                 </div>
                 <div>
+                    <label class="block text-xs text-gray-500">Company Address</label>
+                    <input name="companyAddress" class="w-full border rounded px-2 py-1" value="{{$user->companyAddress}}" readonly>
+                    @error('companyName')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
                     <label class="block text-xs text-gray-500">Sex</label>
                     <select name="sex" class="w-full border rounded px-2 py-1">
                         <option value="Any">Any</option>
@@ -176,12 +183,27 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <div>
                     <label class="block text-xs text-gray-500">Company Logo</label>
                     @if($user->companyLogo)
-                    <img src="{{ asset('storage/' . $user->companyLogo) }}" alt="Company Logo" class="w-16 h-16 object-cover border rounded mb-2" id="companyLogo" name="companyLogo" style="display: block;">
-                    <span id="companyLogoFilename">{{ $user->companyLogo ? basename($user->companyLogo) : 'No file chosen' }}</span>
-                    @endif
-                    @error('companyLogo')
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                    @enderror
+                    @php
+                    // If your Supabase storage public bucket base URL looks like:
+                    // https://<your-project-id>.supabase.co/storage/v1/object/public/company-logos/
+                        $supabaseBaseUrl = 'https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}';
+                        $logoUrl = Str::startsWith($user->companyLogo, 'http')
+                        ? $user->companyLogo
+                        : $supabaseBaseUrl . ltrim($user->companyLogo, '/');
+                        @endphp
+
+                        <img src="{{ $logoUrl }}" alt="Company Logo"
+                            class="w-16 h-16 object-cover border rounded mb-2"
+                            id="companyLogo"
+                            name="companyLogo">
+                        <span id="companyLogoFilename">{{ basename($user->companyLogo) }}</span>
+                        @else
+                        <p class="text-gray-400 text-sm">No company logo uploaded</p>
+                        @endif
+
+                        @error('companyLogo')
+                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">age</label>
@@ -193,17 +215,17 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <div>
                     <label class="block text-xs text-gray-500">Disability Type</label>
                     <select name="disabilityType" class="w-full border rounded px-2 py-1" required>
-  <option selected disabled>Select Disability Type</option>
-                            <option value="Deaf or Hard of Hearing">Deaf or Hard of Hearing</option>
-                            <option value="Intellectual Disability">Intellectual Disability</option>
-                            <option value="Learning Disability">Learning Disability</option>
-                            <option value="Mental Disability">Mental Disability</option>
-                            <option value="Physical Disability (Orthopedic)">Physical Disability (Orthopedic)</option>
-                            <option value="Psychosocial Disability">Psychosocial Disability</option>
-                            <option value="Speech and Language Impairment">Speech and Language Impairment</option>
-                            <option value="Visual Disability">Visual Disability</option>
-                            <option value="Cancer (RA11215)">Cancer (RA11215)</option>
-                            <option value="Rare Disease (RA10747)">Rare Disease (RA10747)</option>
+                        <option selected disabled>Select Disability Type</option>
+                        <option value="Deaf or Hard of Hearing">Deaf or Hard of Hearing</option>
+                        <option value="Intellectual Disability">Intellectual Disability</option>
+                        <option value="Learning Disability">Learning Disability</option>
+                        <option value="Mental Disability">Mental Disability</option>
+                        <option value="Physical Disability (Orthopedic)">Physical Disability (Orthopedic)</option>
+                        <option value="Psychosocial Disability">Psychosocial Disability</option>
+                        <option value="Speech and Language Impairment">Speech and Language Impairment</option>
+                        <option value="Visual Disability">Visual Disability</option>
+                        <option value="Cancer (RA11215)">Cancer (RA11215)</option>
+                        <option value="Rare Disease (RA10747)">Rare Disease (RA10747)</option>
                     </select>
                     @error('disabilityType')
                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>

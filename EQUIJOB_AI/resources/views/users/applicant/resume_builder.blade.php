@@ -108,7 +108,7 @@
                             </div>
                             <div>
                                 <label for="dob" class="block text-lg">Date of Birth</label>
-                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" readonly/>
+                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" readonly />
                             </div>
                             <div>
                                 <label for="address" class="block text-lg">Address</label>
@@ -120,18 +120,25 @@
                             </div>
                             <div>
                                 <label for="phone" class="block text-lg">Phone Number</label>
-                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" readonly/>
+                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" readonly />
                             </div>
+                            
+                            {{-- *** THIS IS THE UPDATED BLOCK *** --}}
                             <div>
                                 <label for="disability_type" class="block text-lg">Disability Type</label>
                                 <select id="typeOfDisability" name="resume[typeOfDisability]" class="w-full border border-black bg-gray-300 h-11 px-3">
                                     <option value="" disabled {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
-                                    <option value="Physical" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Physical' ? 'selected' : '' }}>Physical</option>
-                                    <option value="Visual" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Visual' ? 'selected' : '' }}>Visual</option>
-                                    <option value="Hearing" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Hearing' ? 'selected' : '' }}>Hearing</option>
-                                    <option value="Intellectual" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == 'Intellectual' ? 'selected' : '' }}>Intellectual</option>
+                                    
+                                    @foreach($disabilityTypes as $disability)
+                                        <option value="{{ $disability }}" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == $disability ? 'selected' : '' }}>
+                                            {{ $disability }}
+                                        </option>
+                                    @endforeach
+
                                 </select>
                             </div>
+                            {{-- *** END OF UPDATED BLOCK *** --}}
+                            
                             <div>
                                 <label for="photo" class="block text-lg">Upload a 2x2 Photo</label>
                                 <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" />
@@ -170,7 +177,7 @@
                                     </div>
                                     <div>
                                         <label for="experience_{{$key}}_year" class="block text-lg">Year</label>
-                                        <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}"/>
+                                        <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}" />
                                     </div>
                                     <div class="md:col-span-2">
                                         <label for="experience_{{$key}}_responsibilities" class="block text-lg">Responsibilities/Description</label>
@@ -239,12 +246,20 @@
             </main>
         </div>
     </div>
-<script>
-    const initialCounts = {
-        experience: {{ old('experience') ? count(old('experience')) : 0 }},
-        education: {{ old('educations') ? count(old('educations')) : 0 }}
-    };
-</script>
+    <script>
+        const initialCounts = {
+            experience: {
+                {
+                    old('experience') ? count(old('experience')) : 0
+                }
+            },
+            education: {
+                {
+                    old('educations') ? count(old('educations')) : 0
+                }
+            }
+        };
+    </script>
 
 
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>

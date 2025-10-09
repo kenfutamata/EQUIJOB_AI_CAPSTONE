@@ -47,17 +47,13 @@ function openViewJobPostingModal(button) {
     document.getElementById('modal.companyName').value = jobposting.companyName;
     document.getElementById('modal.sex').value = jobposting.sex;
     const companyLogo = document.getElementById('modal.companyLogo');
-    if (jobposting.companyLogo) {
-        companyLogo.src = `/storage/${jobposting.companyLogo}`;
-        companyLogo.style.display = 'block';
-    } else {
-        companyLogo.style.display = 'none';
-    }
+  companyLogo.src = jobposting.companyLogo ? jobposting.companyLogo : '';
+            companyLogo.style.display = jobposting.companyLogo ? 'block' : 'none';
+    document.getElementById('modal.companyAddress').value = jobposting.companyAddress;
     document.getElementById('modal.age').value = jobposting.age;
     document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
     document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;
     document.getElementById('modal.workEnvironment').value = jobposting.workEnvironment;
-    
     document.getElementById('modal.jobPostingObjectives').value = jobposting.jobPostingObjectives;
     document.getElementById('modal.experience').value = jobposting.experience;
     document.getElementById('modal.skills').value = jobposting.skills;

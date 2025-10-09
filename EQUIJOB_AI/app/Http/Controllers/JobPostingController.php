@@ -7,6 +7,7 @@ use App\Models\JobPosting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\JobPostingNotificationSent;
+use App\Services\SupabaseStorageService;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -58,13 +59,14 @@ class JobPostingController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(Request $request, SupabaseStorageService $supabase)
     {
         $user = Auth::guard('job_provider')->user();
 
         $validatedData = $request->validate([
             'position' => 'required|string|max:100',
             'companyName' => 'required|string|max:100',
+            'companyAddress' => 'required|string|max:100',
             'sex' => 'required|string|max:10',
             'age' => 'required|string|max:65',
             'disabilityType' => 'required|string|max:100',
@@ -85,8 +87,12 @@ class JobPostingController extends Controller
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }
-        $validatedData['companyLogo'] = $user->companyLogo;
-
+        if ($request->hasFile('companyLogo')) {
+            $url = $supabase->upload($request->file('companyLogo'), 'companyLogo');
+            $validatedData['companyLogo'] = $url;
+        } else {
+            $validatedData['companyLogo'] = $user->companyLogo;
+        }
         $validatedData['jobProviderID'] = Auth::guard('job_provider')->id();
         $validatedData['status'] = 'Pending';
 

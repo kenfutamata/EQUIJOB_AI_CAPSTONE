@@ -76,6 +76,11 @@
                                         class="w-full border rounded-md px-4 py-2 text-sm" />
                                 </div>
                                 <div>
+                                    <label class="block text-sm text-gray-600 mb-1">Company Address</label>
+                                    <input type="text" value="{{ $user->companyAddress }}" readonly
+                                        class="w-full border rounded-md px-4 py-2 text-sm" />
+                                </div>
+                                <div>
                                     <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
                                     @php
                                     $logoUrl = Str::startsWith($user->companyLogo, 'http')
@@ -140,6 +145,11 @@
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
+                            <label class="block text-sm text-gray-600 mb-1">Company Address</label>
+                            <input type="text" name="companyAddress" value="{{ $user->companyAddress }}"
+                                class="w-full border rounded-md px-4 py-2 text-sm" />
+                        </div>
+                        <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Company Logo</label>
                             <input type="file" name="companyLogo"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
@@ -171,17 +181,17 @@
 
             const businessPermitContainer = document.getElementById('view_businessPermit');
             businessPermitContainer.innerHTML = '';
-            if(userData.businessPermit){
+            if (userData.businessPermit) {
                 const filePath = userData.businessPermit.startsWith('http') ? userData.businessPermit : `${SUPABASE_BASE_URL}/${userData.businessPermit}`;
                 const fileExtension = filePath.split('.').pop().toLowerCase();
-                if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)){
+                if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
                     businessPermitContainer.innerHTML = `<img src="${filePath}" alt="Business Permit" class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">`;
-                } else if (fileExtension === 'pdf'){
+                } else if (fileExtension === 'pdf') {
                     businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 hover:underline">View Business Permit (PDF)</a>`;
-                }else{
+                } else {
                     businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 hover:underline">Download Business Permit</a>`;
                 }
-                
+
             }
 
             function openModal() {

@@ -45,12 +45,8 @@
             document.getElementById('modal.salaryRange').value = jobposting.salaryRange || 'No Salary Range provided';
             document.getElementById('modal.remarks').value = jobposting.remarks || 'N/A';
             const companyLogo = document.getElementById('modal.companyLogo');
-            if (jobposting.companyLogo) {
-                companyLogo.src = `/storage/${jobposting.companyLogo}`;
-                companyLogo.style.display = 'block';
-            } else {
-                companyLogo.style.display = 'none';
-            }
+            companyLogo.src = jobposting.companyLogo ? jobposting.companyLogo : '';
+            companyLogo.style.display = jobposting.companyLogo ? 'block' : 'none';
             document.getElementById('viewJobPostingModal').classList.remove('hidden');
         }
 
