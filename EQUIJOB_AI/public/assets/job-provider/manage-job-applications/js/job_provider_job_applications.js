@@ -1,3 +1,4 @@
+const SUPABASE_BASE_URL = "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage";
 document.addEventListener('DOMContentLoaded', function () {
 
     window.openViewJobApplicationsModal = function (button) {
@@ -17,19 +18,35 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-interviewLink').innerHTML = data.interviewLink ? `<a href="${data.interviewLink}" target="_blank" class="text-blue-600 hover:underline">Join Meeting</a>` : 'No link provided';
         document.getElementById('modal-remarks').textContent = data.remarks || 'No remarks.';
         const profileImg = document.getElementById('modal-applicantProfile');
-        if (data.profilePicture) {
-            profileImg.src = `/storage/${data.profilePicture}`;
-        } else {
-            profileImg.src = `/assets/applicant/applicant-dashboard/profile_pic.png`;
-            profileImg.style.display = 'block';
+        profileImg.src = data.profilePicture ? data.profilePicture : '';
+        profileImg.style.display = data.profilePicture ? 'block' : 'none';
+        const applicationContainer = document.getElementById('modal_view_application_letter');
+        applicationContainer.innerHTML = '';
+        if(data.uploadApplicationLetter){
+            const filePath = data.uploadApplicationLetter.startsWith('http') ? data.uploadApplicationLetter : `${SUPABASE_BASE_URL}/uploadApplicationLetter/${data.uploadApplicationLetter}`;
+            const fileExtension = filePath.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
+                applicationContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Application Letter Preview"/></a>`;
+            } else if (fileExtension === 'pdf') {
+                applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
+            } else {
+                applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">Download Application Letter</a>`;
+            }
         }
-
+        
         const resumeContainer = document.getElementById('modal_view_resume');
-        resumeContainer.innerHTML = data.uploadResume ? `<a href="/storage/${data.uploadResume}" target="_blank" class="text-blue-600 hover:underline">View Resume</a>` : '<span>Not provided</span>';
-
-        const letterContainer = document.getElementById('modal_view_application_letter');
-        letterContainer.innerHTML = data.uploadApplicationLetter ? `<a href="/storage/${data.uploadApplicationLetter}" target="_blank" class="text-blue-600 hover:underline">View Letter</a>` : '<span>Not provided</span>';
-
+        resumeContainer.innerHTML = '';
+        if(data.uploadApplicationLetter){
+            const filePath = data.uploadResume.startsWith('http') ? data.uploadResume : `${SUPABASE_BASE_URL}/uploadResume/${data.uploadResume}`;
+            const fileExtension = filePath.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
+                resumeContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Resume Preview"/></a>`;
+            } else if (fileExtension === 'pdf') {
+                resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
+            } else {
+                resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">Download Resume</a>`;
+            }
+        }
         modal.classList.remove('hidden');
     };
 

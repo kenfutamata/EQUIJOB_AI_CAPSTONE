@@ -1,3 +1,5 @@
+const SUPABASE_BASE_URL = "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage";
+
 document.addEventListener('DOMContentLoaded', function () {
     const notificationBar = document.getElementById('notification-bar');
     if (notificationBar) {
@@ -29,15 +31,8 @@ function openViewJobApplicationModal(button) {
 
     const fullName = `${applicationData.firstName || ''} ${applicationData.lastName || ''}`.trim();
     const profilePictureImg = document.getElementById('modal.applicantProfile');
-    if (applicationData.profilePicture) {
-        profilePictureImg.src = `/storage/${applicationData.profilePicture}`;
-        profilePictureImg.style.display = 'block';
-        document.getElementById('modal.applicantInitial').style.display = 'none';
-    } else {
-        profilePictureImg.src = `/assets/applicant/applicant-dashboard/profile_pic.png`;
-        profilePictureImg.style.display = 'block';
-        document.getElementById('modal.applicantInitial').style.display = 'none';
-    }
+    profilePictureImg.src = applicationData.profilePicture ? applicationData.profilePicture : '';
+    profilePictureImg.style.display = applicationData.profilePicture ? 'block' : 'none';
 
     document.getElementById('modal.applicantName').textContent = fullName || 'N/A';
     document.getElementById('modal.position').textContent = applicationData.position ?? 'N/A';
@@ -53,34 +48,30 @@ function openViewJobApplicationModal(button) {
 
     const resumeContainer = document.getElementById('modal_view_resume');
     resumeContainer.innerHTML = '';
-    if (applicationData.uploadResume) {
-        const filePath = `/storage/${applicationData.uploadResume}`;
-        const ext = applicationData.uploadResume.split('.').pop().toLowerCase();
-        if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+    if(applicationData.uploadResume){
+        const filePath = applicationData.uploadResume.startsWith('http') ? applicationData.uploadResume : `${SUPABASE_BASE_URL}/uploadResume/${applicationData.uploadResume}`;
+        const fileExtension = filePath.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
             resumeContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Resume Preview"/></a>`;
-        } else if (ext === 'pdf') {
+        } else if (fileExtension === 'pdf') {
             resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Resume (PDF)</a>`;
         } else {
             resumeContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">Download Resume</a>`;
         }
-    } else {
-        resumeContainer.innerText = 'No resume uploaded.';
     }
 
     const applicationContainer = document.getElementById('modal_view_application_letter');
     applicationContainer.innerHTML = '';
-    if (applicationData.uploadApplicationLetter) {
-        const filePath = `/storage/${applicationData.uploadApplicationLetter}`;
-        const ext = applicationData.uploadApplicationLetter.split('.').pop().toLowerCase();
-        if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
+    if(applicationData.uploadApplicationLetter){
+        const filePath = applicationData.uploadApplicationLetter.startsWith('http') ? applicationData.uploadApplicationLetter : `${SUPABASE_BASE_URL}/uploadApplicationLetter/${applicationData.uploadApplicationLetter}`;
+        const fileExtension = filePath.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
             applicationContainer.innerHTML = `<a href="${filePath}" target="_blank"><img src="${filePath}" class="w-[100px] h-[100px] object-cover" alt="Application Letter Preview"/></a>`;
-        } else if (ext === 'pdf') {
+        } else if (fileExtension === 'pdf') {
             applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">View Application Letter (PDF)</a>`;
         } else {
             applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">Download Application Letter</a>`;
         }
-    } else {
-        applicationContainer.innerText = 'No Application Letter uploaded.';
     }
 
     document.getElementById('viewJobApplicationModal').classList.remove('hidden');

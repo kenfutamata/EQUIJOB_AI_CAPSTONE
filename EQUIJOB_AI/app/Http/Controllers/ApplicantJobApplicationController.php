@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\users;
 use App\Notifications\JobApplicationSent;
+use App\Services\SupabaseStorageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -37,13 +38,13 @@ class ApplicantJobApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, SupabaseStorageService $supabase)
     {
 
         $validatedRequest = $request->validate([
             'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'jobPostingID' => 'required|exists:jobPosting,id', 
+            'jobPostingID' => 'required|exists:jobPosting,id',
             'jobProviderID' => 'required|exists:users,id',
         ]);
 
@@ -57,13 +58,16 @@ class ApplicantJobApplicationController extends Controller
             if (!$jobProvider) {
                 throw new \Exception('The specified job provider could not be found or does not have the correct role.');
             }
+
+            $resumeUrl = $supabase->upload($request->file('uploadResume'), 'uploadResume');
+            $applicationLetterUrl = $supabase->upload($request->file('uploadApplicationLetter'), 'uploadApplicationLetter');
             $applicationData = [
                 'applicantID' => $applicant->id,
                 'jobPostingID' => $posting->id,
                 'jobApplicationNumber' => $this->generateAlphaNumericId(),
                 'status' => 'Pending',
-                'uploadResume' => $request->file('uploadResume')->store('uploadResume', 'public'),
-                'uploadApplicationLetter' => $request->file('uploadApplicationLetter')->store('uploadApplicationLetter', 'public'),
+                'uploadResume' => $resumeUrl,
+                'uploadApplicationLetter' => $applicationLetterUrl,
             ];
 
             $newApplication = JobApplication::create($applicationData);
@@ -80,8 +84,7 @@ class ApplicantJobApplicationController extends Controller
             ];
 
             Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
-            $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider')); 
-
+            $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider'));
         } catch (\Exception $e) {
             Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
@@ -95,7 +98,7 @@ class ApplicantJobApplicationController extends Controller
     {
         $prefix = 'AN25';
         $last = JobApplication::where('jobApplicationNumber', 'like', $prefix . '%')
-            ->latest('id') 
+            ->latest('id')
             ->first();
 
         $lastID = $last?->jobApplicationNumber ?? $prefix . '0000';
@@ -109,17 +112,17 @@ class ApplicantJobApplicationController extends Controller
     {
         try {
             $application = JobApplication::findOrFail($id);
-            
-            DB::transaction(function () use ($application){
-            $application->status = 'Hired';
-            $application->hiredAt = now();
-            $application->save();
 
-            JobApplication::where('jobPostingID', $application->jobPostingID)
-                ->where('id', '!=', $application->id)
-                ->whereIN('status', ['Pending', 'For Interview', 'On-Offer'])
-                ->update(['status' => 'Not Available']);
-            }); 
+            DB::transaction(function () use ($application) {
+                $application->status = 'Hired';
+                $application->hiredAt = now();
+                $application->save();
+
+                JobApplication::where('jobPostingID', $application->jobPostingID)
+                    ->where('id', '!=', $application->id)
+                    ->whereIN('status', ['Pending', 'For Interview', 'On-Offer'])
+                    ->update(['status' => 'Not Available']);
+            });
 
 
             $applicant = $application->applicant;
@@ -134,10 +137,10 @@ class ApplicantJobApplicationController extends Controller
                 'lastName' => $applicant->lastName,
                 'companyName' => $jobPosting->companyName,
                 'position' => $jobPosting->position,
-                'jobProviderFirstName'=> $jobProvider->firstName,
-                'jobProviderLastName'=> $jobProvider->lastName,
-                'jobProviderEmail'=> $jobProvider->email,
-                'jobProviderPhone'=> $jobProvider->phone,
+                'jobProviderFirstName' => $jobProvider->firstName,
+                'jobProviderLastName' => $jobProvider->lastName,
+                'jobProviderEmail' => $jobProvider->email,
+                'jobProviderPhone' => $jobProvider->phone,
             ];
 
             Mail::to($applicant)->send(new HiredStatusSent($maildata));
@@ -156,7 +159,7 @@ class ApplicantJobApplicationController extends Controller
         try {
             $application = JobApplication::findOrFail($id);
             $application->status = 'Withdrawn';
-            $application ->remarks = $request->input('remarks');
+            $application->remarks = $request->input('remarks');
             $application->save();
 
             return redirect()->back()->with('Success', 'Application Withdrawn Successfully');

@@ -13,13 +13,14 @@ function openViewJobPostingModal(button) {
     document.getElementById('modal-requirements').textContent = job.requirements || 'No requirements provided.';
     document.getElementById('modal-contactPhone').textContent = job.contactPhone || 'No contact number provided.';
     document.getElementById('modal-contactEmail').textContent = job.contactEmail || 'No email address provided.';
-
+    document.getElementById('modal-companyAddress').textContent = job.companyAddress || 'N/A';
     const logo = document.getElementById('modal-companyLogo');
     const initial = document.getElementById('modal-companyInitial');
     if (job.companyLogo) {
-        logo.src = `/storage/${job.companyLogo}`;
+        logo.src = job.companyLogo ? job.companyLogo : '';
         logo.style.display = 'block';
         initial.style.display = 'none';
+
     } else {
         logo.style.display = 'none';
         initial.textContent = job.companyName ? job.companyName.charAt(0) : '';

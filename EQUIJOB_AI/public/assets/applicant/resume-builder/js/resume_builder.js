@@ -1,13 +1,13 @@
-    document.addEventListener('DOMContentLoaded', function() {
-        let experienceEntryCount = initialCounts.experience;
-        let educationEntryCount = initialCounts.education;
+document.addEventListener('DOMContentLoaded', function() {
+    let experienceEntryCount = initialCounts.experience;
+    let educationEntryCount = initialCounts.education;
 
-        const experienceEntriesContainer = document.getElementById('experienceEntriesContainer');
-        const addExperienceBtn = document.getElementById('addExperienceBtn');
+    const experienceEntriesContainer = document.getElementById('experienceEntriesContainer');
+    const addExperienceBtn = document.getElementById('addExperienceBtn');
 
-        function createExperienceEntryHTML(index, data = {}) {
-            const responsibilities = data.responsibilities || '';
-            return `
+    function createExperienceEntryHTML(index, data = {}) {
+        const responsibilities = data.responsibilities || '';
+        return `
     <div class="experience-entry border border-gray-300 p-4 rounded-md relative">
         ${index > 0 || experienceEntriesContainer.children.length > 0 ? '<hr class="mb-4 border-t border-gray-200">' : ''}
         <button type="button" class="remove-experience-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this experience">×</button>
@@ -35,38 +35,38 @@
         </div>
     </div>
     `;
+    }
+
+    function addExperienceEntry(isInitial = false) {
+        if (isInitial && experienceEntriesContainer.children.length > 0) {
+            return;
         }
+        const index = experienceEntryCount++;
+        const entryHTML = createExperienceEntryHTML(index);
+        experienceEntriesContainer.insertAdjacentHTML('beforeend', entryHTML);
 
-        function addExperienceEntry(isInitial = false) {
-            if (isInitial && experienceEntriesContainer.children.length > 0) {
-                return;
-            }
-            const index = experienceEntryCount++;
-            const entryHTML = createExperienceEntryHTML(index);
-            experienceEntriesContainer.insertAdjacentHTML('beforeend', entryHTML);
-
-            if (!isInitial && experienceEntriesContainer.lastElementChild) {
-                experienceEntriesContainer.lastElementChild.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
+        if (!isInitial && experienceEntriesContainer.lastElementChild) {
+            experienceEntriesContainer.lastElementChild.scrollIntoView({
+                behavior: 'smooth'
+            });
         }
+    }
 
-        addExperienceBtn.addEventListener('click', () => {
-            addExperienceEntry(false);
-        });
+    addExperienceBtn.addEventListener('click', () => {
+        addExperienceEntry(false);
+    });
 
-        experienceEntriesContainer.addEventListener('click', (event) => {
-            if (event.target.classList.contains('remove-experience-btn')) {
-                event.target.closest('.experience-entry')?.remove();
-            }
-        });
+    experienceEntriesContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('remove-experience-btn')) {
+            event.target.closest('.experience-entry')?.remove();
+        }
+    });
 
-        const educationEntriesContainer = document.getElementById('educationEntriesContainer');
-        const addEducationBtn = document.getElementById('addEducationBtn');
+    const educationEntriesContainer = document.getElementById('educationEntriesContainer');
+    const addEducationBtn = document.getElementById('addEducationBtn');
 
-        function createEducationEntryHTML(index, data = {}) {
-            return `
+    function createEducationEntryHTML(index, data = {}) {
+        return `
     <div class="education-entry border border-gray-300 p-4 rounded-md relative">
         ${index > 0 || educationEntriesContainer.children.length > 0 ? '<hr class="mb-4 border-t border-gray-200">' : ''}
         <button type="button" class="remove-education-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this education">×</button>
@@ -94,30 +94,30 @@
         </div>
     </div>
     `;
+    }
+
+    function addEducationEntry(isInitial = false) {
+        if (isInitial && educationEntriesContainer.children.length > 0) {
+            return;
         }
+        const index = educationEntryCount++;
+        const entryHTML = createEducationEntryHTML(index);
+        educationEntriesContainer.insertAdjacentHTML('beforeend', entryHTML);
 
-        function addEducationEntry(isInitial = false) {
-            if (isInitial && educationEntriesContainer.children.length > 0) {
-                return;
-            }
-            const index = educationEntryCount++;
-            const entryHTML = createEducationEntryHTML(index);
-            educationEntriesContainer.insertAdjacentHTML('beforeend', entryHTML);
-
-            if (!isInitial && educationEntriesContainer.lastElementChild) {
-                educationEntriesContainer.lastElementChild.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
+        if (!isInitial && educationEntriesContainer.lastElementChild) {
+            educationEntriesContainer.lastElementChild.scrollIntoView({
+                behavior: 'smooth'
+            });
         }
+    }
 
-        addEducationBtn.addEventListener('click', () => {
-            addEducationEntry(false);
-        });
-
-        educationEntriesContainer.addEventListener('click', (event) => {
-            if (event.target.classList.contains('remove-education-btn')) {
-                event.target.closest('.education-entry')?.remove();
-            }
-        });
+    addEducationBtn.addEventListener('click', () => {
+        addEducationEntry(false);
     });
+
+    educationEntriesContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('remove-education-btn')) {
+            event.target.closest('.education-entry')?.remove();
+        }
+    });
+});

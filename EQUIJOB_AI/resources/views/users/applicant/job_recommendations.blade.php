@@ -36,7 +36,7 @@
     <!-- Mobile Sidebar -->
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
         <div class="flex justify-end p-4">
-             <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
+            <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -88,7 +88,12 @@
                 <article class="bg-white border border-gray-200 rounded-lg p-6 flex flex-col gap-4 hover:shadow-lg hover:border-blue-500 transition-all duration-300">
                     <header class="flex justify-between items-center gap-4 flex-wrap">
                         @if($job->companyLogo)
-                        <img class="w-12 h-12 rounded-lg object-contain border border-gray-100" src="{{ asset('storage/' . $job->companyLogo) }}" alt="{{ $job->companyName }} logo" />
+                        @php
+                        $profileUrl = Str::startsWith($job->companyLogo, 'http')
+                        ? $job->companyLogo
+                        : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}";
+                        @endphp
+                        <img class="w-12 h-12 rounded-lg object-contain border border-gray-100" src="{{ $profileUrl }}" alt="{{ $job->companyName }} logo" />
                         @else
                         <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center text-blue-500 font-bold text-lg">
                             {{ substr($job->companyName, 0, 1) }}
@@ -193,6 +198,13 @@
                         <div>
                             <p class="text-sm text-gray-700">Email Address</p>
                             <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/email.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Company Address</p>
+                            <p id="modal-companyAddress" class="text-sm text-blue-600 font-medium"></p>
                         </div>
                     </div>
                 </div>

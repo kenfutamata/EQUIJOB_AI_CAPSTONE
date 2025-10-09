@@ -246,21 +246,13 @@
             </main>
         </div>
     </div>
+    
     <script>
         const initialCounts = {
-            experience: {
-                {
-                    old('experience') ? count(old('experience')) : 0
-                }
-            },
-            education: {
-                {
-                    old('educations') ? count(old('educations')) : 0
-                }
-            }
+            experience: {{ old('experience') ? count(old('experience')) : 0 }},
+            education: {{ old('educations') ? count(old('educations')) : 0 }}
         };
     </script>
-
 
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>
 </body>
