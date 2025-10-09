@@ -85,7 +85,7 @@ $is_pdf = $is_pdf ?? false;
 
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
         <div class="flex justify-end p-4">
-             <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
+            <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -159,12 +159,34 @@ $is_pdf = $is_pdf ?? false;
                     @endif
                 </div>
 
-                @php $photoPath = $resume->photo ?? null; @endphp
-                @if($photoPath)
-                <div class="flex-shrink-0 flex flex-col items-center @if(!$is_pdf) ml-0 md:ml-6 mt-8 md:mt-0 border border-gray-200 bg-white rounded p-3 shadow-sm @else ml-6 @endif" style="width: 136px;">
+                @php
+                use Illuminate\Support\Str;
+
+                $photoUrl = null;
+                
+                $resumePhotoFile = $user->resume->photo ?? null;
+
+                if (!empty($resumePhotoFile)) {
+                    $filename = basename($resumePhotoFile);
+                    $photoUrl = "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/photo/{$filename}";
+                }
+
+                if (!$photoUrl && isset($photoPath)) {
+                    $photoUrl = asset('storage/' . $photoPath);
+                }
+                @endphp
+                
+                @if($photoUrl)
+                <div class="flex-shrink-0 flex flex-col items-center 
+                    @if(!$is_pdf) ml-0 md:ml-6 mt-8 md:mt-0 border border-gray-200 bg-white rounded p-3 shadow-sm @else ml-6 @endif"
+                    style="width: 136px;">
+
                     <div class="@if(!$is_pdf) p-1 bg-gray-50 rounded-md border border-gray-300 shadow-sm @endif">
-                        <img src="@if($is_pdf){{ storage_path('storage/' . $photoPath) }}@else{{ asset('storage/' . $photoPath) }}@endif" alt="Applicant Photo" class="w-auto rounded-sm" style="max-height: 160px;">
+                        <img src="{{ $photoUrl }}" alt="Applicant Photo"
+                            class="w-[136px] h-[136px] object-cover rounded-md border border-gray-300 shadow-sm"
+                            @if($is_pdf) style="width: 136px; height: 136px;" @endif>
                     </div>
+                    <p class="text-xs text-gray-500 mt-1">(2x2 Photo)</p>
                 </div>
                 @endif
             </div>
@@ -178,7 +200,7 @@ $is_pdf = $is_pdf ?? false;
             <div class="resume-section experience">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-3">Experience</h2>
                 @foreach($resume->experiences as $exp)
-                <div class="mb-4 pb-2 border-b border-gray-200 last:border-b-0">
+                <div class="mb-4 pb-2 border-b border-gray-200 last-border-b-0">
                     <h3 class="text-xl font-medium">{{ $exp->jobTitle ?? 'N/A' }} at {{ $exp->employer ?? 'N/A' }}</h3>
                     <p class="text-sm text-gray-600">{{ $exp->location ?? '' }} ({{ $exp->year ?? '' }})</p>
                     @if($exp->description)<p class="mt-1 text-gray-700">{{ $exp->description }}</p>@endif
@@ -191,7 +213,7 @@ $is_pdf = $is_pdf ?? false;
             <div class="resume-section education">
                 <h2 class="text-2xl font-semibold text-blue-600 mb-3">Education</h2>
                 @foreach($resume->educations as $edu)
-                <div class="mb-4 pb-2 border-b border-gray-200 last:border-b-0">
+                <div class="mb-4 pb-2 border-b border-gray-200 last-border-b-0">
                     <h3 class="text-xl font-medium">{{ $edu->degree ?? 'N/A' }} - {{ $edu->school ?? 'N/A' }}</h3>
                     <p class="text-sm text-gray-600">{{ $edu->location ?? '' }} ({{ $edu->year ? \Carbon\Carbon::parse($edu->year)->format('Y') : '' }})</p>
                     @if($edu->description)<p class="mt-1 text-gray-700">{{ $edu->description }}</p>@endif

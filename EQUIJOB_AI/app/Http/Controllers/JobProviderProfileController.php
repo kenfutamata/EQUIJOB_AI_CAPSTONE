@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,7 +58,7 @@ class JobProviderProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
             'firstName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
@@ -67,21 +68,20 @@ class JobProviderProfileController extends Controller
             'companyName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
             'companyLogo'=> 'file|mimes:jpg,jpeg,png|max:2048',
             'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'phoneNumber' => 'string|max:11',
+            'companyAddress' => 'string|max:100',
         ]);
         if($request->hasFile('companyLogo')){
-            $file = $request->file('companyLogo'); 
-            $filepath = $file->store('companyLogo', 'public'); 
-            $validateInformation['companyLogo'] = $filepath;
+            $url = $supabase->upload($request->file('companyLogo'), 'companyLogo');
+            $validateInformation['companyLogo'] = $url;
         }
         if ($request->hasFile('businessPermit')) {
-            $file = $request->file('businessPermit');
-            $filepath = $file->store('businessPermit', 'public');
-            $validateInformation['businessPermit'] = $filepath;
+            $url = $supabase->upload($request->file('businessPermit'), 'businessPermit');
+            $validateInformation['businessPermit'] = $url;
         }
         if ($request->hasFile('profilePicture')) {
-            $file = $request->file('profilePicture');
-            $filepath = $file->store('profilePicture', 'public');
-            $validateInformation['profilePicture'] = $filepath;
+            $url = $supabase->upload($request->file('profilePicture'), 'profilePicture');
+            $validateInformation['profilePicture'] = $url;
         }
 
         try {

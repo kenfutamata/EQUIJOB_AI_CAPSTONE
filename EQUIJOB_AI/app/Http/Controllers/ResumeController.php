@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Resume;
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -104,162 +105,166 @@ class ResumeController extends Controller
         return $prompt;
     }
 
-    public function store(Request $request)
-    {
-        $applicantUser = Auth::guard('applicant')->user();
+   public function store(Request $request, SupabaseStorageService $supabase)
+{
+    $applicantUser = Auth::guard('applicant')->user();
 
-        $validatedData = $request->validate([
-            'resume.firstName' => 'required|string|max:255',
-            'resume.lastName' => 'required|string|max:255',
-            'resume.dob' => 'nullable|date',
-            'resume.address' => 'nullable|string|max:255',
-            'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
-            'resume.phone' => 'nullable|string|max:15',
-            'resume.typeOfDisability' => 'nullable|string|max:255',
-            'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'resume.summary' => 'nullable|string',
-            'resume.skills' => 'nullable|string|max:1000',
-            'experience' => 'nullable|array',
-            'experience.*.employer' => 'nullable|string|max:255|required_with:experience.*.jobTitle',
-            'experience.*.jobTitle' => 'nullable|string|max:255|required_with:experience.*.employer',
-            'experience.*.location' => 'nullable|string|max:255',
-            'experience.*.year' => 'nullable|string|max:255',
-            'experience.*.responsibilities' => 'nullable|string',
+    $validatedData = $request->validate([
+        'resume.firstName' => 'required|string|max:255',
+        'resume.lastName' => 'required|string|max:255',
+        'resume.dob' => 'nullable|date',
+        'resume.address' => 'nullable|string|max:255',
+        'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
+        'resume.phone' => 'nullable|string|max:15',
+        'resume.typeOfDisability' => 'nullable|string|max:255',
+        'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'resume.summary' => 'nullable|string',
+        'resume.skills' => 'nullable|string|max:1000',
+        'experience' => 'nullable|array',
+        'experience.*.employer' => 'nullable|string|max:255|required_with:experience.*.jobTitle',
+        'experience.*.jobTitle' => 'nullable|string|max:255|required_with:experience.*.employer',
+        'experience.*.location' => 'nullable|string|max:255',
+        'experience.*.year' => 'nullable|string|max:255',
+        'experience.*.responsibilities' => 'nullable|string',
+        'educations' => 'nullable|array',
+        'educations.*.school' => 'nullable|string|max:255|required_with:educations.*.degree',
+        'educations.*.degree' => 'nullable|string|max:255|required_with:educations.*.school',
+        'educations.*.location' => 'nullable|string|max:255',
+        'educations.*.year' => 'nullable|string|max:255',
+        'educations.*.description' => 'nullable|string',
+    ]);
 
-            'educations' => 'nullable|array',
-            'educations.*.school' => 'nullable|string|max:255|required_with:educations.*.degree',
-            'educations.*.degree' => 'nullable|string|max:255|required_with:educations.*.school',
-            'educations.*.location' => 'nullable|string|max:255',
-            'educations.*.year' => 'nullable|string|max:255',
-            'educations.*.description' => 'nullable|string',
-        ]);
-
-        try {
-
-            $resumeInputData = $validatedData['resume'];
-            if (!isset($resumeInputData['typeOfDisability'])) {
-                $resumeInputData['typeOfDisability'] = '';
-            }
-            $skillsRaw = $request->input('skills') ?? '';
-            $resumeInputData['skills'] = $skillsRaw;
-            if ($request->hasFile('resume.photo')) {
-                $path = $request->file('resume.photo')->store('resume_photos', 'public');
-                $resumeInputData['photo'] = $path;
-            }
-            unset($resumeInputData['photo']);
-            if (isset($path)) {
-                $resumeInputData['photo'] = $path;
-            }
-            $resumeInstance = Resume::updateOrCreate(['userID' => $applicantUser->id], $resumeInputData);
-            $resumeInstance->experiences()->delete();
-            if (!empty($validatedData['experience'])) {
-                foreach ($validatedData['experience'] as $exp) {
-                    if (!empty($exp['employer']) && !empty($exp['jobTitle'])) {
-                        $resumeInstance->experiences()->create([
-                            'employer' => $exp['employer'],
-                            'jobTitle' => $exp['jobTitle'],
-                            'location' => $exp['location'] ?? null,
-                            'year' => $exp['year'] ?? null,
-                            'description' => $exp['responsibilities'] ?? null,
-                        ]);
-                    }
-                }
-            }
-            $resumeInstance->educations()->delete();
-            if (!empty($validatedData['educations'])) {
-                foreach ($validatedData['educations'] as $edu) {
-                    if (!empty($edu['school']) && !empty($edu['degree'])) {
-                        $resumeInstance->educations()->create($edu);
-                    }
-                }
-            }
-
-            $promptForAI = $this->buildResumePrompt($resumeInstance, $skillsRaw);
-            $geminiApiKey = config('services.gemini.api_key');
-            if (!$geminiApiKey) {
-                Log::error('Google Gemini API Key is not set.');
-                return redirect()->back()->with('error', 'Google Gemini API Key is not configured.');
-            }
-            $client = Gemini::client($geminiApiKey);
-            $modelName = config('services.gemini.model');
-            if (!$modelName) {
-                Log::error("Gemini model name not set.");
-                return redirect()->back()->with('error', 'AI model name is not configured.');
-            }
-
-            $generatedContent = null;
-            $maxRetries = 3;
-            $initialDelay = 1; 
-
-            for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
-                try {
-                    $response = $client->generativeModel($modelName)->generateContent($promptForAI);
-                    $generatedContent = $response->text();
-                    if (!empty($generatedContent)) {
-                        break;
-                    }
-                } catch (\Exception $e) {
-                    Log::warning("Gemini API call failed on attempt " . ($attempt + 1) . ". Error: " . $e->getMessage());
-                    if ($attempt === $maxRetries - 1) {
-                        throw $e;
-                    }
-                    $delay = $initialDelay * (2 ** $attempt);
-                    sleep($delay);
-                }
-            }
-
-
-            if (empty($generatedContent)) {
-                $generatedContent = 'AI could not generate additional content for the resume.';
-            }
-
-            $resumeInstance->aiGeneratedSummary = $generatedContent;
-            $resumeInstance->save();
-
-            $resumeData = $resumeInstance->load('experiences', 'educations')->toArray();
-            session()->flash('generated_resume_content', $generatedContent);
-            session()->flash('resume_data_for_download', $resumeData);
-            session()->flash('skills_summary_for_download', $skillsRaw);
-
-            return redirect()->route('applicant-resume-view-and-download')->with('success', 'Resume processed successfully with AI enhancements!');
-        } catch (\Throwable $e) {
-            Log::error('Error in ResumeController@store: ' . $e->getMessage());
-            if (str_contains(strtolower($e->getMessage()), 'overloaded')) {
-                $errorMessage = 'The AI assistant is currently experiencing high demand and could not process your request. Your resume has been saved. Please try again in a few moments.';
-            } else {
-                $errorMessage = 'An unexpected error occurred during AI processing: ' . $e->getMessage();
-            }
-            return redirect()->back()->with('error', $errorMessage)->withInput();
+    try {
+        $resumeInputData = $validatedData['resume'];
+        if (!isset($resumeInputData['typeOfDisability'])) {
+            $resumeInputData['typeOfDisability'] = '';
         }
-    }
+        $skillsRaw = $request->input('skills') ?? '';
+        $resumeInputData['skills'] = $skillsRaw;
 
+        if ($request->hasFile('resume.photo')) {
+            $photoPath = $supabase->upload($request->file('resume.photo'), 'photo');
+            $resumeInputData['photo'] = $photoPath;
+        }
+        
+        // THE BAD LINE IS NOW REMOVED.
+
+        $resumeInstance = Resume::updateOrCreate(['userID' => $applicantUser->id], $resumeInputData);
+
+        // ... (The rest of your store method is fine) ...
+        $resumeInstance->experiences()->delete();
+        if (!empty($validatedData['experience'])) {
+            foreach ($validatedData['experience'] as $exp) {
+                if (!empty($exp['employer']) && !empty($exp['jobTitle'])) {
+                    $resumeInstance->experiences()->create([
+                        'employer' => $exp['employer'],
+                        'jobTitle' => $exp['jobTitle'],
+                        'location' => $exp['location'] ?? null,
+                        'year' => $exp['year'] ?? null,
+                        'description' => $exp['responsibilities'] ?? null,
+                    ]);
+                }
+            }
+        }
+        $resumeInstance->educations()->delete();
+        if (!empty($validatedData['educations'])) {
+            foreach ($validatedData['educations'] as $edu) {
+                if (!empty($edu['school']) && !empty($edu['degree'])) {
+                    $resumeInstance->educations()->create($edu);
+                }
+            }
+        }
+
+        $promptForAI = $this->buildResumePrompt($resumeInstance, $skillsRaw);
+        $geminiApiKey = config('services.gemini.api_key');
+        if (!$geminiApiKey) {
+            Log::error('Google Gemini API Key is not set.');
+            return redirect()->back()->with('error', 'Google Gemini API Key is not configured.');
+        }
+        $client = Gemini::client($geminiApiKey);
+        $modelName = config('services.gemini.model');
+        if (!$modelName) {
+            Log::error("Gemini model name not set.");
+            return redirect()->back()->with('error', 'AI model name is not configured.');
+        }
+
+        $generatedContent = null;
+        $maxRetries = 3;
+        $initialDelay = 1;
+
+        for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
+            try {
+                $response = $client->generativeModel($modelName)->generateContent($promptForAI);
+                $generatedContent = $response->text();
+                if (!empty($generatedContent)) {
+                    break;
+                }
+            } catch (\Exception $e) {
+                Log::warning("Gemini API call failed on attempt " . ($attempt + 1) . ". Error: " . $e->getMessage());
+                if ($attempt === $maxRetries - 1) {
+                    throw $e;
+                }
+                $delay = $initialDelay * (2 ** $attempt);
+                sleep($delay);
+            }
+        }
+
+
+        if (empty($generatedContent)) {
+            $generatedContent = 'AI could not generate additional content for the resume.';
+        }
+
+        $resumeInstance->aiGeneratedSummary = $generatedContent;
+        $resumeInstance->save();
+
+        session()->flash('generated_resume_content', $generatedContent);
+        session()->flash('skills_summary_for_download', $skillsRaw);
+
+        return redirect()->route('applicant-resume-view-and-download')->with('success', 'Resume processed successfully with AI enhancements!');
+    } catch (\Throwable $e) {
+        Log::error('Error in ResumeController@store: ' . $e->getMessage());
+        if (str_contains(strtolower($e->getMessage()), 'overloaded')) {
+            $errorMessage = 'The AI assistant is currently experiencing high demand and could not process your request. Your resume has been saved. Please try again in a few moments.';
+        } else {
+            $errorMessage = 'An unexpected error occurred during AI processing: ' . $e->getMessage();
+        }
+        return redirect()->back()->with('error', $errorMessage)->withInput();
+    }
+}
     public function viewAndDownload()
     {
-        $generatedContent = session('generated_resume_content');
-        $resumeDataArray = session('resume_data_for_download');
-        $skillsSummary = session('skills_summary_for_download');
 
-        if (!$resumeDataArray) {
+        $user = Auth::guard('applicant')->user();
+
+        // Eager load the resume and its relationships. THIS IS THE FIX.
+        $user->load('resume.experiences', 'resume.educations');
+
+        $resume = $user->resume;
+
+        // If for some reason the user has no resume, redirect them.
+        if (!$resume) {
             return redirect()->route('applicant.resume.builder')->with('error', 'No resume data found. Please build your resume first.');
         }
 
-        $resumeInstance = new Resume($resumeDataArray);
+        $notifications = $user->notifications;
+        $unreadNotifications = $user->unreadNotifications;
 
-        if (isset($resumeDataArray['experiences'])) {
-            $experiences = \App\Models\Experience::hydrate($resumeDataArray['experiences'])->all();
-            $resumeInstance->setRelation('experiences', collect($experiences));
-        } else {
-            $resumeInstance->setRelation('experiences', collect());
-        }
+        // Get the AI content and skills from the session, as they are temporary.
+        $generatedSummary = session('generated_resume_content', $resume->aiGeneratedSummary ?? 'No AI summary generated yet.');
+        $skillsRaw = session('skills_summary_for_download', $resume->skills ?? '');
 
-        if (isset($resumeDataArray['educations'])) {
-            $educations = \App\Models\Education::hydrate($resumeDataArray['educations'])->all();
-            $resumeInstance->setRelation('educations', collect($educations));
-        } else {
-            $resumeInstance->setRelation('educations', collect());
-        }
+        // Convert skills string to an array for the view, if needed
+        $skillsList = !empty($skillsRaw) ? array_map('trim', explode(',', $skillsRaw)) : [];
 
-        return view('users.applicant.resume_view_download', compact('generatedContent', 'resumeInstance', 'skillsSummary'));
+        // The view expects variables named 'resume' and 'generatedSummary'. Let's provide them.
+        return view('users.applicant.resume_view_download', [
+            'user' => $user,
+            'resume' => $resume,
+            'generatedSummary' => $generatedSummary,
+            'skillsList' => $skillsList,
+            'notifications' => $notifications,
+            'unreadNotifications' => $unreadNotifications
+        ]);
     }
 
     // Unchanged methods
@@ -269,6 +274,3 @@ class ResumeController extends Controller
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
 }
-
-
-

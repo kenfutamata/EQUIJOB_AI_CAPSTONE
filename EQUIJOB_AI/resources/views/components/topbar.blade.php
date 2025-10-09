@@ -34,12 +34,11 @@
           <div class="max-h-48 overflow-y-auto">
             @foreach($unreadNotifications as $notification)
             <div class="relative group border-t hover:bg-gray-100">
-              <div 
-                onclick="openNotificationModal(event)" 
-                class="block px-4 py-2 pr-8 cursor-pointer" 
+              <div
+                onclick="openNotificationModal(event)"
+                class="block px-4 py-2 pr-8 cursor-pointer"
                 data-position="{{ $notification->data['position'] ?? 'N/A' }}"
-                data-message="{{ $notification->data['message'] ?? 'New notification' }}"
-              >
+                data-message="{{ $notification->data['message'] ?? 'New notification' }}">
                 <p class="text-sm text-gray-800">{{ $notification->data['message'] ?? 'New notification' }}</p>
                 <p class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</p>
               </div>
@@ -60,16 +59,15 @@
           <div class="px-4 py-2 text-xs font-bold text-gray-500 uppercase">Recent</div>
           <div class="max-h-48 overflow-y-auto">
             @php
-              $readNotifications = $notifications->whereNotIn('id', $unreadNotifications->pluck('id'))->take(5);
+            $readNotifications = $notifications->whereNotIn('id', $unreadNotifications->pluck('id'))->take(5);
             @endphp
             @forelse($readNotifications as $notification)
             <div class="relative group border-t hover:bg-gray-100">
-              <div 
-                onclick="openNotificationModal(event)" 
+              <div
+                onclick="openNotificationModal(event)"
                 class="block px-4 py-2 pr-8 cursor-pointer text-gray-600"
                 data-position="{{ $notification->data['position'] ?? 'N/A' }}"
-                data-message="{{ $notification->data['message'] ?? 'Notification' }}"
-              >
+                data-message="{{ $notification->data['message'] ?? 'Notification' }}">
                 <p class="text-sm">{{ $notification->data['message'] ?? 'Notification' }}</p>
                 <p class="text-xs">{{ $notification->created_at->diffForHumans() }}</p>
               </div>
@@ -92,9 +90,9 @@
     @if($user->role == 'Applicant')
     <a href="{{ route('applicant-profile') }}" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]">
       @php
-        $profileUrl = Str::startsWith($user->profilePicture, 'http')
-        ? $user->profilePicture
-        : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
+      $profileUrl = Str::startsWith($user->profilePicture, 'http')
+      ? $user->profilePicture
+      : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
       @endphp
       <img src="{{ $profileUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
       <div class="text-xs font-medium">
@@ -104,7 +102,12 @@
     </a>
     @elseif($user->role == 'Job Provider')
     <a href="{{ route('job-provider-profile') }}" class="flex items-center border border-black px-2 py-1 bg-white hover:bg-gray-100 transition rounded w-[170px] h-[50px]">
-      <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
+      @php
+      $profileUrl = Str::startsWith($user->profilePicture, 'http')
+      ? $user->profilePicture
+      : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
+      @endphp
+      <img src="{{ $profileUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}" alt="User avatar" class="rounded-full w-10 h-11 mr-2" />
       <div class="text-xs font-medium">
         <div class="text-[11px]"> {{ $user->firstName }} {{ $user->lastName }}</div>
         <div class="text-[12px] text-gray-600">{{ $user->role }}</div>
@@ -129,7 +132,7 @@
     <h2 class="text-xl font-bold mb-4">Notifications</h2>
     <div>
       <label class="block text-xs text-gray-500">Notification Display</label>
-      <textarea  id="modal.message" class="w-full border rounded px-2 py-1 w-100" readonly></textarea>
+      <textarea id="modal.message" class="w-full border rounded px-2 py-1 w-100" readonly></textarea>
     </div>
   </div>
 </div>

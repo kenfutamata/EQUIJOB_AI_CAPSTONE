@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>EQUIJOB - Job Provider Profile</title>
         <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+        <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/jobprovider_profile.css') }}">
     </head>
@@ -34,7 +34,12 @@
                 <div class="max-w-5xl mx-auto">
 
                     <div class="flex flex-col items-center mb-8">
-                        <img src="{{ $user->profilePicture ? asset('storage/' . $user->profilePicture) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                        @php
+                        $profileUrl = Str::startsWith($user->profilePicture, 'http')
+                        ? $user->profilePicture
+                        : ($user->profilePicture ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}" : null);
+                        @endphp
+                        <img src="{{ $profileUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                             alt="Profile Picture"
                             class="rounded-md w-[200px] h-[200px] object-cover mb-4 shadow-md">
                     </div>
@@ -72,7 +77,12 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Company Logo</label>
-                                    <img src="{{ $user->companyLogo ? asset('storage/' . $user->companyLogo) : asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                                    @php
+                                    $logoUrl = Str::startsWith($user->companyLogo, 'http')
+                                    ? $user->companyLogo
+                                    : ($user->companyLogo ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->companyLogo}" : null);
+                                    @endphp
+                                    <img src="{{ $logoUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
                                         alt="Company Logo"
                                         class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
                                 </div>
@@ -157,23 +167,21 @@
 
         <script>
             const userData = @json($user);
+            const SUPABASE_BASE_URL = "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage";
+
             const businessPermitContainer = document.getElementById('view_businessPermit');
-
-            if (userData && userData.businessPermit) {
-                const permitPath = userData.businessPermit;
-                const filePath = `/storage/${permitPath}`;
-
-                const extension = permitPath.split('.').pop().toLowerCase();
-
-                if (['jpg', 'jpeg', 'png', 'webp'].includes(extension)) {
-                    businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" title="Click to view full size"><img src="${filePath}" class="w-24 h-24 object-cover rounded-md border shadow-sm" alt="Business Permit Preview"/></a>`;
-                } else if (extension === 'pdf') {
-                    businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 underline hover:text-blue-800">View Business Permit (PDF)</a>`;
-                } else {
-                    businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 underline hover:text-blue-800">Download Business Permit</a>`;
+            businessPermitContainer.innerHTML = '';
+            if(userData.businessPermit){
+                const filePath = userData.businessPermit.startsWith('http') ? userData.businessPermit : `${SUPABASE_BASE_URL}/${userData.businessPermit}`;
+                const fileExtension = filePath.split('.').pop().toLowerCase();
+                if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)){
+                    businessPermitContainer.innerHTML = `<img src="${filePath}" alt="Business Permit" class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">`;
+                } else if (fileExtension === 'pdf'){
+                    businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 hover:underline">View Business Permit (PDF)</a>`;
+                }else{
+                    businessPermitContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-600 hover:underline">Download Business Permit</a>`;
                 }
-            } else {
-                businessPermitContainer.innerHTML = `<p class="text-sm text-gray-500">No Business Permit uploaded.</p>`;
+                
             }
 
             function openModal() {

@@ -24,7 +24,7 @@ window.openProfileModal = function (button) {
     }
 
     const profilePicture = document.getElementById('modal_profilePicture');
-    profilePicture.src = user.profilePicture? `${SUPABASE_BASE_URL}/${user.profilePicture}`: '';
+    profilePicture.src = user.profilePicture ? user.profilePicture : '';
     profilePicture.style.display = user.profilePicture ? 'block' : 'none';
 
     const logo = document.getElementById('modal_companyLogo');
