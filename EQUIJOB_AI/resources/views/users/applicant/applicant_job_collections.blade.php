@@ -89,28 +89,35 @@
         </select>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($collections as $collection)
-            {{-- START: MODIFICATION 1 --}}
-            @php
-              // Create a temporary array from the collection data
-              $jobData = $collection->toArray();
-              // Overwrite the companyLogo with a full, accessible URL if it exists
-              $jobData['companyLogo'] = $collection->companyLogo ? asset('storage/' . $collection->companyLogo) : null;
-            @endphp
-            {{-- END: MODIFICATION 1 --}}
-          
-            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
-              <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $collection->position }}</h2>
-              <p class="text-gray-600 mb-4">{{ Str::limit($collection->description, 100) }}</p>
-              <p class="text-gray-500 text-sm mb-4">Category: {{ $collection->category }}</p>
+          @php
+          $jobData = $collection->toArray();
+          $logoPath = $collection->companyLogo;
 
-              <p class="text-gray-500 text-sm mb-4">Company Name: {{ $collection->companyName }}</p>
-              
-              {{-- Pass the modified $jobData array to the button --}}
-              <button onclick="openJobDetailsModal(this)" data-jobposting='@json($jobData)' class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300">View Details</button>
-              
-              <a href="{{route('applicant-match-jobs')}}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">Apply Now</a>
+          if ($logoPath) {
+          if (Str::startsWith($logoPath, 'https://')) {
+          $fullLogoUrl = $logoPath;
+          } else {
+          $fullLogoUrl = 'https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/' . ltrim($logoPath, '/');
+          }
+          } else {
+          $fullLogoUrl = asset('assets/applicant/applicant-dashboard/profile_pic.png'); 
+          }
 
-            </div>
+          $jobData['companyLogo'] = $fullLogoUrl;
+          @endphp
+
+          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $collection->position }}</h2>
+            <p class="text-gray-600 mb-4">{{ Str::limit($collection->description, 100) }}</p>
+            <p class="text-gray-500 text-sm mb-4">Category: {{ $collection->category }}</p>
+
+            <p class="text-gray-500 text-sm mb-4">Company Name: {{ $collection->companyName }}</p>
+
+            <button onclick="openJobDetailsModal(this)" data-jobposting='@json($jobData)' class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300">View Details</button>
+
+            <a href="{{route('applicant-match-jobs')}}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">Apply Now</a>
+
+          </div>
           @endforeach
         </div>
       </div>
@@ -207,41 +214,6 @@
     </div>
   </div>
 </body>
-<script>
-  function openJobDetailsModal(button) {
-    const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-
-    document.getElementById('modal-position').textContent = jobposting.position || 'No Position provided';
-    document.getElementById('modal-companyName').textContent = jobposting.companyName || 'No Company provided';
-    document.getElementById('modal-disabilityType').textContent = jobposting.disabilityType || 'No Disability Type provided';
-    document.getElementById('modal-educationalAttainment').textContent = jobposting.educationalAttainment || 'No Educational Attainment provided';
-    document.getElementById('modal-workEnvironment').textContent = jobposting.workEnvironment || 'No Work Environment provided';
-    document.getElementById('modal-skills').textContent = jobposting.skills || 'No Skills provided';
-    document.getElementById('modal-requirements').textContent = jobposting.requirements || 'No Requirements provided';
-    document.getElementById('modal-contactPhone').textContent = jobposting.contactPhone || 'No phone number provided';
-    document.getElementById('modal-contactEmail').textContent = jobposting.contactEmail || 'No contact email provided';
-    document.getElementById('modal-description').textContent = jobposting.description || 'No description provided';
-    document.getElementById('modal-salaryRange').textContent = jobposting.salaryRange || 'No Salary Range provided';
-    document.getElementById('modal-category').textContent = jobposting.category || 'No Category provided';
-
-    // START: MODIFICATION 2
-    const companyLogo = document.getElementById('modal-companyLogo');
-    if (jobposting.companyLogo) {
-      // The `jobposting.companyLogo` now contains the full, correct URL
-      companyLogo.src = jobposting.companyLogo;
-      companyLogo.style.display = 'block';
-    } else {
-      // If no logo, hide the image element
-      companyLogo.style.display = 'none';
-    }
-    // END: MODIFICATION 2
-
-    document.getElementById('viewJobDetailsModal').classList.remove('hidden');
-  }
-
-  function closeViewJobDetailsModal() {
-    document.getElementById('viewJobDetailsModal').classList.add('hidden');
-  }
-</script>
+<script src="{{ asset('assets/applicant/applicant-job-collections/js/applicant_job_collections.js') }}"></script>
 
 </html>

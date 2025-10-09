@@ -1,4 +1,3 @@
-// This JavaScript code is correct and requires no changes.
 
 function openJobDetailsModal(button) {
     const job = JSON.parse(button.dataset.jobposting);
@@ -17,9 +16,8 @@ function openJobDetailsModal(button) {
     document.getElementById('modal-requirements').textContent = job.requirements || '';
 
     const logo = document.getElementById('modal-companyLogo');
-    // This line now works because the Blade template provides the full 'companyLogoUrl'
-    logo.src = job.companyLogoUrl || '';
-    logo.classList.remove('hidden');
+    logo.src = job.companyLogo || '';
+    logo.style.display = job.companyLogo ? 'block' : 'none';
 
     const modal = document.getElementById('viewJobDetailsModal');
     const modalContent = document.getElementById('modalContent');

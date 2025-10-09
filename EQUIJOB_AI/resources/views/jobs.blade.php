@@ -71,13 +71,11 @@
                     <p class="text-gray-600 mb-3">{{ Str::limit($collection->description, 100) }}</p>
                     <p class="text-gray-500 text-sm mb-2">Company: <span class="font-medium">{{ $collection->companyName }}</span></p>
                     <div class="mt-auto flex gap-2">
-                        <!-- START: MODIFICATION 1 -->
                         <button onclick="openJobDetailsModal(this)"
                             data-jobposting='@json(array_merge($collection->toArray(), ["companyLogoUrl" => $collection->companyLogo ? asset("storage/" . $collection->companyLogo) : asset("assets/photos/default-company.png")]))'
                             class="flex-1 bg-blue-600 text-white text-center px-4 py-2 rounded hover:bg-blue-700 transition">
                             View Details
                         </button>
-                        <!-- END: MODIFICATION 1 -->
                         <a href="{{route('sign-in')}}"
                             class="flex-1 bg-green-600 text-white text-center px-4 py-2 rounded hover:bg-green-700 transition">
                             Apply Now
@@ -104,10 +102,8 @@
 
             <div class="flex flex-col md:flex-row gap-6">
                 <div class="flex-shrink-0">
-                    <!-- START: MODIFICATION 2 -->
                     <img id="modal-companyLogo" src="" alt="Company Logo"
                         class="w-44 h-auto border rounded hidden" />
-                    <!-- END: MODIFICATION 2 -->
                 </div>
                 <div>
                     <h2 id="modal-companyName" class="text-2xl font-semibold text-gray-800">Company Name</h2>
@@ -115,7 +111,6 @@
                 </div>
             </div>
 
-            <!-- Job Info -->
             <div class="flex flex-col md:flex-row gap-6">
                 <div class="border w-full md:max-w-xs p-4 flex flex-col gap-4">
                     <h3 class="text-lg font-semibold border-b pb-2">Job Information</h3>
@@ -151,7 +146,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <x-footer />
     <script src="{{ asset('assets/landing_page/js/landing_page/jobs.js') }}"></script>
 </body>
