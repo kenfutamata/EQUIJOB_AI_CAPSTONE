@@ -205,10 +205,12 @@ class JobProviderManageJobApplications extends Controller
                 'status' => 'Rejected',
                 'remarks' => $validated['remarks'],
             ]);
-            $application->save();
+            // The $application->save(); line was here and has been removed as it's redundant.
+
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
             $jobProvider = Auth::guard('job_provider')->user();
+
             $maildata = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
@@ -218,11 +220,14 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
+
             Mail::to($applicant)->send(new DisapprovalDetailsSent($maildata));
+
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
         } catch (\Exception $e) {
-            Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());
-            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Reject Application');
+            // THE FIX IS HERE: using $application->id instead of $id
+            Log::error('Failed to reject application ' . $application->id . ': ' . $e->getMessage());
+            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Reject Application. Please check logs.');
         }
     }
 
