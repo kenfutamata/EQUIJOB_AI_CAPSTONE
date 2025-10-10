@@ -9,7 +9,7 @@ use App\Exports\JobProviderJobPostingDataExport;
 use App\Http\Requests\RejectApplicationRequest;
 use App\Http\Requests\ScheduleInterviewRequest;
 // Consolidate Mail and Notification usage
-use App\Mail\DisapprovalDetailsSent;
+use App\Mail\disapprovalDetailssent;
 use App\Mail\InterviewDetailsSent;
 use App\Mail\SendOnOfferDetails;
 use App\Models\JobApplication;
@@ -219,7 +219,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
-            Mail::to($applicant)->send(new disapprovalDetailsSent($maildata));
+            Mail::to($applicant)->send(new disapprovalDetailssent($maildata));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
         } catch (\Exception $e) {
             Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());
