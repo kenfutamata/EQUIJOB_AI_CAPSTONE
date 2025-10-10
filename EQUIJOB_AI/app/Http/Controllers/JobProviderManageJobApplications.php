@@ -196,17 +196,17 @@ class JobProviderManageJobApplications extends Controller
     /**
      * Reject a job application.
      */
-    public function rejectApplication(RejectApplicationRequest $request, JobApplication $application): RedirectResponse
+    public function rejectApplication(Request $request, string $id)
     {
-        $validated = $request->validated();
+        $request->validate([
+            'remarks' => 'required|string|max:255',
+        ]);
 
         try {
-            $application->update([
-                'status' => 'Rejected',
-                'remarks' => $validated['remarks'],
-            ]);
-            // The extra $application->save() call is removed as it's not needed.
-
+            $application = JobApplication::findOrFail($id);
+            $application->status = 'Rejected';
+            $application->remarks = $request->input('remarks');
+            $application->save();
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
             $jobProvider = Auth::guard('job_provider')->user();
@@ -219,12 +219,11 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
                 'remarks' => $application->remarks,
             ];
-            Mail::to($applicant)->send(new DisapprovalDetailsSent($maildata));
+            Mail::to($applicant)->send(new disapprovalDetailsSent($maildata));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');
         } catch (\Exception $e) {
-            // THE FIX IS HERE: Using the correct variable $application->id
-            Log::error('Failed to reject application ' . $application->id . ': ' . $e->getMessage());
-            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Reject Application. See logs for details.');
+            Log::error('Failed to reject application ' . $id . ': ' . $e->getMessage());
+            return redirect()->route('job-provider-manage-job-applications')->with('error', 'Failed to Reject Application');
         }
     }
 
