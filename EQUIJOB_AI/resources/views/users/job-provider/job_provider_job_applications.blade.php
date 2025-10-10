@@ -366,4 +366,4 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 
 </body>
 
-</html
+</html>
