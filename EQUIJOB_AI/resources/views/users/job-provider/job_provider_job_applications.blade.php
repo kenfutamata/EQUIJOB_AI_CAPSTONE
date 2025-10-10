@@ -138,7 +138,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                 <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.scheduleinterview', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
                                     For Interview
                                 </button>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
+                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
                                     onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">
@@ -158,7 +158,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                         Offer
                                     </button>
                                 </form>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
+                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
                                 <button
                                     onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications.delete', $application->id) }}')"
                                     class="bg-red-500 text-white px-2 py-1 rounded">

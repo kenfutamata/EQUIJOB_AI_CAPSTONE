@@ -196,16 +196,15 @@ class JobProviderManageJobApplications extends Controller
     /**
      * Reject a job application.
      */
-    public function rejectApplication(Request $request, string $id)
+    public function rejectApplication(RejectApplicationRequest $request, JobApplication $application): RedirectResponse
     {
-        $request->validate([
-            'remarks' => 'required|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         try {
-            $application = JobApplication::findOrFail($id);
-            $application->status = 'Rejected';
-            $application->remarks = $request->input('remarks');
+            $application->update([
+                'status' => 'Rejected',
+                'remarks' => $validated['remarks'],
+            ]);
             $application->save();
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
