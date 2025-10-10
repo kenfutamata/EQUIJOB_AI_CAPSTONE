@@ -213,7 +213,7 @@ class JobProviderManageJobApplications extends Controller
             $maildata = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
-                'position' => $applicant->position,
+                'position' => $jobPosting->position,
                 'companyName' => $jobPosting->companyName,
                 'jobProviderFirstName' => $jobProvider->firstName,
                 'jobProviderLastName' => $jobProvider->lastName,
