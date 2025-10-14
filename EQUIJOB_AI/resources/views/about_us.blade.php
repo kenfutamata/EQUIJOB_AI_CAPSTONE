@@ -18,9 +18,8 @@
 <body class="bg-white text-gray-800">
   <x-landing-page-navbar />
 
-  <!-- Hero Section -->
   <section class="relative bg-blue-800 text-white">
-    <img src="{{ asset('assets/photos/landing_page/about_us_title.jpg') }}" alt="Main background"
+    <img src="{{ asset('assets/photos/landing_page/documentation.jpg') }}" alt="Main background"
       class="absolute inset-0 w-full h-full object-cover opacity-40">
     <div class="relative max-w-4xl mx-auto px-6 py-32 text-center space-y-8">
       <h1 class="text-5xl md:text-6xl font-bold">About Us</h1>
@@ -44,10 +43,6 @@
       algorithms to connect individuals with the right opportunities based on their skills, preferences, and
       accessibility needs.
     </p>
-  </section>
-
-  <section class="relative bg-blue-100 text-white min-h-[650px] flex items-center justify-center">
-    <img src="{{ asset('assets/photos/landing_page/documentation.jpg') }}" alt="Main background" class="absolute inset-0 w-full h-full object-cover opacity-40">
   </section>
 
   <!-- Mission & Vision -->
