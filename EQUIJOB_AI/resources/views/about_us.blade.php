@@ -7,7 +7,7 @@
   <title>EQUIJOB - About Us</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -44,9 +44,10 @@
       algorithms to connect individuals with the right opportunities based on their skills, preferences, and
       accessibility needs.
     </p>
-    <div class="mt-12 flex justify-center">
-      <img src="{{ asset('assets/photos/landing_page/mcctest.png') }}" alt="Illustration" class="rounded-2xl shadow-lg">
-    </div>
+  </section>
+
+  <section class="relative bg-blue-100 text-white min-h-[650px] flex items-center justify-center">
+    <img src="{{ asset('assets/photos/landing_page/documentation.jpg') }}" alt="Main background" class="absolute inset-0 w-full h-full object-cover opacity-40">
   </section>
 
   <!-- Mission & Vision -->
@@ -72,9 +73,7 @@
   <section class="py-20 px-6 md:px-16 bg-white">
     <h2 class="text-4xl font-semibold text-center mb-12">Meet Our Team</h2>
 
-    <!-- Main Grid (Top 3 Members) -->
     <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Member -->
       <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2">
         <img src="{{ asset('assets/photos/landing_page/kezekiah.jpg') }}" alt="Team Member" class="w-24 h-24 mx-auto rounded-full mb-4">
         <h3 class="text-xl font-medium text-center">Kezekiah Yatong</h3>

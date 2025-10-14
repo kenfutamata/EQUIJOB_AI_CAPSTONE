@@ -26,6 +26,7 @@ class AdminJobRatingDataExport implements FromCollection
     public function collection()
     {
         $query = Feedbacks::query()
+            ->where('feedbackType', 'Job Rating')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('applicantID', 'like', "%{$this->search}%")
