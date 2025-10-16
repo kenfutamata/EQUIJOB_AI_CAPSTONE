@@ -147,16 +147,18 @@
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
         </div>
-        <div class="md:col-span-2 text-sm text-gray-600">
-          <input type="checkbox" id="checkAgree" onchange="checkAgreement()"> By signing up, you agree to our <a href="" onclick="openAgreementModal(); return false;" class="text-blue-600 underline">Terms and Conditions and Privacy Policy</a>.
+        <div class="md:col-span-2 text-sm text-gray-600 mb-2">
+          <label class="inline-flex items-start gap-3">
+            <input type="checkbox" id="checkAgree" onchange="checkAgreement()" class="mt-1">
+            <span>By signing up, you agree to our <a href="#" onclick="openAgreementModal(); return false;" class="text-blue-600 underline">Terms and Conditions and Privacy Policy</a>.</span>
+          </label>
         </div>
-        <br>
-        <br>
-        <div class="flex flex-col md:flex-row gap-4 mt-10">
-          <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md text-base font-semibold hover:bg-blue-700 transition" id="sign_up_button">
+
+        <div class="md:col-span-2 flex flex-col gap-4 pt-2">
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold transition" id="sign_up_button">
             Sign Up
           </button>
-          <a href="{{ route('sign-in') }}" class="w-full bg-black text-white py-3 rounded-md text-base font-semibold text-center hover:bg-gray-800 transition">
+          <a href="{{ route('sign-in') }}" class="w-full text-center bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold transition">
             Back to Login
           </a>
         </div>

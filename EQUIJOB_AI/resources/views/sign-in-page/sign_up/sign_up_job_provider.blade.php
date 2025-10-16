@@ -104,11 +104,11 @@
           <div class="md:col-span-2 text-sm text-gray-600">
             <input type="checkbox" id="checkAgree" onchange="checkAgreement()"> By signing up, you agree to our <a href="" onclick="openAgreementModal(); return false;" class="text-blue-600 underline">Terms and Conditions and Privacy Policy</a>.
           </div>
-          <div class="flex flex-col gap-4 pt-6">
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition" id="sign_up_button">
+          <div class="md:col-span-2 flex flex-col gap-4 pt-6">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold transition" id="sign_up_button">
               Sign Up
             </button>
-            <a href="{{ route('sign-in') }}" class="w-full text-center bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
+            <a href="{{ route('sign-in') }}" class="w-full text-center bg-black hover:bg-gray-800 text-white py-4 rounded-xl font-semibold transition">
               Back to Login
             </a>
           </div>
