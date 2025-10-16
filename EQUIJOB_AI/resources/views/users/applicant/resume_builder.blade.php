@@ -14,13 +14,15 @@
 <body x-data="{ sidebarOpen: false }" class="bg-gray-100 text-gray-800 font-sans antialiased h-screen overflow-hidden">
 
     @if (session('error'))
-    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-md" role="alert">
+    {{-- START: MODIFIED BLOCK 1 --}}
+    <div class="auto-fade-alert transition-opacity duration-500 ease-in-out mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-md" role="alert">
         {{ session('error') }}
     </div>
+    {{-- END: MODIFIED BLOCK 1 --}}
     @endif
 
     @if ($errors->any())
-    <div class="mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-lg shadow-lg" role="alert">
+    <div class="auto-fade-alert transition-opacity duration-500 ease-in-out mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-lg shadow-lg" role="alert">
         <div class="flex items-center">
             <svg aria-hidden="true" class="w-5 h-5 mr-2 text-red-700" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
@@ -95,6 +97,7 @@
                         Smart Resume <span class="text-sky-500">Builder</span>
                     </div>
 
+                    {{-- The rest of your form is unchanged --}}
                     <section class="bg-white p-6 shadow rounded-lg">
                         <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -122,23 +125,21 @@
                                 <label for="phone" class="block text-lg">Phone Number</label>
                                 <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" readonly />
                             </div>
-                            
-                            {{-- *** THIS IS THE UPDATED BLOCK *** --}}
+
                             <div>
                                 <label for="disability_type" class="block text-lg">Disability Type</label>
                                 <select id="typeOfDisability" name="resume[typeOfDisability]" class="w-full border border-black bg-gray-300 h-11 px-3">
                                     <option value="" disabled {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
-                                    
+
                                     @foreach($disabilityTypes as $disability)
-                                        <option value="{{ $disability }}" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == $disability ? 'selected' : '' }}>
-                                            {{ $disability }}
-                                        </option>
+                                    <option value="{{ $disability }}" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == $disability ? 'selected' : '' }}>
+                                        {{ $disability }}
+                                    </option>
                                     @endforeach
 
                                 </select>
                             </div>
-                            {{-- *** END OF UPDATED BLOCK *** --}}
-                            
+
                             <div>
                                 <label for="photo" class="block text-lg">Upload a 2x2 Photo</label>
                                 <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" />
@@ -149,7 +150,7 @@
                             </div>
                         </div>
                     </section>
-
+                    
                     <section id="experienceSection" class="bg-white p-6 shadow rounded-lg">
                         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-4">
                             <h2 class="text-2xl font-semibold">Experience</h2>
@@ -241,6 +242,7 @@
                             Generate Resume
                         </button>
                     </div>
+
                 </form>
 
             </main>
@@ -255,6 +257,9 @@
     </script>
 
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>
+
+
+
 </body>
 
 </html>

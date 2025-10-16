@@ -15,7 +15,7 @@ class GeminiService
      * @param string $mimeType The MIME type of the file (e.g., 'application/pdf').
      * @return array|null
      */
-    public function extractInformationFromResumeFile(string $filePath, string $mimeType): ?array
+     public function extractInformationFromResumeFile(string $filePath, string $mimeType): ?array
     {
         $apiKey = config('gemini.api_key');
         if (!$apiKey) {
@@ -25,7 +25,16 @@ class GeminiService
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
-        $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. You MUST return the information ONLY as a valid JSON object. The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
+        // =================================================================
+        // START: PROMPT IMPROVEMENT
+        // =================================================================
+        $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. "
+                    . "You MUST return the information ONLY as a valid JSON object. "
+                    . "CRITICAL: If the provided file does not appear to be a professional resume or Curriculum Vitae (CV), you MUST return an empty JSON object like `{}`. "
+                    . "The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
+        // =================================================================
+        // END: PROMPT IMPROVEMENT
+        // =================================================================
 
         $fileData = [
             'inline_data' => [
@@ -61,7 +70,6 @@ class GeminiService
             return null;
         }
     }
-
     public function getAiJobMatches(array $resumeData, $potentialJobs): array
     {
         if ($potentialJobs->isEmpty()) { return []; }

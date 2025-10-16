@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let experienceEntryCount = initialCounts.experience;
     let educationEntryCount = initialCounts.education;
 
@@ -119,5 +119,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target.classList.contains('remove-education-btn')) {
             event.target.closest('.education-entry')?.remove();
         }
+    });
+
+    const alerts = document.querySelectorAll('.auto-fade-alert');
+
+    alerts.forEach(alertEl => {
+        setTimeout(() => {
+            alertEl.classList.add('opacity-0');
+
+
+            setTimeout(() => {
+                alertEl.style.display = 'none';
+            }, 500);
+        }, 10000);
     });
 });

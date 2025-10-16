@@ -7,7 +7,7 @@ use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule; // <-- ADD THIS LINE AT THE TOP
+use Illuminate\Validation\Rule; 
 use Gemini;
 
 class ResumeController extends Controller
@@ -131,7 +131,6 @@ class ResumeController extends Controller
         return $prompt;
     }
 
-    // REPLACE your existing store() method with this one
     public function store(Request $request, SupabaseStorageService $supabase)
     {
         $applicantUser = Auth::guard('applicant')->user();
@@ -139,13 +138,13 @@ class ResumeController extends Controller
         $validatedData = $request->validate([
             'resume.firstName' => 'required|string|max:255',
             'resume.lastName' => 'required|string|max:255',
-            'resume.dob' => 'nullable|date',
-            'resume.address' => 'nullable|string|max:255',
+            'resume.dob' => 'required|date',
+            'resume.address' => 'required|string|max:255',
             'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
-            'resume.phone' => 'nullable|string|max:15',
+            'resume.phone' => 'required|string|max:15',
             'resume.typeOfDisability' => ['nullable', 'string', Rule::in($this->getDisabilityTypes())],
-            'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'resume.summary' => 'nullable|string',
+            'resume.photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'resume.summary' => 'required|string',
             'resume.skills' => 'nullable|string|max:1000',
             'experience' => 'nullable|array',
             'experience.*.employer' => 'nullable|string|max:255|required_with:experience.*.jobTitle',

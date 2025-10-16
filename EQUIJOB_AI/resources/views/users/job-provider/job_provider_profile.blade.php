@@ -87,9 +87,9 @@
                                     ? $user->companyLogo
                                     : ($user->companyLogo ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->companyLogo}" : null);
                                     @endphp
-                                    <img src="{{ $logoUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
-                                        alt="Company Logo"
-                                        class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
+                                        <img src="{{ $logoUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                                            alt="Company Logo"
+                                            class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Business Permit</label>
