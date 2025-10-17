@@ -32,7 +32,7 @@
         </div>
 
         <div id="mobile-menu" class="absolute top-full right-4 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden md:hidden z-50">
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">About Us</a>
+          <a href="{{route('about-us')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">About Us</a>
           <a href="{{route('contact-us')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-100">Contact Us</a>
           <a href="{{ route('sign-in') }}" class="block px-4 py-2 text-sm text-blue-600 font-semibold hover:bg-blue-100">Sign In</a>
         </div>
