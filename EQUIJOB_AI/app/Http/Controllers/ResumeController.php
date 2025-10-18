@@ -257,7 +257,6 @@ class ResumeController extends Controller
 
     public function viewAndDownload()
     {
-        // ... Your viewAndDownload method remains unchanged ...
         $user = Auth::guard('applicant')->user();
         $user->load('resume.experiences', 'resume.educations');
         $resume = $user->resume;
