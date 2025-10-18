@@ -16,17 +16,61 @@
 
 <body class="min-h-screen bg-gray-100 text-gray-800 font-sans antialiased">
 
-    <div class="fixed top-0 left-0 w-[234px] h-full z-40 bg-white">
+    <aside class="hidden lg:block w-[234px] bg-white h-screen fixed top-0 left-0 z-30">
         <x-applicant-sidebar />
-    </div>
+    </aside>
+
+    <div
+        x-show="sidebarOpen"
+        @click="sidebarOpen = false"
+        x-transition.opacity
+        class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
+
+    <aside
+        x-show="sidebarOpen"
+        x-transition:enter="transition transform duration-300"
+        x-transition:enter-start="-translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition transform duration-300"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="-translate-x-full"
+        class="fixed inset-y-0 left-0 w-[234px] bg-white z-40 lg:hidden shadow-lg flex flex-col overflow-y-auto">
+        <div class="flex flex-col h-full bg-[#c7d4f8]">
+
+            <div class="flex justify-end p-4 bg-[#c7d4f8]">
+                <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto">
+                <x-applicant-sidebar />
+            </div>
+
+        </div>
+    </aside>
 
     <div class="flex flex-col ml-0 lg:ml-[234px] ">
 
-        <div class="sticky top-0 z-30 bg-white shadow-sm flex-shrink-0 h-16">
+        <div class="sticky top-0 z-20 bg-white shadow-sm flex-shrink-0 h-16 flex items-center justify-between px-4 sm:px-6">
+            <button type="button" @click="sidebarOpen = true" class="text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 lg:hidden">
+                <span class="sr-only">Open sidebar</span>
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <div class="flex-1"></div>
+
             <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
         </div>
 
-        <div class="sticky top-16 z-20 bg-white shadow-sm flex items-center justify-between px-6 py-4 flex-shrink-0 h-14">
+
+        <div class="sticky top-16 z-10 bg-white shadow-sm flex items-center justify-between px-6 py-4 flex-shrink-0 h-14">
             <h1 class="font-audiowide text-3xl md:text-4xl text-gray-800">
                 <span class="text-[#25324B]">Applicant </span>
                 <span class="text-[#26A4FF]">Profile</span>
@@ -53,22 +97,22 @@
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">First Name</label>
                                 <input type="text" value="{{ $user->firstName }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Last Name</label>
                                 <input type="text" value="{{ $user->lastName }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Email Address</label>
                                 <input type="email" value="{{ $user->email }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Phone Number</label>
                                 <input type="text" value="{{ $user->phoneNumber }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                         </div>
 
@@ -76,22 +120,22 @@
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Date of Birth</label>
                                 <input type="date" value="{{ $user->dateOfBirth }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Address</label>
                                 <input type="text" value="{{ $user->address }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
                                 <input type="text" value="{{ $user->pwdId }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Disability Type</label>
                                 <input type="text" value="{{ $user->typeOfDisability }}" disabled
-                                    class="w-full border rounded-md px-4 py-2 text-sm" />
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                         </div>
                     </div>
