@@ -62,11 +62,11 @@ class JobProviderProfileController extends Controller
     public function update(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
-            'firstName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
-            'lastName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'sometimes|string|max:100|',
+            'lastName' => 'sometimes|string|max:100|',
             'email' => 'sometimes|string|email|max:255',
             'businessPermit' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'companyName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'companyName' => 'sometimes|string|max:100|',
             'companyLogo' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
             'profilePicture' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
             'phoneNumber' => 'sometimes|string|max:11',

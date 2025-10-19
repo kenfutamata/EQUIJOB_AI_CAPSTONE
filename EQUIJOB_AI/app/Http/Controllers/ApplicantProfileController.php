@@ -61,8 +61,8 @@ class ApplicantProfileController extends Controller
     public function update(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
-            'firstName' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
-            'lastName' => 'string|max:255|regex:/^[A-Za-z\s]+$/',
+            'firstName' => 'string|max:255',
+            'lastName' => 'string|max:255',
             'email' => 'string|email|max:255',
             'phoneNumber' => 'string|max:11',
             'dateOfBirth' => 'date|before_or_equal:today',
