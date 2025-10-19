@@ -82,7 +82,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <th class="px-2 py-2">Applicant Last Name {!! sortArrow('lastName')!!}</th>
                             <th class="px-2 py-2">Applicant Phone Number {!! sortArrow('phoneNumber')!!}</th>
                             <th class="px-2 py-2">Sex {!! sortArrow('gender')!!}</th>
-                            <th class="px-2 py-2">Applicant Address {!! sortArrow('address')!!}</th>
                             <th class="px-2 py-2">Email Address {!! sortArrow('emailAddress')!!}</th>
                             <th class="px-2 py-2">Applicant Disability Type {!! sortArrow('disabilityType')!!}</th>
                             <th class="px-2 py-2">Status {!! sortArrow('status')!!}</th>
@@ -99,10 +98,11 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         'companyName' => $posting->companyName ?? 'N/A',
                         'firstName' => $applicant->firstName ?? 'N/A',
                         'lastName' => $applicant->lastName ?? 'N/A',
-                        'sex' => $applicant->gender ?? 'N/A',
+                        'gender' => $applicant->gender ?? 'N/A',
                         'age' => $applicant->age ?? 'N/A',
                         'contactPhone' => $applicant->phoneNumber ?? 'N/A',
                         'contactEmail' => $applicant->email ?? 'N/A',
+                        'address' => $applicant->address ?? 'N/A',
                         'disabilityType' => $applicant->typeOfDisability ?? 'N/A',
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
@@ -123,7 +123,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $applicant->lastName ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->phoneNumber ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->gender ?? '' }}</td>
-                            <td class="px-2 py-2">{{ $applicant->address ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->email ?? '' }}</td>
                             <td class="px-2 py-2">{{ $applicant->typeOfDisability ?? '' }}</td>
                             <td class="px-2 py-2">{{ $application->status ?? '' }}</td>
@@ -246,7 +245,14 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/email.png') }}" alt="Icon" class="w-6 h-6" />
                         <div>
                             <p class="text-sm text-gray-700">Email Address</p>
-                            <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium">₱ 0</p>
+                            <p id="modal-contactEmail" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/address.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Applicant's Address</p>
+                            <p id="modal-address" class="text-sm text-blue-600 font-medium"></p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">

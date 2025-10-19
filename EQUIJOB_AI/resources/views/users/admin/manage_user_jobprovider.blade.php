@@ -105,7 +105,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}";
                             @endphp
                             <img src="{{$profileUrl}}" class="w-8 h-8 object-cover mx-auto">
-                            @else No Picture 
+                            @else 
+                            No Picture 
                             @endif
                         </td>
                         <td class="px-4 py-3">{{ $user->status }}</td>

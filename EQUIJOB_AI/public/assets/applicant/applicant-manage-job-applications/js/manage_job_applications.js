@@ -45,6 +45,7 @@ function openViewJobApplicationModal(button) {
     document.getElementById('modal.sex').textContent = applicationData.gender ?? 'N/A';
     document.getElementById('modal.contactPhone').textContent = applicationData.contactPhone ?? 'N/A';
     document.getElementById('modal.contactEmail').textContent = applicationData.contactEmail ?? 'N/A';
+    document.getElementById('modal.address').textContent = applicationData.address ?? 'N/A';
 
     const resumeContainer = document.getElementById('modal_view_resume');
     resumeContainer.innerHTML = '';

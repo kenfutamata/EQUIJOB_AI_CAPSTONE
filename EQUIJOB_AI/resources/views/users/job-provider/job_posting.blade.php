@@ -350,6 +350,10 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal.companyName" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
+                <label class="block text-xs text-gray-500">Company Address</label>
+                <input id="modal.companyAddress" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
                 <label class="block text-xs text-gray-500">Sex</label>
                 <input id="modal.sex" class="w-full border rounded px-2 py-1" disabled>
             </div>

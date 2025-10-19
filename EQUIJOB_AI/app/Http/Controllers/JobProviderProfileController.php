@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class JobProviderProfileController extends Controller
 {
@@ -61,17 +62,17 @@ class JobProviderProfileController extends Controller
     public function update(Request $request, SupabaseStorageService $supabase)
     {
         $validateInformation = $request->validate([
-            'firstName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
-            'lastName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
-            'email' => 'string|email|max:255',
-            'businessPermit' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'companyName' => 'string|max:100|regex:/^[A-Za-z\s]+$/',
-            'companyLogo'=> 'file|mimes:jpg,jpeg,png|max:2048',
-            'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
-            'phoneNumber' => 'string|max:11',
-            'companyAddress' => 'string|max:100',
+            'firstName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'lastName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'email' => 'sometimes|string|email|max:255',
+            'businessPermit' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'companyName' => 'sometimes|string|max:100|regex:/^[A-Za-z\s]+$/',
+            'companyLogo' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
+            'profilePicture' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
+            'phoneNumber' => 'sometimes|string|max:11',
+            'companyAddress' => 'sometimes|string|max:100',
         ]);
-        if($request->hasFile('companyLogo')){
+        if ($request->hasFile('companyLogo')) {
             $url = $supabase->upload($request->file('companyLogo'), 'companyLogo');
             $validateInformation['companyLogo'] = $url;
         }
@@ -85,16 +86,14 @@ class JobProviderProfileController extends Controller
         }
 
         try {
-            $user = Auth::guard('job_provider')->user();
-            if (!$user instanceof \App\Models\User) {
-                $user = \App\Models\User::find($user->id);
-            }
-            foreach ($validateInformation as $key => $value) {
-                $user->$key = $value;
-            }
-            $user->save();
+            $userId = Auth::guard('job_provider')->id();
+
+            $user = \App\Models\users::findOrFail($userId);
+            $user->update($validateInformation);
             return redirect()->back()->with('success', 'Profile updated successfully.');
         } catch (\Exception $e) {
+            Log::error('error', "Error Occured" . $e->getMessage());
+
             return redirect()->back()->with('error', 'An error occurred while updating the profile: ' . $e->getMessage());
         }
     }

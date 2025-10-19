@@ -61,7 +61,7 @@
                         Feedback Ratings for {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}
                     </h2>
                     @if($ratingsChartData)
-                    <div class="mx-auto"><canvas id="ratingsChart"></canvas></div>
+                    <div class="mx-auto relative h-80 max-w-lg"><canvas id="ratingsChart"></canvas></div>
                     @else
                     <p class="text-center py-10 text-gray-500">No rating data for this month.</p>
                     @endif
@@ -72,7 +72,7 @@
                         Application Outcomes for {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}
                     </h2>
                     @if($trendsChartData)
-                    <div class="mx-auto"><canvas id="trendsChart"></canvas></div>
+                    <div class="mx-auto relative h-80 max-w-lg"><canvas id="trendsChart"></canvas></div>
                     @else
                     <p class="text-center py-10 text-gray-500">No data for this month.</p>
                     @endif

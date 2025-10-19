@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-position').textContent = data.position;
         document.getElementById('modal-companyName').textContent = data.companyName;
         document.getElementById('modal-disabilityType').textContent = data.disabilityType || 'N/A';
-        document.getElementById('modal-sex').textContent = data.sex || 'N/A';
+        document.getElementById('modal-sex').textContent = data.gender || 'N/A';
         document.getElementById('modal-contactPhone').textContent = data.contactPhone || 'N/A';
         document.getElementById('modal-contactEmail').textContent = data.contactEmail || 'N/A';
-
+        document.getElementById('modal-address').textContent = data.address  || 'N/A';
         document.getElementById('modal-interviewDate').textContent = data.interviewDate || 'Not Scheduled';
         document.getElementById('modal-interviewTime').textContent = data.interviewTime || 'Not Scheduled';
         document.getElementById('modal-interviewLink').innerHTML = data.interviewLink ? `<a href="${data.interviewLink}" target="_blank" class="text-blue-600 hover:underline">Join Meeting</a>` : 'No link provided';
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         profileImg.style.display = data.profilePicture ? 'block' : 'none';
         const applicationContainer = document.getElementById('modal_view_application_letter');
         applicationContainer.innerHTML = '';
-        if(data.uploadApplicationLetter){
+        if (data.uploadApplicationLetter) {
             const filePath = data.uploadApplicationLetter.startsWith('http') ? data.uploadApplicationLetter : `${SUPABASE_BASE_URL}/uploadApplicationLetter/${data.uploadApplicationLetter}`;
             const fileExtension = filePath.split('.').pop().toLowerCase();
             if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 applicationContainer.innerHTML = `<a href="${filePath}" target="_blank" class="text-blue-500 underline">Download Application Letter</a>`;
             }
         }
-        
+
         const resumeContainer = document.getElementById('modal_view_resume');
         resumeContainer.innerHTML = '';
-        if(data.uploadApplicationLetter){
+        if (data.uploadApplicationLetter) {
             const filePath = data.uploadResume.startsWith('http') ? data.uploadResume : `${SUPABASE_BASE_URL}/uploadResume/${data.uploadResume}`;
             const fileExtension = filePath.split('.').pop().toLowerCase();
             if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {

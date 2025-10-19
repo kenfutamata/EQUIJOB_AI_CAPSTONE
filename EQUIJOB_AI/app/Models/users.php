@@ -85,7 +85,8 @@ class users extends Authenticatable
         'companyAddress',
         'companyLogo',
         'businessPermit', 
-        'userID'
+        'userID', 
+        'profilePicture'
     ];
 
     protected $hidden = [

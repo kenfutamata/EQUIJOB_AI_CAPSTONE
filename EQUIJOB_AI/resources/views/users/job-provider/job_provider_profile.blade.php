@@ -31,6 +31,17 @@
             </div>
 
             <main class="p-6 md:p-10">
+            @if ($errors->any())
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                    <p class="font-bold">Please correct the following errors:</p>
+                    <ul class="mt-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
                 <div class="max-w-5xl mx-auto">
 
                     <div class="flex flex-col items-center mb-8">
@@ -87,9 +98,9 @@
                                     ? $user->companyLogo
                                     : ($user->companyLogo ? "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->companyLogo}" : null);
                                     @endphp
-                                        <img src="{{ $logoUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
-                                            alt="Company Logo"
-                                            class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
+                                    <img src="{{ $logoUrl ?: asset('assets/applicant/applicant-dashboard/profile_pic.png') }}"
+                                        alt="Company Logo"
+                                        class="rounded-md w-[100px] h-[100px] object-cover mb-4 shadow-md">
                                 </div>
                                 <div>
                                     <label class="block text-sm text-gray-600 mb-1">Business Permit</label>
@@ -114,7 +125,7 @@
         <div id="updateProfileModal"
             class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 space-y-6">
-                <form action="{{ route('job-provider-profile-update', $user->id) }}" method="POST" enctype="multipart/form-data"
+                <form action="{{ route('job-provider-profile-update') }}" method="POST" enctype="multipart/form-data"
                     class="space-y-6">
                     @csrf
                     @method('PUT')
@@ -126,42 +137,42 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">First Name</label>
-                            <input type="text" name="firstName" value="{{ $user->firstName }}"
+                            <input type="text" name="firstName" id="firstName" value="{{ $user->firstName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Last Name</label>
-                            <input type="text" name="lastName" value="{{ $user->lastName }}"
+                            <input type="text" name="lastName" id="lastName" value="{{ $user->lastName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" pattern="[A-Za-z\s]+" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Email Address</label>
-                            <input type="email" name="email" value="{{ $user->email }}"
+                            <input type="email" name="email" id="email" value="{{ $user->email }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Company Name</label>
-                            <input type="text" name="companyName" value="{{ $user->companyName }}"
+                            <input type="text" name="companyName" id="companyName" value="{{ $user->companyName }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Company Address</label>
-                            <input type="text" name="companyAddress" value="{{ $user->companyAddress }}"
+                            <input type="text" name="companyAddress" id="companyAddress" value="{{ $user->companyAddress }}"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Company Logo</label>
-                            <input type="file" name="companyLogo"
+                            <input type="file" name="companyLogo" id="companyLogo"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Business Permit</label>
-                            <input type="file" name="businessPermit"
+                            <input type="file" name="businessPermit" id="businessPermit"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Upload Profile</label>
-                            <input type="file" name="profilePicture"
+                            <input type="file" name="profilePicture" id="profilePicture"
                                 class="w-full border rounded-md px-4 py-2 text-sm" />
                         </div>
                     </div>

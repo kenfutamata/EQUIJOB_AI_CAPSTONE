@@ -110,13 +110,13 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         @php
                         $posting = $application->jobPosting;
                         $applicant = $application->applicant;
-                        // Ensure objects exist before accessing properties
                         $modalData = array_merge($posting ? $posting->toArray() : [], [
                         'firstName' => $applicant->firstName ?? null,
                         'lastName' => $applicant->lastName ?? null,
-                        'sex' => $applicant->gender ?? null,
+                        'gender' => $applicant->gender ?? null,
                         'contactPhone' => $applicant->phoneNumber ?? null,
                         'contactEmail' => $applicant->email ?? null,
+                        'address'=>$applicant->address ?? null,
                         'disabilityType' => $applicant->typeOfDisability ?? null,
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
@@ -195,7 +195,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/salary.png') }}" alt="Icon" class="w-6 h-6" />
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/gender.png') }}" alt="Icon" class="w-6 h-6" />
                         <div>
                             <p class="text-sm text-gray-700">Sex</p>
                             <p id="modal.sex" class="text-sm text-blue-600 font-medium"></p>
@@ -216,14 +216,21 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/workplace.png') }}" alt="Icon" class="w-6 h-6" />
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/address.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Applicant's Address</p>
+                            <p id="modal.address" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/resume.png') }}" alt="Icon" class="w-6 h-6" />
                         <div>
                             <p class="text-sm text-gray-700">Resume</p>
                             <div id="modal_view_resume"></div>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/workplace.png') }}" alt="Icon" class="w-6 h-6" />
+                        <img src="{{ asset('assets/job-provider/manage-job-applications/pictures/applicationletter.png') }}" alt="Icon" class="w-6 h-6" />
                         <div>
                             <p class="text-sm text-gray-700">Application Letter</p>
                             <div id="modal_view_application_letter"></div>
