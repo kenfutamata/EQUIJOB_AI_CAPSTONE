@@ -69,8 +69,8 @@ class ApplicantProfileController extends Controller
             'address' => 'string|max:255',
             'typeOfDisability' => 'string|max:255',
             'pwdId' => 'string|max:19|regex:/^\d{2}-\d{4}-\d{3}-\d{7}$/',
-            'upload_pwd_card' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'profilePicture' => 'file|mimes:jpg,jpeg,png|max:2048',
+            'upload_pwd_card' => 'file|mimes:jpg,jpeg,png,pdf|max:4096',
+            'profilePicture' => 'file|mimes:jpg,jpeg,png|max:4096',
         ]);
         if ($request->hasFile('upload_pwd_card')) {
             $url = $supabase->upload($request->file('upload_pwd_card'), 'upload_pwd_card');

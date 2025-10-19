@@ -65,10 +65,10 @@ class JobProviderProfileController extends Controller
             'firstName' => 'sometimes|string|max:100',
             'lastName' => 'sometimes|string|max:100',
             'email' => 'sometimes|string|email|max:255',
-            'businessPermit' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'businessPermit' => 'sometimes|file|mimes:jpg,jpeg,png,pdf|max:4096',
             'companyName' => 'sometimes|string|max:100',
-            'companyLogo' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
-            'profilePicture' => 'sometimes|file|mimes:jpg,jpeg,png|max:2048',
+            'companyLogo' => 'sometimes|file|mimes:jpg,jpeg,png|max:4096',
+            'profilePicture' => 'sometimes|file|mimes:jpg,jpeg,png|max:4096',
             'phoneNumber' => 'sometimes|string|max:11',
             'companyAddress' => 'sometimes|string|max:100',
         ]);
