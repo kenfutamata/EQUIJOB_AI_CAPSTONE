@@ -41,7 +41,7 @@ class DisapprovedJobPostingSent extends Notification
             'message'=> 'Your job posting for ' . $this->jobPosting->position . ' has been Disapproved. Please Refer to the Remarks for more details.',
             'job_posting_id' => $this->jobPosting->id,
             'job_posting_position' => $this->jobPosting->position,
-            'url' => route('Admin-job-posting-show', $this->jobPosting->id),
+            'url' => route('admin-job-posting-show', $this->jobPosting->id),
         ];
     }
 

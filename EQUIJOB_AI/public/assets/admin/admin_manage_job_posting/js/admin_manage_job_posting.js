@@ -1,7 +1,7 @@
 function openDisapproveJobPostingModal(button) {
     const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
     const form = document.getElementById('disapproveForm');
-    form.action = `/Admin/Manage-Job-Posting/Disapproved/${jobposting.id}`;
+    form.action = `/admin/manage-job-posting/disapproved/${jobposting.id}`;
     document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
 }
 
@@ -17,15 +17,6 @@ function closeAddJobPostingModal() {
     document.getElementById('addJobPostingModal').classList.add('hidden');
 }
 
-function openDeleteModal(userId) {
-    const form = document.getElementById('deleteuser');
-    form.action = `/EQUIJOB/Admin/Manage-User-Applicants/Delete/${userId}`;
-    document.getElementById('DeleteRoleModal').classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    document.getElementById('DeleteRoleModal').classList.add('hidden');
-}
 
 window.addEventListener('click', function(e) {
     const modal = document.getElementById('viewProfileModal');
