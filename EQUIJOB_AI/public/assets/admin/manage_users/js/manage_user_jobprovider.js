@@ -42,7 +42,7 @@ window.closeModal = function () {
 };
 
 window.openDeleteModal = function (url) {
-    const form = document.getElementById('deleteuser');
+    const form = document.getElementById('deleteJobProviderAccountForm');
     form.action = url;
     document.getElementById('DeleteRoleModal').classList.remove('hidden');
 };

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\JobProviderUsersExport;
 use App\Mail\EmailConfirmation;
+use App\Mail\SendJobProviderAccountDeleteDetails;
 use App\Models\User;
 use App\Models\users;
 use Illuminate\Http\Request;
@@ -104,11 +105,18 @@ class AdminManageUserJobProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        $validateInformation = $request->validate([
+            'remarks' => 'required|string|max:1000',
+        ]);
         $user = users::findOrFail($id);
+        Mail::to($user)->send(new SendJobProviderAccountDeleteDetails([
+            'userID' => $user->userID,
+            'remarks' => $validateInformation['remarks'],
+        ]));
         $user->delete();
-        return redirect()->back()->with('Delete_Success', 'User deleted successfully');
+        return redirect()->back()->with('success', 'User deleted successfully');
     }
 
     public function export(Request $request)

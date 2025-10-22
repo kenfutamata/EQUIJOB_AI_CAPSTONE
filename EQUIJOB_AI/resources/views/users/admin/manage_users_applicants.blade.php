@@ -193,15 +193,17 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Delete User?</h3>
+                <h3 class="text-xl font-semibold">Please Input your Remarks for Deleting Job Applicant Account</h3>
                 <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <form id="deleteuser" method="POST" action="">
+            <form id="deleteJobApplicantAccountForm" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-200">Yes</button>
+                <div class="mb-4">
+                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                    <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
+                    <button type="submit" class="w-full py-3 px-4 rounded-lg bg-red-500 text-white">Delete</button>
             </form>
-            <button onclick="closeDeleteModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">No</button>
         </div>
     </div>
     <script src="{{ asset('assets/admin/manage_users/js/manage_users_applicants.js') }}"></script>
