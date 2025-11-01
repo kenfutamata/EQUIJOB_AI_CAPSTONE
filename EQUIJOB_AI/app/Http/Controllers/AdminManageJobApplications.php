@@ -23,7 +23,8 @@ class AdminManageJobApplications extends Controller
         $jobApplicationTable = (new JobApplication())->getTable();
         $applicantTable = 'users';
         $jobPostingTable = 'jobPosting';
-
+        $notifications = $admin->notifications ?? collect();
+        $unreadNotifications = $admin->unreadNotifications ?? collect();
         $applicationsQuery = JobApplication::query()
             ->join($applicantTable, "{$jobApplicationTable}.applicantID", '=', "{$applicantTable}.id")
             ->join($jobPostingTable, "{$jobApplicationTable}.jobPostingID", '=', "{$jobPostingTable}.id")
@@ -80,8 +81,8 @@ class AdminManageJobApplications extends Controller
         return view('users.admin.admin_manage_job_applications', [
             'admin' => $admin,
             'applications' => $applications,
-            'notifications' => $user->notifications ?? collect(),
-            'unreadNotifications' => $user->unreadNotifications ?? collect(),
+            'notifications' => $notifications,
+            'unreadNotifications' => $unreadNotifications,
             'search' => $search
         ]);
     }
