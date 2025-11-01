@@ -43,12 +43,7 @@ class ApplicantMatchJobsController extends Controller
 
             $parsedData = $this->geminiService->extractInformationFromResumeFile($filePath, $mimeType);
 
-            // =================================================================
-            // START: ADDED VALIDATION LOGIC
-            // =================================================================
-
-            // Check if the AI returned a valid structure but with no actual resume content.
-            // A resume must have at least skills, experience, or education to be useful.
+  
             $isResumeContentEmpty = !$parsedData || (
                 empty(trim($parsedData['skills'] ?? '')) &&
                 empty($parsedData['experience_details'] ?? []) &&
@@ -58,9 +53,7 @@ class ApplicantMatchJobsController extends Controller
             if ($isResumeContentEmpty) {
                 return back()->with('error', 'The AI could not identify any resume content (like skills, experience, or education) in the uploaded file. Please ensure you are uploading a valid resume.');
             }
-            // =================================================================
-            // END: ADDED VALIDATION LOGIC
-            // =================================================================
+
 
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("AI_PROCESSING_FAILED: " . $e->getMessage());

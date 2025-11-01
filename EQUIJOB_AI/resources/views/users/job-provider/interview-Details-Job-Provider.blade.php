@@ -4,42 +4,92 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reminder: Interview Details</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Interview Details for Job Provider</title>
+    <style>
+        body,
+        table,
+        td,
+        a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        u+#body a {
+            color: inherit;
+            text-decoration: none;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 py-6">
-    <div class="max-w-xl mx-auto px-4">
-        <div class="bg-white border-4 border-blue-400 rounded-lg p-8">
-            <div class="space-y-6">
-                <div>
-                    <p class="text-gray-800 text-base">Hello {{$jobApplication->jobPosting->companyName}}</p>
-                </div>
-                <div>
-                    <p class="text-gray-700">
-                        Please be Informed that your Interview with {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}} for the 
-                        <br>
-                        Position for {{$jobApplication->jobPosting->position}} will be tomorrow. Here are the interview details:
-                            <br>
-                            INTERVIEW DETAILS:
-                            <br>
-                            Interview Date: {{$jobApplication->interviewDate->format('F j, Y, g:i A')}}
-                            <br>
-                            Google Meet Link: {{$jobApplication->interviewLink}}
-                            <br>
-                            Applicant Name: {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}}
-                    </p>
-                </div>
-                <div>
-                    <p class="font-bold text-gray-800">Please Do not Reply on this Email.</p>
-                    <br>
-                </div>
-                <div class="text-center text-sm text-gray-500 mt-8">
-                    &copy; 2025 EQUIJOB
-                </div>
-            </div>
-        </div>
-    </div>
+<body id="body" style="margin: 0; padding: 0; background-color: #f1f1f1;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="background-color: #f1f1f1; padding: 20px 0;">
+
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff;">
+                    <tr>
+                        <td align="left" style="padding: 40px 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">Hello. {{$jobApplication->jobPosting->companyName}}!</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;"> Please be Informed that your Interview with {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}} for the Position for {{$jobApplication->jobPosting->position}} will be tomorrow.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">Here are the interview details:.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">
+                                INTERVIEW DETAILS:
+                                <br>
+                                Interview Date: {{$jobApplication->interviewDate->format('F j, Y, g:i A')}}
+                                <br>
+                                Google Meet Link: {{$jobApplication->interviewLink}}
+                                <br>
+                                Applicant Name: {{$jobApplication->applicant->firstName}} {{$jobApplication->applicant->lastName}}.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 0 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">Please do not reply on this email</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 0 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">From the Teams of</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding: 0 30px 30px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
+                            <p style="margin: 0;">EQUIJOB</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td align="left" style="padding: 20px 30px 40px 30px; font-family: Arial, sans-serif; font-size: 14px; line-height: 20px; color: #888888;">
+                            <p style="margin: 0;">&copy; 2025 EQUIJOB</p>
+                        </td>
+                    </tr>
+                </table>
+        </tr>
+    </table>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ function openJobDetailsModal(button) {
     document.getElementById('modal-educationalAttainment').textContent = job.educationalAttainment || '';
     document.getElementById('modal-skills').textContent = job.skills || '';
     document.getElementById('modal-requirements').textContent = job.requirements || '';
+    document.getElementById('modal-companyAddress').textContent = job.companyAddress || '';
 
     const logo = document.getElementById('modal-companyLogo');
     logo.src = job.companyLogo || '';

@@ -186,7 +186,6 @@ $is_pdf = $is_pdf ?? false;
                             class="w-[136px] h-[136px] object-cover rounded-md border border-gray-300 shadow-sm"
                             @if($is_pdf) style="width: 136px; height: 136px;" @endif>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">(2x2 Photo)</p>
                 </div>
                 @endif
             </div>

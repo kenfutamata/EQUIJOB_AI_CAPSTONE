@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{csrf_token()}}">
-    <title>EQUIJOB - Job Provider- Manage Job Applications</title>
+    <title>EQUIJOB - Admin- Manage Job Applications</title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
     <link href="{{asset('assets/job-provider/manage-job-applications/css/job_provider_job_applications.css')}}" rel="stylesheet">
 
@@ -28,12 +28,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div>
         <!-- Sidebar -->
         <div class="fixed top-0 left-0 w-[234px] h-full z-40" style="background-color: #c3d2f7;">
-            <x-job-provider-sidebar />
+            <x-admin-sidebar />
         </div>
 
         <!-- Topbar -->
         <div class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200">
-            <x-topbar :user="$user" :notifications="$user->notifications" :unreadNotifications="$user->unreadNotifications" />
+            <x-topbar :user="$admin" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
         </div>
 
         <main class="main-content-scroll bg-gray-50">
@@ -62,8 +62,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <span class="text-blue-500">Job Applications</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <a href="{{ route('job-provider-job-applications-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
-
+                    <a href="{{ route('admin-manage-job-applications-export') }}" class="bg-green-500 text-white px-2 py-1 rounded text-base">Export to Excel</a>
                     <form method="GET" action="" class="flex items-center gap-1 ml-auto">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Job Applications" class="border rounded-l px-2 py-1 w-32 text-sm" />
                         <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded-r text-sm">Search</button>
@@ -127,47 +126,17 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-2 py-2">{{ $applicant->typeOfDisability ?? '' }}</td>
                             <td class="px-2 py-2">{{ $application->status ?? '' }}</td>
                             <td class="px-2 py-2 space-y-1">
-                                @if ($application->status === 'Pending')
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
                                     data-application='@json($modalData)'
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
-                                <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.scheduleinterview', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
-                                    For Interview
-                                </button>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
-                                @elseif($application->status == 'For Interview')
                                 <button
-                                    onclick="openViewJobApplicationsModal(this)"
-                                    data-application='@json($modalData)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">
-                                    View
+                                    onclick="openDeleteApplicationModal('{{ route('admin-manage-job-applications-delete', $application->id) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">
+                                    Delete
                                 </button>
-                                <form action="{{route('job-provider-manage-job-applications.update-to-offer', $application->id)}}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">
-                                        Offer
-                                    </button>
-                                </form>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
-                                @elseif($application->status == 'On-Offer')
-                                <button
-                                    onclick="openViewJobApplicationsModal(this)"
-                                    data-application='@json($modalData)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">
-                                    View
-                                </button>
-                                @else
-                                <button
-                                    onclick="openViewJobApplicationsModal(this)"
-                                    data-application='@json($modalData)'
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">
-                                    View
-                                </button>
-                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -260,10 +229,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         <p id="modal-interviewTime" class="text-sm text-gray-700 leading-relaxed"></p>
                     </div>
                     <div class="border p-4">
-                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Google Meet Link</h3>
-                        <p id="modal-interviewLink" class="text-sm text-gray-700 leading-relaxed"></p>
-                    </div>
-                    <div class="border p-4">
                         <h3 class="text-lg font-semibold border-b pb-1 mb-2">Remarks</h3>
                         <p id="modal-remarks" class="text-sm text-gray-700 leading-relaxed"></p>
                     </div>
@@ -333,7 +298,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
             <button onclick="closeDeleteApplicationModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
-    <script src="{{ asset('assets/job-provider/manage-job-applications/js/job_provider_job_applications.js') }}"></script>
+    <script src="{{ asset('assets/admin/admin-manage-job-applications/js/admin_manage_job_applications.js') }}"></script>
     <style>
         .main-content-scroll {
             margin-left: 234px;

@@ -121,6 +121,7 @@
                         <p><strong>Email:</strong> <span id="modal-contactEmail" class="text-blue-600"></span></p>
                         <p><strong>Environment:</strong> <span id="modal-workEnvironment" class="text-blue-600"></span></p>
                         <p><strong>Category:</strong> <span id="modal-category" class="text-blue-600"></span></p>
+                        <p><strong>Company Address:</strong> <span id="modal-companyAddress" class="text-blue-600"></span></p>
                     </div>
                 </div>
 

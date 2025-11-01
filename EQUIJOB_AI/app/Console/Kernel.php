@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\SendFeedbackRequest::class,
         \App\Console\Commands\SendFeedbackDetailsNow::class,
+        \App\Console\Commands\SendInterviewDetailsNow::class,
     ];
 
     /**

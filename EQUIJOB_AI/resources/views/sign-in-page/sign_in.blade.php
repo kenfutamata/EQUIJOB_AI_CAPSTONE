@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Sign In</title>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <script src="{{ asset('assets/sign-in/js/sign_in.js') }}" defer></script>
 
 </head>
@@ -41,12 +42,6 @@
         <div class="relative">
           <label class="block text-gray-600 text-sm mb-1">Password</label>
           <input type="password" class="w-full h-12 px-4 pr-12 rounded-lg bg-gray-100 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" id="password" name="password" required />
-          <button type="button" onclick="togglePassword()" class="absolute right-3 top-9 text-gray-500 text-sm flex items-center space-x-1">
-            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-10-7-10-7a18.98 18.98 0 013.75-5.25M21 12s-3 7-10 7c-.62 0-1.23-.057-1.82-.167M9.53 9.53A3.001 3.001 0 0114.47 14.47" />
-            </svg>
-            <span>Hide</span>
-          </button>
           @error('password')
           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
           @enderror
@@ -85,7 +80,7 @@
       </div>
     </div>
   </div>
-    <x-footer />
+  <x-footer />
 
 </body>
 

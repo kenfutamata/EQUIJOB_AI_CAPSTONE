@@ -231,18 +231,6 @@ class JobProviderManageJobApplications extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy(string $id)
-    {
-        try {
-            $application = JobApplication::findOrFail($id);
-            $application->delete();
-            return redirect()->back()->with('Success', 'Application Deleted Successfully');
-        } catch (\Exception $e) {
-            Log::error('Failed to delete application ' . $id . ': ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to Delete Application');
-        }
-    }
-
     public function export(Request $request)
     {
         $user = Auth::guard('job_provider')->user();

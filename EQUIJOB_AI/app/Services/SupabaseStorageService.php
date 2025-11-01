@@ -15,21 +15,18 @@ class SupabaseStorageService
     {
         $this->baseUrl = rtrim(config('services.supabase.url'), '/');
         $this->apiKey = config('services.supabase.key');
-        $this->bucket = 'equijob_storage'; // ✅ match your Supabase bucket
+        $this->bucket = 'equijob_storage'; 
     }
 
     public function upload(UploadedFile $file, $folder = '')
     {
-        // Clean and UTF-8 safe filename
         $originalName = $file->getClientOriginalName();
-        $safeName = preg_replace('/[^\w\-.]+/u', '_', $originalName); // remove special chars
+        $safeName = preg_replace('/[^\w\-.]+/u', '_', $originalName);
         $fileName = time() . '_' . $safeName;
         $path = trim($folder . '/' . $fileName, '/');
 
-        // Encode bucket name for URL safety
         $encodedBucket = rawurlencode($this->bucket);
 
-        // Send binary body safely (not JSON-encoded)
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,
             'apikey' => $this->apiKey,
@@ -41,7 +38,6 @@ class SupabaseStorageService
             throw new \Exception("Supabase upload failed: " . $response->body());
         }
 
-        // Return the public URL
         return "{$this->baseUrl}/storage/v1/object/public/{$encodedBucket}/{$path}";
     }
 }
