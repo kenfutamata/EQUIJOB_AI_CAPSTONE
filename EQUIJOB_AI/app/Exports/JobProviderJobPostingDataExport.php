@@ -3,9 +3,11 @@
 namespace App\Exports;
 
 use App\Models\JobPosting;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class JobProviderJobPostingDataExport implements FromCollection
+class JobProviderJobPostingDataExport implements FromCollection, WithHeadings
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -21,36 +23,104 @@ class JobProviderJobPostingDataExport implements FromCollection
         $this->direction = $direction;
     }
 
+    public function headings(): array
+    {
+        return [
+            'ID',
+            'Job Provider ID',
+            'Company Name',
+            'Age',
+            'Disability Type',
+            'Educational Attainment',
+            'Salary Range',
+            'Job Posting Objectives',
+            'Experience',
+            'Skills',
+            'Description',
+            'Requirements', 
+            'created_at',
+            'updated_at',
+            'Contact Phone',
+            'Contact Email',
+            'Remarks',
+            'Position',
+            'Status',
+            'Work Environment',
+            'Sex',
+            'Category',
+            'Company Address',
+        ];
+    }
+
     public function collection()
     {
+        /** @var \App\Models\JobProvider $user */
+        $user = Auth::guard('job_provider')->user();
+
+        if (!$user) {
+            return collect([]);
+        }
+
         $query = JobPosting::query()
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('jobProviderID', 'like', "%{$this->search}%")
-                        ->orwhere('companyName', 'like', "%{$this->search}%")
-                        ->orwhere('sex', 'like', "%{$this->search}%")
-                        ->orwhere('disabilityType', 'like', "%{$this->search}%")
-                        ->orwhere('educationalAttainment', 'like', "%{$this->search}%")
-                        ->orwhere('salaryRange', 'like', "%{$this->search}%")
-                        ->orwhere('jobPostingObjectives', 'like', "%{$this->search}%")
-                        ->orwhere('experience', 'like', "%{$this->search}%")
-                        ->orwhere('skills', 'like', "%{$this->search}%")
-                        ->orwhere('requirements', 'like', "%{$this->search}%")
-                        ->orwhere('contactPhone', 'like', "%{$this->search}%")
-                        ->orwhere('contactEmail', 'like', "%{$this->search}%")
-                        ->orwhere('description', 'like', "%{$this->search}%")
-                        ->orwhere('requirements', 'like', "%{$this->search}%")
-                        ->orwhere('remarks', 'like', "%{$this->search}%")
-                        ->orwhere('workEnvironment', 'like', "%{$this->search}%")
-                        ->orwhere('category', 'like', "%{$this->search}%")
-                        ->orWhere('salaryRange', 'like', "%{$this->search}%")
-                        ->orWhere('status', 'like', "%{$this->search}%");
-                });
+            ->where('jobProviderID', $user->id);
+
+        $query->when($this->search, function ($query) {
+            $query->where(function ($q) {
+                $q->where('companyName', 'like', "%{$this->search}%")
+                    ->orWhere('position', 'like', "%{$this->search}%")
+                    ->orWhere('sex', 'like', "%{$this->search}%")
+                    ->orWhere('disabilityType', 'like', "%{$this->search}%")
+                    ->orWhere('educationalAttainment', 'like', "%{$this->search}%")
+                    ->orWhere('salaryRange', 'like', "%{$this->search}%")
+                    ->orWhere('jobPostingObjectives', 'like', "%{$this->search}%")
+                    ->orWhere('experience', 'like', "%{$this->search}%")
+                    ->orWhere('skills', 'like', "%{$this->search}%")
+                    ->orWhere('requirements', 'like', "%{$this->search}%")
+                    ->orWhere('contactPhone', 'like', "%{$this->search}%")
+                    ->orWhere('contactEmail', 'like', "%{$this->search}%")
+                    ->orWhere('description', 'like', "%{$this->search}%")
+                    ->orWhere('workEnvironment', 'like', "%{$this->search}%")
+                    ->orWhere('category', 'like', "%{$this->search}%")
+                    ->orWhere('status', 'like', "%{$this->search}%");
             });
-        $sortable = ['jobProviderID', 'companyName', 'salaryRange', 'jobPostingObjectives', 'experience', 'skills', 'requirements', 'contactPhone', 'contactEmail', 'description', 'requirements', 'workEnvironment', 'category', 'status'];
+        });
+
+        $sortable = [
+            'jobProviderID', 'companyName', 'position', 'salaryRange',
+            'jobPostingObjectives', 'experience', 'skills', 'requirements',
+            'contactPhone', 'contactEmail', 'description', 'workEnvironment',
+            'category', 'status', 'created_at'
+        ];
+
         $sort = in_array($this->sort, $sortable) ? $this->sort : 'created_at';
         $direction = $this->direction === 'desc' ? 'desc' : 'asc';
+        
         $query->orderBy($sort, $direction);
-        return $query->get(['jobProviderID', 'companyName', 'salaryRange', 'jobPostingObjectives', 'experience', 'skills', 'requirements', 'contactPhone', 'contactEmail', 'description', 'requirements', 'workEnvironment', 'category',  'status']);
+
+        return $query->get([
+            'id',
+            'jobProviderID',
+            'companyName',
+            'age',
+            'disabilityType',
+            'educationalAttainment',
+            'salaryRange',
+            'jobPostingObjectives',
+            'experience',
+            'skills',
+            'description',
+            'requirements',
+            'created_at',
+            'updated_at',
+            'contactPhone',
+            'contactEmail',
+            'remarks',
+            'position',
+            'status',
+            'workEnvironment',
+            'sex',
+            'category',
+            'companyAddress'
+        ]);
     }
 }

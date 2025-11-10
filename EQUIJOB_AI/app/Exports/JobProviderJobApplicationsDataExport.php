@@ -5,8 +5,9 @@ namespace App\Exports;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class JobProviderJobApplicationsDataExport implements FromCollection
+class JobProviderJobApplicationsDataExport implements FromCollection, WithHeadings
 {
     protected $search;
     protected $sort;
@@ -18,7 +19,27 @@ class JobProviderJobApplicationsDataExport implements FromCollection
         $this->sort = $sort;
         $this->direction = $direction;
     }
+    public function headings(): array
+    {
+        return[
+            'ID',
+            'Job Posting ID', 
+            'Apploicant ID', 
+            'Resume', 
+            'Appication Letter', 
+            '',
+            '', 
+            'Remarks', 
+            '', 
+            '', 
+            'Job Application Number', 
+            'Google Meet Link', 
+            'Status', 
+            'Interview Date', 
+            'Interview Time', 
 
+        ];   
+    }
     public function collection()
     {
         $user = Auth::guard('job_provider')->user();

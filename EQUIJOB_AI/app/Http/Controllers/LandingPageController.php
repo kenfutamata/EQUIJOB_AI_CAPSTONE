@@ -27,7 +27,7 @@ class LandingPageController extends Controller
         if(request()->has('category') && request()->category != ''){
             $query->where('category', request()->category);
         }
-        $collections = $query->paginate(10);
+        $collections = $query->paginate(12);
         $response = response()->view('jobs', compact('collections'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

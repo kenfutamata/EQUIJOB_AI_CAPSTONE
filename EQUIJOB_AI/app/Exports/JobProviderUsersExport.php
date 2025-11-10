@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Models\users;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class JobProviderUsersExport implements FromCollection
+class JobProviderUsersExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -27,10 +28,9 @@ class JobProviderUsersExport implements FromCollection
             'First Name',
             'Last Name',
             'Email',
-            'phoneNumber',
-            'companyName',
-            'status', 
-            'companyName'
+            'Phone Number',
+            'Company Name',
+            'Status', 
         ];
         
     }
