@@ -14,11 +14,9 @@
 <body x-data="{ sidebarOpen: false }" class="bg-gray-100 text-gray-800 font-sans antialiased h-screen overflow-hidden">
 
     @if (session('error'))
-    {{-- START: MODIFIED BLOCK 1 --}}
     <div class="auto-fade-alert transition-opacity duration-500 ease-in-out mb-4 rounded-lg bg-red-100 px-6 py-5 text-base text-red-700 fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-md" role="alert">
         {{ session('error') }}
     </div>
-    {{-- END: MODIFIED BLOCK 1 --}}
     @endif
 
     @if ($errors->any())
@@ -142,7 +140,7 @@
 
                             <div>
                                 <label for="photo" class="block text-lg">Upload a 2x2 Photo</label>
-                                <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" />
+                                <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" accept="image/*" />
                             </div>
                             <div class="md:col-span-2">
                                 <label for="summary" class="block text-lg">Summary/Objective</label>
