@@ -5,8 +5,9 @@ namespace App\Exports;
 use App\Models\Feedbacks;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class AdminSystemRatingDataExport implements FromCollection
+class AdminSystemRatingDataExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -21,6 +22,19 @@ class AdminSystemRatingDataExport implements FromCollection
         $this->search = $search;
         $this->sort = $sort;
         $this->direction = $direction;    
+    }
+
+    public function headings(): array   
+    {
+        return [
+            'First Name',
+            'Last Name',
+            'Rating',
+            'Feedback Text',
+            'Feedback Type',
+            'Status',
+        ];
+        
     }
     public function collection()
     {

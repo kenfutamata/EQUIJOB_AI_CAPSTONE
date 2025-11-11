@@ -4,8 +4,9 @@ namespace App\Exports;
 
 use App\Models\Feedbacks;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class AdminJobRatingDataExport implements FromCollection
+class AdminJobRatingDataExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -22,6 +23,20 @@ class AdminJobRatingDataExport implements FromCollection
         $this->direction = $direction;    
     }   
 
+    public function headings(): array   
+    {
+        return [
+            'Applicant ID',
+            'Job Posting ID',
+            'First Name',
+            'Last Name',
+            'Rating',
+            'Feedback Text',
+            'Feedback Type',
+            'Status',
+        ];
+        
+    }
 
     public function collection()
     {
