@@ -42,7 +42,7 @@ class ApplicantJobApplicationController extends Controller
     {
 
         $validatedRequest = $request->validate([
-            'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:8192',
+            'uploadResume' => 'required|file|mimes:pdf|max:4096',
             'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:8192',
             'jobPostingID' => 'required|exists:jobPosting,id',
             'jobProviderID' => 'required|exists:users,id',

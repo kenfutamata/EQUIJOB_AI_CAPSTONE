@@ -51,7 +51,7 @@ class SignInController extends Controller
             'address' => 'required|string|max:255',
             'gender' => 'required|string|max:255|',
             'typeOfDisability' => 'required|string|max:255', 
-            'pwdId' => 'nullable|string|max:19|regex:/^\d{2}-\d{4}-\d{3}-\d{7}$/',
+            'pwdId' => 'nullable|string|max:19|regex:/^\d{2}-\d{4}-\d{3}-\d{7}$/|unique:users',
             'upload_pwd_card' => 'required|file|mimes:jpg,jpeg,png|max:4096',
             'role' => 'nullable|string',
             'status' => 'nullable|string',

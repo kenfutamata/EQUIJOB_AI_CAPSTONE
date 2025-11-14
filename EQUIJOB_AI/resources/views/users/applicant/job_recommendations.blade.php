@@ -30,10 +30,8 @@
 
 <body x-data="{ sidebarOpen: false }" class="bg-[#FCFDFF] text-gray-800 font-sans antialiased min-h-screen flex">
 
-    <!-- Mobile Sidebar Overlay -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
 
-    <!-- Mobile Sidebar -->
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
         <div class="flex justify-end p-4">
             <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
@@ -290,10 +288,16 @@
                 <div>
                     <label class="block text-xs text-gray-500">Upload Resume</label>
                     <input type="file" name="uploadResume" id="uploadResume" accept="image/*, application/pdf " class="w-full border rounded px-2 py-1" required>
+                    @error('uploadResume')
+                    <div class="text-red-500 text-sm mb-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">Upload Application Letter</label>
                     <input type="file" name="uploadApplicationLetter" accept="image/*, application/pdf " class="w-full border rounded px-2 py-1" required>
+                    @error('uploadApplicationLetter')
+                    <div class="text-red-500 text-sm mb-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="flex justify-end gap-2 pt-4">
                     <button type="button" onclick="closeApplyJobModal()" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
