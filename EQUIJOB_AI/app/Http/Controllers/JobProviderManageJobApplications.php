@@ -11,6 +11,8 @@ use App\Http\Requests\ScheduleInterviewRequest;
 // Consolidate Mail and Notification usage
 use App\Mail\disapprovalDetailssent;
 use App\Mail\InterviewDetailsSent;
+use App\Mail\SendInterviewDetailsJobApplicantMail;
+use App\Mail\sendInterviewDetailsJobProviderMail;
 use App\Mail\SendOnOfferDetails;
 use App\Models\JobApplication;
 use App\Notifications\JobInterviewDetailsSent;
@@ -153,6 +155,8 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
             Mail::to($applicant)->send(new InterviewDetailsSent($mailData, 'applicant'));
+            Mail::to($applicant)->send(new SendInterviewDetailsJobApplicantMail($application)); 
+            Mail::to($jobProvider)->send(new sendInterviewDetailsJobProviderMail($application));
             $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
 
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Successfully Scheduled Interview');

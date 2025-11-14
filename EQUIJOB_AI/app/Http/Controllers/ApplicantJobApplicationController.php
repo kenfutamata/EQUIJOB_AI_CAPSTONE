@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\HiredStatusSent;
 use App\Mail\jobApplicationEmailSent;
+use App\Mail\NotifyApplicantFeedbackSent;
+use App\Models\Feedbacks;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
 use Illuminate\Http\Request;
@@ -42,8 +44,8 @@ class ApplicantJobApplicationController extends Controller
     {
 
         $validatedRequest = $request->validate([
-            'uploadResume' => 'required|file|mimes:pdf|max:4096',
-            'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:8192',
+            'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'jobPostingID' => 'required|exists:jobPosting,id',
             'jobProviderID' => 'required|exists:users,id',
         ]);
@@ -132,6 +134,18 @@ class ApplicantJobApplicationController extends Controller
             $jobPosting->save();
             $jobProvider = Auth::guard('job_provider')->user();
 
+            $feedback = Feedbacks::create([
+                'jobApplicationID' => $application->id,
+                'jobPostingID'     => $application->jobPostingID,
+                'applicantID'      => $application->applicantID,
+                'firstName'        => $applicant->firstName,
+                'lastName'         => $applicant->lastName,
+                'email'            => $applicant->email,
+                'phoneNumber'      => $applicant->phoneNumber,
+                'feedbackType'     => 'Job Rating',
+                'status'           => 'Sent',
+            ]);
+
             $maildata = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
@@ -143,7 +157,17 @@ class ApplicantJobApplicationController extends Controller
                 'jobProviderPhone' => $jobProvider->phone,
             ];
 
+            $maildataFeedback = [
+                'firstName'        => $applicant->firstName,
+                'lastName'         => $applicant->lastName,
+                'email'            => $applicant->email,
+                'jobProviderFirstName' => $application->jobPosting->jobProvider->firstName,
+                'jobProviderLastName' => $application->jobPosting->jobProvider->lastName,
+                'companyName'      => $application->jobPosting->jobProvider->companyName,
+                'position'         => $application->jobPosting->position,
+            ];
             Mail::to($applicant)->send(new HiredStatusSent($maildata));
+            Mail::to($applicant)->send(new NotifyApplicantFeedbackSent($maildataFeedback));
             return redirect()->back()->with('Success', 'Application Updated to Hired');
         } catch (\Exception $e) {
             Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
