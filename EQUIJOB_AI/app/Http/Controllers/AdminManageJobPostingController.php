@@ -35,7 +35,9 @@ class AdminManageJobPostingController extends Controller
                         ->orWhere('experience', 'like', "%{$search}%")
                         ->orWhere('category', 'like', "%{$search}%")
                         ->orWhere('skills', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%");              
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orwhere('provinceName', 'like', "%{$search}%")
+                        ->orwhere('cityName', 'like', "%{$search}%");              
                     });
             });
 

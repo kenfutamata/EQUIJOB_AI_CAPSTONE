@@ -41,6 +41,8 @@ function openViewJobPostingModal(button) {
   companyLogo.src = jobposting.companyLogo ? jobposting.companyLogo : '';
             companyLogo.style.display = jobposting.companyLogo ? 'block' : 'none';
     document.getElementById('modal.companyAddress').value = jobposting.companyAddress;
+    document.getElementById('modal.province').value = jobposting.provinceName;
+    document.getElementById('modal.city').value = jobposting.cityName;
     document.getElementById('modal.age').value = jobposting.age;
     document.getElementById('modal.disabilityType').value = jobposting.disabilityType;
     document.getElementById('modal.educationalAttainment').value = jobposting.educationalAttainment;

@@ -39,7 +39,6 @@ class ResumeController extends Controller
         $notifications = $user->notifications;
         $unreadNotifications = $user->unreadNotifications;
 
-        // Pass the sanitized list of disability types to the view
         $disabilityTypes = $this->getDisabilityTypes();
 
         $response = response()->view('users.applicant.resume_builder', compact('user', 'notifications', 'unreadNotifications', 'disabilityTypes'));
@@ -51,7 +50,6 @@ class ResumeController extends Controller
 
     protected function buildResumePrompt(Resume $resume, string $skillsSummary = ''): string
     {
-        // ... Your buildResumePrompt method remains unchanged ...
         $prompt = "You are a helpful assistant that refines and generates professional resume content based on provided information. Focus on clarity, conciseness, and impact.\n\n";
         $prompt .= "Create a professional and impactful resume for the candidate with the following details:\n\n";
 

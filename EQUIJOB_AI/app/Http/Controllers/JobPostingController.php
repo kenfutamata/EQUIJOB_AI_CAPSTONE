@@ -17,7 +17,7 @@ class JobPostingController extends Controller
     {
         $user = Auth::guard('job_provider')->user();
         $search = $request->input('search');
-
+        $user->load('province', 'city');
         $postingsQuery = JobPosting::where('jobProviderID', $user->id);
 
         $postingsQuery->when($search, function ($query, $search) {
@@ -67,6 +67,8 @@ class JobPostingController extends Controller
             'position' => 'required|string|max:100',
             'companyName' => 'required|string|max:100',
             'companyAddress' => 'required|string|max:100',
+            'provinceName' => 'required|string|max:100',
+            'cityName' => 'required|string|max:100',
             'sex' => 'required|string|max:10',
             'age' => 'required|string|max:65',
             'disabilityType' => 'required|string|max:100',

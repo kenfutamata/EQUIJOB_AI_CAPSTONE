@@ -85,7 +85,7 @@ return [
         ],
         'job_providers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\users::class,
         ],
         'admins' => [
             'driver' => 'eloquent',

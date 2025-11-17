@@ -132,6 +132,14 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal.companyAddress" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
+                <label class="block text-xs text-gray-500">Province</label>
+                <input id="modal.province" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500">City</label>
+                <input id="modal.city" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
                 <label class="block text-xs text-gray-500">Sex</label>
                 <input id="modal.sex" class="w-full border rounded px-2 py-1" disabled>
             </div>

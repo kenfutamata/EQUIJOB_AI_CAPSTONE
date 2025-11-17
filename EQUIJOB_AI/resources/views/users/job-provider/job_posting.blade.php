@@ -170,6 +170,20 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     @enderror
                 </div>
                 <div>
+                    <label class="block text-xs text-gray-500">Province</label>
+                    <input name="provinceName" class="w-full border rounded px-2 py-1" value="{{$user->province?->provinceName ?? 'N/A'}}" readonly>
+                    @error('provinceName')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-500">City</label>
+                    <input name="cityName" class="w-full border rounded px-2 py-1" value="{{$user->city?->cityName ?? 'N/A'}}" readonly>
+                    @error('companyName')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
                     <label class="block text-xs text-gray-500">Sex</label>
                     <select name="sex" class="w-full border rounded px-2 py-1">
                         <option value="Any">Any</option>
