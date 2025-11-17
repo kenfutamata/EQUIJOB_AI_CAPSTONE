@@ -82,13 +82,13 @@ function closeviewJobApplicationModal() {
     document.getElementById('viewJobApplicationModal').classList.add('hidden');
 }
 
-function openWithdrawModal(button) {
-    const formActionUrl = button.getAttribute('data-url');
-    const form = document.getElementById('withdrawForm');
-    form.action = formActionUrl;
-    document.getElementById('withdrawJobApplicationModal').classList.remove('hidden');
+function openWithdrawModal(url) {
+        const form = document.getElementById('withdrawApplication');
+        form.action = url;
+        document.getElementById('withdrawJobApplicationModal').classList.remove('hidden');
 }
 
 function closeWithdrawModal() {
     document.getElementById('withdrawJobApplicationModal').classList.add('hidden');
 }
+

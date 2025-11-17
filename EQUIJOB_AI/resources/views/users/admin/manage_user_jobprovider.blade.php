@@ -105,8 +105,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             : "https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/profilePicture/{$user->profilePicture}";
                             @endphp
                             <img src="{{$profileUrl}}" class="w-8 h-8 object-cover mx-auto">
-                            @else 
-                            No Picture 
+                            @else
+                            No Picture
                             @endif
                         </td>
                         <td class="px-4 py-3">{{ $user->status }}</td>
@@ -154,6 +154,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal_phoneNumber" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Name:</label>
                 <input id="modal_companyName" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <label class="block text-xs text-gray-500">Company Address:</label>
+                <input id="modal_companyAddress" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <label class="block text-xs text-gray-500">Province:</label>
+                <input id="modal_province" class="w-full border rounded px-4 py-2 text-sm" disabled />
+                <label class="block text-xs text-gray-500">City:</label>
+                <input id="modal_city" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Logo:</label>
                 <img id="modal_companyLogo" class="w-[100px] h-[100px] object-cover" />
                 <label class="block text-xs text-gray-500">Business Permit:</label>
@@ -170,7 +176,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     </div>
 
     <div id="DeleteRoleModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
                 <h3 class="text-xl font-semibold">Please Input your Remarks for Deleting Job Provider Account</h3>
                 <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>

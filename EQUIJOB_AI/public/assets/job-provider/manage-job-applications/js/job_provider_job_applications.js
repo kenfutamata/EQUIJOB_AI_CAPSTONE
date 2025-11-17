@@ -12,11 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-sex').textContent = data.gender || 'N/A';
         document.getElementById('modal-contactPhone').textContent = data.contactPhone || 'N/A';
         document.getElementById('modal-contactEmail').textContent = data.contactEmail || 'N/A';
-        document.getElementById('modal-address').textContent = data.address  || 'N/A';
+        document.getElementById('modal-address').textContent = data.address || 'N/A';
         document.getElementById('modal-interviewDate').textContent = data.interviewDate || 'Not Scheduled';
         document.getElementById('modal-interviewTime').textContent = data.interviewTime || 'Not Scheduled';
         document.getElementById('modal-interviewLink').innerHTML = data.interviewLink ? `<a href="${data.interviewLink}" target="_blank" class="text-blue-600 hover:underline">Join Meeting</a>` : 'No link provided';
-        document.getElementById('modal-remarks').textContent = data.remarks || 'No remarks.';
         const profileImg = document.getElementById('modal-applicantProfile');
         profileImg.src = data.profilePicture ? data.profilePicture : '';
         profileImg.style.display = data.profilePicture ? 'block' : 'none';
@@ -71,11 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.classList.add('hidden');
     };
 
-    window.openRejectJobApplicationModal = function (button) {
-        const modal = document.getElementById('rejectJobApplicationModal');
-        const form = document.getElementById('rejectForm');
-        form.action = button.dataset.url;
-        modal.classList.remove('hidden');
+    window.openRejectJobApplicationModal = function (url) {
+        const form = document.getElementById('disapproveApplication');
+        form.action = url;
+        document.getElementById('rejectJobApplicationModal').classList.remove('hidden');
     };
 
     window.closeRejectJobApplicationModal = function () {
@@ -91,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.closeDeleteApplicationModal = function () {
         document.getElementById('DeleteApplicationModal').classList.add('hidden');
     };
-
-
 
     const generateBtn = document.getElementById('generate-meet-link-btn');
     const visibleLinkInput = document.getElementById('create_modal_meet_link');

@@ -16,11 +16,42 @@ class ApplicantJobCollectionsController extends Controller
         $user = Auth::guard('applicant')->user();
         $notification = $user->notifications;
         $unreadNotifications = $user->unreadNotifications;
-        $query = JobPosting::where('status', 'For Posting');
-        if($request->has('category') && $request->category != ''){
-            $query->where('category', $request->category);
+        $search = $request->input('search');
+        $fromDate = $request->input('fromDate');
+        $toDate = $request->input('toDate');
+        $category = $request->input('category');
+        $query = JobPosting::query();
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('position', 'like', "%{$search}%")
+                    ->orWhere('companyName', 'like', "%{$search}%")
+                    ->orWhere('age', 'like', "%{$search}%")
+                    ->orWhere('disabilityType', 'like', "%{$search}%")
+                    ->orWhere('educationalAttainment', 'like', "%{$search}%")
+                    ->orWhere('experience', 'like', "%{$search}%")
+                    ->orWhere('skills', 'like', "%{$search}%")
+                    ->orWhere('requirements', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('contactPhone', 'like', "%{$search}%")
+                    ->orWhere('contactEmail', 'like', "%{$search}%")
+                    ->orWhere('companyAddress', 'like', "%{$search}%");
+            });
         }
-        $collections = $query->paginate(12); 
+        if($category){
+            $query->where('category', $category);
+        }
+        if ($fromDate) {
+            $query->whereDate('updated_at', '>=', $fromDate);
+        }
+        if ($toDate) {
+            $query->whereDate('updated_at', '<=', $toDate);
+        }
+
+        
+        $sort = in_array($request->sort, ['position', 'companyName', 'age', 'disabilityType', 'educationalAttainment', 'experience', 'skills', 'requirements']) ? $request->sort : 'created_at';
+        $direction = $request->direction === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($sort, $direction);
+        $collections = $query->paginate(12);
         $response = response()->view('users.applicant.applicant_job_collections', compact('user', 'notification', 'unreadNotifications', 'collections'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');

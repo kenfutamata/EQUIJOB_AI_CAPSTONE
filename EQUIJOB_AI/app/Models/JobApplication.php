@@ -18,7 +18,6 @@ class JobApplication extends Model
         'hiredAt',
         'notifiedAt',
         'appliedAt',
-        'remarks',
         'interviewDate',
         'reminderSentAt', 
         'interviewTime',

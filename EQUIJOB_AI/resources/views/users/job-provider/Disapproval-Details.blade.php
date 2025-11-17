@@ -18,9 +18,6 @@
                 <div>
                     <p class="text-gray-700">
                         Your Job Application for the position of {{$maildata['position']}} has been disapproved by the Job Provider. 
-                        The reason behind the disapproval of your application is as follows: 
-                        <br>
-                        <span class="font-bold">"{{$maildata['remarks']}}"</span>
                         <br>
                         We appreciate your interest in the position and encourage you to apply for other opportunities that may align with your skills and experience.
                         <br>

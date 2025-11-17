@@ -86,7 +86,9 @@ class users extends Authenticatable
         'companyLogo',
         'businessPermit', 
         'userID', 
-        'profilePicture'
+        'profilePicture',
+        'cityId',
+        'provinceId',
     ];
 
     protected $hidden = [
@@ -114,6 +116,16 @@ class users extends Authenticatable
         return Attribute::get(
             fn() => $this->firstName . ' ' . $this->lastName
         );
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(Cities::class, 'cityId');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'provinceId');
     }
 
 }

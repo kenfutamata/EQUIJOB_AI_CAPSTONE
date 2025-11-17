@@ -106,7 +106,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         'disabilityType' => $applicant->typeOfDisability ?? 'N/A',
                         'uploadResume' => $application->uploadResume,
                         'uploadApplicationLetter' => $application->uploadApplicationLetter,
-                        'remarks' => $application->remarks,
                         'interviewDate' => $application->interviewDate ? \Carbon\Carbon::parse($application->interviewDate)->format('F j, Y') : null,
                         'interviewTime' => $application->interviewTime ? \Carbon\Carbon::parse($application->interviewTime)->format('g:i A') : null,
                         'interviewLink' => $application->interviewLink,
@@ -137,7 +136,10 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                 <button onclick="openCreateInterviewDetailsModal('{{ route('job-provider-manage-job-applications.scheduleinterview', $application) }}')" class="bg-green-500 text-white px-2 py-1 rounded">
                                     For Interview
                                 </button>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
+                                <button onclick="openRejectJobApplicationModal('{{ route('job-provider-manage-job-applications.reject', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
+                                <button onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications-delete', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 @elseif($application->status == 'For Interview')
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
@@ -152,7 +154,10 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                         Offer
                                     </button>
                                 </form>
-                                <button onclick="openRejectJobApplicationModal(this)" data-url="{{route('job-provider-manage-job-applications.reject', $application)}}" class="bg-red-500 text-white px-2 py-1 rounded">Disapprove </button>
+                                <button onclick="openRejectJobApplicationModal('{{ route('job-provider-manage-job-applications.reject', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
+                                <button onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications-delete', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 @elseif($application->status == 'On-Offer')
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
@@ -160,6 +165,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
+                                <button onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications-delete', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 @else
                                 <button
                                     onclick="openViewJobApplicationsModal(this)"
@@ -167,6 +174,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                     class="bg-blue-500 text-white px-2 py-1 rounded">
                                     View
                                 </button>
+                                <button onclick="openDeleteApplicationModal('{{ route('job-provider-manage-job-applications-delete', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                                 @endif
                             </td>
                         </tr>
@@ -263,10 +272,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                         <h3 class="text-lg font-semibold border-b pb-1 mb-2">Google Meet Link</h3>
                         <p id="modal-interviewLink" class="text-sm text-gray-700 leading-relaxed"></p>
                     </div>
-                    <div class="border p-4">
-                        <h3 class="text-lg font-semibold border-b pb-1 mb-2">Remarks</h3>
-                        <p id="modal-remarks" class="text-sm text-gray-700 leading-relaxed"></p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -304,18 +309,15 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="rejectJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Disapprove Application</h3>
+                <h3 class="text-xl font-semibold">Disapprove Job Application?</h3>
                 <button onclick="closeRejectJobApplicationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
             </div>
-            <form id="rejectForm" method="POST" action="">
+            <form id="disapproveApplication" method="POST" action="">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label for="remarks-input" class="block text-sm font-medium text-gray-700 mb-1">Please state your reason for Disapproving the application.</label>
-                    <textarea id="remarks-input" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
-                </div>
-                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">Submit Disapproval</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-100">Yes</button>
             </form>
+            <button onclick="closeRejectJobApplicationModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
 

@@ -43,7 +43,12 @@ function closeViewJobPostingModal() {
 
 function openApplyJobModal(button) {
     const jobposting = JSON.parse(button.getAttribute('data-jobposting') || '{}');
-
+    const jobId = jobposting.id;
+    
+    if(appliedJobIds.includes(jobId)) {
+        alert("You have already applied to this job posting.");
+        return;
+    }
     const modal = document.getElementById('applyJobModal');
     if (!modal) return;
 

@@ -7,7 +7,9 @@ window.openProfileModal = function (button) {
     document.getElementById('modal_email').value = user.email;
     document.getElementById('modal_phoneNumber').value = user.phoneNumber;
     document.getElementById('modal_companyName').value = user.companyName;
-
+    document.getElementById('modal_companyAddress').value = user.companyAddress;
+    document.getElementById('modal_province').value = user.province ? user.province.provinceName: 'N/a';
+    document.getElementById('modal_city').value = user.city ? user.city.cityName: 'N/a';
     const permitContainer = document.getElementById('modal_businessPermit_container');
     permitContainer.innerHTML = '';
 

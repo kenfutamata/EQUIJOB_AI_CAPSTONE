@@ -15,6 +15,7 @@ function openJobDetailsModal(button) {
     document.getElementById('modal-description').textContent = jobposting.description || 'No description provided';
     document.getElementById('modal-salaryRange').textContent = jobposting.salaryRange || 'No Salary Range provided';
     document.getElementById('modal-category').textContent = jobposting.category || 'No Category provided';
+    document.getElementById('modal-companyAddress').textContent = jobposting.companyAddress || 'No Location provided';
 
     const logo = document.getElementById('modal-companyLogo');
     logo.src = jobposting.companyLogo || '';

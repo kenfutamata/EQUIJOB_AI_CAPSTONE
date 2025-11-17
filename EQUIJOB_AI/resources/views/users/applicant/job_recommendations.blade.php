@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Epilogue:wght@400;600;700&family=Inter:wght@400&display=swap" rel="stylesheet">
     <!-- Added Alpine.js for interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        const appliedJobIds = @json($appliedJobIds ?? []);
+    </script>
     <script src="{{ asset('assets/applicant/job_recommendations.js') }}" defer></script>
     <script>
         tailwind.config = {
@@ -25,6 +28,7 @@
                 }
             }
         }
+        
     </script>
 </head>
 
@@ -308,6 +312,7 @@
             </form>
         </div>
     </div>
+    
 </body>
 
 </html>

@@ -27,6 +27,9 @@ class LandingPageController extends Controller
         if(request()->has('category') && request()->category != ''){
             $query->where('category', request()->category);
         }
+        $sort = in_array(request()->sort, ['position', 'companyName', 'age', 'disabilityType', 'educationalAttainment', 'experience', 'skills', 'requirements']) ? request()->sort : 'created_at';
+        $direction = request()->direction === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($sort, $direction);
         $collections = $query->paginate(12);
         $response = response()->view('jobs', compact('collections'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');

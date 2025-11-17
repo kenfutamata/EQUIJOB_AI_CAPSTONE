@@ -116,6 +116,17 @@ class JobProviderManageJobApplications extends Controller
         }
     }
 
+    public function destroy(string $id)
+    {
+        try {
+            $application = JobApplication::findOrFail($id);
+            $application->delete();
+            return redirect()->back()->with('Success', 'Application Deleted Successfully');
+        } catch (\Exception $e) {
+            Log::error('Failed to delete application ' . $id . ': ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to Delete Application');
+        }
+    }
     /**
      * Schedule an interview for a job application.
      */
@@ -155,7 +166,7 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
             Mail::to($applicant)->send(new InterviewDetailsSent($mailData, 'applicant'));
-            Mail::to($applicant)->send(new SendInterviewDetailsJobApplicantMail($application)); 
+            Mail::to($applicant)->send(new SendInterviewDetailsJobApplicantMail($application));
             Mail::to($jobProvider)->send(new sendInterviewDetailsJobProviderMail($application));
             $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
 
@@ -200,16 +211,11 @@ class JobProviderManageJobApplications extends Controller
     /**
      * Reject a job application.
      */
-    public function rejectApplication(Request $request, string $id)
+    public function rejectApplication(string $id)
     {
-        $request->validate([
-            'remarks' => 'required|string|max:255',
-        ]);
-
         try {
             $application = JobApplication::findOrFail($id);
             $application->status = 'Rejected';
-            $application->remarks = $request->input('remarks');
             $application->save();
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
@@ -221,7 +227,6 @@ class JobProviderManageJobApplications extends Controller
                 'companyName' => $jobPosting->companyName,
                 'jobProviderFirstName' => $jobProvider->firstName,
                 'jobProviderLastName' => $jobProvider->lastName,
-                'remarks' => $application->remarks,
             ];
             Mail::to($applicant)->send(new disapprovalDetailssent($maildata));
             return redirect()->route('job-provider-manage-job-applications')->with('Success', 'Application Rejected Successfully');

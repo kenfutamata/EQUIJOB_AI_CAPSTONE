@@ -84,6 +84,39 @@
             @enderror
           </div>
           <div>
+            <div class="flex flex-col relative">
+              <label class="text-stone-500 text-base mb-1">Province</label>
+              <select id="province" name="provinceId" class="h-14 px-4 rounded-xl border border-stone-300" required>
+                <option value="">Select Province</option>
+                @foreach($provinces as $province)
+                <option value="{{ $province->id }}" {{ old('provinceId') == $province->id ? 'selected' : '' }}>
+                  {{ $province->provinceName }}
+                </option>
+                @endforeach
+              </select>
+              @error('province_id')
+              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+
+            <!-- City -->
+            <div class="flex flex-col relative">
+              <label class="text-stone-500 text-base mb-1">City</label>
+              <select id="city" name="cityId" class="h-14 px-4 rounded-xl border border-stone-300" required>
+                <option value="">Select City</option>
+                @if(old('provinceId') && $cities ?? false)
+                @foreach($cities as $city)
+                <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>
+                  {{ $city->cityName }}
+                </option>
+                @endforeach
+                @endif
+              </select>
+              @error('cityId')
+              <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+              @enderror
+            </div>
+
             <label class="block mb-2 text-gray-600 text-sm font-medium">Company Logo</label>
             <div class="flex flex-col">
               <input type="file" class="h-14 px-4 py-2 rounded-xl border border-stone-300" id="companyLogo" name="companyLogo" accept="image/*" required>
@@ -163,4 +196,40 @@
 
 </body>
 
+<script>
+  document.getElementById('province').addEventListener('change', async function() {
+    const provinceId = this.value;
+    const citySelect = document.getElementById('city');
+
+    if (!provinceId) {
+        citySelect.innerHTML = '<option value="">Select a Province</option>';
+        return;
+    }
+
+    citySelect.innerHTML = '<option value="">Loading...</option>';
+
+    try {
+        const response = await fetch(`/cities/${provinceId}`);
+        
+        // This is now guaranteed to be the array of city objects.
+        const cities = await response.json(); 
+
+        citySelect.innerHTML = '<option value="">Select City</option>';
+
+        if (cities && cities.length > 0) {
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.id;
+                option.textContent = city.cityName; // This will now work
+                citySelect.appendChild(option);
+            });
+        } else {
+            citySelect.innerHTML = '<option value="">No cities found</option>';
+        }
+    } catch (err) {
+        console.error('Error fetching cities:', err);
+        citySelect.innerHTML = '<option value="">Error loading cities</option>';
+    }
+});
+</script>
 </html>

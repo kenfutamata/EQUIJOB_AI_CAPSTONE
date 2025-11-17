@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\JobProviderUsersExport;
 use App\Mail\EmailConfirmation;
 use App\Mail\SendJobProviderAccountDeleteDetails;
+use App\Mail\SentAccountActivationDetailsJobProvider;
 use App\Models\User;
 use App\Models\users;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class AdminManageUserJobProviderController extends Controller
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $users = users::all();
         $search = $request->input('search');
-        $query = \App\Models\users::query()
+        $query = \App\Models\users::with(['province', 'city'])
             ->where('role', 'Job Provider')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
@@ -37,9 +38,15 @@ class AdminManageUserJobProviderController extends Controller
                         ->orWhere('phoneNumber', 'like', "%{$search}%")
                         ->orWhere('typeOfDisability', 'like', "%{$search}%")
                         ->orWhere('pwdId', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%");
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhereHas('province', function ($q) use ($search) {
+                            $q->where('provinceName', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('city', function ($q) use ($search) {
+                            $q->where('cityName', 'like', "%{$search}%");
                 });
             });
+        });
         $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'companyName', 'role',];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
         $direction = $request->direction === 'desc' ? 'desc' : 'desc';
@@ -91,17 +98,27 @@ class AdminManageUserJobProviderController extends Controller
     public function update(string $id)
     {
         $user = users::findOrFail($id);
-        $user->status = 'Active';
+        $user->status = 'For Activation';
         $user->save();
         $maildata = [
-            'userID'=>$user->userID,
+            'userID' => $user->userID,
+            'id' => $user->id,
+            'email' => $user->email
         ];
-        
-        Mail::to($user)->send(new EmailConfirmation($maildata));
+
+        Mail::to($user)->send(new SentAccountActivationDetailsJobProvider($maildata));
 
         return redirect()->back()->with('Success', 'Email Successfully sent to user');
     }
 
+    public function ActivateAccount(string $id)
+    {
+        $user = users::findOrFail($id);
+        $user->status = 'Active';
+        $user->save();
+
+        return redirect()->route('account-activated')->with('success', 'Account Activated Successfully! You may now login.');;
+    }
     /**
      * Remove the specified resource from storage.
      */
@@ -121,13 +138,13 @@ class AdminManageUserJobProviderController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new JobProviderUsersExport(
-            $request->search, 
-            $request->sort, 
-            $request->direction
-        ),
-        'Job Providers Users.xlsx' 
-    );
-        
+        return Excel::download(
+            new JobProviderUsersExport(
+                $request->search,
+                $request->sort,
+                $request->direction
+            ),
+            'Job Providers Users.xlsx'
+        );
     }
 }

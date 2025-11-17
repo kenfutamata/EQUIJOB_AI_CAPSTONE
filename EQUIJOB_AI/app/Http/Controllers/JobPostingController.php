@@ -84,6 +84,7 @@ class JobPostingController extends Controller
             'companyLogo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+        
         if ($request->has('job_description')) {
             $validatedData['description'] = $request->input('job_description');
         }

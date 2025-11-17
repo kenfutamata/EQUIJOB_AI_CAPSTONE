@@ -4,6 +4,8 @@ function openProfileModal(button) {
     document.getElementById('modal_lastName').value = user.lastName;
     document.getElementById('modal_email').value = user.email;
     document.getElementById('modal_address').value = user.address;
+    document.getElementById('modal_province').value = user.province ? user.province.provinceName: 'N/a';
+    document.getElementById('modal_city').value = user.city ? user.city.cityName: 'N/a';
     document.getElementById('modal_phoneNumber').value = user.phoneNumber;
     document.getElementById('modal_dateOfBirth').value = user.dateOfBirth;
     document.getElementById('modal_pwdId').value = user.pwdId;

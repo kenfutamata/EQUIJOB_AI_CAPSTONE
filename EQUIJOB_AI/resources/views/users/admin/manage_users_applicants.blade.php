@@ -166,6 +166,10 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal_email" class="w-full border rounded px-2 py-1" readonly placeholder="Email">
                 <label class="block text-xs text-gray-500">Address:</label>
                 <input id="modal_address" class="w-full border rounded px-2 py-1" readonly placeholder="Address">
+                <label class="block text-xs text-gray-500">Province:</label>
+                <input id="modal_province" class="w-full border rounded px-2 py-1" readonly placeholder="Address">
+                <label class="block text-xs text-gray-500">City:</label>
+                <input id="modal_city" class="w-full border rounded px-2 py-1" readonly placeholder="Address">
                 <label class="block text-xs text-gray-500">Phone Number:</label>
                 <input id="modal_phoneNumber" class="w-full border rounded px-2 py-1" readonly placeholder="Phone Number">
                 <label class="block text-xs text-gray-500">Date of Birth:</label>

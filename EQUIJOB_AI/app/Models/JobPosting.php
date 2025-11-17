@@ -84,8 +84,8 @@ class JobPosting extends Model
         'skills',
         'contactPhone',
         'contactEmail',
-        'remarks', 
-        'companyAddress'
+        'companyAddress', 
+        'datePosted',
     ];
 
     public function jobProvider()

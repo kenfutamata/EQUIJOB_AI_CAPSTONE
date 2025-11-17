@@ -140,7 +140,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                             <td class="px-3 py-2 space-y-1">
                                 <button onclick="openViewJobApplicationModal(this)" data-application='@json($modalData)' class="bg-blue-500 text-white px-2 py-1 rounded w-full sm:w-auto">View</button>
                                 @if (in_array($application->status, ['Pending', 'For Interview', 'On-Offer']))
-                                <button onclick="openWithdrawModal(this)" data-url="{{route('applicant-manage-job-applications.withdraw', ['id'=> $application->id])}}" class="bg-red-500 text-white px-2 py-1 rounded w-full sm:w-auto">Withdraw</button>
+                                <button onclick="openWithdrawModal('{{ route('applicant-manage-job-applications.withdraw', $application) }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded">Withdraw</button>                                
                                 @endif
                                 @if ($application->status === 'On-Offer')
                                 <form action="{{route('applicant-job-application-hired', $application->id)}}" method="POST" class="inline-block w-full sm:w-auto">
@@ -261,18 +262,15 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="withdrawJobApplicationModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Withdrawal Application</h3>
+                <h3 class="text-xl font-semibold">Withdrawn Job Application?</h3>
                 <button onclick="closeWithdrawModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
             </div>
-            <form id="withdrawForm" method="POST" action="">
+            <form id="withdrawApplication" method="POST" action="">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label for="remarks-input" class="block text-sm font-medium text-gray-700 mb-1">Please state your reason for withdrawing the application.</label>
-                    <textarea id="remarks-input" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
-                </div>
-                <button type="submit" class="w-full py-2 px-4 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700">Submit Withdrawal</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-100">Yes</button>
             </form>
+            <button onclick="closeWithdrawModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
 

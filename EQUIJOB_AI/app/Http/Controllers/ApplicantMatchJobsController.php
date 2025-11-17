@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobApplication;
 use App\Models\JobPosting;
 use App\Services\GeminiService;
 use Illuminate\Http\Request;
@@ -135,7 +136,10 @@ class ApplicantMatchJobsController extends Controller
         $notifications = $user->notifications;
         $unreadNotifications = $user->unreadNotifications;
 
-        return view('users.applicant.job_recommendations', compact('recommendedJobs', 'user', 'notifications', 'unreadNotifications'));
+        $appliedJobIds = JobApplication::where('applicantID', $user->id)
+            ->pluck('jobPostingID')
+            ->toArray();
+        return view('users.applicant.job_recommendations', compact('recommendedJobs', 'user', 'notifications', 'unreadNotifications', 'appliedJobIds'));
     }
 
 

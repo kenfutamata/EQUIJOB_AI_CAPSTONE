@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\users;
 use App\Notifications\JobApplicationSent;
+use App\Notifications\JobApplicationWithdrawnSent;
 use App\Services\SupabaseStorageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -175,17 +176,14 @@ class ApplicantJobApplicationController extends Controller
         }
     }
 
-    public function withdrawApplication(Request $request, string $id)
+    public function withdrawApplication(string $id)
     {
-        $request->validate([
-            'remarks' => 'required|string|max:255',
-        ]);
         try {
             $application = JobApplication::findOrFail($id);
             $application->status = 'Withdrawn';
-            $application->remarks = $request->input('remarks');
             $application->save();
-
+            $jobProvider = $application->jobPosting->jobProvider;
+            $jobProvider->notify(new JobApplicationWithdrawnSent($application, 'job_provider'));
             return redirect()->back()->with('Success', 'Application Withdrawn Successfully');
         } catch (\Exception $e) {
             Log::error('Failed to withdraw application ' . $id . ': ' . $e->getMessage());

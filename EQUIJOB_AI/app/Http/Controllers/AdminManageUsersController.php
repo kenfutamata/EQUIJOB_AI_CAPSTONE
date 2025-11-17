@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\JobApplicantUsersExport;
 use App\Mail\EmailConfirmation;
+use App\Mail\SendAccountActivationDetailsJobApplicant;
 use App\Mail\SendAccountDeleteDetails;
 use App\Models\User;
 use App\Models\users;
@@ -24,7 +25,7 @@ class AdminManageUsersController extends Controller
         $unreadNotifications = $admin->unreadNotifications ?? collect();
         $search = $request->input('search');
 
-        $query = \App\Models\users::query()->where('role', 'Applicant')
+        $query = \App\Models\users::with(['province', 'city'])->where('role', 'Applicant')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->whereRaw('LOWER(CONCAT("firstName", \' \', "lastName")) LIKE ?', ['%' . strtolower($search) . '%'])
@@ -36,9 +37,15 @@ class AdminManageUsersController extends Controller
                         ->orWhere('phoneNumber', 'like', "%{$search}%")
                         ->orWhere('typeOfDisability', 'like', "%{$search}%")
                         ->orWhere('pwdId', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%");
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhereHas('province', function ($q) use ($search) {
+                            $q->where('provinceName', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('city', function ($q) use ($search) {
+                            $q->where('cityName', 'like', "%{$search}%");
                 });
             });
+        });
         $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'dateOfBirth', 'typeOfDisability', 'role', 'status'];
         $sort = in_array($request->sort, $sortable) ? $request->sort : 'userID';
         $direction = $request->direction === 'desc' ? 'desc' : 'desc';
@@ -64,6 +71,10 @@ class AdminManageUsersController extends Controller
         );
     }
 
+    public function viewActivatedAccountPage()
+    {
+        return view('sign-in-page.sign_up.sign_up_confirmation.account_activated');
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -99,14 +110,24 @@ class AdminManageUsersController extends Controller
     public function update(string $id)
     {
         $user = users::findOrFail($id);
+        $maildata = [
+            'id' => $user->id,
+            'userID' => $user->userID,
+            'email' => $user->email,
+        ];
+        $user->status = 'For Activation';
+        $user->save();
+        Mail::to($user)->send(new SendAccountActivationDetailsJobApplicant($maildata));
+        return redirect()->back()->with('Success', 'Email Successfully sent to user');
+    }
+
+    public function ActivateAccount(string $id)
+    {
+        $user = users::findOrFail($id);
         $user->status = 'Active';
         $user->save();
-        $maildata = [
-            'userID' => $user->userID,
-        ];
-        Mail::to($user)->send(new EmailConfirmation($maildata));
 
-        return redirect()->back()->with('Success', 'Email Successfully sent to user');
+        return redirect()->route('account-activated')->with('success', 'Account Activated Successfully! You may now login.');;
     }
 
     /**

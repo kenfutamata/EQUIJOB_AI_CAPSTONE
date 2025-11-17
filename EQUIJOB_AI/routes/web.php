@@ -65,13 +65,16 @@ Route::post('/log-in', [SignInController::class, 'LoginUser'])->name('login');
 Route::get('/log-in', function () {
     return redirect()->route('sign-in');
 });
+Route::get('cities/{province}', [SignInController::class, 'getCities'])->name('get-cities');
 //Sign Up
 Route::get('/sign-up-applicant', [SignInController::class, 'ViewSignUpApplicantPage'])->name('sign-up-applicant');
 Route::get('/sign-up-jobprovider', [SignInController::class, 'ViewSignUpJobProviderPage'])->name('sign-up-job-provider');
 Route::post('/sign-up-applicant/login', [SignInController::class, 'SignUpJobApplicant'])->name('sign-up-applicant-register');
 Route::post('/sign-up-jobprovider/login', [SignInController::class, 'SignUpJobProvider'])->name('sign-up-job-provider-register');
+Route::get('/sign-up/applicant/activate/{id}', [AdminManageUsersController::class, 'ActivateAccount'])->name('sign-up-applicant-activate-account');
+Route::get('/sign-up/job-provider/activate/{id}', [AdminManageUserJobProviderController::class, 'ActivateAccount'])->name('sign-up-job-provider-activate-account');
 Route::get('/email-confirmation', [SignInController::class, 'ViewEmailConfirmationPage'])->name('email-confirmation');
-
+Route::get('/account-activated', [AdminManageUsersController::class, 'viewActivatedAccountPage'])->name('account-activated');
 //Jobs Page
 Route::get('/jobs', [LandingPageController::class, 'ViewJobsPage'])->name('jobs');
 // notification
@@ -99,6 +102,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::post('/job-provider/applications/generate-meet-link', [JobProviderManageJobApplications::class, 'generateMeetLink'])->name('job-provider.meet.create');
     Route::put('/job-provider/manage-job-applications/update-to-offer/{application}', [JobProviderManageJobApplications::class, 'updateApplicationToOffer'])->name('job-provider-manage-job-applications.update-to-offer');
     Route::put('/job-provider/manage-job-applications/reject/{application}', [JobProviderManageJobApplications::class, 'rejectApplication'])->name('job-provider-manage-job-applications.reject');
+    Route::delete('/job-provider/manage-job-applications/delete/{id}', [JobProviderManageJobApplications::class, 'destroy'])->name('job-provider-manage-job-applications-delete');
     Route::get('/job-provider/applicant-feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
     Route::get('/job-provider/applicant-feedback/export', [JobProviderJobRatingController::class, 'export'])->name('job-provider-applicant-feedback-export');
     Route::get('/job-provider/generate-report', [JobProviderGenerateReports::class, 'index'])->name('job-provider-generate-report');
