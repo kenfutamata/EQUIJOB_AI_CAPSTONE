@@ -27,10 +27,15 @@
 
         function openViewJobPostingModal(button) {
             const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-
+            const addressParts =[
+                jobposting.companyAddress, 
+                jobposting.cityName, 
+                jobposting.provinceName
+            ].filter(Boolean); 
+            
             document.getElementById('modal.position').value = jobposting.position || 'No Position provided';
             document.getElementById('modal.companyName').value = jobposting.companyName || 'No Company Name provided';
-            document.getElementById('modal.companyAddress').value = jobposting.companyAddress || 'No Company Name provided';
+            document.getElementById('modal.companyAddress').value = addressParts.length ? addressParts.join(', '): 'No Address provided';
             document.getElementById('modal.sex').value = jobposting.sex || 'No Sex provided';
             document.getElementById('modal.age').value = jobposting.age || 'No Age provided';
             document.getElementById('modal.disabilityType').value = jobposting.disabilityType || 'No Disability Type provided';

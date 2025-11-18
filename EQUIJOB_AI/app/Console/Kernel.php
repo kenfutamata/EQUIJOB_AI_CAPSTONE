@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('feedback:send-request')->dailyAt('00:00');
         $schedule->command('app:send-interview-reminders')->dailyAt('08:00');
+        $schedule->command('job-postings:expire')->daily(); 
     }
 
     /**

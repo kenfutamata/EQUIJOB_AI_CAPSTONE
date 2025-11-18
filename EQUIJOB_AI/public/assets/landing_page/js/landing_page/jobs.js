@@ -1,7 +1,11 @@
 
 function openJobDetailsModal(button) {
     const job = JSON.parse(button.dataset.jobposting);
-
+    const addressParts = [
+        job.companyAddress, 
+        job.cityName, 
+        job.provinceName
+    ].filter(Boolean); 
     document.getElementById('modal-companyName').textContent = job.companyName || '';
     document.getElementById('modal-position').textContent = job.position || '';
     document.getElementById('modal-disabilityType').textContent = job.disabilityType || '';
@@ -14,7 +18,7 @@ function openJobDetailsModal(button) {
     document.getElementById('modal-educationalAttainment').textContent = job.educationalAttainment || '';
     document.getElementById('modal-skills').textContent = job.skills || '';
     document.getElementById('modal-requirements').textContent = job.requirements || '';
-    document.getElementById('modal-companyAddress').textContent = job.companyAddress || '';
+    document.getElementById('modal-companyAddress').textContent = addressParts.length ? addressParts.join(', ') : 'No Address provided';
 
     const logo = document.getElementById('modal-companyLogo');
     logo.src = job.companyLogo || '';

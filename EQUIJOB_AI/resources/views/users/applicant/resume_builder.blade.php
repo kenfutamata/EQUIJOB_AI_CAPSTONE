@@ -95,60 +95,68 @@
                         Smart Resume <span class="text-sky-500">Builder</span>
                     </div>
 
-                    {{-- The rest of your form is unchanged --}}
                     <section class="bg-white p-6 shadow rounded-lg">
                         <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="firstName" class="block text-lg">First Name</label>
-                                <input type="text" id="firstName" name="resume[firstName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.firstName', $user->firstName) }}" readonly />
+                                <input type="text" id="firstName" name="resume[firstName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.firstName', $resume->firstName ?? $user->firstName) }}" readonly />
                             </div>
                             <div>
                                 <label for="lastName" class="block text-lg">Last Name</label>
-                                <input type="text" id="lastName" name="resume[lastName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.lastName', $user->lastName) }}" readonly />
+                                <input type="text" id="lastName" name="resume[lastName]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.lastName', $resume->lastName ?? $user->lastName) }}" readonly />
                             </div>
                             <div>
                                 <label for="dob" class="block text-lg">Date of Birth</label>
-                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $user->dateOfBirth) }}" readonly />
+                                <input type="date" id="dob" name="resume[dob]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.dob', $resume->dob ?? $user->dateOfBirth) }}" readonly />
                             </div>
                             <div>
                                 <label for="address" class="block text-lg">Address</label>
-                                <input type="text" id="address" name="resume[address]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.address', $user->address) }}" readonly />
+                                <input type="text" id="address" name="resume[address]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.address', $resume->address ?? $user->address) }}" readonly />
                             </div>
                             <div>
                                 <label for="email" class="block text-lg">Email Address</label>
-                                <input type="email" id="email" name="resume[email]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.email', $user->email) }}" readonly />
+                                <input type="email" id="email" name="resume[email]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.email', $resume->email ?? $user->email) }}" readonly />
                             </div>
                             <div>
                                 <label for="phone" class="block text-lg">Phone Number</label>
-                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $user->phoneNumber) }}" readonly />
+                                <input type="tel" id="phone" name="resume[phone]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ old('resume.phone', $resume->phone ?? $user->phoneNumber) }}" readonly />
                             </div>
 
                             <div>
-                                <label for="disability_type" class="block text-lg">Disability Type</label>
+                                <label for="typeOfDisability" class="block text-lg">Disability Type</label>
                                 <select id="typeOfDisability" name="resume[typeOfDisability]" class="w-full border border-black bg-gray-300 h-11 px-3">
-                                    <option value="" disabled {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == '' ? 'selected' : '' }}>Select Disability Type</option>
-
+                                    @php
+                                        $selectedDisability = old('resume.typeOfDisability', $resume->typeOfDisability ?? $user->typeOfDisability ?? '');
+                                    @endphp
+                                    <option value="" disabled {{ $selectedDisability == '' ? 'selected' : '' }}>Select Disability Type</option>
                                     @foreach($disabilityTypes as $disability)
-                                    <option value="{{ $disability }}" {{ old('resume.typeOfDisability', $user->typeOfDisability ?? '') == $disability ? 'selected' : '' }}>
+                                    <option value="{{ $disability }}" {{ $selectedDisability == $disability ? 'selected' : '' }}>
                                         {{ $disability }}
                                     </option>
                                     @endforeach
-
                                 </select>
                             </div>
 
                             <div>
-                                <label for="photo" class="block text-lg">Upload a 2x2 Photo</label>
+                                <label for="photo" class="block text-lg">
+                                    {{ $resume && $resume->photo ? 'Change 2x2 Photo' : 'Upload a 2x2 Photo' }}
+                                </label>
+                                @if($resume && $resume->photo)
+                                <div class="mt-2 mb-2">
+                                    <img src="{{ $resume->photo }}" alt="Current Photo" class="w-24 h-24 object-cover rounded-md border">
+                                    <p class="text-xs text-gray-500 mt-1">Current photo</p>
+                                </div>
+                                @endif
                                 <input type="file" id="photo" name="resume[photo]" class="w-full border border-black bg-gray-300 h-11 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" accept="image/*" />
                             </div>
                             <div class="md:col-span-2">
                                 <label for="summary" class="block text-lg">Summary/Objective</label>
-                                <textarea id="summary" name="resume[summary]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2">{{ old('resume.summary') }}</textarea>
+                                <textarea id="summary" name="resume[summary]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2">{{ old('resume.summary', $resume->summary ?? '') }}</textarea>
                             </div>
                         </div>
                     </section>
-                    
+
                     <section id="experienceSection" class="bg-white p-6 shadow rounded-lg">
                         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-4">
                             <h2 class="text-2xl font-semibold">Experience</h2>
@@ -158,33 +166,61 @@
                         </div>
                         <div id="experienceEntriesContainer" class="space-y-6">
                             @if(old('experience'))
-                            @foreach(old('experience') as $key => $exp)
-                            <div class="experience-entry border border-gray-300 p-4 rounded-md relative">
-                                <button type="button" class="remove-experience-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this experience">×</button>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="experience_{{$key}}_employer" class="block text-lg">Employer</label>
-                                        <input type="text" id="experience_{{$key}}_employer" name="experience[{{$key}}][employer]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['employer'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="experience_{{$key}}_jobTitle" class="block text-lg">Job Title</label>
-                                        <input type="text" id="experience_{{$key}}_jobTitle" name="experience[{{$key}}][jobTitle]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['jobTitle'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="experience_{{$key}}_location" class="block text-lg">Location</label>
-                                        <input type="text" id="experience_{{$key}}_location" name="experience[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['location'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="experience_{{$key}}_year" class="block text-lg">Year</label>
-                                        <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}" />
-                                    </div>
-                                    <div class="md:col-span-2">
-                                        <label for="experience_{{$key}}_responsibilities" class="block text-lg">Responsibilities/Description</label>
-                                        <textarea id="experience_{{$key}}_responsibilities" name="experience[{{$key}}][responsibilities]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Describe your key responsibilities and achievements...">{{ $exp['responsibilities'] ?? '' }}</textarea>
+                                @foreach(old('experience') as $key => $exp)
+                                <div class="experience-entry border border-gray-300 p-4 rounded-md relative">
+                                    <button type="button" class="remove-experience-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this experience">×</button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="experience_{{$key}}_employer" class="block text-lg">Employer</label>
+                                            <input type="text" id="experience_{{$key}}_employer" name="experience[{{$key}}][employer]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['employer'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_jobTitle" class="block text-lg">Job Title</label>
+                                            <input type="text" id="experience_{{$key}}_jobTitle" name="experience[{{$key}}][jobTitle]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['jobTitle'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_location" class="block text-lg">Location</label>
+                                            <input type="text" id="experience_{{$key}}_location" name="experience[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['location'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_year" class="block text-lg">Year</label>
+                                            <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp['year'] ?? '' }}" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="experience_{{$key}}_responsibilities" class="block text-lg">Responsibilities/Description</label>
+                                            <textarea id="experience_{{$key}}_responsibilities" name="experience[{{$key}}][responsibilities]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Describe your key responsibilities and achievements...">{{ $exp['responsibilities'] ?? '' }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @elseif($resume && $resume->experiences->isNotEmpty())
+                                @foreach($resume->experiences as $key => $exp)
+                                <div class="experience-entry border border-gray-300 p-4 rounded-md relative">
+                                    <button type="button" class="remove-experience-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this experience">×</button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="experience_{{$key}}_employer" class="block text-lg">Employer</label>
+                                            <input type="text" id="experience_{{$key}}_employer" name="experience[{{$key}}][employer]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp->employer }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_jobTitle" class="block text-lg">Job Title</label>
+                                            <input type="text" id="experience_{{$key}}_jobTitle" name="experience[{{$key}}][jobTitle]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp->jobTitle }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_location" class="block text-lg">Location</label>
+                                            <input type="text" id="experience_{{$key}}_location" name="experience[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp->location }}" />
+                                        </div>
+                                        <div>
+                                            <label for="experience_{{$key}}_year" class="block text-lg">Year</label>
+                                            <input type="text" id="experience_{{$key}}_year" name="experience[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $exp->year }}" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="experience_{{$key}}_responsibilities" class="block text-lg">Responsibilities/Description</label>
+                                            <textarea id="experience_{{$key}}_responsibilities" name="experience[{{$key}}][responsibilities]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Describe your key responsibilities and achievements...">{{ $exp->description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                             @endif
                         </div>
                     </section>
@@ -198,33 +234,61 @@
                         </div>
                         <div id="educationEntriesContainer" class="space-y-6">
                             @if(old('educations'))
-                            @foreach(old('educations') as $key => $edu)
-                            <div class="education-entry border border-gray-300 p-4 rounded-md relative">
-                                <button type="button" class="remove-education-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this education">×</button>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="education_{{$key}}_school" class="block text-lg">School</label>
-                                        <input type="text" id="education_{{$key}}_school" name="educations[{{$key}}][school]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['school'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="education_{{$key}}_degree" class="block text-lg">Degree</label>
-                                        <input type="text" id="education_{{$key}}_degree" name="educations[{{$key}}][degree]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['degree'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="education_{{$key}}_location" class="block text-lg">Location</label>
-                                        <input type="text" id="education_{{$key}}_location" name="educations[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['location'] ?? '' }}" />
-                                    </div>
-                                    <div>
-                                        <label for="education_{{$key}}_year" class="block text-lg">Year Graduated</label>
-                                        <input type="date" id="education_{{$key}}_year" name="educations[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['year'] ?? '' }}" />
-                                    </div>
-                                    <div class="md:col-span-2">
-                                        <label for="education_{{$key}}_description" class="block text-lg">Description</label>
-                                        <textarea id="education_{{$key}}_description" name="educations[{{$key}}][description]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Details about your studies, honors, or relevant info...">{{ $edu['description'] ?? '' }}</textarea>
+                                @foreach(old('educations') as $key => $edu)
+                                <div class="education-entry border border-gray-300 p-4 rounded-md relative">
+                                    <button type="button" class="remove-education-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this education">×</button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="education_{{$key}}_school" class="block text-lg">School</label>
+                                            <input type="text" id="education_{{$key}}_school" name="educations[{{$key}}][school]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['school'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_degree" class="block text-lg">Degree</label>
+                                            <input type="text" id="education_{{$key}}_degree" name="educations[{{$key}}][degree]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['degree'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_location" class="block text-lg">Location</label>
+                                            <input type="text" id="education_{{$key}}_location" name="educations[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['location'] ?? '' }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_year" class="block text-lg">Year Graduated</label>
+                                            <input type="date" id="education_{{$key}}_year" name="educations[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu['year'] ?? '' }}" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="education_{{$key}}_description" class="block text-lg">Description</label>
+                                            <textarea id="education_{{$key}}_description" name="educations[{{$key}}][description]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Details about your studies, honors, or relevant info...">{{ $edu['description'] ?? '' }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @elseif($resume && $resume->educations->isNotEmpty())
+                                @foreach($resume->educations as $key => $edu)
+                                <div class="education-entry border border-gray-300 p-4 rounded-md relative">
+                                    <button type="button" class="remove-education-btn absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold text-xl p-1" title="Remove this education">×</button>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="education_{{$key}}_school" class="block text-lg">School</label>
+                                            <input type="text" id="education_{{$key}}_school" name="educations[{{$key}}][school]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu->school }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_degree" class="block text-lg">Degree</label>
+                                            <input type="text" id="education_{{$key}}_degree" name="educations[{{$key}}][degree]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu->degree }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_location" class="block text-lg">Location</label>
+                                            <input type="text" id="education_{{$key}}_location" name="educations[{{$key}}][location]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu->location }}" />
+                                        </div>
+                                        <div>
+                                            <label for="education_{{$key}}_year" class="block text-lg">Year Graduated</label>
+                                            <input type="date" id="education_{{$key}}_year" name="educations[{{$key}}][year]" class="w-full border border-black bg-gray-300 h-11 px-3" value="{{ $edu->year }}" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="education_{{$key}}_description" class="block text-lg">Description</label>
+                                            <textarea id="education_{{$key}}_description" name="educations[{{$key}}][description]" class="w-full border border-black bg-gray-300 h-24 resize-none p-2" placeholder="Details about your studies, honors, or relevant info...">{{ $edu->description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                             @endif
                         </div>
                     </section>
@@ -232,12 +296,12 @@
                     <section class="bg-white p-6 shadow rounded-lg">
                         <h2 class="text-2xl font-semibold mb-4">Skills</h2>
                         <label for="skills" class="block text-sm text-gray-600 mb-1">Enter skills separated by commas (e.g., JavaScript, Project Management, Team Leadership)</label>
-                        <textarea id="skills" name="skills" class="w-full border border-black bg-gray-300 h-40 resize-none p-2" placeholder="e.g., HTML, CSS, JavaScript, Python, Communication, Problem Solving...">{{ old('skills') }}</textarea>
+                        <textarea id="skills" name="skills" class="w-full border border-black bg-gray-300 h-40 resize-none p-2" placeholder="e.g., HTML, CSS, JavaScript, Python, Communication, Problem Solving...">{{ old('skills', $resume->skills ?? '') }}</textarea>
                     </section>
 
                     <div class="flex justify-center py-6">
                         <button type="submit" class="bg-blue-600 text-white text-lg px-8 py-3 rounded-full hover:bg-blue-700 transition">
-                            Generate Resume
+                            {{ $resume ? 'Update & Regenerate Resume' : 'Generate Resume' }}
                         </button>
                     </div>
 
@@ -249,15 +313,11 @@
     
     <script>
         const initialCounts = {
-            experience: {{ old('experience') ? count(old('experience')) : 0 }},
-            education: {{ old('educations') ? count(old('educations')) : 0 }}
+            experience: {{ old('experience') ? count(old('experience')) : ($resume && $resume->experiences ? $resume->experiences->count() : 0) }},
+            education: {{ old('educations') ? count(old('educations')) : ($resume && $resume->educations ? $resume->educations->count() : 0) }}
         };
     </script>
 
     <script src="{{ asset('assets/applicant/resume-builder/js/resume_builder.js') }}"></script>
-
-
-
 </body>
-
 </html>

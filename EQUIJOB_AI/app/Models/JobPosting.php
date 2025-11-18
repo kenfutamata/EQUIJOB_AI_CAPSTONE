@@ -86,9 +86,13 @@ class JobPosting extends Model
         'contactEmail',
         'companyAddress', 
         'provinceName',
-        'cityName'
+        'cityName',
+        'endDate'
     ];
 
+    protected $casts = [
+        'endDate'=> 'date', 
+    ];
     public function jobProvider()
     {
         return $this->belongsTo(User::class, 'jobProviderID');

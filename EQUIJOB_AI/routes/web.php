@@ -86,6 +86,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/job-provider/job-provider-dashboard', [JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
     Route::get('/job-provider/job-provider-dashboard/logout', [JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
     Route::get('/job-provider/job-provider-profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
+        Route::get('/job-provider/job-provider-profile/cities/{province}', [JobProviderController::class, 'getCities'])->name('get-cities');
     Route::get('/job-provider/job-posting/export', [JobPostingController::class, 'export'])->name('job-provider-job-posting-export');
     Route::get('/job-provider/job-posting', [JobPostingController::class, 'index'])->name('job-provider-job-posting');
     Route::post('/job-provider/job-posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
@@ -106,6 +107,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/job-provider/applicant-feedback', [JobProviderJobRatingController::class, 'index'])->name('job-provider-applicant-feedback');
     Route::get('/job-provider/applicant-feedback/export', [JobProviderJobRatingController::class, 'export'])->name('job-provider-applicant-feedback-export');
     Route::get('/job-provider/generate-report', [JobProviderGenerateReports::class, 'index'])->name('job-provider-generate-report');
+    Route::get('/job-provider/generate-report/download-pdf', [JobProviderGenerateReports::class, 'download'])->name('job-provider-generate-report-download-pdf');
 });
 
 //Applicant 
@@ -114,6 +116,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/applicant/logout', [ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
     Route::get('/applicant/applicant-profile', [ApplicantProfileController::class, 'index'])->name('applicant-profile');
     Route::put('/applicant/applicant-profile/{id}', [ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
+    Route::get('/applicant/applicant-profile/cities/{province}', [ApplicantProfileController::class, 'getCities'])->name('get-cities');
     Route::get('/applicant/resume-builder', [ResumeController::class, 'index'])->name('applicant-resume-builder');
     Route::post('/applicant/resume-builder', [ResumeController::class, 'store'])->name('applicant-resume-builder-store');
     Route::get('/applicant/resume-view-and-download', [ResumeViewAndDownloadController::class, 'index'])->name('applicant-resume-view-and-download');
@@ -130,6 +133,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/applicant/applicant-feedback', [ApplicantFeedbackController::class, 'index'])->name('applicant-feedback');
     Route::put('/applicant/applicant-feedback/{feedback}', [ApplicantFeedbackController::class, 'update'])->name('applicant-feedback-update');
     Route::get('/applicant/job-collections', [ApplicantJobCollectionsController::class, 'index'])->name('applicant-job-collections');
+    Route::get('cities/{province}', [ApplicantJobCollectionsController::class, 'getCities'])->name('get-cities');
 });
 
 //admin
@@ -154,6 +158,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/feedback-system-review/export', [AdminContactUsController::class, 'export'])->name('admin-feedback-system-review-export');
     Route::get('/admin/feedback-job/export', [AdminJobRatingController::class, 'export'])->name('admin-feedback-job-export');
     Route::get('/admin/generate-report', [AdminGenerateReportsController::class, 'index'])->name('admin-generate-report');
+    Route::get('/admin/reports/download', [AdminGenerateReportsController::class, 'download'])->name('admin.reports.download');
     Route::get('admin/manage-user-applicants/Export', [AdminManageUsersController::class, 'export'])->name('admin-manage-user-applicants-export');
     Route::get('admin/manage-user-job-Providers/export', [AdminManageUserJobProviderController::class, 'export'])->name('admin-manage-user-jobproviders-export');
     Route::get('/admin/manage-job-applications', [AdminManageJobApplications::class, 'index'])->name('admin-manage-job-applications');

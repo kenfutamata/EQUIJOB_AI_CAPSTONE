@@ -81,7 +81,7 @@ return [
         ],
         'applicants' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\users::class,
         ],
         'job_providers' => [
             'driver' => 'eloquent',

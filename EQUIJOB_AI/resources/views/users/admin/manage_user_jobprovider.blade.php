@@ -159,7 +159,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <label class="block text-xs text-gray-500">Province:</label>
                 <input id="modal_province" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">City:</label>
-                <input id="modal_city" class="w-full border rounded px-4 py-2 text-sm" disabled />
+            <input id="modal_city" class="w-full border rounded px-4 py-2 text-sm" disabled />
                 <label class="block text-xs text-gray-500">Company Logo:</label>
                 <img id="modal_companyLogo" class="w-[100px] h-[100px] object-cover" />
                 <label class="block text-xs text-gray-500">Business Permit:</label>

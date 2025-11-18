@@ -3,70 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// No need for this: use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+// ... your docblock comments ...
 
-/**
- * 
- *
- * @property int $id
- * @property string $firstName
- * @property string $lastName
- * @property string $email
- * @property string $password
- * @property string|null $address
- * @property string $phoneNumber
- * @property string|null $dateOfBirth
- * @property string|null $gender
- * @property string|null $typeOfDisability
- * @property string|null $pwdId
- * @property string|null $upload_pwd_card
- * @property string $role
- * @property string $status
- * @property string|null $companyName
- * @property string|null $companyLogo
- * @property string|null $profilePicture
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $userID
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
- * @property-read \App\Models\Resume|null $resume
- * @method static \Database\Factories\usersFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereCompanyLogo($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereCompanyName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereDateOfBirth($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereGender($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users wherePhoneNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereProfilePicture($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users wherePwdId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereRole($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereTypeOfDisability($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereUploadPwdCard($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|users whereUserID($value)
- * @mixin \Eloquent
- * @method \Illuminate\Database\Eloquent\Relations\HasOne resume()
- */
+// CHANGE THIS:
+// class users extends Authenticatable
+// TO THIS:
 class users extends Authenticatable
 {
-    use HasFactory, Notifiable;
-    protected $table = 'users';
-    protected $primaryKey = 'id';
+    use HasFactory, Notifiable; // Notifiable trait is correctly placed here
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users'; // This is correct, it points to your 'users' table
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'firstName',
         'lastName',
@@ -75,7 +37,7 @@ class users extends Authenticatable
         'phoneNumber',
         'dateOfBirth',
         'address',
-        'gender', 
+        'gender',
         'typeOfDisability',
         'pwdId',
         'upload_pwd_card',
@@ -84,17 +46,27 @@ class users extends Authenticatable
         'companyName',
         'companyAddress',
         'companyLogo',
-        'businessPermit', 
-        'userID', 
+        'businessPermit',
+        'userID',
         'profilePicture',
         'cityId',
         'provinceId',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
-        'password'
+        'password',
     ];
-    
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -102,11 +74,12 @@ class users extends Authenticatable
         ];
     }
 
-    public function resume(){
-         return $this->hasOne(\App\Models\Resume::class, 'userID');
+    public function resume()
+    {
+         return $this->hasOne(Resume::class, 'userID');
     }
 
-        public function jobPostings()
+    public function jobPostings()
     {
         return $this->hasMany(JobPosting::class, 'jobProviderID');
     }
@@ -118,14 +91,19 @@ class users extends Authenticatable
         );
     }
 
+    /**
+     * Get the city that the user belongs to.
+     */
     public function city()
     {
         return $this->belongsTo(Cities::class, 'cityId');
     }
 
+    /**
+     * Get the province that the user belongs to.
+     */
     public function province()
     {
         return $this->belongsTo(Province::class, 'provinceId');
     }
-
 }

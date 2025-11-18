@@ -114,6 +114,11 @@
                                 <input type="text" value="{{ $user->phoneNumber }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
+                                <input type="text" value="{{ $user->pwdId }}" disabled
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
+                            </div>
                         </div>
 
                         <div class="space-y-4">
@@ -128,8 +133,13 @@
                                     class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
-                                <label class="block text-sm text-gray-600 mb-1">PWD ID</label>
-                                <input type="text" value="{{ $user->pwdId }}" disabled
+                                <label class="block text-sm text-gray-600 mb-1">Province</label>
+                                <input type="text" value="{{ $user->province?->provinceName }}" disabled
+                                    class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">City</label>
+                                <input type="text" value="{{ $user->city?->cityName }}" disabled
                                     class="w-full border rounded-md px-4 py-2 text-sm bg-gray-50 cursor-not-allowed" />
                             </div>
                             <div>
@@ -186,6 +196,30 @@
                             class="w-full border rounded-md px-4 py-2 text-sm" />
                     </div>
                     <div>
+                        <label class="block text-sm text-gray-600 mb-1">Province</label>
+                        <select id="province" name="provinceId" class="w-full border rounded-md px-4 py-2 text-sm" required>
+                            <option value="">Select Province</option>
+                            @foreach($provinces as $province)
+                            <option value="{{ $province->id }}" {{ old('provinceId') == $province->id ? 'selected' : '' }}>
+                                {{ $province->provinceName }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">City</label>
+                        <select id="city" name="cityId" class="w-full border rounded-md px-4 py-2 text-sm" required>
+                            <option value="">Select City</option>
+                            @if(old('provinceId') && $cities ?? false)
+                            @foreach($cities as $city)
+                            <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>
+                                {{ $city->cityName }}
+                            </option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-sm text-gray-600 mb-1">Date of Birth</label>
                         <input type="date" name="dateOfBirth" value="{{ $user->dateOfBirth }}"
                             class="w-full border rounded-md px-4 py-2 text-sm" max="{{ date('Y-m-d') }}" />
@@ -235,5 +269,41 @@
 
 
 </body>
+
+<script>
+    document.getElementById('province').addEventListener('change', async function() {
+        const provinceId = this.value;
+        const citySelect = document.getElementById('city');
+
+        if (!provinceId) {
+            citySelect.innerHTML = '<option value="">Select a Province</option>';
+            return;
+        }
+
+        citySelect.innerHTML = '<option value="">Loading...</option>';
+
+        try {
+            const response = await fetch(`/cities/${provinceId}`);
+
+            const cities = await response.json();
+
+            citySelect.innerHTML = '<option value="">Select City</option>';
+
+            if (cities && cities.length > 0) {
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.id;
+                    option.textContent = city.cityName; 
+                    citySelect.appendChild(option);
+                });
+            } else {
+                citySelect.innerHTML = '<option value="">No cities found</option>';
+            }
+        } catch (err) {
+            console.error('Error fetching cities:', err);
+            citySelect.innerHTML = '<option value="">Error loading cities</option>';
+        }
+    });
+</script>
 
 </html>

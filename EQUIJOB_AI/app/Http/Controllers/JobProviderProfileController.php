@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cities;
+use App\Models\Province;
+use App\Models\users;
 use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,16 +17,41 @@ class JobProviderProfileController extends Controller
      */
     public function index()
     {
-        $user = Auth::guard('job_provider')->user();
+        $authenticatedUser = Auth::guard('job_provider')->user();
+        if (!$authenticatedUser) {
+            return redirect()->route('login');
+        }
+        $user = users::with(['province', 'city'])->findOrFail($authenticatedUser->id);
+        $provinces = Province::all();
         $notification = $user->notifications;
         $unreadNotifications = $user->unreadNotifications;
-        $response = response()->view('users.job-provider.job_provider_profile', compact('user', 'notification', 'unreadNotifications'));
+
+        $cities = [];
+        $selectedProvinceId = old('provinceId', $user->provinceId);
+        if ($selectedProvinceId) {
+            $cities = Cities::where('provinceId', $selectedProvinceId)->get();
+        }
+
+        $response = response()->view('users.job-provider.job_provider_profile', compact('user', 'notification', 'unreadNotifications', 'provinces', 'cities'));
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
         return $response;
     }
 
+
+    public function getCities(Province $province)
+    {
+        $citiesCollection = $province->cities;
+        $citiesArray = $citiesCollection->map(function ($city) {
+            return [
+                'id' => $city->id,
+                'cityName' => $city->cityName,
+            ];
+        });
+
+        return response()->json($citiesArray);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -71,6 +99,8 @@ class JobProviderProfileController extends Controller
             'profilePicture' => 'sometimes|file|mimes:jpg,jpeg,png|max:4096',
             'phoneNumber' => 'sometimes|string|max:11',
             'companyAddress' => 'sometimes|string|max:100',
+            'provinceId'=> 'exists:provinces,id', 
+            'cityId'=> 'exists:cities,id',
         ]);
         if ($request->hasFile('companyLogo')) {
             $url = $supabase->upload($request->file('companyLogo'), 'companyLogo');

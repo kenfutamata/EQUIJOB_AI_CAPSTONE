@@ -78,6 +78,7 @@ class AdminManageJobPostingController extends Controller
     {
         $JobPosting = JobPosting::findOrFail($id);
         $JobPosting->status = 'For Posting';
+        $JobPosting->endDate = now()->addDays(30); 
         $JobPosting->save();
         if ($JobPosting->jobProvider) {
             $JobPosting->jobProvider->notify(new ApprovedJobPostingNotification($JobPosting));

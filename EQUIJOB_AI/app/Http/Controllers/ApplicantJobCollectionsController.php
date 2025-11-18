@@ -3,43 +3,79 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobPosting;
+use App\Models\Province;
+use App\Models\Cities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ApplicantJobCollectionsController extends Controller
 {
     /**
+     * Fetch cities for a given province and return as JSON for AJAX requests.
+     */
+    public function getCities(Province $province)
+    {
+        // This function is correct and remains unchanged.
+        $cities = $province->cities()->orderBy('cityName', 'asc')->get(['id', 'cityName']);
+        return response()->json($cities);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $user = Auth::guard('applicant')->user();
-        $notification = $user->notifications;
-        $unreadNotifications = $user->unreadNotifications;
+
         $search = $request->input('search');
+        $provinceId = $request->input('province');
+        $cityId = $request->input('city'); // We need to get the city ID as well.
+        $category = $request->input('category');
         $fromDate = $request->input('fromDate');
         $toDate = $request->input('toDate');
-        $category = $request->input('category');
+
+        // Prepare data for dropdowns
+        $provinces = Province::orderBy('provinceName', 'asc')->get();
+        $cities = collect();
+        if ($provinceId) {
+            $selectedProvince = Province::find($provinceId);
+            if ($selectedProvince) {
+                $cities = $selectedProvince->cities()->orderBy('cityName', 'asc')->get();
+            }
+        }
+
+        // Build the main query
         $query = JobPosting::query();
+
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('position', 'like', "%{$search}%")
                     ->orWhere('companyName', 'like', "%{$search}%")
-                    ->orWhere('age', 'like', "%{$search}%")
-                    ->orWhere('disabilityType', 'like', "%{$search}%")
-                    ->orWhere('educationalAttainment', 'like', "%{$search}%")
-                    ->orWhere('experience', 'like', "%{$search}%")
-                    ->orWhere('skills', 'like', "%{$search}%")
-                    ->orWhere('requirements', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('contactPhone', 'like', "%{$search}%")
-                    ->orWhere('contactEmail', 'like', "%{$search}%")
-                    ->orWhere('companyAddress', 'like', "%{$search}%");
+                    ->orWhere('skills', 'like', "%{$search}%");
             });
         }
-        if($category){
+        
+        if ($category) {
             $query->where('category', $category);
         }
+
+        // *** THIS IS THE CORRECTED LOGIC ***
+        if ($provinceId) {
+            // 1. Find the Province model using the ID from the filter.
+            $province = Province::find($provinceId);
+            // 2. If the province is found, use its NAME to query the jobPosting table.
+            if ($province) {
+                $query->where('provinceName', $province->provinceName);
+            }
+        }
+
+        if ($cityId) {
+            $city = Cities::find($cityId);
+            if ($city) {
+                $query->where('cityName', $city->cityName);
+            }
+        }
+
         if ($fromDate) {
             $query->whereDate('updated_at', '>=', $fromDate);
         }
@@ -47,63 +83,25 @@ class ApplicantJobCollectionsController extends Controller
             $query->whereDate('updated_at', '<=', $toDate);
         }
 
-        
-        $sort = in_array($request->sort, ['position', 'companyName', 'age', 'disabilityType', 'educationalAttainment', 'experience', 'skills', 'requirements']) ? $request->sort : 'created_at';
-        $direction = $request->direction === 'asc' ? 'asc' : 'desc';
+        $sort = $request->input('sort', 'updated_at');
+        $direction = $request->input('direction', 'desc');
         $query->orderBy($sort, $direction);
-        $collections = $query->paginate(12);
-        $response = response()->view('users.applicant.applicant_job_collections', compact('user', 'notification', 'unreadNotifications', 'collections'));
+        
+        $collections = $query->paginate(12)->withQueryString();
+
+        $response = response()->view('users.applicant.applicant_job_collections', [
+            'user' => $user,
+            'notifications' => $user->notifications,
+            'unreadNotifications' => $user->unreadNotifications,
+            'collections' => $collections,
+            'provinces' => $provinces,
+            'cities' => $cities,
+        ]);
+
         $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         $response->header('Pragma', 'no-cache');
         $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
+        
         return $response;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

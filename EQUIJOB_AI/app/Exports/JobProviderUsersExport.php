@@ -30,13 +30,16 @@ class JobProviderUsersExport implements FromCollection, WithHeadings
             'Email',
             'Phone Number',
             'Company Name',
+            'Company Address',
+            'Province',
+            'City',
             'Status', 
         ];
         
     }
     public function collection()
     {
-        $query = users::query()->where('role', 'Job Provider')
+        $query = users::with(['province', 'city'])->where('role', 'Job Provider')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whereRaw("LOWER(CONCAT(firstName, ' ', lastName)) LIKE ?", ['%' . strtolower($this->search) . '%'])
@@ -47,16 +50,35 @@ class JobProviderUsersExport implements FromCollection, WithHeadings
                         ->orWhere('address', 'like', "%{$this->search}%")
                         ->orWhere('phoneNumber', 'like', "%{$this->search}%")
                         ->orWhere('companyName', 'like', "%{$this->search}%")
-                        ->orWhere('status', 'like', "%{$this->search}%");
+                        ->orWhere('companyAddress', 'like', "%{$this->search}%")
+                        ->orWhere('status', 'like', "%{$this->search}%")
+                        ->orWhereHas('province', function ($q) {
+                            $q->where('provinceName', 'like', "%{$this->search}%");
+                        })
+                        ->orWhereHas('city', function ($q) {
+                            $q->where('cityName', 'like', "%{$this->search}%");
                 });
             });
-
+        });
+        $users = $query->get();
         $sortable = ['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'companyName', 'status' ];
         $sort = in_array($this->sort, $sortable) ? $this->sort : 'userID';
         $direction = $this->direction === 'desc' ? 'desc' : 'asc';
 
         $query->orderBy($sort, $direction);
-
-        return $query->get(['userID', 'firstName', 'lastName', 'email', 'phoneNumber', 'companyName', 'status']);
+        return $users->map(function ($user) {
+            return [
+                'userID' => $user->userID,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'email' => $user->email,
+                'phoneNumber' => $user->phoneNumber,
+                'companyName' => $user->companyName,
+                'companyAddress' => $user->companyAddress,
+                'province'=> $user->province ? $user->province->provinceName : '',
+                'city'=> $user->city ? $user->city->cityName : '',
+                'status' => $user->status,
+            ];
+        });
     }
 }
