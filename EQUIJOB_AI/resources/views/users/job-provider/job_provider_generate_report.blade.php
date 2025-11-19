@@ -62,7 +62,7 @@
                             <option value="Construction" {{ request('category') == 'Construction' ? 'selected' : '' }}>Construction</option>
                             <option value="Manufacturing" {{ request('category') == 'Manufacturing' ? 'selected' : '' }}>Manufacturing</option>
                             <option value="Transport & Logistics" {{ request('category') == 'Transport & Logistics' ? 'selected' : '' }}>Transport & Logistics</option>
-                        <option value="Government" {{ request('category') == 'Government' ? 'selected' : '' }}>Government</option>
+                            <option value="Government" {{ request('category') == 'Government' ? 'selected' : '' }}>Government</option>
                             <option value="Science & Research" {{ request('category') == 'Science & Research' ? 'selected' : '' }}>Science & Research</option>
                             <option value="Other" {{ request('category') == 'Other' ? 'selected' : '' }}>Other</option>
                         </select>
@@ -72,7 +72,24 @@
                     </button>
                 </form>
             </div>
-
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <h3 class="text-gray-500 font-medium">Total Job Applications</h3>
+                    <p class="text-4xl font-bold text-blue-600 mt-2">{{$jobApplicationCount}}</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <h3 class="text-gray-500 font-medium">For Interview</h3>
+                    <p class="text-4xl font-bold text-red-500 mt-2">{{$jobApplicantInterviewCount}}</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <h3 class="text-gray-500 font-medium">Hired</h3>
+                    <p class="text-4xl font-bold text-green-600 mt-2">{{$jobApplicantHiredCount}}</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <h3 class="text-gray-500 font-medium">Rejected</h3>
+                    <p class="text-4xl font-bold text-orange-500 mt-2">{{$jobApplicantRejectedCount}}</p>
+                </div>
+            </div>
             @if($ratingsChartData || $trendsChartData)
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-lg shadow-md border">
@@ -151,7 +168,7 @@
             @endif
 
             @if($trendsChartData)
-            const trendsData = {{ Illuminate\Support\Js::from($trendsChartData) }};
+            const trendsData = @json($trendsChartData);
 
             new Chart(document.getElementById('trendsChart').getContext('2d'), {
                 type: 'doughnut',

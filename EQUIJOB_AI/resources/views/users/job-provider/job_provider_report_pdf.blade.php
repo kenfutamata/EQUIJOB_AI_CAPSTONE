@@ -51,7 +51,6 @@
     </header>
 
     <main>
-        <!-- Section for Key Performance Indicators (KPIs) -->
         <h2 class="text-2xl font-semibold text-slate-700 mt-10 mb-4 border-b pb-2">Summary</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">

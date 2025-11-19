@@ -24,13 +24,25 @@ class JobProviderGenerateReports extends Controller
         $ratingsChartData = null;
         $trendsChartData = null;
         $errorMessage = null;
-
+        $jobApplicationCount = JobApplication::whereHas('jobPosting', function ($query) use ($user) {
+            $query->where('jobProviderID', $user->id);
+        })->count();
+        $jobApplicantInterviewCount = JobApplication::whereHas('jobPosting', function ($query) use ($user) {
+            $query->where('jobProviderID', $user->id);
+        })->where('status', 'Interview')->count();
+        $jobApplicantHiredCount = JobApplication::whereHas('jobPosting', function ($q) use ($user) {
+            $q->where('jobProviderID', $user->id);
+        })->where('status', 'Hired')
+            ->count();
+        $jobApplicantRejectedCount = JobApplication::whereHas('jobPosting', function ($q) use ($user) {
+            $q->where('jobProviderID', $user->id);
+        })->where('status', 'Rejected')
+            ->count();
         try {
             $selectedMonth = $request->input('month', Carbon::now()->format('Y-m'));
             $selectedCategory = $request->input('category');
             $date = Carbon::parse($selectedMonth . '-01');
 
-            // --- RATINGS QUERY ---
             $ratingCounts = Feedbacks::query()
                 ->select('feedbacks.rating', DB::raw('COUNT(*) as count'))
                 ->join(DB::raw('"jobPosting"'), 'feedbacks.jobPostingID', '=', DB::raw('"jobPosting".id'))
@@ -102,7 +114,11 @@ class JobProviderGenerateReports extends Controller
             'errorMessage',
             'selectedMonth',
             'notifications',
-            'unreadNotifications'
+            'unreadNotifications',
+            'jobApplicationCount', 
+            'jobApplicantInterviewCount', 
+            'jobApplicantHiredCount', 
+            'jobApplicantRejectedCount'
         ))
             ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
             ->header('Pragma', 'no-cache')
@@ -121,7 +137,6 @@ class JobProviderGenerateReports extends Controller
         $errorMessage = null;
         $selectedMonth = $request->input('month', Carbon::now()->format('Y-m'));
 
-        // Variables to hold the generated chart image URLs
         $ratingsChartImageUrl = null;
         $trendsChartImageUrl = null;
 
@@ -129,7 +144,6 @@ class JobProviderGenerateReports extends Controller
             $selectedCategory = $request->input('category');
             $date = Carbon::parse($selectedMonth . '-01');
 
-            // --- FIX: RESTORED THE FULL, WORKING RATINGS QUERY ---
             $ratingCounts = Feedbacks::query()
                 ->select('feedbacks.rating', DB::raw('COUNT(*) as count'))
                 ->join(DB::raw('"jobPosting"'), 'feedbacks.jobPostingID', '=', DB::raw('"jobPosting".id'))
@@ -155,7 +169,6 @@ class JobProviderGenerateReports extends Controller
                     ],
                 ];
 
-                // --- GENERATE RATINGS CHART IMAGE FOR PDF ---
                 $ratingsChartImageUrl = null;
                 if ($ratingsChartData) {
                     $ratingsChartImageUrl = $this->makeQuickChartUrl([
@@ -202,7 +215,6 @@ class JobProviderGenerateReports extends Controller
                     'withdrawn' => $applicationTrends->get('Withdrawn', 0),
                 ];
 
-                // --- GENERATE TRENDS CHART IMAGE FOR PDF ---
                 $trendsChartImageUrl = null;
                 if ($trendsChartData) {
                     $trendsChartImageUrl = $this->makeQuickChartUrl([

@@ -143,16 +143,14 @@
                 }, 3000);
             }
 
-            // A more robust function to create charts, handles different types and empty data
             function createChart(elementId, chartData, config) {
                 const canvas = document.getElementById(elementId);
-                // Check if the canvas element exists and if the data is valid
                 if (!canvas || !chartData || chartData.values.reduce((a, b) => a + b, 0) === 0) {
                     if (canvas) {
                         const parent = canvas.parentElement;
                         parent.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500">No data to display for this chart.</div>';
                     }
-                    return; // Stop if no data or canvas
+                    return; 
                 };
 
                 const chartOptions = {
@@ -165,13 +163,12 @@
                     }
                 };
 
-                // Add scales only for non-pie/doughnut charts
                 if (config.type !== 'pie' && config.type !== 'doughnut') {
                     chartOptions.scales = {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                // Ensure y-axis has integer steps
+
                                 precision: 0
                             }
                         }
