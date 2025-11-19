@@ -86,7 +86,7 @@ Route::middleware('auth:job_provider')->group(function () {
     Route::get('/job-provider/job-provider-dashboard', [JobProviderController::class, 'ViewJobProviderDashboard'])->name('job-provider-dashboard');
     Route::get('/job-provider/job-provider-dashboard/logout', [JobProviderController::class, 'LogoutJobProvider'])->name('job-provider-logout');
     Route::get('/job-provider/job-provider-profile', [JobProviderProfileController::class, 'index'])->name('job-provider-profile');
-        Route::get('/job-provider/job-provider-profile/cities/{province}', [JobProviderController::class, 'getCities'])->name('get-cities');
+    Route::get('/job-provider/job-provider-profile/cities/{province}', [JobProviderController::class, 'getCities'])->name('get-cities');
     Route::get('/job-provider/job-posting/export', [JobPostingController::class, 'export'])->name('job-provider-job-posting-export');
     Route::get('/job-provider/job-posting', [JobPostingController::class, 'index'])->name('job-provider-job-posting');
     Route::post('/job-provider/job-posting', [JobPostingController::class, 'store'])->name('job-provider-job-posting-store');
@@ -133,7 +133,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/applicant/applicant-feedback', [ApplicantFeedbackController::class, 'index'])->name('applicant-feedback');
     Route::put('/applicant/applicant-feedback/{feedback}', [ApplicantFeedbackController::class, 'update'])->name('applicant-feedback-update');
     Route::get('/applicant/job-collections', [ApplicantJobCollectionsController::class, 'index'])->name('applicant-job-collections');
-    Route::get('cities/{province}', [ApplicantJobCollectionsController::class, 'getCities'])->name('get-cities');
+    Route::get('/applicant/job-collections/cities/{province}', [ApplicantJobCollectionsController::class, 'getCities'])->name('get-cities');
 });
 
 //admin

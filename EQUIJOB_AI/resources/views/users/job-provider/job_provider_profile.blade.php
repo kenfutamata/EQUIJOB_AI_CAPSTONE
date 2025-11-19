@@ -271,7 +271,7 @@
             citySelect.innerHTML = '<option value="">Loading...</option>';
 
             try {
-                const response = await fetch(`/cities/${provinceId}`);
+                const response = await fetch(`/job-provider/job-provider-profile/cities/${provinceId}`);
 
                 const cities = await response.json();
 

@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cityHelperText.style.display = 'block';
             }
 
-            fetch(`/get-cities/${provinceId}`)
+            fetch(`/applicant/job-collections/cities/${provinceId}`)
                 .then(response => response.json())
                 .then(cities => {
                     if (cities.length > 0) {
