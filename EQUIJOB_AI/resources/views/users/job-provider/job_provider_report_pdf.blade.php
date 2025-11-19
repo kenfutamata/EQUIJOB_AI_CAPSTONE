@@ -2,172 +2,114 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EQUIJOB - Administrator Reports</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Performance Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/x-icon" href="{{asset('assets/photos/landing_page/equijob_logo.png')}}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Define the local 'Inter' font for the PDF generator */
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 400;
+            src: url("{{ storage_path('fonts/Inter-Regular.ttf') }}") format('truetype');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 500;
+            src: url("{{ storage_path('fonts/Inter-Medium.ttf') }}") format('truetype');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 600;
+            src: url("{{ storage_path('fonts/Inter-SemiBold.ttf') }}") format('truetype');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 700;
+            src: url("{{ storage_path('fonts/Inter-Bold.ttf') }}") format('truetype');
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Lighter slate for better contrast */
+            color: #334155; /* Darker slate for text */
+            padding: 2rem;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800">
+<body class="text-slate-800">
 
-    <!-- Sidebar -->
-    <aside class="fixed top-0 left-0 w-[234px] h-full z-40 bg-[#c3d2f7]">
-        <x-admin-sidebar />
-    </aside>
-
-    <!-- Topbar -->
-    <header class="fixed top-0 left-[234px] right-0 h-16 z-30 bg-white border-b border-gray-200 shadow-sm">
-        <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+    <header class="mb-8">
+         <x-report-topbar />
+        <h1 class="text-4xl font-semibold text-[#113882] mb-1">Monthly Performance Report</h1>
+        <h2 class="text-2xl font-medium text-slate-600">{{$user->companyName}}</h2>
+        <p class="text-base text-slate-500 mt-1">As of {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}</p>
     </header>
 
-    <!-- Main Content -->
-    <main class="ml-[234px] mt-[64px] p-6 min-h-screen">
-
-        @foreach (['Success' => 'green', 'error' => 'red'] as $key => $color)
-            @if (session($key))
-            <div id="notification-bar" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-{{ $color }}-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-500">
-                {{ session($key) }}
-            </div>
-            @endif
-        @endforeach
-
-        <!-- Page Header & Filters -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">Administrator Report</h1>
-                <p class="text-gray-500">System-wide statistics for {{ \Carbon\Carbon::parse($selectedMonth)->format('F Y') }}</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm border">
-                    <label for="month" class="text-sm font-medium text-gray-700">Month:</label>
-                    <input type="month" id="month" name="month" value="{{ $selectedMonth }}" onchange="this.form.submit()" class="border-gray-300 rounded-md shadow-sm">
-                </form>
-                <a href="{{ route('admin.reports.download', request()->query()) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm whitespace-nowrap">
-                    Download PDF
-                </a>
-            </div>
+    <main>
+        <!-- Section for Key Performance Indicators (KPIs) -->
+        <h2 class="text-2xl font-semibold text-slate-700 mt-10 mb-4 border-b pb-2">Summary</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                <h3 class="text-base font-medium text-slate-500 mb-4">Total Applicants</h3>
+                <p class="text-5xl font-bold text-[#113882] leading-none">{{$jobApplicationCount}}</p>
+            </section>
+            <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                <h3 class="text-base font-medium text-slate-500 mb-4">For Interview</h3>
+                <p class="text-5xl font-bold text-[#113882] leading-none">{{$jobApplicantInterviewCount}}</p>
+            </section>
+            <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                <h3 class="text-base font-medium text-slate-500 mb-4">Hired</h3>
+                <p class="text-5xl font-bold text-[#113882] leading-none">{{$jobApplicantHiredCount}}</p>
+            </section>
+            <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                <h3 class="text-base font-medium text-slate-500 mb-4">Rejected</h3>
+                <p class="text-5xl font-bold text-[#113882] leading-none">{{$jobApplicantRejectedCount}}</p>
+            </section>
+            <section class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                <h3 class="text-base font-medium text-slate-500 mb-4">Total Job Postings</h3>
+                <p class="text-5xl font-bold text-[#113882] leading-none">{{$jobPostingCount}}</p>
+            </section>
         </div>
 
-        @if(!$errorMessage)
-            <!-- KPI Cards Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 class="text-gray-500 font-medium">New Applicants</h3>
-                    <p class="text-4xl font-bold text-blue-600 mt-2">{{ $totalApplicants }}</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 class="text-gray-500 font-medium">New Job Providers</h3>
-                    <p class="text-4xl font-bold text-red-500 mt-2">{{ $totalProviders }}</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 class="text-gray-500 font-medium">Applicants Hired</h3>
-                    <p class="text-4xl font-bold text-green-600 mt-2">{{ $totalHired }}</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 class="text-gray-500 font-medium">Applicants Rejected</h3>
-                    <p class="text-4xl font-bold text-orange-500 mt-2">{{ $totalRejected }}</p>
-                </div>
-            </div>
+        <!-- Section for Charts -->
+        <h2 class="text-2xl font-semibold text-slate-700 mt-10 mb-4 border-b pb-2">Visualizations</h2>
+        <div class="mt-2">
+            @if((isset($trendsChartImageUrl) && $trendsChartImageUrl) || (isset($ratingsChartImageUrl) && $ratingsChartImageUrl))
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- NEW: Category Distribution Chart -->
-                <div class="bg-white p-6 rounded-lg shadow-md border lg:col-span-2">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Application Distribution by Category</h2>
-                    <div class="relative h-96"><canvas id="categoryDistributionChart"></canvas></div>
+                    {{-- Application Trends Doughnut Chart --}}
+                    @if(isset($trendsChartImageUrl) && $trendsChartImageUrl)
+                        <section class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="text-xl font-semibold text-slate-700 border-b border-slate-200 pb-3 mb-4">Application Status Trends</h3>
+                            <div class="flex justify-center items-center p-4">
+                                <img src="{{ $trendsChartImageUrl }}" alt="Application Trends Chart" style="max-width: 100%; height: auto;">
+                            </div>
+                        </section>
+                    @endif
+
+                    @if(isset($ratingsChartImageUrl) && $ratingsChartImageUrl)
+                        <section class="bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="text-xl font-semibold text-slate-700 border-b border-slate-200 pb-3 mb-4">Feedback Ratings</h3>
+                            <div class="flex justify-center items-center p-4">
+                                <img src="{{ $ratingsChartImageUrl }}" alt="Feedback Ratings Chart" style="max-width: 100%; height: auto;">
+                            </div>
+                        </section>
+                    @endif
                 </div>
-                <!-- Daily Trend Charts -->
-                <div class="bg-white p-6 rounded-lg shadow-md border">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Daily Applicant Registrations</h2>
-                    <div class="relative h-80"><canvas id="applicantRegisteredChart"></canvas></div>
+            {{-- If there is an error message, display it instead of empty chart space --}}
+            @elseif(isset($errorMessage))
+                <div class="bg-slate-50 border border-slate-200 text-slate-600 p-6 rounded-xl text-center">
+                    <p class="font-semibold text-lg">No Chart Data Available</p>
+                    <p class="mt-2">{{ $errorMessage }}</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Daily Job Provider Registrations</h2>
-                    <div class="relative h-80"><canvas id="jobProviderChart"></canvas></div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Daily Hired Applicants</h2>
-                    <div class="relative h-80"><canvas id="hiredApplicantsChart"></canvas></div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Daily Rejected Applicants</h2>
-                    <div class="relative h-80"><canvas id="rejectedApplicantsChart"></canvas></div>
-                </div>
-            </div>
-        @else
-            <!-- No Data Message -->
-            <div class="bg-white p-6 rounded-lg shadow-md border max-w-4xl mx-auto text-center py-12">
-                <h3 class="text-xl font-semibold text-gray-700">No Data Available</h3>
-                <p class="text-gray-500 mt-2">{{ $errorMessage }}</p>
-            </div>
-        @endif
+            @endif
+        </div>
     </main>
 
-    <!-- Charts Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const notifBar = document.getElementById('notification-bar');
-            if (notifBar) { /* ... notification logic ... */ }
-
-            function createChart(elementId, chartData, config) {
-                if (!chartData) return;
-                const ctx = document.getElementById(elementId).getContext('2d');
-                new Chart(ctx, {
-                    type: config.type,
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: config.label,
-                            data: chartData.values,
-                            borderColor: config.borderColor,
-                            backgroundColor: config.backgroundColor ?? ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40', '#c9cbcf'],
-                            borderWidth: config.type === 'bar' ? 1 : 2,
-                            fill: config.type === 'line',
-                            tension: 0.2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: (config.type !== 'pie' && config.type !== 'doughnut') 
-                            ? { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-                            : {},
-                        plugins: {
-                            legend: {
-                                position: (config.type === 'pie' || config.type === 'doughnut') ? 'right' : 'top',
-                            }
-                        }
-                    }
-                });
-            }
-            
-            @if(isset($applicantChartData))
-                createChart('applicantRegisteredChart', @json($applicantChartData), { type: 'line', label: 'New Applicants', borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)' });
-            @endif
-
-            @if(isset($jobProviderChartData))
-                createChart('jobProviderChart', @json($jobProviderChartData), { type: 'line', label: 'New Job Providers', borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' });
-            @endif
-
-            @if(isset($hiredChartData))
-                createChart('hiredApplicantsChart', @json($hiredChartData), { type: 'bar', label: 'Applicants Hired', borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.6)' });
-            @endif
-
-            @if(isset($disapprovedChartData))
-                createChart('rejectedApplicantsChart', @json($disapprovedChartData), { type: 'bar', label: 'Applicants Rejected', borderColor: 'rgba(255, 159, 64, 1)', backgroundColor: 'rgba(255, 159, 64, 0.6)' });
-            @endif
-
-            // --- NEW: Initialize the Category Distribution Pie Chart ---
-            @if(isset($categoryDistributionData))
-                createChart('categoryDistributionChart', @json($categoryDistributionData), {
-                    type: 'pie',
-                    label: 'Applications by Category'
-                });
-            @endif
-        });
-    </script>
 </body>
-
 </html>

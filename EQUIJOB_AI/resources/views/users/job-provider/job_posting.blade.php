@@ -198,8 +198,6 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <label class="block text-xs text-gray-500">Company Logo</label>
                     @if($user->companyLogo)
                     @php
-                    // If your Supabase storage public bucket base URL looks like:
-                    // https://<your-project-id>.supabase.co/storage/v1/object/public/company-logos/
                         $supabaseBaseUrl = 'https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}';
                         $logoUrl = Str::startsWith($user->companyLogo, 'http')
                         ? $user->companyLogo
