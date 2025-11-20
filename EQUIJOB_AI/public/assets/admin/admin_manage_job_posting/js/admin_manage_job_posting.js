@@ -1,8 +1,8 @@
-function openDisapproveJobPostingModal(button) {
-    const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
-    const form = document.getElementById('disapproveForm');
-    form.action = `/admin/manage-job-posting/disapproved/${jobposting.id}`;
+function openDisapproveJobPostingModal(url) {
+    const form = document.getElementById('disapproveJobPosting');
+    form.action = url;
     document.getElementById('DisapproveJobPostingModal').classList.remove('hidden');
+
 }
 
 function closeDisapproveJobPostingModal() {
@@ -18,7 +18,7 @@ function closeAddJobPostingModal() {
 }
 
 
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     const modal = document.getElementById('viewProfileModal');
     if (e.target === modal) closeModal();
 });
@@ -34,12 +34,13 @@ setTimeout(() => {
 
 function openViewJobPostingModal(button) {
     const jobposting = JSON.parse(button.getAttribute('data-jobposting'));
+    const fullTimestamp = jobposting.updated_at;
     document.getElementById('modal.position').value = jobposting.position;
     document.getElementById('modal.companyName').value = jobposting.companyName;
     document.getElementById('modal.sex').value = jobposting.sex;
     const companyLogo = document.getElementById('modal.companyLogo');
-  companyLogo.src = jobposting.companyLogo ? jobposting.companyLogo : '';
-            companyLogo.style.display = jobposting.companyLogo ? 'block' : 'none';
+    companyLogo.src = jobposting.companyLogo ? jobposting.companyLogo : '';
+    companyLogo.style.display = jobposting.companyLogo ? 'block' : 'none';
     document.getElementById('modal.companyAddress').value = jobposting.companyAddress;
     document.getElementById('modal.province').value = jobposting.provinceName;
     document.getElementById('modal.city').value = jobposting.cityName;
@@ -56,7 +57,12 @@ function openViewJobPostingModal(button) {
     document.getElementById('modal.description').value = jobposting.description;
     document.getElementById('modal.category').value = jobposting.category;
     document.getElementById('modal.salaryRange').value = jobposting.salaryRange;
-    document.getElementById('modal.remarks').value = jobposting.remarks || '';
+    document.getElementById('modal.status').value = jobposting.status;
+    if (fullTimestamp) {
+        const dateOnly = new Date(fullTimestamp).toISOString().split('T')[0]; 
+
+        document.getElementById('modal.approvedJobPostingDate').value = dateOnly;
+    } 
     document.getElementById('viewJobPostingModal').classList.remove('hidden');
 
 }

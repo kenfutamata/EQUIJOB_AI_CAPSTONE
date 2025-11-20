@@ -100,7 +100,7 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                                     @method('PUT')
                                     <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded">For Posting</button>
                                 </form>
-                                <button onclick="openDisapproveJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
+                                <button onclick="openDisapproveJobPostingModal('{{route('admin-manage-job-posting-disapproved', $posting->id)}}')" data-jobposting='@json($posting)' class="bg-red-500 text-white px-2 py-1 rounded">Disapprove</button>
                                 @else
                                 <button onclick="openViewJobPostingModal(this)" data-jobposting='@json($posting)' class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
                                 @endif
@@ -200,8 +200,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal.salaryRange" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Remarks</label>
-                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+                <label class="block text-xs text-gray-500">Status</label>
+                <input id="modal.status" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500">Approved/Disapproved Job Posting Date</label>
+                <input id="modal.approvedJobPostingDate" class="w-full border rounded px-2 py-1" disabled>
             </div>
         </div>
     </div>
@@ -209,17 +213,15 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
     <div id="DisapproveJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-6">
             <div class="flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Please Input your Remarks for Disapproval of Job Posting</h3>
-                <button onclick="closeDisapproveJobPostingModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-semibold">Disapprove Job Posting?</h3>
+                <button onclick="closeRejectJobApplicationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
             </div>
-            <form id="disapproveForm" method="POST">
+            <form id="disapproveJobPosting" method="POST" action="">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
-                    <textarea id="remarks" name="remarks" rows="4" class="w-full border rounded px-2 py-1" required></textarea>
-                    <button type="submit" class="w-full py-3 px-4 rounded-lg bg-gray-50">Submit</button>
+                <button type="submit" class="w-full py-3 px-4 rounded-lg bg-green-100">Yes</button>
             </form>
+            <button onclick="closeDisapproveJobPostingModal()" class="w-full py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700">Cancel</button>
         </div>
     </div>
     <script src="{{ asset('assets/admin/admin_manage_job_posting/js/admin_manage_job_posting.js') }}"></script>

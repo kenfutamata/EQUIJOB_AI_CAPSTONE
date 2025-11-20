@@ -24,6 +24,8 @@ class JobApplication extends Model
         'interviewLink', 
         'uploadResume',
         'uploadApplicationLetter',
+        'dateHired', 
+
     ];
 
     protected $casts = [

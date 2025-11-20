@@ -1,5 +1,7 @@
 function openviewDescriptionModal(button) {
     const feedback = JSON.parse(button.getAttribute('data-user'));
+    const fullTimestamp = feedback.updated_at;
+
     const position = feedback.job_posting?.position;
     const companyName = feedback.job_posting?.companyName;
     document.getElementById('modal_firstName').value = feedback.firstName || 'N/A';
@@ -12,6 +14,12 @@ function openviewDescriptionModal(button) {
     document.getElementById('modal_feedbackText').value = feedback.feedbackText || 'No feedback provided yet.';
     document.getElementById('modal_rating').value = feedback.rating || 'Not rated yet.';
     document.getElementById('viewDescriptionModal').classList.remove('hidden');
+    if (fullTimestamp) {
+        const dateOnly = new Date(fullTimestamp).toISOString().split('T')[0];
+
+        document.getElementById('modal_updated_at').value = dateOnly;
+    }
+
 }
 
 function closeviewDescriptionModal() {

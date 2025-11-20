@@ -16,19 +16,19 @@
 </head>
 @php
 function sortArrow($column) {
-    $currentSort = request('sort');
-    $direction = request('direction') === 'asc' ? 'desc' : 'asc';
-    $arrow = request('sort') === $column
-        ? (request('direction') === 'asc' ? '↑' : '↓')
-        : '↕';
-    $params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
-    $url = request()->url() . '?' . http_build_query($params);
-    return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
+$currentSort = request('sort');
+$direction = request('direction') === 'asc' ? 'desc' : 'asc';
+$arrow = request('sort') === $column
+? (request('direction') === 'asc' ? '↑' : '↓')
+: '↕';
+$params = array_merge(request()->all(), ['sort' => $column, 'direction' => $direction]);
+$url = request()->url() . '?' . http_build_query($params);
+return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
 }
 @endphp
 
 <body x-data="{ sidebarOpen: false }" class="bg-gray-50 text-black flex min-h-screen">
-    
+
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
 
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] z-50 lg:hidden flex flex-col" style="background-color: #c3d2f7;">
@@ -105,7 +105,7 @@ function sortArrow($column) {
                         </tr>
                         @empty
                         <tr>
-                           <td colspan="6" class="text-center py-4 text-gray-500">No feedback entries found.</td>
+                            <td colspan="6" class="text-center py-4 text-gray-500">No feedback entries found.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -142,6 +142,8 @@ function sortArrow($column) {
                 <textarea id="modal_feedbackText" class="w-full border rounded px-2 py-1 bg-gray-100" readonly></textarea>
                 <label class="block text-xs text-gray-500">Rating:</label>
                 <input id="modal_rating" class="w-full border rounded px-2 py-1 bg-gray-100" readonly>
+                <label class="block text-xs text-gray-500">Date of Updated Feedback:</label>
+                <input id="modal_updated_at" class="w-full border rounded px-2 py-1 bg-gray-100" readonly>
             </div>
         </div>
     </div>
@@ -175,10 +177,10 @@ function sortArrow($column) {
                         </select>
                         @error('rating')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p
-                        @enderror
+                            @enderror
+                            </div>
+                        <button type="submit" class="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">Submit Feedback</button>
                     </div>
-                    <button type="submit" class="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700">Submit Feedback</button>
-                </div>
             </form>
         </div>
     </div>

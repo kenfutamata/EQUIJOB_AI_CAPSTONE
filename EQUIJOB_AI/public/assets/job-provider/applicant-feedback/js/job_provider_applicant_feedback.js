@@ -1,5 +1,7 @@
 function openviewDescriptionModal(button) {
     const feedback = JSON.parse(button.getAttribute('data-user'));
+    const fullTimestamp = feedback.updated_at;
+
     const position = feedback.job_application?.job_posting?.position;
     const companyName = feedback.job_application?.job_posting?.companyName;
     document.getElementById('modal_firstName').value = feedback.firstName;
@@ -11,6 +13,11 @@ function openviewDescriptionModal(button) {
     document.getElementById('modal_feedbackType').value = feedback.feedbackType;
     document.getElementById('modal_feedbackText').value = feedback.feedbackText;
     document.getElementById('modal_rating').value = feedback.rating;
+    if (fullTimestamp) {
+        const dateOnly = new Date(fullTimestamp).toISOString().split('T')[0];
+
+        document.getElementById('modal_updated_at').value = dateOnly;
+    }
     document.getElementById('viewDescriptionModal').classList.remove('hidden');
 }
 
@@ -28,7 +35,7 @@ function closeDeleteModal() {
     document.getElementById('DeleteRoleModal').classList.add('hidden');
 }
 
-window.addEventListener('click', function(e) {
+window.addEventListener('click', function (e) {
     const modal = document.getElementById('viewProfileModal');
     if (e.target === modal) closeModal();
 });

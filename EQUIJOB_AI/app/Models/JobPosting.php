@@ -87,7 +87,7 @@ class JobPosting extends Model
         'companyAddress', 
         'provinceName',
         'cityName',
-        'endDate'
+        'endDate', 
     ];
 
     protected $casts = [

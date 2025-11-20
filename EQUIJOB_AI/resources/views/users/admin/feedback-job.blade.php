@@ -125,6 +125,8 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <textarea id="modal_feedbackText" class="w-full border rounded px-2 py-1" readonly placeholder="Feedback Text"></textarea>
                 <label class="block text-xs text-gray-500">Rating:</label>
                 <input id="modal_rating" class="w-full border rounded px-2 py-1" readonly placeholder="Rating">
+                <label class="block text-xs text-gray-500">Date of Updated Feedback:</label>
+                <input id="modal_updated_at" class="w-full border rounded px-2 py-1" readonly placeholder="Date of Updated Feedback">
             </div>
         </div>
     </div>

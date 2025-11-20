@@ -198,24 +198,24 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                     <label class="block text-xs text-gray-500">Company Logo</label>
                     @if($user->companyLogo)
                     @php
-                        $supabaseBaseUrl = 'https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}';
-                        $logoUrl = Str::startsWith($user->companyLogo, 'http')
-                        ? $user->companyLogo
-                        : $supabaseBaseUrl . ltrim($user->companyLogo, '/');
-                        @endphp
+                    $supabaseBaseUrl = 'https://zlusioxytbqhxohsfvyr.supabase.co/storage/v1/object/public/equijob_storage/companyLogo/{$user->companyLogo}';
+                    $logoUrl = Str::startsWith($user->companyLogo, 'http')
+                    ? $user->companyLogo
+                    : $supabaseBaseUrl . ltrim($user->companyLogo, '/');
+                    @endphp
 
-                        <img src="{{ $logoUrl }}" alt="Company Logo"
-                            class="w-16 h-16 object-cover border rounded mb-2"
-                            id="companyLogo"
-                            name="companyLogo">
-                        <span id="companyLogoFilename">{{ basename($user->companyLogo) }}</span>
-                        @else
-                        <p class="text-gray-400 text-sm">No company logo uploaded</p>
-                        @endif
+                    <img src="{{ $logoUrl }}" alt="Company Logo"
+                        class="w-16 h-16 object-cover border rounded mb-2"
+                        id="companyLogo"
+                        name="companyLogo">
+                    <span id="companyLogoFilename">{{ basename($user->companyLogo) }}</span>
+                    @else
+                    <p class="text-gray-400 text-sm">No company logo uploaded</p>
+                    @endif
 
-                        @error('companyLogo')
-                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
+                    @error('companyLogo')
+                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label class="block text-xs text-gray-500">age</label>
@@ -422,8 +422,12 @@ return "<a href=\"$url\" class=\"text-xs\">$arrow</a>";
                 <input id="modal.salaryRange" class="w-full border rounded px-2 py-1" disabled>
             </div>
             <div>
-                <label class="block text-xs text-gray-500">Remarks</label>
-                <textarea id="modal.remarks" class="w-full border rounded px-2 py-1" disabled></textarea>
+                <label class="block text-xs text-gray-500">Status</label>
+                <input id="modal.status" class="w-full border rounded px-2 py-1" disabled>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500">Approved/Disapproved Job Posting Date</label>
+                <input id="modal.approvedJobPostingDate" class="w-full border rounded px-2 py-1" disabled>
             </div>
         </div>
     </div>

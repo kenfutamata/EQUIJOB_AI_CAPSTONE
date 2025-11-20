@@ -133,17 +133,13 @@ class AdminManageUsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(string $id)
     {
-        $validateInformation = $request->validate([
-            'remarks' => 'required|string|max:500',
-        ]);
         $user = users::findOrFail($id);
 
         Mail::to($user)->send(new SendAccountDeleteDetails([
             'userID' => $user->userID,
-            'remarks' => $validateInformation['remarks'],
-        ]));
+         ]));
         $user->delete();
         return redirect()->back()->with('Success', 'User deleted successfully');
     }
