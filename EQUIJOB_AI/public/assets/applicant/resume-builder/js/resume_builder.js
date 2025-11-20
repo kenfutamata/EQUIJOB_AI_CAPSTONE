@@ -133,4 +133,41 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 500);
         }, 10000);
     });
+
+
+    // --- START: AI SKILL BUTTON LOGIC ---
+    const skillsTextarea = document.getElementById('skills');
+    const aiSkillButtons = document.querySelectorAll('.ai-skill-btn');
+
+    aiSkillButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const skillToAdd = this.dataset.skill;
+
+            // Get current skills, split into an array, and trim whitespace
+            const currentSkills = skillsTextarea.value
+                .split(',')
+                .map(skill => skill.trim())
+                .filter(skill => skill.length > 0); // Remove any empty entries
+
+            // Check if the skill already exists (case-insensitive)
+            const skillExists = currentSkills.some(
+                skill => skill.toLowerCase() === skillToAdd.toLowerCase()
+            );
+
+            if (!skillExists) {
+                // If textarea is not empty, add a comma and a space before the new skill
+                if (skillsTextarea.value.trim().length > 0) {
+                    skillsTextarea.value += ', ';
+                }
+                // Add the new skill
+                skillsTextarea.value += skillToAdd;
+            }
+
+            // Visually indicate that the skill has been added
+            this.disabled = true;
+            this.classList.remove('bg-sky-100', 'hover:bg-sky-200', 'text-sky-800');
+            this.classList.add('bg-green-100', 'text-green-800', 'cursor-not-allowed');
+            this.textContent = '✔ Added'; // Change text to show it's done
+        });
+    });
 });

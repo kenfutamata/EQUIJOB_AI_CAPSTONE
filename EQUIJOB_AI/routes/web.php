@@ -115,7 +115,7 @@ Route::middleware(['auth:applicant'])->group(function () {
     Route::get('/applicant/applicant-dashboard', [ApplicantController::class, 'ViewApplicantDashboard'])->name('applicant-dashboard');
     Route::get('/applicant/logout', [ApplicantController::class, 'LogOutUser'])->name('applicant-logout');
     Route::get('/applicant/applicant-profile', [ApplicantProfileController::class, 'index'])->name('applicant-profile');
-    Route::put('/applicant/applicant-profile/{id}', [ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
+    Route::put('/applicant/applicant-profile', [ApplicantProfileController::class, 'update'])->name('applicant-profile-update');
     Route::get('/applicant/applicant-profile/cities/{province}', [ApplicantProfileController::class, 'getCities'])->name('get-cities');
     Route::get('/applicant/resume-builder', [ResumeController::class, 'index'])->name('applicant-resume-builder');
     Route::post('/applicant/resume-builder', [ResumeController::class, 'store'])->name('applicant-resume-builder-store');

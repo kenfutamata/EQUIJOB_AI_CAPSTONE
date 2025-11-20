@@ -57,6 +57,9 @@ class JobApplication extends Model
                 });
         });
     }
+    public function job(){
+        return $this->belongsTo(JobPosting::class, 'jobPostingId'); 
+    }
     public function applicant()
     {
         return $this->belongsTo(\App\Models\User::class, 'applicantID', 'id');

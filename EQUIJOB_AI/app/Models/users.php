@@ -8,14 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-// ... your docblock comments ...
 
-// CHANGE THIS:
-// class users extends Authenticatable
-// TO THIS:
 class users extends Authenticatable
 {
-    use HasFactory, Notifiable; // Notifiable trait is correctly placed here
+    use HasFactory, Notifiable; 
 
     /**
      * The table associated with the model.
@@ -40,6 +36,7 @@ class users extends Authenticatable
         'gender',
         'typeOfDisability',
         'pwdId',
+        'certificates',
         'upload_pwd_card',
         'role',
         'status',
@@ -51,6 +48,7 @@ class users extends Authenticatable
         'profilePicture',
         'cityId',
         'provinceId',
+        'extractedCertificates',
     ];
 
     /**
@@ -71,6 +69,8 @@ class users extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'certificates'=>'array', 
+            'extractedCertificates'=>'array', 
         ];
     }
 

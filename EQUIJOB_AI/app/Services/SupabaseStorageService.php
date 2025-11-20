@@ -4,18 +4,20 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SupabaseStorageService
 {
     protected $baseUrl;
     protected $apiKey;
     protected $bucket;
+    protected $client;
 
     public function __construct()
     {
         $this->baseUrl = rtrim(config('services.supabase.url'), '/');
         $this->apiKey = config('services.supabase.key');
-        $this->bucket = 'equijob_storage'; 
+        $this->bucket = 'equijob_storage';
     }
 
     public function upload(UploadedFile $file, $folder = '')
@@ -32,12 +34,31 @@ class SupabaseStorageService
             'apikey' => $this->apiKey,
             'Content-Type' => $file->getMimeType(),
         ])->withBody(file_get_contents($file->getRealPath()), $file->getMimeType())
-          ->put("{$this->baseUrl}/storage/v1/object/{$encodedBucket}/{$path}");
+            ->put("{$this->baseUrl}/storage/v1/object/{$encodedBucket}/{$path}");
 
         if (!$response->successful()) {
             throw new \Exception("Supabase upload failed: " . $response->body());
         }
 
         return "{$this->baseUrl}/storage/v1/object/public/{$encodedBucket}/{$path}";
+    }
+
+    public function delete(string $path)
+    {
+        if (empty($path)) {
+            return false;
+        }
+
+        try {
+            $this->client->storage
+                ->from($this->bucket)
+                ->remove([$path]); 
+
+            return true;
+        } catch (\Exception $e) {
+            // Log the error but don't crash the application
+            Log::error('Supabase Delete Error: ' . $e->getMessage());
+            return false;
+        }
     }
 }

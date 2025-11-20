@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobApplication;
 use App\Models\Resume;
 use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
 use Gemini;
 
 class ResumeController extends Controller
@@ -34,19 +35,55 @@ class ResumeController extends Controller
 
     public function index()
     {
-        $user = Auth::guard('applicant')->user()->load('resume.experiences', 'resume.educations');
-        $resume = $user->resume; 
-        $notifications = $user->notifications;
-        $unreadNotifications = $user->unreadNotifications;
+        // 1. Eager-load all necessary data for the authenticated user at once.
+        $user = Auth::guard('applicant')->user()->load(['resume.experiences', 'resume.educations', 'notifications']);
+
+        // 2. Prepare data for the view with clear variable assignments.
+        $resume = $user->resume;
+
+        // ** FIX #1: Use the correct camelCase property name as you specified. **
+        $certificates = $user->extractedCertificates ?? [];
+
         $disabilityTypes = $this->getDisabilityTypes();
 
+        // 3. Logic to find suggested experiences from past hired roles.
+        $hiredApplications = JobApplication::where('applicantID', $user->id)
+            ->where('status', 'Hired')
+            ->with('jobPosting')
+            ->get();
 
-        $response = response()->view('users.applicant.resume_builder', compact('user', 'notifications', 'resume', 'unreadNotifications', 'disabilityTypes'));
-        $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
-        $response->header('Pragma', 'no-cache');
-        $response->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
-        return $response;
+        // ** FIX #2: A more robust filtering logic. **
+        $suggestedExperiences = $hiredApplications->filter(function ($application) use ($resume) {
+            // Guard clauses for cleaner code
+            if (!$application->jobPosting) {
+                return false; // Skip if job posting data is missing
+            }
+            if (!$resume || !$resume->experiences) {
+                return true; // If there are no experiences in the resume yet, every suggestion is valid
+            }
+
+            // Check if an experience with the same employer and job title already exists.
+            $isAlreadyAdded = $resume->experiences->first(function ($experience) use ($application) {
+                return strcasecmp(trim($experience->employer), trim($application->jobPosting->employerName)) === 0
+                    && strcasecmp(trim($experience->jobTitle), trim($application->jobPosting->position)) === 0;
+            });
+
+            // Keep the suggestion ONLY if it was NOT found (isAlreadyAdded is null).
+            return is_null($isAlreadyAdded);
+        });
+
+        // 4. Return the view with all the corrected and prepared data.
+        return response()->view('users.applicant.resume_builder', [
+            'user' => $user,
+            'resume' => $resume,
+            'notifications' => $user->notifications,
+            'unreadNotifications' => $user->unreadNotifications,
+            'disabilityTypes' => $disabilityTypes,
+            'certificates' => $certificates,
+            'suggestedExperiences' => $suggestedExperiences,
+        ]);
     }
+
 
     protected function buildResumePrompt(Resume $resume, string $skillsSummary = ''): string
     {
@@ -141,7 +178,7 @@ class ResumeController extends Controller
             'resume.email' => 'required|email|unique:users,email,' . $applicantUser->id,
             'resume.phone' => 'required|string|max:15',
             'resume.typeOfDisability' => ['nullable', 'string', Rule::in($this->getDisabilityTypes())],
-            'resume.photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'resume.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'resume.summary' => 'required|string',
             'resume.skills' => 'nullable|string|max:1000',
             'experience' => 'nullable|array',
