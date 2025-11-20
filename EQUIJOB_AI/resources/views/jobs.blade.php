@@ -102,6 +102,10 @@
                 </div>
                 <p class="text-gray-600 mb-3">{{ Str::limit($collection->description, 100) }}</p>
                 <p class="text-gray-500 text-sm mb-2">Company: <span class="font-medium">{{ $collection->companyName }}</span></p>
+                <p class="text-gray-500 text-sm mb-2">Date Posted: <span class="font-medium">{{ $collection->updated_at->format('F j, Y') }}</span></p>
+
+                <p class="text-gray-500 text-sm mb-2">Last day of Posting: <span class="font-medium">{{ $collection->endDate?->format('F j, Y') ?? 'N/A' }}</span></p>
+
                 <div class="mt-auto flex gap-2">
                     @php
                     $jobData = $collection->toArray();
