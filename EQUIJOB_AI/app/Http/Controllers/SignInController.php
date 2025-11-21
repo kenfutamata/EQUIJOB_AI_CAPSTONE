@@ -16,8 +16,13 @@ class SignInController extends Controller
     public function ViewSignUpApplicantPage()
     {
         $provinces = Province::all();
-        $cities = collect(); 
-        return view('sign-in-page.sign_up.sign_up_applicant', compact('provinces'));
+        $cities = collect();
+        // Check if the form is being re-rendered after a validation error
+        if (old('provinceId')) {
+            // If so, fetch the cities for the province the user had previously selected
+            $cities = Cities::where('provinceId', old('provinceId'))->get();
+        }
+        return view('sign-in-page.sign_up.sign_up_applicant', compact('provinces', 'cities'));
     }
 
     public function ViewSignUpJobProviderPage()
@@ -29,14 +34,14 @@ class SignInController extends Controller
 
     public function getCities(Province $province)
     {
-        $citiesCollection = $province->cities; 
+        $citiesCollection = $province->cities;
         $citiesArray = $citiesCollection->map(function ($city) {
             return [
                 'id' => $city->id,
                 'cityName' => $city->cityName,
             ];
         });
-        return response()->json($citiesArray);            
+        return response()->json($citiesArray);
     }
     public function generateAlphaNumericId(string $role): string
     {
@@ -54,7 +59,7 @@ class SignInController extends Controller
         $lastID = $last?->userID ?? $prefix . '0000';
         $number = (int) substr($lastID, strlen($prefix));
         $next = $number + 1;
-    return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
+        return $prefix . str_pad($next, 5, '0', STR_PAD_LEFT);
     }
     public function SignUpJobApplicant(Request $request, SupabaseStorageService $supabase)
     {

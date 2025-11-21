@@ -101,9 +101,9 @@
           <select id="province" name="provinceId" class="h-14 px-4 rounded-xl border border-stone-300" required>
             <option value="">Select Province</option>
             @foreach($provinces as $province)
-                <option value="{{ $province->id }}" {{ old('provinceId') == $province->id ? 'selected' : '' }}>
-                    {{ $province->provinceName }}
-                </option>
+            <option value="{{ $province->id }}" {{ old('provinceId') == $province->id ? 'selected' : '' }}>
+              {{ $province->provinceName }}
+            </option>
             @endforeach
           </select>
           @error('province_id')
@@ -116,12 +116,13 @@
           <label class="text-stone-500 text-base mb-1">City</label>
           <select id="city" name="cityId" class="h-14 px-4 rounded-xl border border-stone-300" required>
             <option value="">Select City</option>
-            @if(old('provinceId') && $cities ?? false)
-                @foreach($cities as $city)
-                    <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>
-                        {{ $city->cityName }}
-                    </option>
-                @endforeach
+            {{-- This will now work correctly on both initial load and validation failure --}}
+            @if($cities->isNotEmpty())
+            @foreach($cities as $city)
+            <option value="{{ $city->id }}" {{ old('cityId') == $city->id ? 'selected' : '' }}>
+              {{ $city->cityName }}
+            </option>
+            @endforeach
             @endif
           </select>
           @error('cityId')
@@ -222,42 +223,43 @@
     </div>
   </div>
 
-<script>
-document.getElementById('province').addEventListener('change', async function() {
-    const provinceId = this.value;
-    const citySelect = document.getElementById('city');
+  <script>
+    document.getElementById('province').addEventListener('change', async function() {
+      const provinceId = this.value;
+      const citySelect = document.getElementById('city');
 
-    if (!provinceId) {
+      if (!provinceId) {
         citySelect.innerHTML = '<option value="">Select a Province</option>';
         return;
-    }
+      }
 
-    citySelect.innerHTML = '<option value="">Loading...</option>';
+      citySelect.innerHTML = '<option value="">Loading...</option>';
 
-    try {
+      try {
         const response = await fetch(`/cities/${provinceId}`);
-        
+
         // This is now guaranteed to be the array of city objects.
-        const cities = await response.json(); 
+        const cities = await response.json();
 
         citySelect.innerHTML = '<option value="">Select City</option>';
 
         if (cities && cities.length > 0) {
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city.id;
-                option.textContent = city.cityName; 
-                citySelect.appendChild(option);
-            });
+          cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city.id;
+            option.textContent = city.cityName;
+            citySelect.appendChild(option);
+          });
         } else {
-            citySelect.innerHTML = '<option value="">No cities found</option>';
+          citySelect.innerHTML = '<option value="">No cities found</option>';
         }
-    } catch (err) {
+      } catch (err) {
         console.error('Error fetching cities:', err);
         citySelect.innerHTML = '<option value="">Error loading cities</option>';
-    }
-});
-</script>
+      }
+    });
+  </script>
 
 </body>
+
 </html>
