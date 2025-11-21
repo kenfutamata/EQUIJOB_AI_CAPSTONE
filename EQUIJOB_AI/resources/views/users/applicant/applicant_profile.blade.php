@@ -133,7 +133,7 @@
                     <div><label class="block text-sm text-gray-600 mb-1">Address</label><input type="text" name="address" value="{{ old('address', $user->address) }}" class="w-full border rounded-md px-4 py-2 text-sm" />@error('address') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror</div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">Province</label>
-                        <select id="province" name="provinceId" class="w-full border rounded-md px-4 py-2 text-sm" required>
+                        <select id="province" name="provinceId" class="w-full border rounded-md px-4 py-2 text-sm">
                             <option value="">Select Province</option>
                             @foreach($provinces as $province)
                             <option value="{{ $province->id }}" {{ old('provinceId') == $province->id ? 'selected' : '' }}>
@@ -144,7 +144,7 @@
                     </div>
                     <div>
                         <label class="block text-sm text-gray-600 mb-1">City</label>
-                        <select id="city" name="cityId" class="w-full border rounded-md px-4 py-2 text-sm" required>
+                        <select id="city" name="cityId" class="w-full border rounded-md px-4 py-2 text-sm" >
                             <option value="">Select City</option>
                             @if(old('provinceId') && $cities ?? false)
                             @foreach($cities as $city)
