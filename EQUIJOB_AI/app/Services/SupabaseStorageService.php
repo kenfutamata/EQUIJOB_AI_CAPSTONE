@@ -11,7 +11,7 @@ class SupabaseStorageService
     protected $baseUrl;
     protected $apiKey;
     protected $bucket;
-    protected $client;
+    // We are removing the unused $client property
 
     public function __construct()
     {
@@ -29,18 +29,31 @@ class SupabaseStorageService
 
         $encodedBucket = rawurlencode($this->bucket);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->apiKey,
-            'apikey' => $this->apiKey,
-            'Content-Type' => $file->getMimeType(),
-        ])->withBody(file_get_contents($file->getRealPath()), $file->getMimeType())
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'apikey' => $this->apiKey,
+                'Content-Type' => $file->getMimeType(),
+            ])
+            // =========================================================================
+            // === THIS IS THE FIX: Give the upload 120 seconds (2 minutes) to complete. ===
+            // =========================================================================
+            ->timeout(120)
+            ->withBody(file_get_contents($file->getRealPath()), $file->getMimeType())
             ->put("{$this->baseUrl}/storage/v1/object/{$encodedBucket}/{$path}");
 
-        if (!$response->successful()) {
-            throw new \Exception("Supabase upload failed: " . $response->body());
-        }
+            if (!$response->successful()) {
+                Log::error("Supabase upload failed: " . $response->body());
+                return null; // Return null on failure instead of throwing an exception
+            }
 
-        return "{$this->baseUrl}/storage/v1/object/public/{$encodedBucket}/{$path}";
+            // Return the public URL for the newly uploaded file
+            return "{$this->baseUrl}/storage/v1/object/public/{$encodedBucket}/{$path}";
+
+        } catch (\Exception $e) {
+            Log::error('Supabase upload exception: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function delete(string $path)
@@ -49,15 +62,29 @@ class SupabaseStorageService
             return false;
         }
 
-        try {
-            $this->client->storage
-                ->from($this->bucket)
-                ->remove([$path]); 
+        $encodedBucket = rawurlencode($this->bucket);
 
+        try {
+            // IMPROVEMENT: Using the Http client for consistency with the upload method.
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'apikey' => $this->apiKey,
+            ])
+            ->timeout(60) // Also give the delete request a generous timeout
+            ->delete("{$this->baseUrl}/storage/v1/object/{$encodedBucket}", [
+                'prefixes' => [$path]
+            ]);
+
+            if ($response->failed()) {
+                Log::error('Supabase Delete Error: ' . $response->body());
+                return false;
+            }
+            
+            Log::info('Supabase: Successfully deleted file at path: ' . $path);
             return true;
+
         } catch (\Exception $e) {
-            // Log the error but don't crash the application
-            Log::error('Supabase Delete Error: ' . $e->getMessage());
+            Log::error('Supabase Delete Exception: ' . $e->getMessage());
             return false;
         }
     }

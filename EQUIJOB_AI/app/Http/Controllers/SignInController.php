@@ -16,6 +16,7 @@ class SignInController extends Controller
     public function ViewSignUpApplicantPage()
     {
         $provinces = Province::all();
+        $cities = collect(); 
         return view('sign-in-page.sign_up.sign_up_applicant', compact('provinces'));
     }
 

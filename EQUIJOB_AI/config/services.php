@@ -36,7 +36,7 @@ return [
     ],
 
     'openai' => [
-        'key' => env('OPEN_API_KEY'),
+        'api_key' => env('OPENAI_API_KEY'), // Note: It's OPENAI_API_KEY
     ],
 
     'gemini' => [
@@ -52,5 +52,6 @@ return [
         'url' => env('SUPABASE_URL'),
         'key' => env('SUPABASE_KEY'),
     ],
+
 
 ];
