@@ -124,13 +124,9 @@ class AdminManageUserJobProviderController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $validateInformation = $request->validate([
-            'remarks' => 'required|string|max:1000',
-        ]);
         $user = users::findOrFail($id);
         Mail::to($user)->send(new SendJobProviderAccountDeleteDetails([
             'userID' => $user->userID,
-            'remarks' => $validateInformation['remarks'],
         ]));
         $user->delete();
         return redirect()->back()->with('success', 'User deleted successfully');

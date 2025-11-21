@@ -26,7 +26,7 @@ function closeModal() {
 }
 
 function openDeleteModal(url) {
-    const form = document.getElementById('deleteJobApplicantAccountForm');
+    const form = document.getElementById('deleteJobApplicantAccount');
     form.action = url;
     document.getElementById('DeleteRoleModal').classList.remove('hidden');
 }

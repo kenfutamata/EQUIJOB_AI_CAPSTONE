@@ -51,11 +51,6 @@
     </tr>
     <tr>
       <td align="left" style="padding: 0 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
-        <p style="margin: 0;"> {{$maildata['remarks']}}.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="left" style="padding: 0 30px 20px 30px; font-family: Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;">
         <p style="margin: 0;"> As your account has been disapproved and deleted, you cannot sign-in your EQUIJOB Job Applicant Account using your email and password. However, you can re-create your EQUIJOB Job Application account 
           but, we will still verify your account if it is valid or not.</p>
       </td>
