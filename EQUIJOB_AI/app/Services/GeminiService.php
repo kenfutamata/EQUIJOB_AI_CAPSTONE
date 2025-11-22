@@ -15,7 +15,7 @@ class GeminiService
      * Extracts certificate data using the official Vertex AI API and validates the recipient's name.
      * This is the correct production-ready implementation that uses service account authentication.
      */
-public function extractCertificateDataFromFile(
+    public function extractCertificateDataFromFile(
         UploadedFile $file,
         string $applicantFirstName,
         string $applicantLastName
@@ -65,13 +65,13 @@ public function extractCertificateDataFromFile(
             // Authentication is correct and remains the same
             $scopes = ['https://www.googleapis.com/auth/cloud-platform'];
             $auth = ApplicationDefaultCredentials::getCredentials($scopes);
-            
+
             $response = \Illuminate\Support\Facades\Http::withToken(
                 collect($auth->fetchAuthToken())->get('access_token')
             )
-            ->withHeaders(['Content-Type' => 'application/json'])
-            ->timeout(120)
-            ->post($url, $requestBody);
+                ->withHeaders(['Content-Type' => 'application/json'])
+                ->timeout(120)
+                ->post($url, $requestBody);
 
             if ($response->failed()) {
                 Log::error('Gemini Vertex AI API Call Failed: ' . $response->body());
@@ -83,8 +83,8 @@ public function extractCertificateDataFromFile(
             // =================================================================================================
             $responseText = $response->json('candidates.0.content.parts.0.text', '');
             if (empty($responseText)) {
-                 Log::error('GeminiService: Empty response text from Vertex AI.', $response->json());
-                 return null;
+                Log::error('GeminiService: Empty response text from Vertex AI.', $response->json());
+                return null;
             }
 
             $jsonResponse = $this->cleanJsonString($responseText);
@@ -110,7 +110,6 @@ public function extractCertificateDataFromFile(
 
             Log::info('GeminiService: Successfully extracted and validated certificate data via Vertex AI.', $decodedJson);
             return $decodedJson;
-
         } catch (CertificateNameMismatchException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -131,9 +130,18 @@ public function extractCertificateDataFromFile(
             return null;
         }
 
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key={$apiKey}";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
 
-        $prompt = "You are an expert HR data entry specialist from EQUIJOB... [Your full prompt here]";
+        // =================================================================
+        // START: PROMPT IMPROVEMENT
+        // =================================================================
+        $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. "
+            . "You MUST return the information ONLY as a valid JSON object. "
+            . "CRITICAL: If the provided file does not appear to be a professional resume or Curriculum Vitae (CV), you MUST return an empty JSON object like `{}`. "
+            . "The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
+        // =================================================================
+        // END: PROMPT IMPROVEMENT
+        // =================================================================
 
         $fileData = [
             'inline_data' => [
@@ -144,7 +152,7 @@ public function extractCertificateDataFromFile(
         $requestBody = [
             'contents' => [
                 'parts' => [
-                    ['text' => $prompt],
+                    ['text' => $textPrompt],
                     $fileData,
                 ],
             ],
@@ -155,7 +163,7 @@ public function extractCertificateDataFromFile(
                 ->post($url, $requestBody);
 
             if ($response->failed()) {
-                Log::error('Gemini Direct Resume API Call Failed. Response Body: ' . $response->body());
+                Log::error('Gemini Direct API Call Failed: ' . $response->body());
                 return null;
             }
 
@@ -164,23 +172,24 @@ public function extractCertificateDataFromFile(
 
             return json_decode($jsonResponse, true);
         } catch (\Exception $e) {
-            Log::error('Gemini Direct Resume API Exception: ' . $e->getMessage());
+            Log::error('Gemini Direct API Exception: ' . $e->getMessage());
             return null;
         }
     }
-
     public function getAiJobMatches(array $resumeData, $potentialJobs): array
     {
         if ($potentialJobs->isEmpty()) {
             return [];
         }
         $apiKey = config('gemini.api_key');
-
-        $prompt = "You are an expert HR recruiter... [Your full prompt here]";
-
-        // This model is also available on the Generative Language API
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
-
+        $highestDegree = !empty($resumeData['education_details'][0]['degree']) ? $resumeData['education_details'][0]['degree'] : 'Not specified';
+        $userProfileString = "## Candidate Profile:\n- Skills: " . ($resumeData['skills'] ?? 'N/A') . "\n- Experience Summary: " . ($resumeData['experience_summary'] ?? 'N/A') . "\n- Highest Education: " . $highestDegree . "\n- Disability: " . ($resumeData['disability_type'] ?? 'N/A') . "\n";
+        $jobListingsString = "## Job Listings to Evaluate:\n";
+        foreach ($potentialJobs as $job) {
+            $jobListingsString .= "### Job ID: {$job->id}\n- Position: {$job->position}\n- Required Skills: " . ($job->skills ?? 'N/A') . "\n- Required Experience: " . ($job->experience ?? 'N/A') . "\n- Required Education: " . ($job->educationalAttainment ?? 'N/A') . "\n- Disability Consideration: " . ($job->disabilityType ?? 'N/A') . "\n\n";
+        }
+        $prompt = "You are an expert HR recruiter... Return ONLY the JSON array. For example: [45, 12, 3]\n\n---\n{$userProfileString}---\n{$jobListingsString}---";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
         try {
             $response = Http::post($url, ['contents' => [['parts' => [['text' => $prompt]]]]]);
             if ($response->failed()) {
