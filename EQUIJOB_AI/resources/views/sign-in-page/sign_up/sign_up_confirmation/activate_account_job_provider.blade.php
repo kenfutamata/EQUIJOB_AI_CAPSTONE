@@ -33,7 +33,7 @@
                     <form action="{{route('sign-up-job-provider-activate-account', ['id' =>$maildata['id']]) }}" method="post">
                       @csrf
                       @method('GET')
-                      <button type="submit" target="_blank" style="font-size: 16px; font-family: Arial, sans-serif; color: #000000ff; text-decoration: none; border-radius: 5px; padding: 12px 25px; border: 1px solid #1ae82bff; display: inline-block; font-weight: bold;">Login</button>
+                      <button type="submit" target="_blank" style="font-size: 16px; font-family: Arial, sans-serif; color: #000000ff; text-decoration: none; border-radius: 5px; padding: 12px 25px; border: 1px solid #1ae82bff; display: inline-block; font-weight: bold;">Activate</button>
                     </form>
                   </td>
                 </tr>
