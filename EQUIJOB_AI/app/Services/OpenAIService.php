@@ -1,43 +1,40 @@
 <?php
 
-namespace App.Services;
+namespace App\Services;
 
-use App.Exceptions.CertificateNameMismatchException;
-use Illuminate.Http.UploadedFile;
-use Illuminate.Support.Facades.Log;
+use App\Exceptions\CertificateNameMismatchException;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use OpenAI;
+use OpenAI\Client;
 
 class OpenAIService
 {
+    protected Client $client;
+
+    public function __construct()
+    {
+        $apiKey = config('services.openai.api_key');
+        if (!$apiKey) {
+            throw new \InvalidArgumentException('FATAL: OPENAI_API_KEY is not configured in your .env file or config/services.php.');
+        }
+        $this->client = OpenAI::client($apiKey);
+    }
+
     /**
-     * Extracts certificate data using OpenAI's GPT-4o model and validates the recipient's name.
-     * This is a reliable, industry-standard implementation.
-     *
-     * @param UploadedFile $file The certificate file (image or PDF).
-     * @param string $applicantFirstName The expected first name of the certificate holder.
-     * @param string $applicantLastName The expected last name of the certificate holder.
-     * @return array|null The extracted data on success, null on general API failure.
-     * @throws CertificateNameMismatchException If the name on the certificate does not match the applicant's name.
+     * Extracts and validates certificate data with maximum reliability.
      */
     public function extractCertificateDataFromFile(
         UploadedFile $file,
         string $applicantFirstName,
         string $applicantLastName
     ): ?array {
-        Log::info('AiVisionService: Starting OpenAI API call for certificate: ' . $file->getClientOriginalName());
+        Log::info('AiVisionService: Starting enhanced OpenAI API call for certificate: ' . $file->getClientOriginalName());
 
-        $apiKey = env('OPENAI_API_KEY');
-        if (!$apiKey) {
-            Log::error('FATAL: OPENAI_API_KEY is not configured.');
-            return null;
-        }
+        $applicantFullName = "{$applicantFirstName} {$applicantLastName}";
 
-        try {
-            $client = OpenAI::client($apiKey);
-            $applicantFullName = "{$applicantFirstName} {$applicantLastName}";
-
-
-            $prompt = "You are an intelligent document verification specialist. Your primary task is to analyze this certificate and confidently verify if it was awarded to '{$applicantFullName}'. ".
+        // The full, unabbreviated prompt for clarity.
+        $prompt = "You are an intelligent document verification specialist. Your primary task is to analyze this certificate and confidently verify if it was awarded to '{$applicantFullName}'. ".
                 "Your goal is to correctly identify certificates belonging to the user, even with minor name variations, while strictly rejecting certificates that clearly belong to someone else. ".
                 "First, extract the data. Second, make a final judgment on the name match.\n\n".
                 "Respond ONLY with a valid JSON object in the following format: ".
@@ -53,70 +50,77 @@ class OpenAIService
                 "    -   **Different First and Last Name:** 'Jane Smith' on certificate vs 'John Doe' applicant.\n".
                 "    -   **Partial but Ambiguous Match:** 'John Smith' on certificate vs 'John Doe' applicant (different last names).\n".
                 "    -   **No Name Found:** If a recipient name cannot be found on the certificate.\n\n".
-                "Your final instruction: Do not reject a certificate for a single missing initial if the first and last names are a perfect match. Use your judgment to approve valid certificates with minor, common discrepancies.";
+                "Your final instruction: Do not reject a certificate for a single missing initial if the first and last names are a perfect match. Use your judgment to approve valid certificates with minor, common discrepancies. You must respond in JSON format.";
 
 
-            $base64Image = base64_encode(file_get_contents($file->getRealPath()));
-            $mimeType = $file->getMimeType();
+        $base64Image = base64_encode(file_get_contents($file->getRealPath()));
+        $mimeType = $file->getMimeType();
 
-            $response = $client->chat()->create([
-                'model' => 'gpt-4o',
-                'messages' => [
-                    [
-                        'role' => 'user',
-                        'content' => [
-                            ['type' => 'text', 'text' => $prompt],
-                            [
-                                'type' => 'image_url',
-                                'image_url' => [
-                                    'url' => "data:{$mimeType};base64,{$base64Image}"
-                                ]
+        $maxRetries = 3;
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+            try {
+                $response = $this->client->chat()->create([
+                    // FIX #1: Switch to the most stable vision model for this feature set.
+                    'model' => 'gpt-4-turbo',
+                    'messages' => [
+                        [
+                            'role' => 'user',
+                            'content' => [
+                                ['type' => 'text', 'text' => $prompt],
+                                [
+                                    'type' => 'image_url',
+                                    'image_url' => [
+                                        'url' => "data:{$mimeType};base64,{$base64Image}",
+                                        // FIX #2: Force low detail to prevent timeouts with large images.
+                                        'detail' => 'low',
+                                    ]
+                                ],
                             ],
                         ],
                     ],
-                ],
-                'max_tokens' => 1000,
-            ]);
-
-            $responseText = $response->choices[0]->message->content ?? '';
-            if (empty($responseText)) {
-                Log::error('OpenAI Service: Received an empty response from the API.');
-                return null;
-            }
-
-            $jsonResponse = $this->cleanJsonString($responseText);
-            $decodedJson = json_decode($jsonResponse, true);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                Log::error('OpenAI Service: JSON Decode Error on certificate: ' . json_last_error_msg() . ' | Raw Text: ' . $responseText);
-                return null;
-            }
-
-            // The validation logic in PHP remains the same, as it now relies entirely on the AI's improved judgment.
-            $nameMatches = $decodedJson['name_match'] ?? false;
-
-            if ($nameMatches === true) {
-                Log::info('OpenAI Service: Successfully extracted and validated certificate data.', $decodedJson);
-                return $decodedJson;
-            } else {
-                $recipientName = $decodedJson['recipient_name'] ?? 'Not Found';
-                $errorMessage = "The name on the certificate ('{$recipientName}') was determined by AI to not match the applicant's name ('{$applicantFullName}').";
-                
-                Log::warning('OpenAI Service: Certificate name mismatch detected by AI.', [
-                    'applicant_name' => $applicantFullName,
-                    'certificate_name' => $recipientName,
-                    'ai_response' => $decodedJson
+                    'max_tokens' => 1000,
+                    'response_format' => ['type' => 'json_object'],
                 ]);
 
-                throw new CertificateNameMismatchException($errorMessage);
-            }
+                $responseText = $response->choices[0]->message->content ?? '';
+                if (empty($responseText)) {
+                    throw new \Exception('Received an empty response from the API.');
+                }
 
-        } catch (CertificateNameMismatchException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            Log::error('OpenAI Service API Exception: ' . $e->getMessage());
-            return null;
+                $decodedJson = json_decode($responseText, true);
+
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception('Failed to decode guaranteed JSON: ' . json_last_error_msg());
+                }
+
+                $nameMatches = $decodedJson['name_match'] ?? false;
+                if ($nameMatches === true) {
+                    Log::info('OpenAI Service: Successfully extracted and validated certificate data.', $decodedJson);
+                    return $decodedJson;
+                } else {
+                    $recipientName = $decodedJson['recipient_name'] ?? 'Not Found';
+                    $errorMessage = "The name on the certificate ('{$recipientName}') was determined by AI to not match the applicant's name ('{$applicantFullName}').";
+                    throw new CertificateNameMismatchException($errorMessage);
+                }
+
+            } catch (CertificateNameMismatchException $e) {
+                Log::warning('OpenAI Service: Certificate name mismatch detected by AI.', [
+                    'applicant_name' => $applicantFullName,
+                    'ai_response' => $decodedJson ?? ['error' => 'Could not decode AI response']
+                ]);
+                throw $e;
+            } catch (\Exception $e) {
+                Log::error("OpenAI Service API Exception (Attempt {$attempt}/{$maxRetries}): " . $e->getMessage());
+                if ($attempt < $maxRetries) {
+                    sleep(2);
+                } else {
+                    Log::error("OpenAI Service: All {$maxRetries} attempts failed.");
+                    return null;
+                }
+            }
         }
+        
+        return null;
     }
 
     private function cleanJsonString(string $string): string
