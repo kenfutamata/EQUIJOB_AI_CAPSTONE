@@ -78,8 +78,8 @@ class ApplicantMatchJobsController extends Controller
                         'skills' => $parsedData['skills'] ?? '',
                         'experience' => $parsedData['experience_summary'] ?? null,
                         'type_of_disability' => $disabilityTypeToSave,
-                        'first_name' => $user->firstName ?? 'N/A',
-                        'last_name' => $user->lastName ?? 'N/A',
+                        'first_name' => $user->firstName,
+                        'last_name' => $user->lastName,
                         'email' => $user->email,
                     ]
                 );
