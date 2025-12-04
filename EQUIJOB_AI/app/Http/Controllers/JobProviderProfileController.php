@@ -42,15 +42,9 @@ class JobProviderProfileController extends Controller
 
     public function getCities(Province $province)
     {
-        $citiesCollection = $province->cities;
-        $citiesArray = $citiesCollection->map(function ($city) {
-            return [
-                'id' => $city->id,
-                'cityName' => $city->cityName,
-            ];
-        });
+        $cities  = Cities::where('provinceId', $province->id)->get();
 
-        return response()->json($citiesArray);
+        return response()->json($cities);
     }
     /**
      * Show the form for creating a new resource.

@@ -263,21 +263,26 @@
             const provinceId = this.value;
             const citySelect = document.getElementById('city');
 
-            if (!provinceId) {
-                citySelect.innerHTML = '<option value="">Select a Province</option>';
-                return;
-            }
+            citySelect.innerHTML = '<option value="">Select City</option>';
+
+            if (!provinceId) return;
 
             citySelect.innerHTML = '<option value="">Loading...</option>';
 
             try {
-                const response = await fetch(`/job-provider/job-provider-profile/cities/${provinceId}`);
+                // dynamic URL generation
+                let url = "{{ route('get-cities', ':id') }}";
+                url = url.replace(':id', provinceId);
+
+                const response = await fetch(url);
+
+                if (!response.ok) throw new Error('Network response was not ok');
 
                 const cities = await response.json();
 
                 citySelect.innerHTML = '<option value="">Select City</option>';
 
-                if (cities && cities.length > 0) {
+                if (cities.length > 0) {
                     cities.forEach(city => {
                         const option = document.createElement('option');
                         option.value = city.id;
@@ -288,7 +293,7 @@
                     citySelect.innerHTML = '<option value="">No cities found</option>';
                 }
             } catch (err) {
-                console.error('Error fetching cities:', err);
+                console.error(err);
                 citySelect.innerHTML = '<option value="">Error loading cities</option>';
             }
         });
