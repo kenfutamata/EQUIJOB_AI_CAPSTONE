@@ -180,7 +180,7 @@
                     </p>
                     <p class="text-gray-600 font-inter text-sm line-clamp-2 mt-2">
                         <span class="font-semibold text-gray-700">Last day of application:</span>
-                        {{ $job->endDate->format('F d, Y') ?? N/A}}
+                        {{ $job->endDate?->format('F d, Y') ?? 'N/A'}}
                     </p>
                     <footer class="mt-auto pt-2">
                         @if($job->disabilityType && $job->disabilityType !== 'Any' && $job->disabilityType !== 'Not Specified')
