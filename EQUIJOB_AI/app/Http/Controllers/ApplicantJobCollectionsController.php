@@ -15,7 +15,6 @@ class ApplicantJobCollectionsController extends Controller
      */
     public function getCities(Province $province)
     {
-        // This function is correct and remains unchanged.
         $cities = $province->cities()->orderBy('cityName', 'asc')->get(['id', 'cityName']);
         return response()->json($cities);
     }
@@ -29,12 +28,11 @@ class ApplicantJobCollectionsController extends Controller
 
         $search = $request->input('search');
         $provinceId = $request->input('province');
-        $cityId = $request->input('city'); // We need to get the city ID as well.
+        $cityId = $request->input('city'); 
         $category = $request->input('category');
         $fromDate = $request->input('fromDate');
         $toDate = $request->input('toDate');
 
-        // Prepare data for dropdowns
         $provinces = Province::orderBy('provinceName', 'asc')->get();
         $cities = collect();
         if ($provinceId) {
@@ -43,9 +41,11 @@ class ApplicantJobCollectionsController extends Controller
                 $cities = $selectedProvince->cities()->orderBy('cityName', 'asc')->get();
             }
         }
-
-        // Build the main query
-        $query = JobPosting::query();
+        $query = JobPosting::withCount(['jobApplications',
+            'jobApplications as interviews_count' => function ($q) {
+                $q->where('status', 'For Interview');
+            },
+        ])->where('status', 'For Posting');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -59,11 +59,8 @@ class ApplicantJobCollectionsController extends Controller
             $query->where('category', $category);
         }
 
-        // *** THIS IS THE CORRECTED LOGIC ***
         if ($provinceId) {
-            // 1. Find the Province model using the ID from the filter.
             $province = Province::find($provinceId);
-            // 2. If the province is found, use its NAME to query the jobPosting table.
             if ($province) {
                 $query->where('provinceName', $province->provinceName);
             }

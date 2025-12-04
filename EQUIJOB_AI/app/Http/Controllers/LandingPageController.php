@@ -32,12 +32,11 @@ class LandingPageController extends Controller
     {
         $search = $request->input('search');
         $provinceId = $request->input('province');
-        $cityId = $request->input('city'); // We need to get the city ID as well.
+        $cityId = $request->input('city'); 
         $category = $request->input('category');
         $fromDate = $request->input('fromDate');
         $toDate = $request->input('toDate');
 
-        // Prepare data for dropdowns
         $provinces = Province::orderBy('provinceName', 'asc')->get();
         $cities = collect();
         if ($provinceId) {
@@ -47,8 +46,11 @@ class LandingPageController extends Controller
             }
         }
 
-        // Build the main query
-        $query = JobPosting::query();
+        $query = JobPosting::withCount(['jobApplications',
+            'jobApplications as interviews_count' => function ($q) {
+                $q->where('status', 'For Interview');
+            },
+        ])->where('status', 'For Posting');
 
         if ($search) {
             $query->where(function ($q) use ($search) {

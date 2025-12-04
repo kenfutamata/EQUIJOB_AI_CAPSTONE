@@ -30,9 +30,6 @@ class GeminiService
             return null;
         }
 
-        // =========================================================================================
-        // === FINAL FIX 1: Switched to the universally available 'gemini-1.0-pro-vision' model. ===
-        // =========================================================================================
         $model = 'gemini-1.0-pro-vision';
 
         // ===============================================================================================
@@ -78,9 +75,7 @@ class GeminiService
                 return null;
             }
 
-            // =================================================================================================
-            // === FINAL FIX 3: Adjusted JSON parsing for the non-streamed ':generateContent' response. ===
-            // =================================================================================================
+ 
             $responseText = $response->json('candidates.0.content.parts.0.text', '');
             if (empty($responseText)) {
                 Log::error('GeminiService: Empty response text from Vertex AI.', $response->json());
@@ -122,60 +117,63 @@ class GeminiService
     /**
      * Extracts structured resume data from a file using a direct API call.
      */
-    public function extractInformationFromResumeFile(string $filePath, string $mimeType): ?array
-    {
-        $apiKey = config('gemini.api_key');
-        if (!$apiKey) {
-            Log::error('FATAL: GEMINI_API_KEY is not configured.');
-            return null;
-        }
-
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
-
-        // =================================================================
-        // START: PROMPT IMPROVEMENT
-        // =================================================================
-        $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. "
-            . "You MUST return the information ONLY as a valid JSON object. "
-            . "CRITICAL: If the provided file does not appear to be a professional resume or Curriculum Vitae (CV), you MUST return an empty JSON object like `{}`. "
-            . "The JSON object must have this exact structure: {\"skills\": \"<comma-separated skills>\", \"experience_summary\": \"<summary>\", \"disability_type\": \"<type>\", \"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], \"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]}";
-        // =================================================================
-        // END: PROMPT IMPROVEMENT
-        // =================================================================
-
-        $fileData = [
-            'inline_data' => [
-                'mime_type' => $mimeType,
-                'data' => base64_encode(file_get_contents($filePath)),
-            ],
-        ];
-        $requestBody = [
-            'contents' => [
-                'parts' => [
-                    ['text' => $textPrompt],
-                    $fileData,
-                ],
-            ],
-        ];
-
-        try {
-            $response = Http::withHeaders(['Content-Type' => 'application/json'])
-                ->post($url, $requestBody);
-
-            if ($response->failed()) {
-                Log::error('Gemini Direct API Call Failed: ' . $response->body());
-                return null;
-            }
-
-            $responseText = $response->json('candidates.0.content.parts.0.text', '');
-            $jsonResponse = $this->cleanJsonString($responseText);
-
-            return json_decode($jsonResponse, true);
-        } catch (\Exception $e) {
-            Log::error('Gemini Direct API Exception: ' . $e->getMessage());
-            return null;
-        }
+ public function extractInformationFromResumeFile(string $filePath, string $mimeType): ?array
+{
+    $apiKey = config('gemini.api_key');
+    if (!$apiKey) {
+        Log::error('FATAL: GEMINI_API_KEY is not configured.');
+        return null;
     }
+
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
+
+    $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. "
+        . "You MUST return the information ONLY as a valid JSON object. "
+        . "CRITICAL: If the provided file does not appear to be a professional resume or Curriculum Vitae (CV), return an empty JSON object like `{}`. "
+        . "The JSON object must have this exact structure: "
+        . "{"
+        . "\"candidate_info\": {\"first_name\": \"<extracted first name>\", \"last_name\": \"<extracted last name>\"}, " 
+        . "\"skills\": \"<comma-separated skills>\", "
+        . "\"experience_summary\": \"<summary>\", "
+        . "\"disability_type\": \"<type>\", "
+        . "\"experience_details\": [{\"job_title\": \"<title>\", \"employer\": \"<employer>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}], "
+        . "\"education_details\": [{\"degree\": \"<degree>\", \"school\": \"<school>\", \"year\": \"<year>\", \"description\": \"<desc>\", \"location\": \"<loc>\"}]"
+        . "}";
+
+    $fileData = [
+        'inline_data' => [
+            'mime_type' => $mimeType,
+            'data' => base64_encode(file_get_contents($filePath)),
+        ],
+    ];
+    
+    $requestBody = [
+        'contents' => [
+            'parts' => [
+                ['text' => $textPrompt],
+                $fileData,
+            ],
+        ],
+    ];
+
+    try {
+        $response = Http::withHeaders(['Content-Type' => 'application/json'])
+            ->post($url, $requestBody);
+
+        if ($response->failed()) {
+            Log::error('Gemini Direct API Call Failed: ' . $response->body());
+            return null;
+        }
+
+        $responseText = $response->json('candidates.0.content.parts.0.text', '');
+        $jsonResponse = $this->cleanJsonString($responseText);
+
+        return json_decode($jsonResponse, true);
+    } catch (\Exception $e) {
+        Log::error('Gemini Direct API Exception: ' . $e->getMessage());
+        return null;
+    }
+}
     public function getAiJobMatches(array $resumeData, $potentialJobs): array
     {
         if ($potentialJobs->isEmpty()) {

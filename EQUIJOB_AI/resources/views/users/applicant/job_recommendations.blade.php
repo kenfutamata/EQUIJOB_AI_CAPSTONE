@@ -10,12 +10,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Epilogue:wght@400;600;700&family=Inter:wght@400&display=swap" rel="stylesheet">
-    <!-- Added Alpine.js for interactivity -->
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <script>
         const appliedJobIds = @json($appliedJobIds ?? []);
     </script>
+
     <script src="{{ asset('assets/applicant/job_recommendations.js') }}" defer></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -28,14 +31,49 @@
                 }
             }
         }
-        
     </script>
+
+    <style>
+        .fade-in-down {
+            animation: fadeInDown 0.5s ease-out forwards;
+        }
+
+        .fade-out-up {
+            animation: fadeOutUp 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+        }
+    </style>
 </head>
 
 <body x-data="{ sidebarOpen: false }" class="bg-[#FCFDFF] text-gray-800 font-sans antialiased min-h-screen flex">
 
+    <!-- Mobile Sidebar Overlay -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
 
+    <!-- Mobile Sidebar -->
     <aside x-show="sidebarOpen" x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transition transform duration-300" x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full" class="fixed inset-y-0 left-0 w-[234px] bg-white z-50 lg:hidden flex flex-col">
         <div class="flex justify-end p-4">
             <button @click="sidebarOpen = false" class="text-gray-800 hover:text-red-600">
@@ -47,6 +85,7 @@
         <x-applicant-sidebar />
     </aside>
 
+    <!-- Desktop Sidebar -->
     <aside class="w-[234px] bg-white hidden lg:block h-screen fixed top-0 left-0 z-20">
         <x-applicant-sidebar />
     </aside>
@@ -60,17 +99,23 @@
                 </svg>
             </button>
             <div class="flex-1">
-                <x-topbar :user="$user" :notifications="$notifications" :unreadNotifications="$unreadNotifications" />
+                <!-- UPDATED: Passed appliedCount and interviewCount -->
+                <x-topbar
+                    :user="$user"
+                    :notifications="$notifications"
+                    :unreadNotifications="$unreadNotifications"
+                    :appliedCount="$numberOfAppliedJobs"
+                    :interviewCount="$numberOfInterviews" />
             </div>
         </header>
 
-        <!-- Notification Alerts -->
+        <!-- PHP Notifications -->
         @if(session('Success'))
-        <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 w-11/12 max-w-lg text-center">
+        <div id="php-notification" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-[100] w-11/12 max-w-lg text-center transition-opacity duration-500 opacity-100">
             {{ session('Success') }}
         </div>
         @elseif(session('error'))
-        <div id="notification-bar" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50 w-11/12 max-w-lg text-center">
+        <div id="php-notification" class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-[100] w-11/12 max-w-lg text-center transition-opacity duration-500 opacity-100">
             {{ session('error') }}
         </div>
         @endif
@@ -85,7 +130,6 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-
                 @forelse($recommendedJobs as $job)
                 <article class="bg-white border border-gray-200 rounded-lg p-6 flex flex-col gap-4 hover:shadow-lg hover:border-blue-500 transition-all duration-300">
                     <header class="flex justify-between items-center gap-4 flex-wrap">
@@ -126,6 +170,18 @@
                     <p class="text-gray-600 font-inter text-sm line-clamp-2">
                         {{ $job->description }}
                     </p>
+                    <p class="text-gray-600 font-inter text-sm line-clamp-2 mt-2">
+                        <span class="font-semibold text-gray-700">Number of applicants applied:</span>
+                        {{ $job->job_applications_count ?? 0 }}
+                    </p>
+                    <p class="text-gray-600 font-inter text-sm line-clamp-2 mt-2">
+                        <span class="font-semibold text-gray-700">Number of applicants For Interview:</span>
+                        {{ $job->interviews_count ?? 0 }}
+                    </p>
+                    <p class="text-gray-600 font-inter text-sm line-clamp-2 mt-2">
+                        <span class="font-semibold text-gray-700">Last day of application:</span>
+                        {{ $job->endDate->format('F d, Y') ?? N/A}}
+                    </p>
                     <footer class="mt-auto pt-2">
                         @if($job->disabilityType && $job->disabilityType !== 'Any' && $job->disabilityType !== 'Not Specified')
                         <span class="text-sm font-semibold text-yellow-800 bg-yellow-100 px-3 py-1 rounded-full">
@@ -148,6 +204,17 @@
         </main>
     </div>
 
+    <!-- JS Notification Container (Centered) -->
+    <div id="notification-container" class="fixed top-24 left-1/2 transform -translate-x-1/2 z-[100] hidden w-full max-w-md">
+        <div id="notification-content" class="shadow-lg rounded-lg p-4 flex items-center gap-3 text-white transition-all duration-300 mx-4 md:mx-0">
+            <div id="notification-icon">
+            </div>
+            <div id="notification-message" class="font-medium text-sm">
+            </div>
+        </div>
+    </div>
+
+    <!-- View Job Modal -->
     <div id="viewJobPostingModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden">
         <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6">
 
@@ -232,6 +299,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Apply Job Modal -->
     <div id="applyJobModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-6 relative">
             <button onclick="closeApplyJobModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
@@ -312,7 +381,125 @@
             </form>
         </div>
     </div>
-    
+
+    <script>
+        // --- PHP NOTIFICATION AUTO-DISMISS ---
+        // This makes sure the PHP session message disappears quickly
+        document.addEventListener('DOMContentLoaded', function() {
+            const phpAlert = document.getElementById('php-notification');
+            if (phpAlert) {
+                // 1. Wait 3000ms (3 seconds) - You can reduce this number if it's still too slow
+                setTimeout(() => {
+                    // 2. Add fade out class (using Tailwind's opacity-0)
+                    phpAlert.classList.add('opacity-0');
+
+                    // 3. Remove from DOM after transition (0.5s) matches CSS duration-500
+                    setTimeout(() => {
+                        phpAlert.style.display = 'none';
+                    }, 500);
+                }, 3000);
+            }
+        });
+
+        // --- JS NOTIFICATION LOGIC ---
+        function showNotification(message, type = 'error') {
+            const container = document.getElementById('notification-container');
+            const content = document.getElementById('notification-content');
+            const icon = document.getElementById('notification-icon');
+            const msgText = document.getElementById('notification-message');
+
+            if (!container || !content || !icon || !msgText) {
+                console.error("Notification elements not found in DOM");
+                alert(message);
+                return;
+            }
+
+            if (type === 'error') {
+                content.className = "shadow-lg rounded-lg p-4 flex items-center gap-3 text-white bg-red-500";
+                icon.innerHTML = `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            } else {
+                content.className = "shadow-lg rounded-lg p-4 flex items-center gap-3 text-white bg-green-500";
+                icon.innerHTML = `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+            }
+
+            msgText.textContent = message;
+
+            container.classList.remove('hidden', 'fade-out-up');
+            container.classList.add('fade-in-down');
+
+            setTimeout(() => {
+                container.classList.remove('fade-in-down');
+                container.classList.add('fade-out-up');
+                setTimeout(() => {
+                    container.classList.add('hidden');
+                }, 300);
+            }, 3500);
+        }
+
+        // --- APPLY MODAL LOGIC ---
+        function openApplyJobModal(button) {
+            const jobposting = JSON.parse(button.getAttribute('data-jobposting') || '{}');
+            const id = parseInt(jobposting.id);
+            const numericAppliedIds = appliedJobIds.map(id => parseInt(id));
+
+            if (numericAppliedIds.includes(id)) {
+                showNotification('You have already submitted an application for this position.', 'error');
+                return;
+            }
+
+            const modal = document.getElementById('applyJobModal');
+            document.getElementById('apply_jobPostingID').value = jobposting.id || '';
+            document.getElementById('apply_jobProviderID').value = jobposting.jobProviderID || '';
+            document.getElementById('apply_position').value = jobposting.position || '';
+            document.getElementById('apply_companyName').value = jobposting.companyName || '';
+            modal.classList.remove('hidden');
+        }
+
+        function closeApplyJobModal() {
+            document.getElementById('applyJobModal').classList.add('hidden');
+        }
+
+        // --- VIEW MODAL LOGIC ---
+        function openViewJobPostingModal(button) {
+            const job = JSON.parse(button.getAttribute('data-jobposting') || '{}');
+            const setText = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val || 'Not Specified';
+            };
+
+            setText('modal-position', job.position);
+            setText('modal-companyName', job.companyName);
+            setText('modal-disabilityType', job.disabilityType);
+            setText('modal-salaryRange', job.salaryRange);
+            setText('modal-educationalAttainment', job.educationalAttainment);
+            setText('modal-workEnvironment', job.workEnvironment);
+            setText('modal-skills', job.skills);
+            setText('modal-description', job.description);
+            setText('modal-requirements', job.requirements);
+            setText('modal-contactPhone', job.contactPhone);
+            setText('modal-contactEmail', job.contactEmail);
+            setText('modal-companyAddress', job.city ? `${job.companyAddress}, ${job.city}, ${job.province}` : job.companyAddress);
+
+            const logo = document.getElementById('modal-companyLogo');
+            const initial = document.getElementById('modal-companyInitial');
+
+            if (job.companyLogo) {
+                logo.src = job.companyLogo;
+                logo.style.display = 'block';
+                initial.style.display = 'none';
+            } else {
+                logo.style.display = 'none';
+                initial.textContent = job.companyName ? job.companyName.charAt(0).toUpperCase() : '?';
+                initial.style.display = 'flex';
+            }
+
+            document.getElementById('viewJobPostingModal').classList.remove('hidden');
+        }
+
+        function closeViewJobPostingModal() {
+            document.getElementById('viewJobPostingModal').classList.add('hidden');
+        }
+    </script>
 </body>
 
 </html>

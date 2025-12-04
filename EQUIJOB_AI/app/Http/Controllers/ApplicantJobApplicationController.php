@@ -44,55 +44,61 @@ class ApplicantJobApplicationController extends Controller
     public function store(Request $request, SupabaseStorageService $supabase)
     {
 
-        $validatedRequest = $request->validate([
-            'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'jobPostingID' => 'required|exists:jobPosting,id',
-            'jobProviderID' => 'required|exists:users,id',
-        ]);
-
-        try {
-            $applicant = auth('applicant')->user();
-            $posting = JobPosting::find($validatedRequest['jobPostingID']);
-            $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
-                ->where('role', 'Job Provider')
-                ->first();
-
-            if (!$jobProvider) {
-                throw new \Exception('The specified job provider could not be found or does not have the correct role.');
-            }
-
-            $resumeUrl = $supabase->upload($request->file('uploadResume'), 'uploadResume');
-            $applicationLetterUrl = $supabase->upload($request->file('uploadApplicationLetter'), 'uploadApplicationLetter');
-            $applicationData = [
-                'applicantID' => $applicant->id,
-                'jobPostingID' => $posting->id,
-                'jobApplicationNumber' => $this->generateAlphaNumericId(),
-                'status' => 'Pending',
-                'uploadResume' => $resumeUrl,
-                'uploadApplicationLetter' => $applicationLetterUrl,
-            ];
-
-            $newApplication = JobApplication::create($applicationData);
-
-            $maildata = [
-                'firstName' => $applicant->firstName,
-                'lastName' => $applicant->lastName,
-                'email' => $applicant->email,
-                'jobProvidersFirstName' => $jobProvider->firstName,
-                'jobProvidersLastName' => $jobProvider->lastName,
-                'position' => $posting->position,
-                'companyName' => $posting->companyName,
-                'applicationNumber' => $applicationData['jobApplicationNumber'],
-            ];
-
-            Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
-            $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider'));
-        } catch (\Exception $e) {
-            Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
-            return redirect()->back()->with('error', 'An error occurred. Please try again.');
+        $applicant = auth('applicant')->user();
+        $esists = JobApplication::where('applicantID', $applicant->id)
+            ->where('jobPostingID', $request->input('jobPostingID'))
+            ->exists(); 
+        if ($esists) {
+            return redirect()->back()->with('error', 'You have already applied to this job posting.');
         }
 
+            $validatedRequest = $request->validate([
+                'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'jobPostingID' => 'required|exists:jobPosting,id',
+                'jobProviderID' => 'required|exists:users,id',
+            ]);
+
+            try {
+                $posting = JobPosting::find($validatedRequest['jobPostingID']);
+                $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
+                    ->where('role', 'Job Provider')
+                    ->first();
+
+                if (!$jobProvider) {
+                    throw new \Exception('The specified job provider could not be found or does not have the correct role.');
+                }
+
+                $resumeUrl = $supabase->upload($request->file('uploadResume'), 'uploadResume');
+                $applicationLetterUrl = $supabase->upload($request->file('uploadApplicationLetter'), 'uploadApplicationLetter');
+                $applicationData = [
+                    'applicantID' => $applicant->id,
+                    'jobPostingID' => $posting->id,
+                    'jobApplicationNumber' => $this->generateAlphaNumericId(),
+                    'status' => 'Pending',
+                    'uploadResume' => $resumeUrl,
+                    'uploadApplicationLetter' => $applicationLetterUrl,
+                ];
+
+                $newApplication = JobApplication::create($applicationData);
+
+                $maildata = [
+                    'firstName' => $applicant->firstName,
+                    'lastName' => $applicant->lastName,
+                    'email' => $applicant->email,
+                    'jobProvidersFirstName' => $jobProvider->firstName,
+                    'jobProvidersLastName' => $jobProvider->lastName,
+                    'position' => $posting->position,
+                    'companyName' => $posting->companyName,
+                    'applicationNumber' => $applicationData['jobApplicationNumber'],
+                ];
+
+                Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
+                $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider'));
+            } catch (\Exception $e) {
+                Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
+                return redirect()->back()->with('error', 'An error occurred. Please try again.');
+            }
         return redirect()->back()->with('Success', 'Application Submitted Successfully');
     }
 

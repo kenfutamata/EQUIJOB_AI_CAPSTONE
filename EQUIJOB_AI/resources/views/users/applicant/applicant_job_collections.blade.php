@@ -129,7 +129,6 @@
                 </select>
               </div>
 
-              <!-- DATE FILTERS -->
               <div class="flex items-center gap-2 text-sm">
                 <span>From:</span>
                 <input type="date" name="fromDate" value="{{ request('fromDate') }}" class="border rounded px-3 py-2 w-full">
@@ -137,7 +136,6 @@
                 <input type="date" name="toDate" value="{{ request('toDate') }}" class="border rounded px-3 py-2 w-full">
               </div>
 
-              <!-- BUTTONS -->
               <div class="flex items-center gap-2">
                 <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded text-sm whitespace-nowrap hover:bg-blue-700 transition">Apply Filters</button>
                 <a href="{{ route('applicant-job-collections') }}" class="w-full bg-gray-500 text-white px-4 py-2 rounded text-sm whitespace-nowrap text-center hover:bg-gray-600 transition">Clear</a>
@@ -171,6 +169,9 @@
             <p class="text-gray-500 text-sm mb-4">Category: {{ $collection->category }}</p>
             <p class="text-gray-500 text-sm mb-4">Company Name: {{ $collection->companyName }}</p>
             <p class="text-gray-500 text-sm mb-4">Salary: {{ $collection->salaryRange }}</p>
+            <p class="text-gray-500 text-sm mb-4">Number of Applicants Applied: {{ $collection->job_applications_count ?? 0 }}</p>
+            <p class="text-gray-500 text-sm mb-4">Number of Applicants For Interview: {{ $collection->interviews_count ?? 0 }}</p>
+
             <p class="text-gray-500 text-sm mb-4">Date Posted: {{ $collection->updated_at->format('F j, Y') }}</p>
             <p class="text-gray-500 text-sm mb-4">
               Last Day of Posting: {{ $collection->endDate?->format('F j, Y') ?? 'N/A' }}

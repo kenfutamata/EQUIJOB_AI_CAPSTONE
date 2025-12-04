@@ -44,7 +44,6 @@ class JobPostingsDataExport implements FromCollection, WithHeadings
             'Updated At',
             'Contact Phone',
             'Contact Email',
-            'Remarks',
             'Position',
             'Status',
             'Work Environment',

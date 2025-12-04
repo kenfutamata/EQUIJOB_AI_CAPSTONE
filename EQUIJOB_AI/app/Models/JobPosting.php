@@ -102,5 +102,9 @@ class JobPosting extends Model
     {
         return $this->belongsTo(User::class, 'jobProviderID');
     }
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class, 'jobPostingID');
+    }
 
 }

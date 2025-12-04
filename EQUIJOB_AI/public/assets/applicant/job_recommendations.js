@@ -1,88 +1,104 @@
+// --- NOTIFICATION LOGIC ---
+function showNotification(message, type = 'error') {
+    const container = document.getElementById('notification-container');
+    const content = document.getElementById('notification-content');
+    const icon = document.getElementById('notification-icon');
+    const msgText = document.getElementById('notification-message');
+    
+    // Set styles based on type
+    if (type === 'error') {
+        content.className = "shadow-lg rounded-lg p-4 flex items-center gap-3 text-white bg-red-500";
+        icon.innerHTML = `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+    } else {
+        content.className = "shadow-lg rounded-lg p-4 flex items-center gap-3 text-white bg-green-500";
+        icon.innerHTML = `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+    }
+
+    msgText.textContent = message;
+
+    // Reset Animation
+    container.classList.remove('hidden', 'fade-out-up');
+    container.classList.add('fade-in-down');
+
+    // Hide after 3.5 seconds
+    setTimeout(() => {
+        container.classList.remove('fade-in-down');
+        container.classList.add('fade-out-up');
+        setTimeout(() => {
+            container.classList.add('hidden');
+        }, 300);
+    }, 3500);
+}
+
+// --- APPLY MODAL LOGIC (The Core Request) ---
+function openApplyJobModal(button) {
+    // 1. Parse the job object
+    const jobposting = JSON.parse(button.getAttribute('data-jobposting') || '{}');
+    const id = parseInt(jobposting.id); // Force the ID to be an Integer
+
+    // 2. Ensure the Applied IDs array are also Integers (handles strings like "1")
+    const numericAppliedIds = appliedJobIds.map(id => parseInt(id));
+
+    // 3. Check if applied
+    if (numericAppliedIds.includes(id)) {
+        showNotification('You have already submitted an application for this position.', 'error');
+        return; // STOP HERE: Do not open the modal
+    }
+
+    // 4. Open Modal (Only if not applied)
+    const modal = document.getElementById('applyJobModal');
+    
+    // Set form values
+    document.getElementById('apply_jobPostingID').value = jobposting.id || '';
+    document.getElementById('apply_jobProviderID').value = jobposting.jobProviderID || '';
+    document.getElementById('apply_position').value = jobposting.position || '';
+    document.getElementById('apply_companyName').value = jobposting.companyName || '';
+    
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+function closeApplyJobModal() {
+    document.getElementById('applyJobModal').classList.add('hidden');
+}
+
+// --- VIEW MODAL LOGIC ---
 function openViewJobPostingModal(button) {
     const job = JSON.parse(button.getAttribute('data-jobposting') || '{}');
-
-    const setText = (id, value, fallback = 'N/A') => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value || fallback;
+    const setText = (id, val) => { 
+        const el = document.getElementById(id); 
+        if(el) el.textContent = val || 'Not Specified'; 
     };
 
     setText('modal-position', job.position);
     setText('modal-companyName', job.companyName);
-    setText('modal-disabilityType', job.disabilityType, 'Not Specified');
-    setText('modal-salaryRange', job.salaryRange, '₱ 0');
-    setText('modal-educationalAttainment', job.educationalAttainment, 'No educational attainment provided.');
-    setText('modal-workEnvironment', job.workEnvironment, 'No Work Environment provided.');
-    setText('modal-skills', job.skills, 'No skills required.');
-    setText('modal-description', job.description, 'No description provided.');
-    setText('modal-requirements', job.requirements, 'No requirements provided.');
-    setText('modal-contactPhone', job.contactPhone, 'No contact number provided.');
-    setText('modal-contactEmail', job.contactEmail, 'No email address provided.');
+    setText('modal-disabilityType', job.disabilityType);
+    setText('modal-salaryRange', job.salaryRange);
+    setText('modal-educationalAttainment', job.educationalAttainment);
+    setText('modal-workEnvironment', job.workEnvironment);
+    setText('modal-skills', job.skills);
+    setText('modal-description', job.description);
+    setText('modal-requirements', job.requirements);
+    setText('modal-contactPhone', job.contactPhone);
+    setText('modal-contactEmail', job.contactEmail);
     setText('modal-companyAddress', job.companyAddress);
 
     const logo = document.getElementById('modal-companyLogo');
     const initial = document.getElementById('modal-companyInitial');
 
-    if (logo && initial) {
-        if (job.companyLogo) {
-            logo.src = job.companyLogo;
-            logo.style.display = 'block';
-            initial.style.display = 'none';
-        } else {
-            logo.style.display = 'none';
-            initial.textContent = job.companyName ? job.companyName.charAt(0).toUpperCase() : '?';
-            initial.style.display = 'flex';
-        }
+    if (job.companyLogo) {
+        logo.src = job.companyLogo;
+        logo.style.display = 'block';
+        initial.style.display = 'none';
+    } else {
+        logo.style.display = 'none';
+        initial.textContent = job.companyName ? job.companyName.charAt(0).toUpperCase() : '?';
+        initial.style.display = 'flex';
     }
 
-    document.getElementById('viewJobPostingModal')?.classList.remove('hidden');
+    document.getElementById('viewJobPostingModal').classList.remove('hidden');
 }
 
 function closeViewJobPostingModal() {
-    document.getElementById('viewJobPostingModal')?.classList.add('hidden');
-}
-
-function openApplyJobModal(button) {
-    const jobposting = JSON.parse(button.getAttribute('data-jobposting') || '{}');
-    const jobId = jobposting.id;
-    
-    if(appliedJobIds.includes(jobId)) {
-        alert("You have already applied to this job posting.");
-        return;
-    }
-    const modal = document.getElementById('applyJobModal');
-    if (!modal) return;
-
-    document.getElementById('apply_jobPostingID').value = jobposting.id || '';
-    document.getElementById('apply_jobProviderID').value = jobposting.jobProviderID || '';
-    document.getElementById('apply_position').value = jobposting.position || '';
-    document.getElementById('apply_companyName').value = jobposting.companyName || '';
-
-    modal.classList.remove('hidden');
-}
-
-function closeApplyJobModal() {
-    document.getElementById('applyJobModal')?.classList.add('hidden');
-}
-
-// Notification fade-out
-setTimeout(() => {
-    const notif = document.getElementById('notification-bar');
-    if (notif) notif.style.opacity = '0';
-}, 2500);
-
-setTimeout(() => {
-    const notif = document.getElementById('notification-bar');
-    if (notif) notif.style.display = 'none';
-}, 3000);
-
-function openDeleteModal(button) {
-    const form = document.getElementById('deleteJobPosting'); // corrected ID
-    if (!form) return;
-
-    form.action = button.getAttribute('data-action') || form.action;
-    document.getElementById('DeleteJobPostingModal')?.classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    document.getElementById('DeleteJobPostingModal')?.classList.add('hidden');
+    document.getElementById('viewJobPostingModal').classList.add('hidden');
 }

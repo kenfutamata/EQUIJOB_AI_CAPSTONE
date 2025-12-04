@@ -102,8 +102,10 @@
                 </div>
                 <p class="text-gray-600 mb-3">{{ Str::limit($collection->description, 100) }}</p>
                 <p class="text-gray-500 text-sm mb-2">Company: <span class="font-medium">{{ $collection->companyName }}</span></p>
-                <p class="text-gray-500 text-sm mb-2">Date Posted: <span class="font-medium">{{ $collection->updated_at->format('F j, Y') }}</span></p>
+                <p class="text-gray-500 text-sm mb-2">Number of applicants applied: <span class="font-medium">{{ $collection->job_applications_count ?? 0 }}</span></p>
+                <p class="text-gray-500 text-sm mb-2">Number of for interviews: <span class="font-medium">{{ $collection->interviews_count ?? 0 }}</span></p>
 
+                <p class="text-gray-500 text-sm mb-2">Date Posted: <span class="font-medium">{{ $collection->updated_at->format('F j, Y') }}</span></p>
                 <p class="text-gray-500 text-sm mb-2">Last day of Posting: <span class="font-medium">{{ $collection->endDate?->format('F j, Y') ?? 'N/A' }}</span></p>
 
                 <div class="mt-auto flex gap-2">
@@ -136,7 +138,6 @@
         </div>
     </main>
 
-    {{-- Modal and Footer remain the same --}}
     <div id="viewJobDetailsModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden" aria-hidden="true" aria-modal="true" role="dialog">
         <div class="relative bg-white rounded-lg w-full max-w-6xl mx-4 overflow-auto max-h-[90vh] p-8 flex flex-col gap-6 transform transition-all scale-95 opacity-0" id="modalContent">
             <button onclick="closeViewJobDetailsModal()" class="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl font-bold">&times;</button>
