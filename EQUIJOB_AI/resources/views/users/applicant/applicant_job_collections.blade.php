@@ -263,7 +263,7 @@
             </div>
           </div>
           <div class="flex items-start gap-3">
-            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/category.png') }}" alt="Icon" class="w-6 h-6" />
+            <img src="{{ asset('assets/photos/job-applicant/job-recommendations/email.png') }}" alt="Icon" class="w-6 h-6" />
             <div>
               <p class="text-sm text-gray-700">Company Address</p>
               <p id="modal-companyAddress" class="text-sm text-blue-600 font-medium"></p>

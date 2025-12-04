@@ -1,11 +1,9 @@
-// --- NOTIFICATION LOGIC ---
 function showNotification(message, type = 'error') {
     const container = document.getElementById('notification-container');
     const content = document.getElementById('notification-content');
     const icon = document.getElementById('notification-icon');
     const msgText = document.getElementById('notification-message');
     
-    // Set styles based on type
     if (type === 'error') {
         content.className = "shadow-lg rounded-lg p-4 flex items-center gap-3 text-white bg-red-500";
         icon.innerHTML = `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
@@ -30,22 +28,17 @@ function showNotification(message, type = 'error') {
     }, 3500);
 }
 
-// --- APPLY MODAL LOGIC (The Core Request) ---
 function openApplyJobModal(button) {
-    // 1. Parse the job object
     const jobposting = JSON.parse(button.getAttribute('data-jobposting') || '{}');
     const id = parseInt(jobposting.id); // Force the ID to be an Integer
 
-    // 2. Ensure the Applied IDs array are also Integers (handles strings like "1")
     const numericAppliedIds = appliedJobIds.map(id => parseInt(id));
 
-    // 3. Check if applied
     if (numericAppliedIds.includes(id)) {
         showNotification('You have already submitted an application for this position.', 'error');
-        return; // STOP HERE: Do not open the modal
+        return; 
     }
 
-    // 4. Open Modal (Only if not applied)
     const modal = document.getElementById('applyJobModal');
     
     // Set form values
@@ -54,7 +47,6 @@ function openApplyJobModal(button) {
     document.getElementById('apply_position').value = jobposting.position || '';
     document.getElementById('apply_companyName').value = jobposting.companyName || '';
     
-    // Show modal
     modal.classList.remove('hidden');
 }
 
@@ -81,6 +73,7 @@ function openViewJobPostingModal(button) {
     setText('modal-requirements', job.requirements);
     setText('modal-contactPhone', job.contactPhone);
     setText('modal-contactEmail', job.contactEmail);
+    setText('modal-category', job.category);
     setText('modal-companyAddress', job.companyAddress);
 
     const logo = document.getElementById('modal-companyLogo');

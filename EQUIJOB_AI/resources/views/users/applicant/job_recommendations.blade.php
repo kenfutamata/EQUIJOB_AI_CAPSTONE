@@ -204,7 +204,6 @@
         </main>
     </div>
 
-    <!-- JS Notification Container (Centered) -->
     <div id="notification-container" class="fixed top-24 left-1/2 transform -translate-x-1/2 z-[100] hidden w-full max-w-md">
         <div id="notification-content" class="shadow-lg rounded-lg p-4 flex items-center gap-3 text-white transition-all duration-300 mx-4 md:mx-0">
             <div id="notification-icon">
@@ -260,6 +259,13 @@
                         <div>
                             <p class="text-sm text-gray-700">Work Environment</p>
                             <p id="modal-workEnvironment" class="text-sm text-blue-600 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <img src="{{ asset('assets/photos/job-applicant/job-recommendations/category.png') }}" alt="Icon" class="w-6 h-6" />
+                        <div>
+                            <p class="text-sm text-gray-700">Category</p>
+                            <p id="modal-category" class="text-sm text-blue-600 font-medium"></p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -383,17 +389,12 @@
     </div>
 
     <script>
-        // --- PHP NOTIFICATION AUTO-DISMISS ---
-        // This makes sure the PHP session message disappears quickly
         document.addEventListener('DOMContentLoaded', function() {
             const phpAlert = document.getElementById('php-notification');
             if (phpAlert) {
-                // 1. Wait 3000ms (3 seconds) - You can reduce this number if it's still too slow
                 setTimeout(() => {
-                    // 2. Add fade out class (using Tailwind's opacity-0)
                     phpAlert.classList.add('opacity-0');
 
-                    // 3. Remove from DOM after transition (0.5s) matches CSS duration-500
                     setTimeout(() => {
                         phpAlert.style.display = 'none';
                     }, 500);
@@ -401,7 +402,6 @@
             }
         });
 
-        // --- JS NOTIFICATION LOGIC ---
         function showNotification(message, type = 'error') {
             const container = document.getElementById('notification-container');
             const content = document.getElementById('notification-content');
@@ -478,6 +478,7 @@
             setText('modal-requirements', job.requirements);
             setText('modal-contactPhone', job.contactPhone);
             setText('modal-contactEmail', job.contactEmail);
+            setText('modal-category', job.category);
             setText('modal-companyAddress', job.city ? `${job.companyAddress}, ${job.city}, ${job.province}` : job.companyAddress);
 
             const logo = document.getElementById('modal-companyLogo');
