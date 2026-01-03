@@ -1,6 +1,6 @@
 # EQUIJOB
 <p align="center">
-  <img src="https://github.com/kenfutamata/EQUIJOB_AI_CAPSTONE/blob/a075f3c06b7e9fab99836734901a8420a48d9d60/Pictures/equijob_logo.png" alt="WebApp" width="200">
+  <img src="Pictures/equijob_logo.png" alt="WebApp" width="200">
 </p>
 
 <table>
@@ -12,75 +12,72 @@
 </table>
 
 
-## Demo
-Here is a working live demo :  https://iharsh234.github.io/WebApp/
-
-
 ## Site
+EQUIJOB Site Link: https://equijob.up.railway.app/
 
-### Landing Page
-Currently it is working on all NSE (India) Stocks, BSE (India) Stocks Symbol will be added soon.
+## Landing Page
+The landing page is the main view of the viewers who wish to apply to EQUIJOB
 
-![](https://iharsh234.github.io/WebApp/images/demo/web_app_face.JPG)
+![](Pictures/landingpage.png)
+![](Pictures/aboutus.png)
+![](Pictures/jobs.png)
 
-### Query Filled Form
-![](https://iharsh234.github.io/WebApp/images/demo/demo_query.JPG)
+## Main Feature
+### AI Job Matching Page
+![](Pictures/aijobmatching.png)
+![](Pictures/jobrecommendation.png)
 
-### Charts
-![](https://iharsh234.github.io/WebApp/images/demo/demo_chart1.JPG)
-![](https://iharsh234.github.io/WebApp/images/demo/demo_chart2.JPG)
-![](https://iharsh234.github.io/WebApp/images/demo/demo_chart3.JPG)
+### Smart Resume Builder
+![](Pictures/resume.png)
 
+## Development
+## Technology Stack Used
+### Front End
+[![Front End](https://skillicons.dev/icons?i=html,css,javascript,tailwind&theme=light)](https://skillicons.dev)
+### Backend
+[![Backend](https://skillicons.dev/icons?i=php,postgres,supabase,&theme=light)](https://skillicons.dev)
+### APIs 
+![Gemini AI](https://img.shields.io/badge/Gemini-AI-4285F4?logo=google&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-AI-000000?logo=openai&logoColor=white)
+![Google Meet](https://img.shields.io/badge/Google%20Meet-00897B?logo=google-meet&logoColor=white)
 
-## Mobile support
-The WebApp is compatible with devices of all sizes and all OS's, and consistent improvements are being made.
-
-![](https://iharsh234.github.io/WebApp/images/demo/mobile.png)
-
-
-
-
-## [Usage](https://iharsh234.github.io/WebApp/) 
-
-### Development
-Want to contribute? Great!
-
-To fix a bug or enhance an existing module, follow these steps:
-
-- Fork the repo
-- Create a new branch (`git checkout -b improve-feature`)
-- Make the appropriate changes in the files
-- Add changes to reflect the changes made
-- Commit your changes (`git commit -am 'Improve feature'`)
-- Push to the branch (`git push origin improve-feature`)
-- Create a Pull Request 
-
-### Bug / Feature Request
-
-If you find a bug (the website couldn't handle the query and / or gave undesired results), kindly open an issue [here](https://github.com/iharsh234/WebApp/issues/new) by including your search query and the expected result.
-
-If you'd like to request a new function, feel free to do so by opening an issue [here](https://github.com/iharsh234/WebApp/issues/new). Please include sample queries and their corresponding results.
-
-
-## Built with 
-
-- [jQuery - Ajax](http://www.w3schools.com/jquery/jquery_ref_ajax.asp) - jQuery simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.
-- [Google Chart API](https://developers.google.com/chart/interactive/docs/quick_start) - Free , Rich Gallery , Customizable and Cross-browser compatible.
-- [Bootstrap](http://getbootstrap.com/) - Extensive list of components and  Bundled Javascript plugins.
-
-
-## To-do
-- Add BSE (India) Symbol to the current App.
-- Decide comparison models of Stocks. (suggestions are most welcome).
-- Another WebApp, capable of comparing at least 10 stocks.
+## Framework 
+[![Framework](https://skillicons.dev/icons?i=laravel&theme=light)](https://skillicons.dev)
 
 ## Team
 
-[![Harsh Vijay](https://avatars1.githubusercontent.com/u/12688534?v=3&s=144)](https://github.com/iharsh234)  | [![Quandl.com](https://github.com/iharsh234/WebApp/blob/master/images/quandl.jpg)](https://www.quandl.com/)
----|---
-[Harsh Vijay ](https://github.com/iharsh234) |[Quandl](https://www.quandl.com)
 
-## [License](https://github.com/iharsh234/WebApp/blob/master/LICENSE.md)
+<table align="center">
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%">
+          <img src="Pictures/keze.jpg" width="100px;" alt="Kezekiah R. Yatong"/>
+          <br /><sub><b style="color: #50a4f8">Kezekiah R. Yatong</b></sub>
+        <br />
+            <p>Project Manager</p>
+      </td>
+      <td align="center" valign="top" width="14.28%">
+          <img src="Pictures/kento.jpg" width="100px;" alt="Kento B. Futamata"/>
+          <br /><sub><b style = "color: #50a4f8">Kento B. Futamata</b></sub>
+        <br />Hacker
+      </td>
+      <td align="center" valign="top" width="14.28%">
+          <img src="Pictures/anine.jpg" width="100px;" alt="Janine C. Alolod"/>
+          <br /><sub><b style = "color: #50a4f8">Janine C. Alolod</b></sub>
+        <br />Hipster
+      </td>
+      <td align="center" valign="top" width="14.28%">
+          <img src="Pictures/sara.png" width="100px;" alt="Sara C. Pahara"/>
+          <br /><sub><b style = "color: #50a4f8">Sara C. Pahara</b></sub>
+        <br />Hustler
+      </td>
+      <td align="center" valign="top" width="14.28%">
+          <img src="Pictures/lance.jpg" width="100px;" alt="Lance Paul D. Montemar"/>
+          <br /><sub><b style = "color:#50a4f8 ">Lance Paul D. Montemar</b></sub>
+        <br />Tester
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-MIT © [Harsh Vijay ](https://github.com/iharsh234)
 
