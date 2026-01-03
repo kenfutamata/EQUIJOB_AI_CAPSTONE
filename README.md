@@ -1,9 +1,12 @@
-# ![WebApp](https://iharsh234.github.io/WebApp/images/demo/demo_landing.JPG)
-# WebApp
+# EQUIJOB
+<p align="center">
+  <img src="https://github.com/kenfutamata/EQUIJOB_AI_CAPSTONE/blob/a075f3c06b7e9fab99836734901a8420a48d9d60/Pictures/equijob_logo.png" alt="WebApp" width="200">
+</p>
+
 <table>
 <tr>
 <td>
-  A webapp using Quandl API to display history of stock growth in a given period of time. It helps predict the growth of stocks from the  charts of stock performace in any period of time. It helps to judge stocks, with the principle of momentum investing, which returns 1% per month on average.
+  Our capstone project, EQUIJOB, is an AI-powered web-based platform that we developed to help persons with disabilities find inclusive job opportunities. With EQUIJOB, we aim to make job searching easier by matching PWD job seekers to employers who practice inclusive hiring.
 </td>
 </tr>
 </table>
