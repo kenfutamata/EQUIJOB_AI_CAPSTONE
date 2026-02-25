@@ -125,7 +125,7 @@ class GeminiService
         return null;
     }
 
-    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
     $textPrompt = "You are an expert HR data entry specialist from EQUIJOB. Analyze the attached resume file and extract the information. "
         . "You MUST return the information ONLY as a valid JSON object. "
@@ -187,7 +187,7 @@ class GeminiService
             $jobListingsString .= "### Job ID: {$job->id}\n- Position: {$job->position}\n- Required Skills: " . ($job->skills ?? 'N/A') . "\n- Required Experience: " . ($job->experience ?? 'N/A') . "\n- Required Education: " . ($job->educationalAttainment ?? 'N/A') . "\n- Disability Consideration: " . ($job->disabilityType ?? 'N/A') . "\n\n";
         }
         $prompt = "You are an expert HR recruiter... Return ONLY the JSON array. For example: [45, 12, 3]\n\n---\n{$userProfileString}---\n{$jobListingsString}---";
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
         try {
             $response = Http::post($url, ['contents' => [['parts' => [['text' => $prompt]]]]]);
             if ($response->failed()) {

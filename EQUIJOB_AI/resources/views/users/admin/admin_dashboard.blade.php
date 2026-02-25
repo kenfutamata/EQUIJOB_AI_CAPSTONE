@@ -11,7 +11,7 @@
 
 <body class="bg-[#FCFDFF] min-h-screen flex flex-col md:flex-row">
 
-  <div class="w-[234px] bg-white hidden lg:block h-screen fixed top-0 left-0">
+<div class="w-[234px] bg-white hidden lg:block h-screen fixed top-0 left-0">
     <x-admin-sidebar />
   </div>
 

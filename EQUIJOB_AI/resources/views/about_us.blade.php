@@ -45,26 +45,6 @@
     </p>
   </section>
 
-  <!-- Mission & Vision -->
-  <section class="py-20 bg-gray-50 px-6 md:px-16">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
-      <div class="bg-blue-600 text-white p-10 rounded-2xl shadow-lg">
-        <h3 class="text-3xl font-semibold mb-4">Our Mission</h3>
-        <p class="text-lg leading-relaxed">
-          To empower persons with disabilities by providing equal access to employment opportunities through smart,
-          inclusive, and accessible job-matching technology.
-        </p>
-      </div>
-      <div class="bg-blue-600 text-white p-10 rounded-2xl shadow-lg">
-        <h3 class="text-3xl font-semibold mb-4">Our Vision</h3>
-        <p class="text-lg leading-relaxed">
-          A future where inclusive employment is the standard where everyone, regardless of ability, has access to
-          meaningful work and a supportive workplace environment.
-        </p>
-      </div>
-    </div>
-  </section>
-
   <section class="py-20 px-6 md:px-16 bg-white">
     <h2 class="text-4xl font-semibold text-center mb-12">Meet Our Team</h2>
 
