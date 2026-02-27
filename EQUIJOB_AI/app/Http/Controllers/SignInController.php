@@ -28,8 +28,9 @@ class SignInController extends Controller
     public function ViewSignUpJobProviderPage()
     {
         $provinces = Province::all();
+         $cities = collect();
 
-        return view('sign-in-page.sign_up.sign_up_job_provider', compact('provinces'));
+        return view('sign-in-page.sign_up.sign_up_job_provider', compact('provinces', 'cities'));
     }
 
     public function getCities(Province $province)

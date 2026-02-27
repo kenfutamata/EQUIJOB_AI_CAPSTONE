@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('feedback:send-request')->dailyAt('00:00');
         $schedule->command('app:send-interview-reminders')->dailyAt('08:00');
-        $schedule->command('job-postings:expire')->daily(); 
+        $schedule->command('job-postings:expire')->daily();
     }
 
     /**
@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
         require base_path('routes/console.php');
     }
 }

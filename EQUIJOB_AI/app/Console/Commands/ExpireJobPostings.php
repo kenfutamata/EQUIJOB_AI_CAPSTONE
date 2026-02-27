@@ -15,21 +15,30 @@ class ExpireJobPostings extends Command
     {
         $this->info('Checking for expired job postings...');
 
-        $expiredPostings = JobPosting::where('status', 'For Posting')
-                                     ->where('endDate', '<', now()->startOfDay())
-                                     ->get();
+        // 1. Look for any job where the endDate has passed
+        // 2. AND the status is NOT already 'Expired'
+        $expiredPostings = JobPosting::where('endDate', '<', now())
+            ->where('status', '!=', 'Expired')
+            ->get();
 
         if ($expiredPostings->isEmpty()) {
             $this->info('No expired job postings found.');
             return;
         }
 
+        $count = 0;
         foreach ($expiredPostings as $posting) {
-            $posting->status = 'Expired'; 
-            $posting->save();
-            Log::info("Job posting #{$posting->id} ('{$posting->position}') has been marked as Expired.");
+            try {
+                $posting->status = 'Expired';
+                $posting->save();
+                $this->info("Updated: #{$posting->id} - {$posting->position}");
+                Log::info("Job posting #{$posting->id} marked as Expired.");
+                $count++;
+            } catch (\Exception $e) {
+                $this->error("Failed to update #{$posting->id}: " . $e->getMessage());
+            }
         }
 
-        $this->info("Successfully updated {$expiredPostings->count()} job postings to 'Expired'.");
+        $this->info("Successfully updated {$count} job postings.");
     }
 }

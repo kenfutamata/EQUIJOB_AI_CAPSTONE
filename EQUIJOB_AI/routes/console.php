@@ -14,3 +14,4 @@
     Schedule::command('app:send-interview-reminders')->dailyAt('08:00')->appendOutputTo(storage_path('logs/interview_reminders.log'));
     Schedule::command('app:check-my-path');
     Schedule::command('app:send-interview-details {application}')->appendOutputTo(storage_path('logs/interview_details.log'));
+    Schedule::command('job-postings:expire')->daily();
