@@ -174,7 +174,6 @@ class ApplicantJobApplicationController extends Controller
                 'position'         => $application->jobPosting->position,
             ];
             Mail::to($applicant)->send(new HiredStatusSent($maildata));
-            Mail::to($applicant)->send(new NotifyApplicantFeedbackSent($maildataFeedback));
             return redirect()->back()->with('Success', 'Application Updated to Hired');
         } catch (\Exception $e) {
             Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
