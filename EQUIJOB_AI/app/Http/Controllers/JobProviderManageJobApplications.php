@@ -166,7 +166,6 @@ class JobProviderManageJobApplications extends Controller
                 'jobProviderLastName' => $jobProvider->lastName,
             ];
             Mail::to($applicant)->send(new InterviewDetailsSent($mailData, 'applicant'));
-            Mail::to($applicant)->send(new SendInterviewDetailsJobApplicantMail($application));
             Mail::to($jobProvider)->send(new sendInterviewDetailsJobProviderMail($application));
             $applicant->notify(new JobInterviewDetailsSent($application, 'applicant'));
 
