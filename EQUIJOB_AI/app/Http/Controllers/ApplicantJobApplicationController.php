@@ -47,58 +47,58 @@ class ApplicantJobApplicationController extends Controller
         $applicant = auth('applicant')->user();
         $esists = JobApplication::where('applicantID', $applicant->id)
             ->where('jobPostingID', $request->input('jobPostingID'))
-            ->exists(); 
+            ->exists();
         if ($esists) {
             return redirect()->back()->with('error', 'You have already applied to this job posting.');
         }
 
-            $validatedRequest = $request->validate([
-                'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-                'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-                'jobPostingID' => 'required|exists:jobPosting,id',
-                'jobProviderID' => 'required|exists:users,id',
-            ]);
+        $validatedRequest = $request->validate([
+            'uploadResume' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'uploadApplicationLetter' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'jobPostingID' => 'required|exists:jobPosting,id',
+            'jobProviderID' => 'required|exists:users,id',
+        ]);
 
-            try {
-                $posting = JobPosting::find($validatedRequest['jobPostingID']);
-                $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
-                    ->where('role', 'Job Provider')
-                    ->first();
+        try {
+            $posting = JobPosting::find($validatedRequest['jobPostingID']);
+            $jobProvider = User::where('id', $validatedRequest['jobProviderID'])
+                ->where('role', 'Job Provider')
+                ->first();
 
-                if (!$jobProvider) {
-                    throw new \Exception('The specified job provider could not be found or does not have the correct role.');
-                }
-
-                $resumeUrl = $supabase->upload($request->file('uploadResume'), 'uploadResume');
-                $applicationLetterUrl = $supabase->upload($request->file('uploadApplicationLetter'), 'uploadApplicationLetter');
-                $applicationData = [
-                    'applicantID' => $applicant->id,
-                    'jobPostingID' => $posting->id,
-                    'jobApplicationNumber' => $this->generateAlphaNumericId(),
-                    'status' => 'Pending',
-                    'uploadResume' => $resumeUrl,
-                    'uploadApplicationLetter' => $applicationLetterUrl,
-                ];
-
-                $newApplication = JobApplication::create($applicationData);
-
-                $maildata = [
-                    'firstName' => $applicant->firstName,
-                    'lastName' => $applicant->lastName,
-                    'email' => $applicant->email,
-                    'jobProvidersFirstName' => $jobProvider->firstName,
-                    'jobProvidersLastName' => $jobProvider->lastName,
-                    'position' => $posting->position,
-                    'companyName' => $posting->companyName,
-                    'applicationNumber' => $applicationData['jobApplicationNumber'],
-                ];
-
-                Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
-                $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider'));
-            } catch (\Exception $e) {
-                Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
-                return redirect()->back()->with('error', 'An error occurred. Please try again.');
+            if (!$jobProvider) {
+                throw new \Exception('The specified job provider could not be found or does not have the correct role.');
             }
+
+            $resumeUrl = $supabase->upload($request->file('uploadResume'), 'uploadResume');
+            $applicationLetterUrl = $supabase->upload($request->file('uploadApplicationLetter'), 'uploadApplicationLetter');
+            $applicationData = [
+                'applicantID' => $applicant->id,
+                'jobPostingID' => $posting->id,
+                'jobApplicationNumber' => $this->generateAlphaNumericId(),
+                'status' => 'Pending',
+                'uploadResume' => $resumeUrl,
+                'uploadApplicationLetter' => $applicationLetterUrl,
+            ];
+
+            $newApplication = JobApplication::create($applicationData);
+
+            $maildata = [
+                'firstName' => $applicant->firstName,
+                'lastName' => $applicant->lastName,
+                'email' => $applicant->email,
+                'jobProvidersFirstName' => $jobProvider->firstName,
+                'jobProvidersLastName' => $jobProvider->lastName,
+                'position' => $posting->position,
+                'companyName' => $posting->companyName,
+                'applicationNumber' => $applicationData['jobApplicationNumber'],
+            ];
+
+            Mail::to($applicant)->send(new jobApplicationEmailSent($maildata));
+            $jobProvider->notify(new JobApplicationSent($newApplication, 'job_provider'));
+        } catch (\Exception $e) {
+            Log::error('Job application failed: ' . $e->getMessage() . ' on line ' . $e->getLine() . ' in ' . $e->getFile());
+            return redirect()->back()->with('error', 'An error occurred. Please try again.');
+        }
         return redirect()->back()->with('Success', 'Application Submitted Successfully');
     }
 
@@ -120,67 +120,69 @@ class ApplicantJobApplicationController extends Controller
     public function hiredStatus(string $id)
     {
         try {
-            $application = JobApplication::findOrFail($id);
-
-            DB::transaction(function () use ($application) {
-                $application->status = 'Hired';
-                $application->hiredAt = now();
-                $application->save();
-
-                JobApplication::where('jobPostingID', $application->jobPostingID)
-                    ->where('id', '!=', $application->id)
-                    ->whereIN('status', ['Pending', 'For Interview', 'On-Offer'])
-                    ->update(['status' => 'Not Available']);
-            });
-
+            // 1. Eager load everything: the applicant, the posting, and the person who posted the job
+            // This assumes JobPosting has a 'jobProvider' relationship (User model)
+            $application = JobApplication::with(['applicant', 'jobPosting.jobProvider'])->findOrFail($id);
 
             $applicant = $application->applicant;
             $jobPosting = $application->jobPosting;
 
-            $jobPosting->status = 'Occupied';
-            $jobPosting->save();
-            $jobProvider = Auth::guard('job_provider')->user();
+            // 2. Fetch the Job Provider from the database instead of the session
+            // Based on your other methods, $jobPosting->jobProvider should work.
+            // If that relationship isn't set, use: User::find($jobPosting->jobProviderID);
+            $jobProvider = $jobPosting->jobProvider ?? User::find($jobPosting->jobProviderID);
 
-            $feedback = Feedbacks::create([
-                'jobApplicationID' => $application->id,
-                'jobPostingID'     => $application->jobPostingID,
-                'applicantID'      => $application->applicantID,
-                'firstName'        => $applicant->firstName,
-                'lastName'         => $applicant->lastName,
-                'email'            => $applicant->email,
-                'phoneNumber'      => $applicant->phoneNumber,
-                'feedbackType'     => 'Job Rating',
-                'status'           => 'Sent',
-            ]);
+            // --- SAFETY CHECKS ---
+            if (!$applicant) {
+                throw new \Exception("Applicant data not found.");
+            }
 
+            if (!$jobProvider) {
+                throw new \Exception("The Job Provider associated with this posting no longer exists.");
+            }
+
+            // 3. Perform the database update
+            DB::transaction(function () use ($application, $jobPosting) {
+                $application->status = 'Hired';
+                $application->hiredAt = now();
+                $application->feedbackSent = false;
+                $application->expectedFeedback = now()->addDays(30);
+                $application->save();
+
+                // Mark other applications for the same job as "Not Available"
+                JobApplication::where('jobPostingID', $application->jobPostingID)
+                    ->where('id', '!=', $application->id)
+                    ->whereIn('status', ['Pending', 'For Interview', 'On-Offer'])
+                    ->update(['status' => 'Not Available']);
+
+                // Set the job itself to Occupied
+                if ($jobPosting) {
+                    $jobPosting->status = 'Occupied';
+                    $jobPosting->save();
+                }
+            });
+
+            // 4. Prepare data for the email (Using the Provider we found in the DB)
             $maildata = [
                 'firstName' => $applicant->firstName,
                 'lastName' => $applicant->lastName,
-                'companyName' => $jobPosting->companyName,
-                'position' => $jobPosting->position,
+                'companyName' => $jobPosting->companyName ?? 'EQUIJOB Partner',
+                'position' => $jobPosting->position ?? 'Position',
                 'jobProviderFirstName' => $jobProvider->firstName,
                 'jobProviderLastName' => $jobProvider->lastName,
                 'jobProviderEmail' => $jobProvider->email,
-                'jobProviderPhone' => $jobProvider->phone,
+                'jobProviderPhone' => $jobProvider->phone ?? 'N/A',
             ];
 
-            $maildataFeedback = [
-                'firstName'        => $applicant->firstName,
-                'lastName'         => $applicant->lastName,
-                'email'            => $applicant->email,
-                'jobProviderFirstName' => $application->jobPosting->jobProvider->firstName,
-                'jobProviderLastName' => $application->jobPosting->jobProvider->lastName,
-                'companyName'      => $application->jobPosting->jobProvider->companyName,
-                'position'         => $application->jobPosting->position,
-            ];
-            Mail::to($applicant)->send(new HiredStatusSent($maildata));
-            return redirect()->back()->with('Success', 'Application Updated to Hired');
+            // 5. Send the email to the applicant
+            Mail::to($applicant->email, $applicant->firstName . ' ' . $applicant->lastName)->send(new HiredStatusSent($maildata));
+
+            return redirect()->back()->with('Success', 'Congratulations! You have accepted the offer.');
         } catch (\Exception $e) {
-            Log::error('Failed to update application ' . $id . ': ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to Update Application');
+            Log::error('Hired Status Error for App ' . $id . ': ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-
     public function withdrawApplication(string $id)
     {
         try {

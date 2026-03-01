@@ -19,12 +19,12 @@ class JobApplication extends Model
         'notifiedAt',
         'appliedAt',
         'interviewDate',
-        'reminderSentAt', 
+        'reminderSentAt',
         'interviewTime',
-        'interviewLink', 
+        'interviewLink',
         'uploadResume',
         'uploadApplicationLetter',
-        'dateHired', 
+        'dateHired',
 
     ];
 
@@ -34,11 +34,11 @@ class JobApplication extends Model
         'interviewTime' => 'datetime',
         'hiredAt' => 'datetime',
     ];
-
     public function name(): Attribute
     {
         return Attribute::get(
-            fn () => $this->firstName . ' ' . $this->lastName
+            // It should look at the applicant relationship, not the application table
+            fn() => $this->applicant ? ($this->applicant->firstName . ' ' . $this->applicant->lastName) : 'Unknown Applicant'
         );
     }
     public function scopeSearch($query, $search)
@@ -51,7 +51,7 @@ class JobApplication extends Model
                 ->orWhereHas('jobPosting', function ($q2) use ($searchTerm) {
                     $q2->where('position', 'like', $searchTerm)
                         ->orWhereRaw('"companyName" LIKE ?', [$searchTerm])
-                        ->orWhereRaw('"disabilityType" LIKE ?', [$searchTerm]); 
+                        ->orWhereRaw('"disabilityType" LIKE ?', [$searchTerm]);
                 })
                 ->orWhereHas('applicant', function ($q3) use ($searchTerm) {
                     $q3->where('firstName', 'like', $searchTerm)
@@ -59,12 +59,13 @@ class JobApplication extends Model
                 });
         });
     }
-    public function job(){
-        return $this->belongsTo(JobPosting::class, 'jobPostingId'); 
+    public function job()
+    {
+        return $this->belongsTo(JobPosting::class, 'jobPostingId');
     }
     public function applicant()
     {
-        return $this->belongsTo(\App\Models\User::class, 'applicantID', 'id');
+        return $this->belongsTo(User::class, 'applicantID', 'id');
     }
     public function jobPosting()
     {
